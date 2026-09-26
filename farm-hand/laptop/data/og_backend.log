@@ -1,0 +1,7 @@
+
+> soil-backend@0.1.0 start
+> tsx src/index.ts
+
+9:44:17 PM HARDWARE=off: not opening consoles. Every probe stays offline; nothing is simulated.
+9:44:17 PM backend on http://127.0.0.1:8787  (MCP streamable HTTP at /mcp)
+9:44:17 PM voice: disabled (XAI_API_KEY is not set. Add it to backend/.env (never the browser). Create a key at https://console.x.ai/)

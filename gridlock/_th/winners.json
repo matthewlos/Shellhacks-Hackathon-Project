@@ -1,0 +1,2570 @@
+[
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/baymax-your-personal-healthcare-companion",
+  "name": "Baymax, Your Personal Healthcare Companion",
+  "tagline": "Our AI-powered robot arm is a personalized solution to restore physically impaired and elderly individuals’ ability to interact with their environment.",
+  "prizes": [
+   "Grand Prize ($10k Cash)",
+   "Reazon Holdings: Best Senior-Focused Hack (4x Round Trip Tickets to Tokyo)"
+  ],
+  "github": [
+   "https://github.com/Jaybear411/VisArm"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/show-and-tell-capturing-emotion-in-sign-language",
+  "name": "Show and Tell - Capturing Emotion in Sign Language",
+  "tagline": "Enabling emotion and expression for the hard of hearing. Through innovative wearable technology and LLM integration, Show and Tell tackles the issue of accessibility for the hard of hearing.",
+  "prizes": [
+   "Most Creative Hack (4x Nintendo Switches)",
+   "Human Capital: Memorial Partnership Journey (Box @ Warriors Game)"
+  ],
+  "github": [
+   "https://github.com/raviriley/aidactyl"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/good-samaritan-29zp5x",
+  "name": "Good Samaritan - Vision Pro Assisted First-Aid Care",
+  "tagline": "Allowing bystanders to provide informed first-aid care to those experiencing medical emergencies with the assistance of mixed reality (looking years in advance when the tech is commonplace).",
+  "prizes": [
+   "Most Impactful Hack (4x Apple Watch Series 9)",
+   "TerraAPI: Health Prize (4x Meta x Ray-Ban)",
+   "BGB Group: Informed Physicians Prize (4x $500 Gift Card + Internship Interview)"
+  ],
+  "github": [
+   "http://github.com/rayhotate/tree"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/dockerc",
+  "name": "dockerc",
+  "tagline": "Software distribution solved.",
+  "prizes": [
+   "Most Technically Complex Hack (4x Mac Mini)",
+   "Bun: Best Use of Zig (4x iPad Pro + Interview with Bun Founder)"
+  ],
+  "github": [
+   "https://github.com/NilsIrl/dockerc",
+   "https://github.com/NilsIrl/dockerc/releases/tag/treehacksv0",
+   "https://github.com/oven-sh/bun",
+   "https://github.com/shepherdjerred/macos-cross-compiler"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/recollect-ytn0bk",
+  "name": "Recollect: Leave No Book Behind",
+  "tagline": "Our robot scans, digitizes, and analyzes books with zero intervention.",
+  "prizes": [
+   "Best Hardware Hack (4x Prusa 3D Printers)"
+  ],
+  "github": [
+   "https://github.com/Scott-Hickmann/Book-Scanner"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/nab-3d",
+  "name": "Nab 3D",
+  "tagline": "Nab any object straight out of the real world and into your browser. Video to 3D web component -- all in one line of code.",
+  "prizes": [
+   "Best Beginner Hack (4x Razer Keyboard + Mouse)"
+  ],
+  "github": [
+   "https://github.com/soapantelope/nab"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/skysplat",
+  "name": "SkySplat",
+  "tagline": "drones + gaussian splatting = automated, AI-powered 3D modeling of any environment for disaster recovery, emergency response, and infrastructure inspections",
+  "prizes": [
+   "Sustainability Grand Prize (4x Patagonia Down Jackets)"
+  ],
+  "github": [
+   "https://github.com/Hoponga/splatting/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/therapease-ai",
+  "name": "TherapEase.ai",
+  "tagline": "Expanding access to physical therapy and critical healthcare services through AI-enabled telehealth.",
+  "prizes": [
+   "Health Grand Prize (4x Oura Ring)"
+  ],
+  "github": [
+   "https://github.com/anshgupta1234/TherapEase/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/lingua-franca-6xovi3",
+  "name": "Lingua Franca",
+  "tagline": "Immersive VR language learning experience powered by AI.",
+  "prizes": [
+   "Education Grand Prize (4x Quest 3)"
+  ],
+  "github": [
+   "https://github.com/ShounakRay/TreeHacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/zorg-7ubd4x",
+  "name": "Zorg - Health Records Reimagined",
+  "tagline": "Automated healthcare with Zorg: secure, decentralized storage and instant access to encrypted patient records, ensuring life-saving info is available in emergencies.",
+  "prizes": [
+   "Blockchain & Security Grand Prize (4x JBL Partybox)"
+  ],
+  "github": [
+   "https://github.com/rohan-patra/Zorg"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/3dreal",
+  "name": "3dReal",
+  "tagline": "Your memories, but realer",
+  "prizes": [
+   "Entertainment Grand Prize (4x 32in Curved Gaming Monitors)"
+  ],
+  "github": [
+   "https://github.com/alexkranias/3dReal"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/study-suite",
+  "name": "Study Suite",
+  "tagline": "Research shows students learn 20% more content through the active recall method. Our project converts lectures into quizzes that help student retain and understand the information they learn best.",
+  "prizes": [
+   "Fetch.ai: Beyond Boundaries AI Agent Prize (4x Engraved iPads + 1v1 with CEO)"
+  ],
+  "github": [
+   "https://github.com/Daniel-Moraes1/UnifyAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/gradeai-s9ptdc",
+  "name": "gradeAI",
+  "tagline": "Efficient teaching, effective learning",
+  "prizes": [
+   "Fetch.ai: Smartest AI Agent Prize (Top 2 Teams - $3k Cash)"
+  ],
+  "github": [
+   "https://github.com/justbustin/gradeAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/pawsome-nk68yv",
+  "name": "Pawsome",
+  "tagline": "We envision a world where every pet enjoys a happy, healthy life. Our goal is to prioritize pets' health and wellness, offering accessible, reliable solutions for their care.",
+  "prizes": [
+   "Fetch.ai: Smartest AI Agent Prize (Top 2 Teams - $3k Cash)"
+  ],
+  "github": [
+   "https://github.com/mounika2000/Treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/healthiator",
+  "name": "Healthiator",
+  "tagline": "Easily compare medical costs across hospitals, tailored to your condition, insurance plan vs out-of-pocket payment with Healthiator. Uncover savings and take control of your healthcare journey.",
+  "prizes": [
+   "Fetch.ai: Smartest AI Agent Prize (Top 2 Teams - $3k Cash)"
+  ],
+  "github": [
+   "https://github.com/elenaxx2022/healthiator",
+   "https://github.com/elenaxx2022/healthiators"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/trustfile",
+  "name": "TrustFile",
+  "tagline": "Nearly 48,000 Canadian children and ten times as many in the US lack stable document access in foster care. TrustFile offers a blockchain-based solution for secure document storage.",
+  "prizes": [
+   "Ava Labs / Avalanche: Best Consumer Use Case for Blockchain ($1.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/Matt711/TrustFile"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/estimate-0nqzfx",
+  "name": "EstiMate",
+  "tagline": "Friends Fueled Fun: Betting Made Easy and Secure",
+  "prizes": [
+   "Taisu Ventures: Amazing Web3 Gaming Award ($500 Cash)",
+   "Caldera: Best Use of Caldera ($1k ETH)",
+   "Ava Labs / Avalanche: Best Consumer Use Case for Blockchain ($1.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/ryantinder/treehacks-2024",
+   "https://github.com/underthestars-zhy/EstiMate"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/zknowledge-base",
+  "name": "zKnowledgeBase",
+  "tagline": "The world's research, embedded, immortalized and decentralized.",
+  "prizes": [
+   "Ava Labs / Avalanche: Best Decentralized Application ($1.5k Cash)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/fedifi",
+  "name": "FediFi",
+  "tagline": "Ad platforms like Google make $10+ a click. None of that makes it to you. Fedifi: the first-ever decentralized financial infra for web3, built with automated smart contracts to cut out the middleman.",
+  "prizes": [
+   "Taisu Ventures: Innovative DeFi Award ($500 Cash)"
+  ],
+  "github": [
+   "https://github.com/AdvitDeepak/FediFi-Controller",
+   "https://github.com/tonyjiang02/FediFi-Dashboard",
+   "https://github.com/tonyjiang02/FediFi-Pixel",
+   "https://github.com/tonyjiang02/FediFi-Social"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/sonoverse",
+  "name": "Sonoverse",
+  "tagline": "Protecting small artists' work through a decentralized on-chain ML-driven platform, integrating automatic DMCA claims.",
+  "prizes": [
+   "Taisu Ventures: Creative Web3 Platform Award ($500 Cash)"
+  ],
+  "github": [
+   "https://github.com/gashon/treehacks-2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/meshworks-nlp-lora-mesh-network-for-emergency-response",
+  "name": "Meshworks - NLP LoRa Mesh Network for Emergency Response",
+  "tagline": "Imagine an earthquake disabling all telecommunication. We combine mesh-based radio technology with cutting-edge AI processing to build a resilient information network for emergency responders.",
+  "prizes": [
+   "Intel: Best Use of Intel Developer Cloud ($10k Credits + 4x Lenovo AI PC [1st] & $4k Credits [2nd] & $2k Credits [3rd])"
+  ],
+  "github": [
+   "https://github.com/AWESDUDEtheCOOL/Treehacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/scratchml",
+  "name": "ScratchML",
+  "tagline": "The no-code platform for ML designed for students in the age of AI.",
+  "prizes": [
+   "Intel: Best Use of Intel Developer Cloud ($10k Credits + 4x Lenovo AI PC [1st] & $4k Credits [2nd] & $2k Credits [3rd])",
+   "Warp: Best Developer Tool by Warp (4x Keytron Keyboards + Warp Tumblers)"
+  ],
+  "github": [
+   "https://github.com/theDubW/ScratchML"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/memory-playground",
+  "name": "Memory Playground",
+  "tagline": "Build a digital Memory Playground to help boost memory recall and retention.",
+  "prizes": [
+   "Intel: Best Use of Intel Developer Cloud ($10k Credits + 4x Lenovo AI PC [1st] & $4k Credits [2nd] & $2k Credits [3rd])"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/ekko-v9wkgy",
+  "name": "Ekko",
+  "tagline": "Elevate your foreign language fluency with tailored guidance and individualized verbal conversation practice on Ekko.",
+  "prizes": [
+   "Together.ai: Best Project Built on Open-Source AI Programs and Models ($2.5k Credits)",
+   "Bun: Best Use of Bun ($2k Cash + Interview with Bun Founder)"
+  ],
+  "github": [
+   "https://github.com/chroline/treehacks2024.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/invisible-me",
+  "name": "ephemeral",
+  "tagline": "always helping but you never notice",
+  "prizes": [
+   "Together.ai: Best Use of Together API ($2.5k Credits + 1x AirPods Max)"
+  ],
+  "github": [
+   "https://github.com/pgasawa/ephemeral"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/memorylane-5aon4r",
+  "name": "MemoryLane",
+  "tagline": "Brighten your golden years with MemoryLane! Activate the mind, connect hearts, and revive cherished memories—all with just a tap. Bond over shared stories and sharpen your mind, effortlessly.",
+  "prizes": [
+   "InterSystems: Best Use of GenAI using InterSystems IRIS Vector Search ($2k Cash [1st] & $1.5k Cash [2nd] & $1k Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/gracelliu/TreeHacksX"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/insight-critter",
+  "name": "Kaleido",
+  "tagline": "Kaleido illuminates the colorful spectrum of bias in the news, like peering through a kaleidoscope.",
+  "prizes": [
+   "InterSystems: Best Use of GenAI using InterSystems IRIS Vector Search ($2k Cash [1st] & $1.5k Cash [2nd] & $1k Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/austinchen12/insight"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/flipside-rz9i1v",
+  "name": "Flipside",
+  "tagline": "News reimagined: Swipe to see every side of the story.",
+  "prizes": [
+   "InterSystems: Best Use of GenAI using InterSystems IRIS Vector Search ($2k Cash [1st] & $1.5k Cash [2nd] & $1k Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/robbym-dev/Flipside-AI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/verivote-t42xoi",
+  "name": "VeriVote",
+  "tagline": "Empowering democracy through QED Zero-Knowledge Proofs in order to improve, secure, and bring transparency one vote at a time!",
+  "prizes": [
+   "QED Protocol: Best Application of Zero Knowledge Proofs ($5k Cash)"
+  ],
+  "github": [
+   "https://github.com/certifiedp/VeriVote"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/proofpix",
+  "name": "proofpix",
+  "tagline": "attested image ZK library + verified image iPhone app",
+  "prizes": [
+   "QED Protocol: Best Application of Zero Knowledge Proofs ($5k Cash)",
+   "Caldera: Most Creative On-Chain Hack ($2.5k ETH)"
+  ],
+  "github": [
+   "https://github.com/Sofianel5/ProofPix",
+   "https://github.com/kayleegeorge/attested-images"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/aros-prove-your-images-are-real",
+  "name": "Aros",
+  "tagline": "Aros is an app to verify that an image is real and not AI-generated. Aros uses hardware security and cryptography to prove that an image was clicked on your iPhone.",
+  "prizes": [
+   "QED Protocol: Best Application of Zero Knowledge Proofs ($5k Cash)"
+  ],
+  "github": [
+   "https://github.com/siddhantsharma301/aros/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/mediflow",
+  "name": "MediFlow",
+  "tagline": "Automating healthcare's tedious administrative tasks to save hospitals $265.6 billion yearly and prevent the closure of over 30% of rural hospitals in America, allowing them to focus on patient care.",
+  "prizes": [
+   "Convex: Best Use of Convex Features ($1.25k Cash + 6mo Pro [1st] & $500 Cash + 3mo Pro [2nd] & $250 Cash [3rd])"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/skin-ai-zlwdsy",
+  "name": "DermaDetect",
+  "tagline": "DermaDetect leverages AI for accessible skin health checks, focusing on affordability and privacy for underserved populations.",
+  "prizes": [
+   "Convex: Best Use of Convex Features ($1.25k Cash + 6mo Pro [1st] & $500 Cash + 3mo Pro [2nd] & $250 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/abccodes/Treehacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/spark-mhxso9",
+  "name": "Spark",
+  "tagline": "Empowering Passion, Sparking Change, Inspiring Impact: Connecting Sustainable Hearts with Purposeful Projects.",
+  "prizes": [
+   "Convex: Best Use of Convex Features ($1.25k Cash + 6mo Pro [1st] & $500 Cash + 3mo Pro [2nd] & $250 Cash [3rd])",
+   "Stanford Ecopreneurship: Best Prototyping Process ($1k Cash)",
+   "Cotopaxi: Most Innovative Sustainability Hack (4x Allpha 35L Backpack)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/polyaiglot",
+  "name": "LangUR",
+  "tagline": "LangUR: Your language learning companion. Effortless fluency with personalized articles, translations, and progress tracking. Join us today, and master languages at your leisure!",
+  "prizes": [
+   "Vespa.ai: Best Hack using a Large Language Model (4x Bose Headphones)"
+  ],
+  "github": [
+   "https://github.com/langur-treehacks/langur"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/vr-tines",
+  "name": "VR-TINES <3",
+  "tagline": "Bridging hearts across miles with immersive VR—experience shared moments, tastes, and realistic presence! Your solution to overcoming distance—because love knows no bounds, and now, neither do you!",
+  "prizes": [
+   "Otsuka/Valuenex: Best Hack to Connect with Others through Food (4x $500 DoorDash + 4x $250 Spa Giftcards)"
+  ],
+  "github": [
+   "https://github.com/kmay23/VR-TINES"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/vision-mama-llm-vision-pro-agents-fun-learning",
+  "name": "Vision Mama: LLMs + Vision Pro + Agents = Cooking Magic",
+  "tagline": "Remember Cooking Mama? We turned it into a Conversational Agent for Vision Pro that teaches cooking! We pretrained & fine-tuned recipe making LLMs, made a food ordering agent, semantic recipes,...",
+  "prizes": [
+   "Codegen: Best Use of AI Agents ($3k Cash)",
+   "Best Use of Monster Generative AI APIs (4x XBox Series S [1st] & 1 million Monster API credits [2nd] & $400 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/andrewgcodes/treehacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/synthesis-ag1djb",
+  "name": "Synthesis",
+  "tagline": "News that promotes personalization and prevents polarization.",
+  "prizes": [
+   "Coframe: Best AI Hack (NVIDIA RTX 4080 GPU)"
+  ],
+  "github": [
+   "https://github.com/ronnachum11/synthesis.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/project-horus-prejc4",
+  "name": "Project Horus",
+  "tagline": "Civilians accounted for 95% of all cluster munition casualties in 2022. We developed an autonomous system for detecting cluster munitions in post-war zones using a Parrot Drone and a custom CNN.",
+  "prizes": [
+   "Parrot Drones: Best Use of Drone Technology ($4.5k Anafi AI Drone)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/xxx-23s7u1",
+  "name": "MockupMagic",
+  "tagline": "Think. Click. Prototype. MockupMagic seamlessly turns paper napkin ideas into fully functioning prototypes.",
+  "prizes": [
+   "Neo: Most Likely to Become a Business (Airfare + Accommodation at Summer Retreat)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/vly-ai-the-bubble-io-killer",
+  "name": "vly.ai: the bubble.io killer",
+  "tagline": "Generate Full-Stack SaaS Apps with just 1 click using AI.",
+  "prizes": [
+   "Reflex: Best Use of Reflex ($2k Cash)"
+  ],
+  "github": [
+   "https://github.com/victorxheng/treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/truckrzzz",
+  "name": "TruckrZzz",
+  "tagline": "An all-in-one smart solution for early drowsiness detection amongst truck drivers, providing smart solutions.",
+  "prizes": [
+   "Reflex: Best Use of Reflex ($2k Cash)",
+   "TerraAPI: Most Commercially Viable Hack (weekly 1v1 product sessions)"
+  ],
+  "github": [
+   "https://github.com/banyar-shin/TruckrZzz-iOS-App",
+   "https://github.com/pnavab/TruckrZzz"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/kanga-slides-made-easy",
+  "name": "Kanga: Streamlining Research Papers into Presentations",
+  "tagline": "We are making research more accessible by automatically generating understandable, concise, and aesthetically clean presentation slides from a research paper with just one click.",
+  "prizes": [
+   "Canva: Best New Canva App Submission (4x Wireless Headphones + Canva Sweatshirts)"
+  ],
+  "github": [
+   "https://github.com/theAnshulGupta/kanga"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/shard-i03hcs",
+  "name": "Shard",
+  "tagline": "A distributed system to train models across heterogeneous computers",
+  "prizes": [
+   "Pear VC: Most Likely to Get Funded ($1.5k Cash)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/watchdog-onxyge",
+  "name": "Bino-SoRAs",
+  "tagline": "AI-generated video detection using interpolated next-frame-prediction and Fréchet inception distance to generate 92% accurate zero-shot classification. Novel Binocular method applied to OpenAI's SORA.",
+  "prizes": [
+   "HRT: Best Use of Data (4x HRT Keyboard + Mouse)"
+  ],
+  "github": [
+   "https://github.com/Willy-Chan/Bino-SoRAs"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/dialogixai",
+  "name": "dialogixAI",
+  "tagline": "Revolutionize language learning with our AI-driven app: Engage in real conversations, receive instant feedback, and master languages naturally. Beyond rote, towards fluency.",
+  "prizes": [
+   "Wispr.ai: Best Voice Experience (4x Interview with Wispr founders and visit to Wispr HQ)"
+  ],
+  "github": [
+   "https://github.com/cherylwu834/dialogixAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/nowaste-ai",
+  "name": "NoWaste.ai",
+  "tagline": "Providing a practical and scalable solution to every-day food waste.",
+  "prizes": [
+   "Postman: Best Use of an API with Postman (4x Flipper0 + Postman Merch)"
+  ],
+  "github": [
+   "https://github.com/RussellBustamante/NoWasteAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/knowledgequest-roblox",
+  "name": "Questi - Roblox",
+  "tagline": "Projected at $52B by 2030, gamified education is booming. Through Roblox Studio, we're bridging global education gaps, fostering collaboration, and supporting learners' well-being through our project",
+  "prizes": [
+   "Roblox: Visionary Award (4x Roblox Blankets + Backpacks + $100 Gift Card)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/inclusiv-ai",
+  "name": "Inclusiv.ai",
+  "tagline": "Inki is a simplified system to navigate the web.",
+  "prizes": [
+   "Best Use of Monster Generative AI APIs (4x XBox Series S [1st] & 1 million Monster API credits [2nd] & $400 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/VolVox99/inklusiv"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/medbot-u3hzt8",
+  "name": "care.ai",
+  "tagline": "For go-to assistant for everything in primary healthcare",
+  "prizes": [
+   "Best Use of Monster Generative AI APIs (4x XBox Series S [1st] & 1 million Monster API credits [2nd] & $400 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/joyendra/TreeHacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/ai-thena",
+  "name": "mentis.ai",
+  "tagline": "AI-powered tutor designed to be accessible, interactive and audiovisual.",
+  "prizes": [
+   "Best Use of Monster Generative AI APIs (4x XBox Series S [1st] & 1 million Monster API credits [2nd] & $400 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/jtcheng26/treehacks24"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/sagewell",
+  "name": "SageWell",
+  "tagline": "An AI-powered Medical Assistant for the Elderly",
+  "prizes": [
+   "Best Use of Monster Generative AI APIs (4x XBox Series S [1st] & 1 million Monster API credits [2nd] & $400 Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/PrabhleenKaurLamba/SageWell"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/oasis-8iv1lu",
+  "name": "Oasis",
+  "tagline": "AI agents help benchmark, assess, and enhance corporate sustainability practices",
+  "prizes": [
+   "Endex: Senior Citizen Prize ($1k Cash)"
+  ],
+  "github": [
+   "https://github.com/ShaishavShah04/oasis",
+   "https://github.com/anishk23733/oasis-backend",
+   "https://github.com/anishk23733/oasis-scripts"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/leed-bud",
+  "name": "LEED Bud",
+  "tagline": "Get around the burdensome process of points-based LEED certification and discover where you currently stand based on Large Language Models contextualized with LEED codes and your building specs.",
+  "prizes": [
+   "Stanford Ecopreneurship: Best Solves the User’s Pain Point ($1k Cash)"
+  ],
+  "github": [
+   "https://github.com/garvcodes/leed/commit/843f90ee6668363d91e8c5db94ead643ef3bdfed"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/carbon-price-curves",
+  "name": "CarbonInsight: Guiding Companies to Net-zero",
+  "tagline": "Using supply and demand projections, our software advises companies on the tradeoff between decarbonizing their existing business practices and offsetting emissions through carbon credit purchasing.",
+  "prizes": [
+   "Stanford Ecopreneurship: Best Incorporation of Broader Stakeholders ($1k Cash)"
+  ],
+  "github": [
+   "https://github.com/lfun1/carbon-price-curves/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/coderepair",
+  "name": "CodeRepair",
+  "tagline": "Tool to automatically identify and fix bugs in codebases using GPT-4 to use debugger tools and automatically erase bugs. Scales to codebase of any size.",
+  "prizes": [
+   "YCombinator: YC / Yoneda Labs Prize (Office Hours with YC Group Partner)"
+  ],
+  "github": [
+   "https://github.com/jasondu7297/coderepair.ai"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/carbon-cut-3d5k2g",
+  "name": "Carbon Cut",
+  "tagline": "Your one-stop shop for climate action and impact.",
+  "prizes": [
+   "Cotopaxi: Most Innovative Sustainability Hack (4x Allpha 35L Backpack)"
+  ],
+  "github": [
+   "https://github.com/AdrianLandaverde/TreeHacks-Sustainability",
+   "https://github.com/Charu-Gupta9/TreeHacks-UI.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/learnboost-empowering-education-with-ai-nfts",
+  "name": "MindMint: Empowering Education with AI & NFTs",
+  "tagline": "NFTs, Verifiable Credentials, AI Generated Feedback, Spaced Repetition all in an Educational App: Improves Learning Experience for Children with incentives, Allows Teachers to Manage Classes with ease",
+  "prizes": [
+   "Crossmint: Best Identity Credential Application Hack (2x rabbit r1 + $1k credit [1st] & 4x Ledger Nano S Plus + $400 credit [2nd])"
+  ],
+  "github": [
+   "https://github.com/shray3420/treehacks2024"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/nourish-connect",
+  "name": "Med2Meals",
+  "tagline": "Replace medicine with alternative natural food 🥘",
+  "prizes": [
+   "Crossmint: Best Identity Credential Application Hack (2x rabbit r1 + $1k credit [1st] & 4x Ledger Nano S Plus + $400 credit [2nd])"
+  ],
+  "github": [
+   "https://github.com/ShaneYokota72/Med2Meals"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2024,
+  "url": "https://devpost.com/software/test-project-skqc27",
+  "name": "Test Project",
+  "tagline": "Test Project",
+  "prizes": [
+   "Workshop Raffle Prizes ($10k in Prizes)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/hawkwatch",
+  "name": "HawkWatch",
+  "tagline": "Transform any camera into a smart security system with HawkWatch. Our AI VLM instantly detects and alerts security to potential threats, giving businesses of all sizes a peace of mind.",
+  "prizes": [
+   "TreeHacks Grand Prize | 1st Place ($11k Cash)"
+  ],
+  "github": [
+   "https://github.com/Grace-Shao/Treehacks2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/omnom-hg16v3",
+  "name": "OmNom",
+  "tagline": "OmNom is your late night food savior, autonomously navigating a variety of outdoor and indoor environments across campus to bring back your cravings just in time for you to finish your PSET.",
+  "prizes": [
+   "Most Creative Hack (Pioneer DJ DDJ-FLX4 Pack per team member)"
+  ],
+  "github": [
+   "https://github.com/NilsIrl/ActuallyAHuman/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/hearti",
+  "name": "Hearti",
+  "tagline": "Simplifying congenital heart disease diagnosing, and treatment planning, and medical explanations for doctors and patients using computer vision, machine learning, VLMs, and more.",
+  "prizes": [
+   "Most Impactful Hack (JBL Partybox 110 per team member)"
+  ],
+  "github": [
+   "https://github.com/ethan-tam33/heartAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/edith-bvh014",
+  "name": "Edith",
+  "tagline": "Solving the accessibility crisis, one second pair of eyes at a time.",
+  "prizes": [
+   "Most Technically Complex Hack (Meta Quest 3 per team member)"
+  ],
+  "github": [
+   "https://github.com/jotalis/Edith"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/readable-ai-braille-printer",
+  "name": "BrailleBot: Make Every Document Accessible!",
+  "tagline": "World's first braille printer under $15",
+  "prizes": [
+   "Best Hardware Hack (DJI Mini 3 Drone with Remote Control per team member)"
+  ],
+  "github": [
+   "https://github.com/cathyzbn/braille-printer"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/blinkai",
+  "name": "BlinkAI",
+  "tagline": "Blink AI gives a voice to those who cannot type or speak. It translates blinks into Morse code, converts them into text, and sends prompts to AI—unlocking seamless, hands-free communication instantly.",
+  "prizes": [
+   "Best Beginner Hack (Keychron K8 Pro QMK/VIA Wireless Mechanical Keyboard per team member)"
+  ],
+  "github": [
+   "https://github.com/FuzionEcho/BlinkAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/iris-vlnzp0",
+  "name": "Iris",
+  "tagline": "Real-time vision for the blind.",
+  "prizes": [
+   "Edge AI Prize: Most Creative On-Device AI Deployment ($10k Cash)"
+  ],
+  "github": [
+   "https://github.com/RoyceAroc/iris"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/survivex",
+  "name": "SurviveX",
+  "tagline": "Your hands-free conversational survival assistant. Powered by on device LLM inference, offering step-by-step instructions to keep you smarter and safer anytime, anywhere.",
+  "prizes": [
+   "Edge AI Prize: Most Creative On-Device AI Deployment ($10k Cash)"
+  ],
+  "github": [
+   "https://github.com/rockuutree/SurviveX-Treehacks/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/pushpa-pyro-uav-system-for-high-risk-patrol-and-alerting",
+  "name": "PUSHPA - Pyro UAV System for High-risk Patrol and Alerting",
+  "tagline": "PUSHPA gives firefighters eyes on the ground and in the air. Smart glasses steer drones for real-time wildfire mitigation w optical & UAV input + x20 kernel-optimized edge compute on custom SDKs.",
+  "prizes": [
+   "Edge AI Prize: Operator Optimization Champion ($5k Cash)"
+  ],
+  "github": [
+   "https://github.com/chandrasuda/nextgen-firewatcher"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/mediledger",
+  "name": "MediLedger",
+  "tagline": "A privacy-preserving drug availability search powered by EigenDA and ZK-PTLS",
+  "prizes": [
+   "Web3 Prize: Best AI Agents ($8k Cash + 8k EIGEN [1st] & $7k Cash + 7k EIGEN [2nd])"
+  ],
+  "github": [
+   "https://github.com/shayaansultan/treehacks-final"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/agentzero",
+  "name": "AgentZero",
+  "tagline": "Our autonomous and verifiable AI agent removes human inconsistency in making trading decisions, enabling data-driven trades with real-time analysis, customization, and safety.",
+  "prizes": [
+   "Web3 Prize: Best AI Agents ($8k Cash + 8k EIGEN [1st] & $7k Cash + 7k EIGEN [2nd])"
+  ],
+  "github": [
+   "https://github.com/2pir2/TreeHack2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/ecgo",
+  "name": "ECGo",
+  "tagline": "Mobile ECG with Wi-Fi capabilities that makes AI-powered diagnoses and stores data on a remote server.",
+  "prizes": [
+   "Web3 Prize: Most Crazy Idea ($7k Cash + 7k EIGEN)"
+  ],
+  "github": [
+   "https://github.com/fightingj305/ecgo"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/therms-thermoregulation-wearables-with-ai-powered-insights",
+  "name": "Therms - Thermoregulation Wearables with AI-powered Insights",
+  "tagline": "A non-invasive wearable using novel thermoregulation research to provide precise heating/cooling to maintain core temperature. Built to enhance physical performance and battle geriatric disorders.",
+  "prizes": [
+   "Healthcare Grand Prize (Meta Ray Ban Smart Glasses x4) and [2nd place]",
+   "Scrapybara: Capy Prize (Japan offsite + $1k credits + Scrapybara Pro 6 months [1st] & $1k credits + Scrapybara Pro 3 months [2nd] & $100 credits + Scrapybara Pro 1 month [3rd])"
+  ],
+  "github": [
+   "https://github.com/arnavnc/therms-platform"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/project-avia-autonomous-vigilance-insights-for-aviation",
+  "name": "Project AVIA",
+  "tagline": "Leveraging healthcare data to improve the performance of fighter jet pilots",
+  "prizes": [
+   "Healthcare Grand Prize (Meta Ray Ban Smart Glasses x4) and [2nd place]"
+  ],
+  "github": [
+   "https://github.com/Harsh-Karia/TreeHacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/visionguard-smart-vision-for-smarter-driving",
+  "name": "VisionGuard: smart vision for smarter driving",
+  "tagline": "Our AI-powered system analyzes in-car video footage to transcribe and interpret driver behavior in real time. By detecting safe/unsafe actions, we provide actionable insights to improve road safety.",
+  "prizes": [
+   "Tesla: Excellence Prize ($2k Tesla Store Gift Card [1st], $1k Gift Card [2nd], $1k Gift Card [3rd])",
+   "Autonomy Grand Prize (6-months use of a Tesla Model 3 or Y w/ Supervised FSD)"
+  ],
+  "github": [
+   "https://github.com/JayYeung/tesla_kaggle"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/hivemind-18cula",
+  "name": "HiveMind",
+  "tagline": "HiveMind: Your Second Brain for Smarter Learning.",
+  "prizes": [
+   "Education Grand Prize ($1k Cash + Meta Ray Ban Smart Glasses x4 + Marine Layer Zoom Hoodie x4)"
+  ],
+  "github": [
+   "https://github.com/AahilAliCodes/Hivemind2",
+   "https://github.com/rajashekarcs2023/HiveMind",
+   "https://github.com/rajashekarcs2023/knowledge-balance-network"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/erwin-enhanced-rock-weathering-impact-navigator",
+  "name": "ERWIN: Enhanced Rock Weathering Impact Navigator",
+  "tagline": "An accessible carbon removal assessment platform for Enhanced Rock Weathering (ERW) projects. Democratizing geochemistry science to inform CO2 removal research and carbon credit investments.",
+  "prizes": [
+   "Sustainability Prize: Best solves the user's pain point of a provided challenge ($800 Cash)"
+  ],
+  "github": [
+   "https://github.com/Jackal-Studios/rock-thing"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/bas-climate-action-matcher",
+  "name": "BAS Climate Action Matcher",
+  "tagline": "A tool to match companies to relevant climate actions. Embedding search to find climate initiatives and agentic workflows+tool usage to discover corporate climate actions from sustainability reports",
+  "prizes": [
+   "Sustainability Prize: Best prototyping process ($800 Cash)",
+   "Intersystems: Best Use of GenAI using InterSystems IRIS Vector Search ($2k Cash [1st] & $1.5k Cash [2nd] & 1k Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/Suzehva/bas_labs"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/lemon-7gn5hq",
+  "name": "Lemon",
+  "tagline": "A simple, transparent ecommerce platform for bargain produce that connects consumers and businesses with local farmers to reduce food waste and fight climate change",
+  "prizes": [
+   "Sustainability Prize: Best incorporation of broader context to enhance venture viability ($800 Cash)"
+  ],
+  "github": [
+   "https://github.com/twosodium/lemon"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/ranger-6jkv5s",
+  "name": "Ranger",
+  "tagline": "Audio is a luxury we take for granted, that deaf folks don't get. Ranger is a wearable AR solution aiming to fix that, visualizing audio around them, and bringing them into the world of *sound*.",
+  "prizes": [
+   "NVIDIA: Best Accelerated Compute (5090s per team member - 1 GPU JHH signed [1st] & 5080s per team member [2nd])"
+  ],
+  "github": [
+   "https://github.com/YuanSamuel/Treehacks2025/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/wiiwork-8u1x62",
+  "name": "WiiWork",
+  "tagline": "Everyone is hyped about AI agents that can interact with the world.\nProblem: Websites weren't built with LLMs in mind\nWhat would it look like if a website was built ground up with Agent usage first?",
+  "prizes": [
+   "NVIDIA: Best Accelerated Compute (5090s per team member - 1 GPU JHH signed [1st] & 5080s per team member [2nd])"
+  ],
+  "github": [
+   "https://github.com/Alezander9/WiiWork"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/portable-braille-cdq8v5",
+  "name": "Portable Braille",
+  "tagline": "Educational device that encourages young visually impaired people to learn and practice Braille in order to increase chances for future employment and expand general literacy level of the community.",
+  "prizes": [
+   "NVIDIA: Robo Prize (Jetson Dev kit per team member)",
+   "TreeHacks Grand Prize | 3rd Place (iPhone 16 Pro per team member)"
+  ],
+  "github": [
+   "https://github.com/Adil-Jussupov/PortableBraille"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/cyberdrive",
+  "name": "CyberDrive",
+  "tagline": "CyberDrive - Transforming driving footage into intelligent insights.",
+  "prizes": [
+   "Tesla: Excellence Prize ($2k Tesla Store Gift Card [1st], $1k Gift Card [2nd], $1k Gift Card [3rd])"
+  ],
+  "github": [
+   "https://github.com/KoaChang/TeslaMCQTreehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/horizonx",
+  "name": "HorizonX",
+  "tagline": "HorizonX is a dual-purpose platform using !!on-device!! VLMs to empower blind people with real-time haptic guider while crowdsourcing anonymized data to help governments improve public safety.",
+  "prizes": [
+   "Tesla: Excellence Prize ($2k Tesla Store Gift Card [1st], $1k Gift Card [2nd], $1k Gift Card [3rd])"
+  ],
+  "github": [
+   "https://github.com/bsflll/treehack2025",
+   "https://github.com/bsflll/treehack2025/tree/main/tesla-real-world-video-q-a"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/wingnote",
+  "name": "WingNote",
+  "tagline": "WingNote – Smart hardware meets AI-powered documentation to listen, structure, and simplify care for nurses and patients.",
+  "prizes": [
+   "Google Cloud: Best Use of Gemini (Google Pixel Watches x4)"
+  ],
+  "github": [
+   "https://github.com/bencullenn/wing-note"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/lumora",
+  "name": "Lumora",
+  "tagline": "Lumora is a Personal Assistant Marketplace. No need to manually set meetings or write to-do lists any longer! Automatically generate quizzes and flashcards based on your online zoom class!",
+  "prizes": [
+   "Vercel: Most Creative Use of Vercel/v0 in Edge AI track ($1.2k in Vercel Pro Credits)"
+  ],
+  "github": [
+   "https://github.com/ShaneYokota72/Lumora"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/noteworthy-visualize-capture-remember",
+  "name": "Noteworthy: Visualize, Capture, Remember.",
+  "tagline": "AI-powered lecture companion: Transforms speech into real-time visualizations, incorporates notes, and enhances learning with summaries, resources, and chatbot integration—effortless and efficient.",
+  "prizes": [
+   "Zoom: Best Use of Zoom APIs ($250 Git Card + Herschel Duffle Bags [1st] & $100 Git Card + Hoodies [2nd] & $50 Git Card + Bottles [3rd])"
+  ],
+  "github": [
+   "https://github.com/arushisharmaa/stanford-tree-hacks-"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/flowpilot-zoom-agent-that-automates-your-workflows",
+  "name": "FlowPilot: Your Agentic Co-Pilot",
+  "tagline": "FlowPilot listens, understands, and executes, transforming Zoom meetings into Slide decks and Notion workflows. No more lost action items - just approve and watch it execute.",
+  "prizes": [
+   "DAIN Labs: AI Agent Excellence & Innovation Awards ($5k Cash [1st] & $2.5K Cash [2nd] & $500 Cash [3rd] + Agent Launchpad Invitation)",
+   "Zoom: Best Use of Zoom APIs ($250 Git Card + Herschel Duffle Bags [1st] & $100 Git Card + Hoodies [2nd] & $50 Git Card + Bottles [3rd])",
+   "Perplexity: Hacking With Perplexity Award ($50 Gift Card per team member)"
+  ],
+  "github": [
+   "https://github.com/CarterCote/flow-pilot",
+   "https://github.com/cyu60/dain-agent"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/zoneout-atz5pe",
+  "name": "ZoneOut",
+  "tagline": "Zoned out during a lecture? Your very own lecture buddy is here to save you! With real-time Q&A based on audio, text & visual context from the lectures, you'll be acing your classes again in no time!",
+  "prizes": [
+   "Zoom: Best Use of Zoom APIs ($250 Git Card + Herschel Duffle Bags [1st] & $100 Git Card + Hoodies [2nd] & $50 Git Card + Bottles [3rd])"
+  ],
+  "github": [
+   "https://github.com/NxtGenLegend/TreeHacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/beef-xk5pif",
+  "name": "BEF",
+  "tagline": "For leaders in high-performance environments, we aggregate real-time wearable data from teams, providing LLM-driven insights, detecting arrhythmias, and reconstructing ECGs—no medical expertise needed",
+  "prizes": [
+   "Terra API: Health Command Center (Ultrahuman Air Ring per team member)"
+  ],
+  "github": [
+   "https://github.com/shafink11/ppg_project"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/watchdog-ai",
+  "name": "WatchDog AI",
+  "tagline": "Anti-Rug AI agent for memecoins by frontrunning + sandwich attacks.\n\nLonger version: \n- Memecoin risk evaluator\n- Auto trade bot\n- Stops hard and soft rug by removing financial incentives",
+  "prizes": [
+   "Taisu Ventures: Most Promising Web3 Project (4x Deeper Network Air)"
+  ],
+  "github": [
+   "https://github.com/BdNWoG/watchdog-ai-final"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/cipher-shield",
+  "name": "Cipher Shield",
+  "tagline": "Making discrimination mathematically impossible via the blockchain & homomorphic encryption",
+  "prizes": [
+   "Taisu Ventures: Next-Gen Web3 Security Award (4x Deeper Network Air + 1 NGRAVE cold wallet)"
+  ],
+  "github": [
+   "https://github.com/zoraizmohammad/treehacks-2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/the-giving-tree-x0a5hk",
+  "name": "The Giving Tree",
+  "tagline": "Intelligent, Efficient, Crypto Donation Platform powered by AI agents",
+  "prizes": [
+   "Taisu Ventures: Web3 for Good Award (4x Deeper Network Air)"
+  ],
+  "github": [
+   "https://github.com/emilyjsun/treehacks25/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/moodmap-ai",
+  "name": "Moods and Metrics",
+  "tagline": "Hyper-analyze your mood with a simple click of a button. See your emotions clearly through audio, video, and transcription sentiment analysis to take control of your mental well-being!",
+  "prizes": [
+   "Otsuka Valuenex: ekkomi® Advanced Technologies for User Feedback Award ($500 Amazon + $100 ekkomi® matcha gift card per team member)"
+  ],
+  "github": [
+   "https://github.com/corey-shen/stress-level-audio-analysis"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/vigilante-xkf7s9",
+  "name": "Vigilante",
+  "tagline": "Combat misinformation through flagged Tweets and grounded sources, and reference a realtime dashboard that visualizes trends on a global scale.",
+  "prizes": [
+   "Otsuka Valuenex: VALUENEX Big Data Visualization Award ($1k Amazon Gift Card)"
+  ],
+  "github": [
+   "https://github.com/dav1dbai/Vigilante"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/superclassroom",
+  "name": "Superclassroom",
+  "tagline": "Adaptive Learning Content Generation for Students with Disabilities",
+  "prizes": [
+   "Intersystems: Best Use of GenAI using InterSystems IRIS Vector Search ($2k Cash [1st] & $1.5k Cash [2nd] & 1k Cash [3rd])"
+  ],
+  "github": [
+   "https://github.com/airjlee/superclassroom"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/factchex",
+  "name": "Verify",
+  "tagline": "Instantly verify tweets with our seamless web extension, ensuring understanding in a world riddled with misinformation. From political stories to fake sports trades, know the truth automatically",
+  "prizes": [
+   "Perplexity: Best Search Hack ($250 Gift Card per team member + HQ visit)"
+  ],
+  "github": [
+   "https://github.com/jcub-gold/TreeHacks_25_Project"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/synapseai",
+  "name": "SynapseAI",
+  "tagline": "Transforming Thoughts into Visual Expression - Empowering Minds Beyond Words",
+  "prizes": [
+   "Chroma: Best Chroma Cloud AI Application ($200 per team member)"
+  ],
+  "github": [
+   "https://github.com/angad-the-coder/synapse"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/conductor-ai",
+  "name": "Conductor AI",
+  "tagline": "Agentic routing at scale for 66x cheaper and 4x faster — Powering the Agentic Future",
+  "prizes": [
+   "Codegen: Best Code Generation Application ($1.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/codegen-sh/codegen-sdk/pull/521",
+   "https://github.com/shloknatarajan/ariadne-routing"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/code-insight",
+  "name": "CodeInsight",
+  "tagline": "Help developers understand codebases faster",
+  "prizes": [
+   "Codegen: Best Code Analysis Application ($1.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/evanng07/ej-treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/swarm-ai-s6lhd0",
+  "name": "Swarm AI",
+  "tagline": "Swarm AI empowers AI companies to test thousands of speech-to-speech conversations in parallel, measuring latency, coherence, memory, & engagement. We turn weeks of QA & model evaluation into minutes.",
+  "prizes": [
+   "Codegen: Best Developer Tool ($1.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/phombal/swarm-backend-new",
+   "https://github.com/sidjavvaji/swarm.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/pulse-ai-0oafm5",
+  "name": "PULSE.AI",
+  "tagline": "An AI code agent tool that integrates live browser session context for smarter coding assistance. It analyzes tabs, runs extra searches, and uses RAG to provide Codeium’s Cascade with extra context.",
+  "prizes": [
+   "Codeium: Best Use of Windsurf ($1k Cash + 1-Year Windsurf + Codeium Subscription)"
+  ],
+  "github": [
+   "https://github.com/ekang7/PulseAI"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/traider",
+  "name": "traider",
+  "tagline": "Trade smarter not harder! Upgrade your financial literacy with traider",
+  "prizes": [
+   "Context: Best AI Employee Workflow ($2.5k Cash + $2.5k Context API Credits)"
+  ],
+  "github": [
+   "https://github.com/ajagtapdev/traider"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/theramind",
+  "name": "TheraMind",
+  "tagline": "Less paperwork, more patient care: the AI therapist's assistant.",
+  "prizes": [
+   "DAIN Labs: AI Agent Excellence & Innovation Awards ($5k Cash [1st] & $2.5K Cash [2nd] & $500 Cash [3rd] + Agent Launchpad Invitation)"
+  ],
+  "github": [
+   "https://github.com/cherylwu834/treehacks25"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/jarvis-mhfy78",
+  "name": "Agent Ricky",
+  "tagline": "Monitoring the Health and Safety of First Responders and Military Personnel",
+  "prizes": [
+   "DAIN Labs: AI Agent Excellence & Innovation Awards ($5k Cash [1st] & $2.5K Cash [2nd] & $500 Cash [3rd] + Agent Launchpad Invitation)"
+  ],
+  "github": [
+   "https://github.com/nipunbatra8/healthbot",
+   "https://github.com/nipunbatra8/mapagent"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/ai-mama",
+  "name": "Motherly.ai",
+  "tagline": "Your mom knows you better than you do.",
+  "prizes": [
+   "Delve: Best Agentic Workflow (AirPods + Delve Founder Numbers + Onsite)",
+   "Scrapybara: Capy Prize (Japan offsite + $1k credits + Scrapybara Pro 6 months [1st] & $1k credits + Scrapybara Pro 3 months [2nd] & $100 credits + Scrapybara Pro 1 month [3rd])"
+  ],
+  "github": [
+   "https://github.com/MingkuanY/ai-mommy"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/protestlink",
+  "name": "ProtestLink",
+  "tagline": "Secure, real-time protest coordination via encrypted mesh and AI insights",
+  "prizes": [
+   "Delve: Most Secure App (AirPods + Delve Founder Numbers + Onsite)"
+  ],
+  "github": [
+   "https://github.com/wyang563/protest_app"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/codeforge-pages",
+  "name": "CodeForge Pages",
+  "tagline": "Aesthetic React Landing Pages in Minutes – AI, Code Preview / Export, OAuth, Databases",
+  "prizes": [
+   "Delve: Most Intuitive UX (AirPods + Delve Founder Numbers + Onsite)"
+  ],
+  "github": [
+   "https://github.com/KshitijTeotia06/backendTreeHacks",
+   "https://github.com/KshitijTeotia06/frontendTreeHacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/theo-k1enau",
+  "name": "theo",
+  "tagline": "a cognition copilot that distills your thoughts from pen to perspective",
+  "prizes": [
+   "Elastic: Best use of Elasticsearch Serverless ($2,000 Cash [1st] & $1,000 Cash [2nd])"
+  ],
+  "github": [
+   "https://github.com/RALS-TreeHacks-25/backend",
+   "https://github.com/RALS-TreeHacks-25/frontend"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/priorityqueue",
+  "name": "<PriorityQueue>",
+  "tagline": "Democratizing information across the electric grid.",
+  "prizes": [
+   "Elastic: Best use of Elasticsearch Serverless ($2,000 Cash [1st] & $1,000 Cash [2nd])"
+  ],
+  "github": [
+   "https://github.com/shrenikpatel17/treeHacks2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/codecrack",
+  "name": "CodeCrack",
+  "tagline": "Master coding interviews with CodeCrack: a voice-driven AI agent simulating dynamic, real-time mock interviews, delivering interactive feedback to sharpen your skills.",
+  "prizes": [
+   "ElevenLabs: Best Use of ElevenLabs (11M Credits + AirPods Max per team member [1st] & 8.11M Credits + Merch [2nd] & 5.11M Credits + Merch [3rd])"
+  ],
+  "github": [
+   "https://github.com/kkarenvoo/TreeHacks2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/the-duck-you-mean",
+  "name": "The Duck You Mean?",
+  "tagline": "- if you can explain it to a duck, you can explain it to anyone.",
+  "prizes": [
+   "ElevenLabs: Best Use of ElevenLabs (11M Credits + AirPods Max per team member [1st] & 8.11M Credits + Merch [2nd] & 5.11M Credits + Merch [3rd])"
+  ],
+  "github": [
+   "https://github.com/joycechen721/duck-you-mean/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/ecobite-qcujae",
+  "name": "EcoBite",
+  "tagline": "Track your food waste in a gamified way— EcoBite aims at combating global food waste by allowing its users to upload images of their food, eaten or uneaten, to determine the weight of what is wasted.",
+  "prizes": [
+   "Flutterflow: Best Use of FlutterFlow ($2,000 Cash + meet w/ founders [1st] & $1,500 Cash [2nd] & iPad 10.9\"s [3rd])"
+  ],
+  "github": [
+   "https://github.com/SirKentut/EcoBite"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/sprout-io",
+  "name": "Sprout",
+  "tagline": "Where imagination shapes learning",
+  "prizes": [
+   "Flutterflow: Best Use of FlutterFlow ($2,000 Cash + meet w/ founders [1st] & $1,500 Cash [2nd] & iPad 10.9\"s [3rd])"
+  ],
+  "github": [
+   "https://github.com/sdoshi4/Treehacks2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/caren-ai",
+  "name": "Caren AI",
+  "tagline": "Because everyone deserves someone who cares",
+  "prizes": [
+   "Flutterflow: Best Use of FlutterFlow ($2,000 Cash + meet w/ founders [1st] & $1,500 Cash [2nd] & iPad 10.9\"s [3rd])"
+  ],
+  "github": [
+   "https://github.com/Tap2Call/flutterflow"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/navi-7sp5mz",
+  "name": "Navi",
+  "tagline": "Navigate smarter: a co-pilot for your browser\n\nNavi streamlines your browsing experience with immediate assistance, voice navigation, and website recommendations based on predicted user intent.",
+  "prizes": [
+   "Groq: Best on Groq Multimodal App Challenge ($1,000 of Groq Swag Store Credit)"
+  ],
+  "github": [
+   "https://github.com/danieltyx/navi-browser-agent"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/tumor-invasion-kinetics-gui",
+  "name": "Spheroid Tumor Invasion Kinetics (STIK) GUI",
+  "tagline": "An AI-powered tool for tracking and predicting spheroid tumor invasion kinetics that eliminates the need for manual tracing, featuring an intuitive graphical user interface.",
+  "prizes": [
+   "Hudson River Trading: Best Use of Data Hack (HRT-branded JBL earbuds per team member)"
+  ],
+  "github": [
+   "https://github.com/sonnyloweus/STIK_GUI/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/plot-3pi8c4",
+  "name": "Plot",
+  "tagline": "Plot delivers comprehensive insights on any location. Whether you're scouting investments or shaping skylines, Plot helps you shape your plot’s plot—making smarter decisions before you break ground.",
+  "prizes": [
+   "LangChain: Best Use of LangChain (LangChain Swag Box, $250 LangSmith Credits, and access to LangGraph Cloud per team member)"
+  ],
+  "github": [
+   "https://github.com/toni-akintola/jats"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/the-anachronist",
+  "name": "The Anachronist",
+  "tagline": "History isn’t just studied, it’s lived. Enter a 3D time-travel adventure.",
+  "prizes": [
+   "LumaLabs: Reimagining Visual Creation with AI ($2,500 Cash + $5,000 Luma Credits)"
+  ],
+  "github": [
+   "https://github.com/rgu0114/the-anachronist"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/mirror-lmd54a",
+  "name": "Mirror",
+  "tagline": "Reflecting on your past work, relationships, and learning has never been easier. Mirror turns your minute-to-minute into a comprehensive and indexable knowledge base in the form of a journal.",
+  "prizes": [
+   "Mistral: Best Use of Mistral AI API (AirPods x4 + $1,000 Cash + $1,000 API Credits)"
+  ],
+  "github": [
+   "https://github.com/kevinzhu12/treehacks-glasses",
+   "https://github.com/sarahjsu/tree_augmentos"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/sherlock-n4fikj",
+  "name": "Sherlock",
+  "tagline": "Connecting the dots for investigative minds.",
+  "prizes": [
+   "Neo: Most Likely to Become a Business (Airfare + Accomodations at Neo Summer Retreat)"
+  ],
+  "github": [
+   "https://github.com/Honyant/TreeHacks2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/fable-br8e1d",
+  "name": "Fable",
+  "tagline": "Fable tells stories that adapt to your state of mind. As your brainwaves shift, we generate a story and create an immersive visual journey that mirrors your inner state in real time.",
+  "prizes": [
+   "OpenAI: Most Creative Use of OpenAI API (OpenAI SF HQ lunch + Swag)"
+  ],
+  "github": [
+   "https://github.com/StiopaPopa/fable"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/treetrash",
+  "name": "TreeTrash",
+  "tagline": "Quantify, analyze, and improve sustainability with intelligent trash monitoring!",
+  "prizes": [
+   "OpenAI: Most Creative Use of OpenAI API (OpenAI SF HQ lunch + Swag)"
+  ],
+  "github": [
+   "https://github.com/sonnetx/treehacks-2025"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/zue-research",
+  "name": "Zue Research",
+  "tagline": "interactive multimodal AI experiences for neurodivergent learners run entirely on the edge",
+  "prizes": [
+   "Orbstack: Best Use of Rust ($1k Cash)"
+  ],
+  "github": [
+   "https://github.com/exo-explore/exo",
+   "https://github.com/zcsabbagh/zu-lm/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/lattice-data-at-your-fingertips",
+  "name": "Lattice: Orchestrating end-to-end web workflows at scale",
+  "tagline": "Massively parallelized agentic research workflows using spreadsheets as a primitive",
+  "prizes": [
+   "Pear VC: Best Customer Insights ($25k Unncapped SAFE + Office Hours w/ Partners [1st] & Office Hours w/ Partners [2nd])",
+   "Paradigm: Best Spreadsheet-Adjacent Hack (Air Pods Max per team member)"
+  ],
+  "github": [
+   "https://github.com/WeltonWang02/spreadsheet_hackathon"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/spielburg-ai",
+  "name": "Spielberg AI",
+  "tagline": "AI-powered video editing with CUDA optimization—our advanced AI agent executes complex edits with natural language, slashing 10-minute processing tasks to seconds using the GPU!",
+  "prizes": [
+   "Rox: Best Agents Hack ($7k Cash)"
+  ],
+  "github": [
+   "https://github.com/adeng27/treehacks-25"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/mindcontrolpc-control-computer-with-brainwaves",
+  "name": "NeuroPilot: Brainwave Computer Control",
+  "tagline": "Control your computer with just your mind.",
+  "prizes": [
+   "Scrapybara: Capy Prize (Japan offsite + $1k credits + Scrapybara Pro 6 months [1st] & $1k credits + Scrapybara Pro 3 months [2nd] & $100 credits + Scrapybara Pro 1 month [3rd])"
+  ],
+  "github": [
+   "http://github.com/nicolesplaining/treehacks/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/mapdash",
+  "name": "Miru",
+  "tagline": "Indoor navigation for the visually impaired, made easy.",
+  "prizes": [
+   "Vespa.ai: Best Hack Using a Vision Language Model ($500 Amazon gift card per team member)"
+  ],
+  "github": [
+   "https://github.com/flatypus/miru"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/codefusion-v9eq2x",
+  "name": "CodeFusion",
+  "tagline": "Talk, gesture, and bring your code to life.",
+  "prizes": [
+   "Warp: Best Developer Tool (Keychron Mechanical Keyboard per team member)"
+  ],
+  "github": [
+   "https://github.com/vsahni3/CodeFusion/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2025,
+  "url": "https://devpost.com/software/supernova-p1tum5",
+  "name": "Supernova",
+  "tagline": "End-to-end AI-generated ads – the world's influencers at your fingertips.",
+  "prizes": [
+   "TreeHacks Grand Prize | 2nd Place ($7.5k Cash)"
+  ],
+  "github": [
+   "https://github.com/pr28416/ai-ugc"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/raising-cane",
+  "name": "Shepherd",
+  "tagline": "A smart cane that guides indoor and outdoor navigation for blind people, costing ~1/20 of existing devices and providing better guidance.",
+  "prizes": [
+   "Treehacks Grand Prize (1st)",
+   "[OpenEvidence] Healthcare Track Grand Prize",
+   "[OpenEvidence] Best Use of Clinical Information (4x Apple Watches)"
+  ],
+  "github": [
+   "https://github.com/tonywangs/shepherd"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/we-use-nix",
+  "name": "Robosurge",
+  "tagline": "Cursor for surgery.",
+  "prizes": [
+   "Treehacks Grand Prize (2nd)"
+  ],
+  "github": [
+   "https://github.com/quantum9Innovation/treehacks2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/chromachord",
+  "name": "ChromaChord",
+  "tagline": "Real-time music chord suggestions based on the elegant theory of 24D chroma vectors, enhanced with track generation features.",
+  "prizes": [
+   "Treehacks Grand Prize (3rd)",
+   "[Suno] Best Musical Hack"
+  ],
+  "github": [
+   "https://github.com/J4Joshua/JASS-APP",
+   "https://github.com/cjbayron/autochord"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/diffuji",
+  "name": "diffuji",
+  "tagline": "a diffusion-powered instant camera",
+  "prizes": [
+   "Most Creative",
+   "[Neo] Most Likely to Become a Product"
+  ],
+  "github": [
+   "http://github.com/alexkranias/dispo"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/mira-w65b0a",
+  "name": "Mira",
+  "tagline": "AI eldercare assistant that reconstructs 3D scenes, localizes lost objects, and alerts caregivers—all through voice and vision.",
+  "prizes": [
+   "Most Impactful",
+   "[OpenAI] Artificial Intelligence Track ([1st] Lunch with OpenAI engineers at the office + 1 year of ChatGPT Pro [2nd] 1 year of ChatGPT Pro [3rd] OpenAI swag)"
+  ],
+  "github": [
+   "https://github.com/nathanjzhao/treehacks2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/freak-in-the-sheets-7jl542",
+  "name": "Freak in the Sheets",
+  "tagline": "The hot new LLVM backend: compile your code to a spreadsheet.",
+  "prizes": [
+   "Most Technically Complex",
+   "[Human Capital] Human Capital Fellowship Prize ( $50k equity-free check per team member (up to $200k total))"
+  ],
+  "github": [
+   "https://github.com/kognise/freak-in-the-sheets/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/sentinel-c8ki50",
+  "name": "Sentinel",
+  "tagline": "Full-stack AI for bare-metal embedded systems. Proven by shipping a complete bare-metal OS on Raspberry Pi from scratch in 24 hours.",
+  "prizes": [
+   "Best Hardware Hack"
+  ],
+  "github": [
+   "https://github.com/apple-314/treehacks26"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/heartstart",
+  "name": "HeartStart",
+  "tagline": "Emergency Detection. Autonomous Robot CPR.",
+  "prizes": [
+   "Best Beginner Hack"
+  ],
+  "github": [
+   "https://github.com/nicolewongbiz/cpr-robot.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/visionos-5euxo7",
+  "name": "VisionOS",
+  "tagline": "Imagine a Blind Person Could Code",
+  "prizes": [
+   "[OpenAI] Artificial Intelligence Track ([1st] Lunch with OpenAI engineers at the office + 1 year of ChatGPT Pro [2nd] 1 year of ChatGPT Pro [3rd] OpenAI swag)"
+  ],
+  "github": [
+   "https://github.com/ledaniel0/treehacks2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/containos",
+  "name": "ContainOS",
+  "tagline": "Physics-Grounded Multi-Agent Copilot for Rapid Wildfire Containment.",
+  "prizes": [
+   "[OpenAI] Artificial Intelligence Track ([1st] Lunch with OpenAI engineers at the office + 1 year of ChatGPT Pro [2nd] 1 year of ChatGPT Pro [3rd] OpenAI swag)"
+  ],
+  "github": [
+   "https://github.com/maanitg/containment"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/shadowguard-l6yv7p",
+  "name": "ShadowGuard",
+  "tagline": "ShadowGuard is a network-layer AI firewall that detects and redacts sensitive patient data in real time, before it ever leaves a hospital network.",
+  "prizes": [
+   "[OpenEvidence] Healthcare Track Grand Prize"
+  ],
+  "github": [
+   "https://github.com/shamanthak-hegde/ShadowGuard"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/project-lend",
+  "name": "Project Lend",
+  "tagline": "An autonomous food bank run entirely by AI + robotics, sourcing and distributing over 50lbs of food during TreeHacks to Palo Alto shelters in 1 weekend!",
+  "prizes": [
+   "[Anthropic] Human Flourishing Track (1st Place: 4 tungsten cubes 2nd Place: 1 year of Claude Pro 3rd Place: 6 months of Claude Pro)"
+  ],
+  "github": [
+   "https://github.com/PranavViswanath/project-lend"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/tribune",
+  "name": "Tribune",
+  "tagline": "GitHub for democracy. Every policy change cited to a voice.",
+  "prizes": [
+   "[Anthropic] Human Flourishing Track (1st Place: 4 tungsten cubes 2nd Place: 1 year of Claude Pro 3rd Place: 6 months of Claude Pro)"
+  ],
+  "github": [
+   "https://github.com/arihantjain4/Tribune"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/bloom-dvjpea",
+  "name": "Bloom",
+  "tagline": "The AI caretaker that enables seniors to be more independent and connected to their families.",
+  "prizes": [
+   "[Anthropic] Human Flourishing Track (1st Place: 4 tungsten cubes 2nd Place: 1 year of Claude Pro 3rd Place: 6 months of Claude Pro)",
+   "[Decagon] Best Conversation Assistant (Nintendo Switch 2 Mario Kart World Bundle Guaranteed onsite interviews for internship)"
+  ],
+  "github": [
+   "https://github.com/Kevinxygu/treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/synsplatt",
+  "name": "Mirage",
+  "tagline": "Robots and self-driving cars need training data. Mirage synthesizes 3D world-model training data covering hard-to-capture scenes - like driving in a hailstorm.",
+  "prizes": [
+   "[Modal] Inference Track (Inference Track Grand Prize: $5K in Modal Credits per person, paid visit (flight & hotel) to SF or NY Office with lunch with Modal team,. Inference Track Runner Up Prize: $1K in Modal credits, airpods for each team member.)"
+  ],
+  "github": [
+   "https://github.com/kyan-yang/treehacks-2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/shotspot-kfvp1n",
+  "name": "ShotSpot",
+  "tagline": "Stop scrubbing videos. Start training models.",
+  "prizes": [
+   "[Modal] Inference Track (Inference Track Grand Prize: $5K in Modal Credits per person, paid visit (flight & hotel) to SF or NY Office with lunch with Modal team,. Inference Track Runner Up Prize: $1K in Modal credits, airpods for each team member.)",
+   "[Bright Data] Best AI-Powered Web Data Hack ($500 Cash + $1.5k Credits [1st] & $350 Cash + $1K Credits [2nd] & $250 Cash + $500 Credits [3rd])"
+  ],
+  "github": [
+   "https://github.com/aedutta/shot-spot-treehacks-26/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/jiggle-wiggle",
+  "name": "jiggle wiggle",
+  "tagline": "any move, any coach, anytime.",
+  "prizes": [
+   "[Modal] Inference Track (Inference Track Grand Prize: $5K in Modal Credits per person, paid visit (flight & hotel) to SF or NY Office with lunch with Modal team,. Inference Track Runner Up Prize: $1K in Modal credits, airpods for each team member.)",
+   "[Zoom x Render] Best use of Zoom APIs + Render: (Bose Headphones x 4 Zoom Ocean Bottle x 4$2000 Render Credits)"
+  ],
+  "github": [
+   "https://github.com/cindyzli/jigglewiggle"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/gridveda",
+  "name": "GridVeda",
+  "tagline": "GridVeda gives powerline operators predictive failure detection at edge. Ensemble AI monitors 20 transformers with real-time health scoring + natural lang diagnostics; all autonomous on NVIDIA Jetson.",
+  "prizes": [
+   "[Stanford Ecopreneurship] Sustainability: Best prototyping process"
+  ],
+  "github": [
+   "https://github.com/TheRaven5520/GridVeda"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/morro",
+  "name": "Morro",
+  "tagline": "The geoengineering operating system for climate renewal. Predict natural disasters, pick from a suite of rain/cloud seeding interventions, and prevent their destructive impacts.",
+  "prizes": [
+   "[Stanford Ecopreneurship] Sustainability: Best incorporation of broader context (e.g. regulatory, competitive landscape) to improve venture viability"
+  ],
+  "github": [
+   "https://github.com/Thaarak/graphcast.git"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/mobius-the-first-ai-agent-to-build-a-unicorn",
+  "name": "Mobius: the first AI Agent to build a billion dollar company",
+  "tagline": "Mobius runs for very long periods of time completely autonomously to complete all aspects of building a venture-scale company from scratch - engineering, marketing, operations, legal, and more.",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)",
+   "[Modal] Sandbox Challenge"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/tradeproof",
+  "name": "TradeProof",
+  "tagline": "AI-Native Infrastructure that Reimagines Trade Work for Blue-Collar Careers.",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)"
+  ],
+  "github": [
+   "https://github.com/Yaga-Yoink/tradeproof"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/aesthetica",
+  "name": "aesthetica",
+  "tagline": "the 1st spatial fashion system. w 1 gesture on meta glasses, u turn any outfit u c into aesthetic data, matched products, a taste profile that evolves w u\nu see it \nu like it \nu want it \nu got it.",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)"
+  ],
+  "github": [
+   "https://github.com/socratesosorio/aesthetica"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/hireright",
+  "name": "HireUp",
+  "tagline": "Match with the best applicants, powered by AI agents and TikTok's recommendation algorithm.",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)"
+  ],
+  "github": [
+   "https://github.com/pahu2353/HireUp"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/zeta-jwq9te",
+  "name": "Zeta",
+  "tagline": "Grammarly for Math",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)"
+  ],
+  "github": [
+   "https://github.com/aryans-15/treehacks-2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/evolve-browser",
+  "name": "evolve(browser)",
+  "tagline": "The self-modifying browser for maximizing productivity.",
+  "prizes": [
+   "[Y Combinator] Build an Iconic YC Company with AI (1st Place: Guaranteed YC interview 2nd Place: Guaranteed YC Office Hours 3rd Place: Guaranteed YC Office Hours)"
+  ],
+  "github": [
+   "https://github.com/adeng27/evolve-browser/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/hellocare",
+  "name": "Hellocare",
+  "tagline": "Left the doctor confused or worried you forgot something? Your grandparents probably have. Hellocare schedules, explains, and turns paperwork into clear next steps, so you focus on health, not stress.",
+  "prizes": [
+   "[Google] Cloud AI Track"
+  ],
+  "github": [
+   "https://github.com/smallboar/HelloCare"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/bye-buy",
+  "name": "Bye! Buy!",
+  "tagline": "Selling stuff online sucks... 50+ messages, lowball offers, sketchy buyers. Bye-Buy handles this mess: our AI agents cross-list on platforms, negotiate for best prices, and guarantee instant payment.",
+  "prizes": [
+   "[Google] Cloud AI Track",
+   "[Browserbase] Best Web Automation with Stagehand ($1,000)"
+  ],
+  "github": [
+   "https://github.com/jpsingaraju/bye-buy"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/torq",
+  "name": "TORQ",
+  "tagline": "Turn any car into a self-driving vehicle with the Jetson Thor. Retrofit autonomy, enable rideshare, and deliver smart AI feedback. From real-time reflexes to deep reasoning.",
+  "prizes": [
+   "[NVIDIA] Edge AI Track"
+  ],
+  "github": [
+   "https://github.com/HazyResearch/ThunderKittens",
+   "https://github.com/JoelGrayson/Treehacks2026",
+   "https://github.com/NVIDIA/TensorRT-Edge-LLM",
+   "https://github.com/bryandong24/treehacks2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/greenguardian-microfarm",
+  "name": "Sprout",
+  "tagline": "Your mini robot microfarm.",
+  "prizes": [
+   "[NVIDIA] Edge AI Track"
+  ],
+  "github": [
+   "https://github.com/lethan3/cactushacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/detour-64kpds",
+  "name": "Detour",
+  "tagline": "On-board AI agents autonomously saving satellites from orbital debris.",
+  "prizes": [
+   "[NVIDIA] Edge AI Track"
+  ],
+  "github": [
+   "https://github.com/keanucz/detour"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/caltrack-i0pq3n",
+  "name": "CalTrack",
+  "tagline": "Using mass surveillance to keep people safe - predicting impact, affected areas, and coordinating faster emergency response in disasters.",
+  "prizes": [
+   "[NVIDIA] Edge AI Track"
+  ],
+  "github": [
+   "https://github.com/alangrewco/treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/prereq-sg1thw",
+  "name": "Prereq",
+  "tagline": "Real-time knowledge graphs that make every lecture impossible to fall behind in",
+  "prizes": [
+   "[Zoom] Education Track"
+  ],
+  "github": [
+   "https://github.com/jasonyi33/prereq"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/ta-da-intelligent-teaching-assistant",
+  "name": "TA-DA: Intelligent Teaching Assistant",
+  "tagline": "Why are students Googling mid-lecture? TA-DA keeps them in the room: AI teaching assistant built into Zoom that detects confusion and generates concept cards instantly. No context loss. Just learning.",
+  "prizes": [
+   "[Zoom] Education Track"
+  ],
+  "github": [
+   "https://github.com/pb2323/TA-da"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/minerva-3sj6z0",
+  "name": "Minerva",
+  "tagline": "Accessible tutoring for everyone",
+  "prizes": [
+   "[Zoom] Education Track",
+   "[HeyGen] Best creation with HeyGen Avatar API (4 Airpod Pros 3, 1 year of HeyGen Creator license, guaranteed onsite interviews for FTE or intern roles)"
+  ],
+  "github": [
+   "https://github.com/anton-3/minerva",
+   "https://github.com/manimCommunity/manim"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/monolith-z10684",
+  "name": "Monolith",
+  "tagline": "Shared coding agent context powered by RLMs. One Context, Run Everywhere.",
+  "prizes": [
+   "[Modal] Sandbox Challenge"
+  ],
+  "github": [
+   "https://github.com/WingchunSiu/Monolith"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/longshot",
+  "name": "Longshot",
+  "tagline": "Built Minecraft in one shot - Burned $5500 running 100+ coding agents pushing at peak 1200+ commits/hr to research the future of \"coding\"",
+  "prizes": [
+   "[Modal] Sandbox Challenge"
+  ],
+  "github": [
+   "https://github.com/andrewcai8/agentswarm"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/rescuerx",
+  "name": "RescueRX",
+  "tagline": "How many drugs have been shelved that could save lives for diseases they were never tested on? We use AI to find drugs abandoned for business reasons & pinpoint diseases they're best suited to fight.",
+  "prizes": [
+   "[OpenEvidence] Best Use of Clinical Information (4x Apple Watches)"
+  ],
+  "github": [
+   "https://github.com/Donglomur/TreeHacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/sunday-94odas",
+  "name": "Sunday",
+  "tagline": "Sunday is the friend in the group chat who actually makes things happen — plans the dinner, orders the groceries, books the restaurant, and remembers to send out the Partiful.",
+  "prizes": [
+   "[Anthropic] Best Use of Claude Agent SDK ($2,500 in Claude Developer Platform credits)"
+  ],
+  "github": [
+   "https://github.com/priyanshbhatter24/sunday"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/keryx-k49dta",
+  "name": "Keryx",
+  "tagline": "Drones map real buildings in minutes, creating AI-operable world models where assistive agents navigate and search for locations (ex. food, elevator). Provides on-demand street view.",
+  "prizes": [
+   "[Human Capital] Human Capital Fellowship Prize ( $50k equity-free check per team member (up to $200k total))"
+  ],
+  "github": [
+   "https://github.com/WubbLord/treehacks-26"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/ontab",
+  "name": "OnTab",
+  "tagline": "Cursor Tab for Everything",
+  "prizes": [
+   "[Human Capital] Human Capital Fellowship Prize ( $50k equity-free check per team member (up to $200k total))"
+  ],
+  "github": [
+   "https://github.com/csaye/ontab"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/m-4f2iwy",
+  "name": "Edamame",
+  "tagline": "AI Clones for Organizational Memory",
+  "prizes": [
+   "[Greylock] Best multi-turn agent (Courtside tickets to Warriors game ($10k value) Office hours with Greylock Partners)"
+  ],
+  "github": [
+   "https://github.com/angelinaquan/edamame-treehacks/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/aimogus",
+  "name": "aimogus",
+  "tagline": "Can AI agents in multi-agent systems deceive, deduce, and stay aligned?",
+  "prizes": [
+   "[Greylock] Best multi-turn agent (Courtside tickets to Warriors game ($10k value) Office hours with Greylock Partners)"
+  ],
+  "github": [
+   "https://github.com/samarth-bhargav/treehacks-amogus"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/power-lever",
+  "name": "Power Lever",
+  "tagline": "Agentic inference optimization. Unlike static inference providers, we dynamically orchestrate GPUs and implement on-demand speculative decoding to deliver inference control, saving water and compute.",
+  "prizes": [
+   "[Greylock] Best multi-turn agent (Courtside tickets to Warriors game ($10k value) Office hours with Greylock Partners)"
+  ],
+  "github": [],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/mira-3xqlos",
+  "name": "Mira Mira on Da Wall",
+  "tagline": "MIRA is an AI powered smart mirror that helps you decide what to wear and what to buy. \"Mira Mira On The Wall...\"",
+  "prizes": [
+   "[Visa] The Generative Edge: Future of Commerce ($10,000 total)"
+  ],
+  "github": [
+   "https://github.com/23jmo/mirrorless"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/voider",
+  "name": "Voider",
+  "tagline": "Voider is a voice-first shopping brain that orchestrates cross-platform price comparisons and secure, agentic payments to make buying as effortless as setting a timer.",
+  "prizes": [
+   "[Fetch.ai] Build, launch and monetise AI Agents on Agentverse that turn user intent into real outcomes. (Best Overall AI Agent Solution - $2500 Best Multi-Agent Workflow - $1500 Best Monetised Agent - $1000)"
+  ],
+  "github": [
+   "https://github.com/Sohamiscurious/TreeHacks2026"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/hackoverflow-stack-overflow-for-ai-agents-at-hackathons",
+  "name": "HackOverflow: Stack Overflow for AI Agents",
+  "tagline": "Not another AI social network. A productivity knowledge commons for AI. Where agents solve real problems, share real code, and escalate to real humans.",
+  "prizes": [
+   "[Fetch.ai] Build, launch and monetise AI Agents on Agentverse that turn user intent into real outcomes. (Best Overall AI Agent Solution - $2500 Best Multi-Agent Workflow - $1500 Best Monetised Agent - $1000)",
+   "[Runpod] Best use of Flash (1st Place: 200 Runpod credits per team member (up to 4). 2nd Place: 100 Runpod credits per team member (up to 4). 3rd Place: 50 Runpod credits per team member (up to 4).)"
+  ],
+  "github": [
+   "https://github.com/vrinda-inani/treehacks26"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/agentplace",
+  "name": "AgentPlace",
+  "tagline": "The AI-native digital marketplace that haggles for you",
+  "prizes": [
+   "[Fetch.ai] Build, launch and monetise AI Agents on Agentverse that turn user intent into real outcomes. (Best Overall AI Agent Solution - $2500 Best Multi-Agent Workflow - $1500 Best Monetised Agent - $1000)"
+  ],
+  "github": [
+   "https://github.com/patidararnav/agentplace"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/molecule-mcbob",
+  "name": "RepoRx",
+  "tagline": "AI-native research engine to discover FDA-approved drug repurposing candidates for cancer treatment. Runs GPU-accelerated diffusion simulations to surface high-potential treatments in minutes.",
+  "prizes": [
+   "[Fetch.ai] Build, launch and monetise AI Agents on Agentverse that turn user intent into real outcomes. (Best Overall AI Agent Solution - $2500 Best Multi-Agent Workflow - $1500 Best Monetised Agent - $1000)",
+   "[Runpod] Best use of Flash (1st Place: 200 Runpod credits per team member (up to 4). 2nd Place: 100 Runpod credits per team member (up to 4). 3rd Place: 50 Runpod credits per team member (up to 4).)"
+  ],
+  "github": [
+   "https://github.com/ezou1/tree26"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/neuroblocks-cz7n9k",
+  "name": "NeuroBlocks",
+  "tagline": "No setup. No code. Just drag, connect, and learn ML.",
+  "prizes": [
+   "[Runpod] Best use of Flash (1st Place: 200 Runpod credits per team member (up to 4). 2nd Place: 100 Runpod credits per team member (up to 4). 3rd Place: 50 Runpod credits per team member (up to 4).)"
+  ],
+  "github": [
+   "https://github.com/tupdaily/AIPlayground"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/adapt-ujvn5e",
+  "name": "ADapt",
+  "tagline": "One ad. Every market.AI-localized in seconds.",
+  "prizes": [
+   "[Runpod] Best use of Flash (1st Place: 200 Runpod credits per team member (up to 4). 2nd Place: 100 Runpod credits per team member (up to 4). 3rd Place: 50 Runpod credits per team member (up to 4).)"
+  ],
+  "github": [
+   "https://github.com/ssiddhantsood/treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/gallop",
+  "name": "Gallop",
+  "tagline": "Stop breaches in real-time. Gallop is a multi-agent, AI-native cybersecurity control platform that detects intrusion activity and converts security signals into immediate defensive actions.",
+  "prizes": [
+   "[Elastic] Best end-to-end Agentic system on Elasticsearch (1st Place: $2,000 (split across team members) 2nd Place: $1,000 (split across team members))"
+  ],
+  "github": [
+   "https://github.com/Eth007/gallop"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/carelink-k1pzeh",
+  "name": "CareLink",
+  "tagline": "Voice AI with RAG-powered clinical reasoning that proactively detects post-surgical complications, alerts care providers before symptoms escalate, and prevents costly hospital readmissions",
+  "prizes": [
+   "[Elastic] Best end-to-end Agentic system on Elasticsearch (1st Place: $2,000 (split across team members) 2nd Place: $1,000 (split across team members))"
+  ],
+  "github": [
+   "https://github.com/JoyZhuoz/carelink"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/4sight-neoslb",
+  "name": "4sight",
+  "tagline": "AI-powered biometric and visual monitoring that predicts when you’re prone to bad decisions. With autonomously triggered interventions, 4sight helps you make better decisions for a better you.",
+  "prizes": [
+   "[Cloudflare] Best Use of Cloudflare Developer Platform (1st Place - $250K Cloudflare credits + Cloudflare swag bag for each team member. 2nd Place - $100k Cloudflare credits)"
+  ],
+  "github": [
+   "https://github.com/kl527/4sight"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/concierge-1tjlf5",
+  "name": "Concierge",
+  "tagline": "Stop guessing gifts! Concierge lets 2 Poke agents collaborate with shared context across your email, the web, and your texts, then auto-finds and configures the perfect buy via Browserbase web agents.",
+  "prizes": [
+   "[The Interaction Company of California] Build with Poke (Challenge 1: iPhone Air for everyone in the team Challenge 2: iPhone 17 Pro for everyone in the team Challenge 3: iPhone Air for everyone in the team Bonus: up to $100k in cash)",
+   "[Browserbase] Best Web Automation with Stagehand ($1,000)"
+  ],
+  "github": [
+   "https://github.com/andaero/treehacks26"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/the-orchestration-company-of-palo-alto",
+  "name": "The Orchestration Company of Palo Alto",
+  "tagline": "OS of tomorrow, Claude Code of today",
+  "prizes": [
+   "[The Interaction Company of California] Build with Poke (Challenge 1: iPhone Air for everyone in the team Challenge 2: iPhone 17 Pro for everyone in the team Challenge 3: iPhone Air for everyone in the team Bonus: up to $100k in cash)"
+  ],
+  "github": [
+   "https://github.com/FO214/treehacks",
+   "https://github.com/soooooooot/treehacks-agent-repo"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/hive-swarm-intelligence",
+  "name": "HIVE: Swarm Intelligence.",
+  "tagline": "HIVE is your personal workforce that makes digital busywork obsolete. Launch a swarm of parallel, background computer use agents to solve any computer use task — specialized agents for GSuite and more",
+  "prizes": [
+   "[Browserbase] Best Web Automation with Stagehand ($1,000)"
+  ],
+  "github": [
+   "https://github.com/bossbobster/hive/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/dot-bringing-humanity-to-in-home-care",
+  "name": ".dot: bringing humanity to in-home care",
+  "tagline": "Agentified personal in-home care for the elderly. Multimodal S2S agent system handles patient charts, leading medical knowledge, medicine routines, and emergency contacts, all in a friendly package.",
+  "prizes": [
+   "[Zingage] Best Voice AI for Healthcare (Airpods Max + fast-track to superday with Zingage)"
+  ],
+  "github": [
+   "https://github.com/o-bm/dot"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/snappier",
+  "name": "Snappier",
+  "tagline": "Show Snappier your workflow once by recording your screen. AI figures out what you did and why, then automates it across any connected app. That's it.",
+  "prizes": [
+   "[Graphite] Most Likely to get Acquired by a Sponsor (OB–4 black bluetooth speaker)",
+   "[Vercel] Best Use of Vercel/Best Deployed on Vercel (2k cash prize + $2.4k in Pro-level access credits ($100/month for 4 winners, access for 6 months.)"
+  ],
+  "github": [
+   "https://github.com/nintang/snappier-treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/arena-lz2m84",
+  "name": "Arena",
+  "tagline": "Arena makes agents compete to write the software that best serves you.",
+  "prizes": [
+   "[Warp] Best Use of Warp Agents (Keychron Mechanical Keyboard for each team member)"
+  ],
+  "github": [
+   "https://github.com/TomBinford/treehacks/"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/maestro-n0uqyz",
+  "name": "Maestro",
+  "tagline": "Turn an everyday object into infinite instruments.",
+  "prizes": [
+   "[Suno] Best Musical Hack"
+  ],
+  "github": [
+   "https://github.com/markmusic27/treehacks"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/nextop",
+  "name": "NextOp",
+  "tagline": "200K veterans transition out every year — most without real support. NextOp is a private AI coach that translates military careers into civilian résumés, benefits, and training.",
+  "prizes": [
+   "[Bright Data] Best AI-Powered Web Data Hack ($500 Cash + $1.5k Credits [1st] & $350 Cash + $1K Credits [2nd] & $250 Cash + $500 Credits [3rd])"
+  ],
+  "github": [
+   "https://github.com/cocozxu/NextOp"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/kiru",
+  "name": "kiru",
+  "tagline": "Hate waiting on hold? kiru is a voice agent that actually calls companies, talks to customer support, and negotiates your bills down. Just type what you want and watch the live transcript",
+  "prizes": [
+   "[Bright Data] Best AI-Powered Web Data Hack ($500 Cash + $1.5k Credits [1st] & $350 Cash + $1K Credits [2nd] & $250 Cash + $500 Credits [3rd])"
+  ],
+  "github": [
+   "https://github.com/Pranav-Karra-3301/treehacks-26/tree/main"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/tonguekeeper",
+  "name": "Tonguekeeper",
+  "tagline": "Every 2 weeks, a language dies. TongueKeeper deploys autonomous AI agents that compile and cross-reference vocabulary and grammar from scattered sources, forging them into a living language atlas.",
+  "prizes": [
+   "[Perplexity] Best Use of Perplexity's Sonar API ($500 per team member and trip to Perplexity office)"
+  ],
+  "github": [
+   "https://github.com/lourdrickvalsote/tonguekeeper"
+  ],
+  "ok": true
+ },
+ {
+  "year": 2026,
+  "url": "https://devpost.com/software/a-p1lt2h",
+  "name": "Synapse",
+  "tagline": "Claim-level truth forensics–trace any idea back to its origin and know what's actually true. Powered by Perplexity Sonar, Claude Sonnet, and Semantic Scholar, orchestrated for multi-step verification.",
+  "prizes": [
+   "[Perplexity] Best Use of Perplexity's Sonar API ($500 per team member and trip to Perplexity office)"
+  ],
+  "github": [
+   "https://github.com/yravipati/TreeHacks-2026"
+  ],
+  "ok": true
+ }
+]

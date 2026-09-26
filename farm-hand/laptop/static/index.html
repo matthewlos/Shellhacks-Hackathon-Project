@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand</title>
+<meta name="description" content="Farm Hand: a Gemini agent team waters a pot of Florida soil and counts the water a timer would have wasted.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f64b8'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'%3EFH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1"></script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<style>
+/* Farm Hand. House tokens (visual-page), tuned for contrast: blue ink #1f64b8 carries the AI, orange #c4501f the timer. */
+:root{
+  --ground:#eef1f4; --panel:#fbfcfd; --wash:#f2f5f8; --line:rgba(14,22,33,.09);
+  --ink:#0e1621; --ink-2:#3d4a59; --muted:#5b6674;
+  --ai:#1f64b8; --ai-wash:rgba(31,100,184,.09); --timer:#c4501f;
+  --good:#0a8a0a; --bad:#c43333; --warn:#9a6a00; --heat:#7646b8;
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+::selection{background:rgba(31,100,184,.18)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit}
+button:disabled{cursor:progress;opacity:.6}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+*{scrollbar-width:thin;scrollbar-color:rgba(14,22,33,.18) transparent}
+
+.shell{height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) 404px}
+.left{display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;min-width:0}
+
+/* stage */
+.stage{position:relative;overflow:hidden;background:radial-gradient(70% 60% at 50% 45%,#fbfcfd 0%,#e9edf1 100%)}
+#field{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;touch-action:none}
+.brand{position:absolute;top:22px;left:26px;z-index:3}
+.brand h1{margin:0;font:700 1.55rem/1 var(--f-display);letter-spacing:-.02em}
+.brand p{margin:6px 0 0;color:var(--ink-2);font-size:14px;max-width:38ch}
+.lens{position:absolute;left:26px;bottom:24px;z-index:3;display:grid;gap:8px;justify-items:start}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:11px;background:rgba(251,252,253,.9);border:1px solid var(--line);backdrop-filter:blur(8px)}
+.seg button{height:30px;padding:0 13px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink-2);transition:background .2s,color .2s}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--ink);color:#fff}
+.lens small{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.ramp{width:72px;height:6px;border-radius:9px;background:linear-gradient(90deg,var(--r0),var(--r1),var(--r2))}
+.state{position:absolute;right:24px;bottom:24px;z-index:3;display:flex;align-items:center;gap:9px;height:36px;padding:0 14px;border-radius:99px;background:var(--ai);color:#fff;font-size:13.5px;font-weight:600;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+.state.idle{opacity:0;transform:translateY(6px);pointer-events:none}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.front{position:absolute;left:0;top:0;z-index:2;pointer-events:none;font-size:12.5px;font-weight:600;color:var(--ai);background:rgba(251,252,253,.92);padding:3px 9px;border-radius:99px}
+.tag{position:absolute;left:0;top:0;z-index:2;pointer-events:none}
+
+/* control column */
+aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0}
+section{padding:22px 24px;border-bottom:1px solid var(--line)}
+.call .verdict{margin:0;font:700 2.1rem/1.02 var(--f-display);letter-spacing:-.025em}
+.call .verdict.water{color:var(--ai)}
+.call .verdict.bad{color:var(--bad)}
+.call .why{margin:8px 0 0;color:var(--ink-2);font-size:14.5px;min-height:2.9em}
+.call .who{margin:6px 0 16px;color:var(--muted);font-size:12.5px}
+.run{width:100%;height:46px;border-radius:12px;background:var(--ai);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:9px;transition:background .15s,transform .12s var(--ease)}
+.run:hover:not(:disabled){background:#1a57a1}
+.run:active:not(:disabled){transform:scale(.985)}
+.row2{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.link{font-size:13.5px;font-weight:600;color:var(--ai);display:inline-flex;align-items:center;gap:6px;padding:4px 2px}
+.link:hover{text-decoration:underline;text-underline-offset:3px}
+.link.stop{color:var(--bad)}
+
+.nums{display:grid;grid-template-columns:1fr 1fr}
+.nums > div{display:grid;gap:4px;align-content:start}
+.nums > div + div{border-left:1px solid var(--line);padding-left:20px}
+.k{font-size:13px;color:var(--muted)}
+.big{font-size:1.9rem;font-weight:600;line-height:1.05;white-space:nowrap}
+.sub{font-size:12.5px;color:var(--ink-2)}
+.band{position:relative;height:6px;border-radius:9px;background:var(--wash);overflow:hidden;margin-top:4px}
+.band .ok{position:absolute;top:0;bottom:0;background:rgba(10,138,10,.16)}
+.band i{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--ai);border-radius:9px;transform-origin:left;transition:transform .6s var(--ease)}
+
+.facts{display:grid;gap:9px}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px}
+.fact span{color:var(--ink-2)} .fact b{font-weight:600}
+.fact em{font-style:normal;color:var(--muted);font-size:12.5px;display:block;margin-top:1px}
+
+.team{overflow-y:auto;display:grid;align-content:start;gap:0;padding-top:16px}
+.tabs{display:flex;gap:18px;margin-bottom:12px}
+.tabs button{font-size:14px;font-weight:700;color:var(--muted);padding:2px 0;border-bottom:2px solid transparent}
+.tabs button.on{color:var(--ink);border-color:var(--ai)}
+.steps{list-style:none;margin:0;padding:0}
+.steps li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:7px 0;font-size:14px}
+.steps li .ph{font-size:17px;color:var(--muted)}
+.steps li .w{font-size:12.5px;color:var(--muted);max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.steps li.sub{padding-left:18px}
+.steps li.on{color:var(--ai);font-weight:600} .steps li.on .ph,.steps li.on .w{color:var(--ai)}
+.steps li.bad,.steps li.bad .ph,.steps li.bad .w{color:var(--bad)}
+.steps li.warn,.steps li.warn .ph,.steps li.warn .w{color:var(--warn)}
+.steps .group{display:block;font-size:12.5px;color:var(--muted);padding:6px 0 2px 32px}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:7px 0;font-size:13.5px;border-top:1px solid var(--line)}
+.log li:first-child{border-top:0}
+.log .t{color:var(--muted);font-size:12.5px}
+.log b{font-weight:600} .log .bad b{color:var(--bad)} .log .good b{color:var(--good)} .log .warn b{color:var(--warn)}
+.rules{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:6px}
+.rules li{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.rules .ph{font-size:16px} .rules .y{color:var(--good)} .rules .n{color:var(--bad)}
+.rules small{margin-left:auto;color:var(--muted);font-size:12.5px}
+.soak{padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.soak:first-child{border-top:0}
+.soak b{font-size:1.05rem}
+.soak div{color:var(--muted);font-size:12.5px}
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--wash);padding:0 12px;font-size:15px;outline:none}
+.ask input:focus{border-color:var(--ai);box-shadow:0 0 0 3px var(--ai-wash)}
+.ask button{height:42px;padding:0 16px;border-radius:10px;background:var(--ai);color:#fff;font-weight:700}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.sugg button{font-size:13px;padding:6px 11px;border-radius:99px;border:1px solid var(--line);color:var(--ink-2)}
+.sugg button:hover{background:var(--wash)}
+.reply{font-size:15px;line-height:1.55;color:var(--ink)}
+.muted{color:var(--muted)}
+.call .verdict.good{color:var(--good)}
+.call .verdict.stale{color:var(--muted)}
+.call .who.old{color:var(--warn);font-weight:600}
+.tgt{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.tgt .k{margin-right:auto}
+.stepper{display:inline-flex;align-items:center;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--wash)}
+.stepper button{width:34px;height:100%;display:grid;place-items:center;color:var(--ink-2);font-size:15px}
+.stepper button:hover{color:var(--ink)}
+.stepper b{min-width:52px;text-align:center;font-size:16px}
+.go{height:38px;padding:0 16px;border-radius:10px;background:var(--ink);color:#fff;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:7px;transition:transform .12s var(--ease)}
+.go:active:not(:disabled){transform:scale(.97)}
+.pulses{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.pulses:empty{display:none}
+.pulses li{font-size:12.5px;padding:4px 9px;border-radius:99px;background:var(--ai-wash);color:var(--ai);font-weight:600}
+.pulses li.bad{background:rgba(196,51,51,.1);color:var(--bad)}
+.hud{position:absolute;top:22px;right:24px;z-index:3;display:grid;justify-items:end;gap:2px;text-align:right}
+.hud .lbl{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hud .now{font:600 3.4rem/1 var(--f-num);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.hud .of{font-size:14px;color:var(--ink-2)}
+.hud .track{position:relative;width:220px;height:8px;border-radius:9px;background:rgba(14,22,33,.08);margin-top:8px}
+.hud .track i{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:9px;background:var(--ai);transform-origin:left;transition:transform .5s var(--ease)}
+.hud .track s{position:absolute;top:0;height:16px;transform:translateY(-4px);width:2px;background:var(--ink);border-radius:2px}
+.hud.good .now{color:var(--good)} .hud.good .track i{background:var(--good)}
+.hud.bad .now{color:var(--bad)} .hud.bad .track i{background:var(--bad)}
+.link.pinch{color:var(--muted);font-weight:500;margin-top:6px}
+
+
+/* money graph strip under the stage */
+.graph{display:grid;grid-template-columns:minmax(0,1fr) 212px;gap:22px;padding:14px 24px;background:var(--panel);border-top:1px solid var(--line);border-bottom:0}
+.ghead{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:4px}
+.ghead h3{margin:0;font:700 1.02rem/1 var(--f-display);letter-spacing:-.01em}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2)}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.leg i{display:inline-block;width:18px;height:0;border-top:2px solid}
+.leg .m i{border-color:var(--ai)} .leg .t i{border-color:var(--timer);border-top-style:dashed} .leg .h i{border-color:var(--heat)}
+.leg .pd{display:inline-block;width:9px;height:9px;border-radius:50%}
+.leg em{font-style:normal;color:var(--muted)}
+.ghead .seg{margin-left:auto;background:var(--wash);order:2}
+.ghead .leg{order:3;width:100%}
+.ghead .seg button{height:26px;padding:0 10px;font-size:12.5px}
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:188px;overflow:visible}
+.chart .ax{font:500 11px var(--f-num);fill:var(--muted)}
+.chart .lab{font:600 11.5px var(--f-body);fill:var(--ink-2)}
+.chart .grid{stroke:rgba(14,22,33,.07)}
+.chart .empty{font:500 13px var(--f-body);fill:var(--muted)}
+.tip{position:absolute;top:0;z-index:4;pointer-events:none;background:var(--ink);color:#fff;border-radius:9px;padding:7px 10px;font-size:12.5px;line-height:1.45;white-space:nowrap;transform:translateX(-50%);opacity:0;transition:opacity .12s}
+.tip b{font-family:var(--f-num);font-weight:600}
+.tip .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.cups{display:grid;align-content:center;gap:3px;border-left:1px solid var(--line);padding-left:20px}
+.cups .big{font-size:2.6rem;letter-spacing:-.04em}
+.cups .unit{font:700 1rem/1 var(--f-display);color:var(--ink)}
+.cups .sub b{font-family:var(--f-num);font-weight:600}
+.est{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--timer);background:rgba(196,80,31,.09);border-radius:6px;padding:2px 6px;justify-self:start}
+
+/* fast + smart */
+.brains{display:grid;gap:6px;margin:4px 0 14px}
+.br{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 10px;border-radius:11px;background:var(--wash);font-size:13.5px;line-height:1.3;transition:background .4s}
+.br > i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:#fff;color:var(--ai)}
+.br b{font-weight:700} .br span{color:var(--ink-2);font-size:12.5px}
+.br .t{font:600 1.05rem/1 var(--f-num);color:var(--ai);text-align:right}
+.br .t small{display:block;font:500 11px var(--f-body);color:var(--muted);margin-top:3px}
+.br.fresh{background:var(--ai-wash)}
+.br.off .t,.br.off > i{color:var(--muted)}
+
+/* temperature card */
+.nums .heat .big{color:var(--heat)}
+
+/* someone-added-water banner */
+.alert{position:absolute;left:50%;top:92px;z-index:5;transform:translate(-50%,-150%);opacity:0;display:grid;grid-template-columns:44px auto;gap:14px;align-items:center;padding:14px 22px 14px 14px;border-radius:16px;background:var(--ink);color:#fff;box-shadow:0 18px 40px rgba(14,22,33,.22);transition:transform .5s var(--ease),opacity .3s;max-width:min(560px,calc(100% - 32px))}
+.alert.on{transform:translate(-50%,0);opacity:1}
+.alert > i{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--ai);font-size:24px}
+.alert b{display:block;font:700 1.3rem/1.15 var(--f-display);letter-spacing:-.01em}
+.alert b .num{color:#9cc4f2}
+.alert span{display:block;color:rgba(255,255,255,.84);font-size:14.5px;margin-top:3px}
+
+/* view switch + field view */
+.seg button .ph{font-size:14px;vertical-align:-2px;margin-right:3px}
+.fieldview{position:absolute;inset:0;z-index:2;background:radial-gradient(70% 60% at 50% 45%,#fbfcfd 0%,#e9edf1 100%);overflow:hidden}
+.fieldview svg{position:absolute;top:84px;left:8px;width:calc(100% - 330px);height:calc(100% - 150px)}
+#fieldZoom{transform-box:view-box;transition:transform 1.5s var(--ease)}
+.fieldcap{position:absolute;top:92px;right:20px;z-index:3;max-width:300px;background:rgba(251,252,253,.95);border:1px solid var(--line);border-radius:14px;padding:13px 15px;font-size:13.5px;color:var(--ink-2)}
+.fieldcap .est{margin-bottom:7px;color:var(--ink-2);background:var(--wash)}
+.fieldcap b{color:var(--ink)}
+.fieldcap .fk{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:12.5px}
+.fieldcap .fk .ramp{width:80px;--r0:#c8a878;--r1:#5a8fc8;--r2:#1f5fb0}
+
+@media (max-width:1100px){.shell{grid-template-columns:1fr;height:auto} .left{height:auto} .stage{height:62dvh;min-height:420px} aside{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:760px){.graph{grid-template-columns:1fr;padding:14px 16px}.cups{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:12px}.ghead .seg{margin-left:0}.fieldview svg{top:64px;left:8px;width:calc(100% - 16px);height:calc(100% - 240px)}.fieldcap{left:16px;right:16px;top:auto;bottom:76px;max-width:none;padding:9px 12px;font-size:12.5px}.fieldcap .long,.fieldcap .fk:not(.muted){display:none}.fieldcap .fk{margin-top:3px}}
+@media (max-width:560px){.state{top:16px;bottom:auto;right:16px;max-width:60%}.state span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hud{top:auto;bottom:64px;right:16px}.hud .now{font-size:2.4rem}.hud .track{width:150px}section{padding:18px 16px}.brand{left:16px;top:16px}.lens{left:16px;bottom:16px}.state{right:16px;bottom:16px}.call .verdict{font-size:1.8rem}.brand p{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="left">
+  <main class="stage" id="stage" aria-label="3D view of the pot">
+    <canvas id="field" tabindex="0" aria-label="The see-through pot, soil colored by moisture at each depth"></canvas>
+    <div class="brand"><h1>Farm Hand</h1><p id="subline">An AI agent team waters this pot. A timer is the thing to beat.</p></div>
+    <div class="alert" id="alert" role="status" aria-live="assertive"><i class="ph-fill ph-drop"></i><div><b id="alertT"></b><span id="alertS"></span></div></div>
+    <div class="fieldview" id="fieldView" hidden></div>
+    <div class="lens">
+      <div class="seg" role="group" aria-label="View">
+        <button class="on" data-view="pot"><i class="ph ph-cube"></i>This box</button><button data-view="field"><i class="ph ph-squares-four"></i>A whole field</button>
+      </div>
+      <div class="seg" id="lensSeg" role="group" aria-label="Color the soil by">
+        <button class="on" data-lens="natural">Soil</button><button data-lens="moisture">Moisture</button><button data-lens="temp">Heat</button>
+      </div>
+      <small id="lensKey"><span>dry</span><span class="ramp" id="ramp"></span><span>wet</span><span>by depth, modeled from one probe</span></small>
+    </div>
+    <div class="state idle" id="working" role="status" aria-live="polite"><span class="spin"></span><span id="workTxt"></span></div>
+    <div class="hud" id="hud" hidden><span class="lbl" id="hudLbl">Target</span><span class="now" id="hudNow">–</span><span class="of" id="hudOf"></span><span class="track"><i id="hudBar"></i><s id="hudMark"></s></span></div>
+    <div class="front" id="front" hidden></div>
+    <div class="tag" id="tagA" hidden></div><div class="tag" id="tagB" hidden></div>
+  </main>
+  <section class="graph" aria-label="Soil over time and water saved">
+    <div>
+      <div class="ghead">
+        <h3>Soil over time</h3>
+        <div class="leg"><span class="m"><i></i>Moisture <em>measured</em></span><span class="t"><i></i>If a timer watered <em>estimated</em></span><span class="h"><i></i>Soil temp <em>measured</em></span><span><b class="pd" style="background:#1f64b8"></b>AI pour</span><span><b class="pd" style="background:#c4501f"></b>timer pour</span></div>
+        <div class="seg" role="group" aria-label="Time window"><button data-win="1">1 h</button><button data-win="6">6 h</button><button class="on" data-win="24">24 h</button><button data-win="0">All</button></div>
+      </div>
+      <div class="chart" id="chart"><svg id="chartSvg" role="img" aria-label="Soil moisture and temperature over time"></svg><div class="tip" id="tip"></div></div>
+    </div>
+    <div class="cups">
+      <span class="k" id="cupsK">Water saved vs a timer</span>
+      <span><span class="big num" id="cups">–</span> <span class="unit" id="cupsU">cups</span></span>
+      <span class="sub" id="cupsSub">&nbsp;</span>
+      <span class="est">Timer is estimated</span>
+      <span class="sub muted" id="cupsHow"></span>
+    </div>
+  </section>
+  </div>
+
+  <aside aria-label="Decision, numbers and the agent team">
+    <section class="call">
+      <h2 class="verdict" id="verdict">Waiting</h2>
+      <p class="why" id="reason">The agents haven't checked the soil yet.</p>
+      <p class="who" id="by">&nbsp;</p>
+      <div class="brains" id="brains">
+        <div class="br fast" id="brFast"><i class="ph-fill ph-lightning"></i><div><b id="fastPick">Laya, the fast call</b><br><span id="fastSub">our small model, trained on 6 years of Miami weather</span></div><span class="t num" id="fastT">–</span></div>
+        <div class="br smart" id="brSmart"><i class="ph ph-users-three"></i><div><b id="smartH">Gemini team explains</b><br><span id="smartSub">weather, soil, memory, planner, critic</span></div><span class="t num" id="smartT">–</span></div>
+      </div>
+      <button class="run" id="runBtn"><i class="ph-bold ph-play"></i><span>Run agents</span></button>
+      <div class="row2">
+        <button class="link" id="pourBtn"><i class="ph ph-drop"></i>Test pour 5 s</button>
+        <button class="link stop" id="stopBtn"><i class="ph-bold ph-stop"></i>Stop pump</button>
+      </div>
+      <div class="tgt">
+        <span class="k">Hit a target</span>
+        <span class="stepper"><button id="tMinus" aria-label="Lower target"><i class="ph-bold ph-minus"></i></button><b class="num" id="tVal">55%</b><button id="tPlus" aria-label="Raise target"><i class="ph-bold ph-plus"></i></button></span>
+        <button class="go" id="goBtn"><i class="ph-bold ph-crosshair"></i>Go</button>
+      </div>
+      <ol class="pulses" id="pulses"></ol>
+      <button class="link pinch" id="pinchBtn" hidden><i class="ph ph-hand-pinch"></i><span>Pinch the tube (test)</span></button>
+      <button class="link pinch" id="handBtn" hidden><i class="ph ph-drop-half"></i><span>Pour a cup in by hand (test)</span></button>
+    </section>
+
+    <section class="nums">
+      <div><span class="k">Soil moisture</span><span class="big num" id="pA">–</span><div class="band"><span class="ok" id="okBand"></span><i id="gA" style="transform:scaleX(0)"></i></div><span class="sub" id="sA">&nbsp;</span></div>
+      <div class="heat"><span class="k">Soil temperature</span><span class="big num" id="tA">–</span><span class="sub" id="tSub">&nbsp;</span></div>
+    </section>
+
+    <section class="facts">
+      <div class="fact"><span>Dries out in</span><b id="dry">–</b></div>
+      <div class="fact"><span>Rain, next 24 h<em id="rainD"></em></span><b id="rain">–</b></div>
+      <div class="fact"><span>Evaporation, next 24 h</span><b id="et0">–</b></div>
+      <div class="fact"><span>County in drought<em id="drD"></em></span><b id="drV">–</b></div>
+    </section>
+
+    <section class="team">
+      <div class="tabs" role="tablist">
+        <button class="on" data-tab="team" role="tab">Agent team</button><button data-tab="pours" role="tab">Pours</button><button data-tab="ask" role="tab">Ask</button>
+      </div>
+      <div id="pane-team">
+        <ul class="steps" id="steps">
+          <li data-k="predictor"><i class="ph ph-trend-up"></i><span>Dry-time model</span><span class="w" id="w-predictor"></span></li>
+          <li data-k="laya"><i class="ph ph-lightning-a"></i><span>Fast decider (Laya)</span><span class="w" id="w-laya"></span></li>
+          <li class="group">at the same time</li>
+          <li class="sub" data-k="weather_agent"><i class="ph ph-cloud-sun"></i><span>Weather</span><span class="w" id="w-weather_agent"></span></li>
+          <li class="sub" data-k="soil_agent"><i class="ph ph-plant"></i><span>Soil</span><span class="w" id="w-soil_agent"></span></li>
+          <li class="sub" data-k="memory_agent"><i class="ph ph-clock-counter-clockwise"></i><span>Memory</span><span class="w" id="w-memory_agent"></span></li>
+          <li data-k="planner_agent"><i class="ph ph-clipboard-text"></i><span>Planner</span><span class="w" id="w-planner_agent"></span></li>
+          <li data-k="critic_agent"><i class="ph ph-magnifying-glass"></i><span>Critic</span><span class="w" id="w-critic_agent"></span></li>
+          <li data-k="guards"><i class="ph ph-shield-check"></i><span>Safety rules</span><span class="w" id="w-guards"></span></li>
+          <li data-k="executor"><i class="ph ph-lightning"></i><span>Pump</span><span class="w" id="w-executor"></span></li>
+          <li data-k="soak"><i class="ph ph-waves"></i><span>Pour detector</span><span class="w" id="w-soak"></span></li>
+          <li data-k="target_agent"><i class="ph ph-crosshair"></i><span>Target controller</span><span class="w" id="w-target_agent"></span></li>
+        </ul>
+        <ul class="rules" id="rules"></ul>
+        <ul class="log" id="log" style="margin-top:14px"></ul>
+      </div>
+      <div id="pane-pours" hidden><p class="muted" style="margin:0 0 8px">Each pour is watched for 3 minutes. What the probe sees sets the size of the next one. Learned: <b class="num" id="learn">–</b> % per pump second.</p><div id="soaks"><p class="muted">No pours yet.</p></div></div>
+      <div id="pane-ask" hidden>
+        <div class="ask"><input id="q" placeholder="Why did you water?" aria-label="Question for the farm"><button id="askBtn">Ask</button></div>
+        <div class="sugg"><button>Why did you water?</button><button>How much would the timer have used?</button><button>How dry is the county?</button></div>
+        <div class="reply" id="reply"><span class="muted">Gemini answers from the live sensors, forecast, drought map and its own log.</span></div>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const j = async (u, o) => (await fetch(u, o)).json();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clock = ts => new Date(ts * 1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}).replace(/\s(?=[AP]M)/, ' ');
+const NAMES = {weather_agent:'Weather', soil_agent:'Soil', memory_agent:'Memory', planner_agent:'Planner', critic_agent:'Critic', guards:'Safety', executor:'Pump', farm_helper:'Chat', target_agent:'Target', laya:'Laya'};
+window.LIVE = {busy:{}, soak:{}}; window.LENS = 'natural';
+let S = null, tab = 'team', tgt = 55, showT = false;
+
+document.querySelectorAll('[data-lens]').forEach(b => b.onclick = () => { document.querySelectorAll('[data-lens]').forEach(x => x.classList.toggle('on', x === b)); window.LENS = b.dataset.lens; ramp(); });
+function ramp() { const r = {natural:['#c8a878','#7a5534','#2a1c12'], moisture:['#c8a878','#5a8fc8','#1f5fb0'], temp:['#1f64b8','#c9b89a','#c4501f']}[window.LENS];
+  ['--r0','--r1','--r2'].forEach((k, i) => $('ramp').style.setProperty(k, r[i])); }
+ramp();
+document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { tab = b.dataset.tab;
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === b));
+  ['team','pours','ask'].forEach(t => $('pane-' + t).hidden = t !== tab); slow(); });
+
+async function fast() {
+  let L; try { L = await j('/api/live'); } catch (e) { return; }
+  window.LIVE = L;
+  $('pA').textContent = L.a != null ? L.a.toFixed(1) + '%' : '–';
+  $('tA').textContent = L.temp != null ? L.temp.toFixed(1) + '°C' : '–';
+  $('gA').style.transform = `scaleX(${Math.max(0, Math.min(1, (L.a ?? 0) / 100))})`;
+  if (L.cfg) { $('okBand').style.left = L.cfg.dry + '%'; $('okBand').style.width = (L.cfg.wet - L.cfg.dry) + '%'; }
+  const busy = Object.entries(L.busy || {}), w = $('working');
+  drawTarget(L);
+  if (L.pumping !== 'none') { w.classList.remove('idle'); $('workTxt').textContent = 'Pump running'; }
+  else if (busy.length) { const [k, x] = busy[busy.length - 1]; w.classList.remove('idle'); $('workTxt').textContent = `${NAMES[k] || k}: ${x}`; }
+  else if (L.soak?.phase === 'soaking') { w.classList.remove('idle'); $('workTxt').textContent = `Soaking in, ${L.soak.before?.toFixed(1)}% to ${L.soak.now?.toFixed(1)}%`; }
+  else w.classList.add('idle');
+  document.querySelectorAll('.steps li[data-k]').forEach(el => {
+    const k = el.dataset.k, what = (L.busy || {})[k];
+    let on = !!what; if (k === 'executor') on = on || L.pumping !== 'none'; if (k === 'soak') on = L.soak?.phase === 'soaking';
+    el.classList.toggle('on', on); el.classList.toggle('bad', k === 'guards' && /^REFUSED/.test(what || '')); el.classList.toggle('warn', k === 'critic_agent' && /^sent back/.test(what || ''));
+    const ww = $('w-' + k); if (!ww) return;
+    if (what) ww.textContent = what;
+    if (k === 'executor') ww.textContent = L.pumping !== 'none' ? 'running' : (what || '');
+    if (k === 'soak') ww.textContent = L.soak?.phase === 'soaking' ? `${L.soak.before?.toFixed(1)} to ${L.soak.now?.toFixed(1)}%` : (L.soak?.last ? `last +${L.soak.last.rise_pct}%` : '');
+  });
+}
+
+async function slow() {
+  try { S = await j('/api/state'); } catch (e) { $('reason').textContent = 'Can\'t reach the Farm Hand server.'; return; }
+  const d = S.drought || {}, f = S.forecast || {}, p = S.prediction || {}, L = S.latest || {};
+  $('subline').textContent = S.fake ? 'Running on test data from the simulated board.' : S.online ? 'An AI agent team waters this pot. A timer is the thing to beat.' : 'The board is offline. Check the USB cable.';
+  $('sA').textContent = `healthy ${S.config.dry}-${S.config.wet}%`;
+  $('tSub').textContent = f.temp_c_now != null ? `outside air ${(+f.temp_c_now).toFixed(1)}°C, forecast` : 'steel probe in the soil';
+  $('dry').textContent = p.settling ? 'measuring' : p.hours_until_dry != null ? (p.hours_until_dry < .05 ? 'now' : p.hours_until_dry >= 48 ? '2+ days' : `${p.hours_until_dry.toFixed(1)} h`) : '–';
+  $('rain').textContent = f.rain_mm_next_24h != null ? `${f.rain_mm_next_24h} mm` : '–';
+  $('rainD').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance${S.config.outdoors ? '' : ', pot is indoors'}` : '';
+  $('et0').textContent = f.et0_mm_next_24h != null ? `${f.et0_mm_next_24h} mm` : '–';
+  $('drV').textContent = d.pct_in_D1_or_worse != null ? `${d.pct_in_D1_or_worse}%` : '–';
+  $('drD').textContent = d.level ? `${(d.county || '').replace(' County', '')}, ${d.level} ${d.level_name}` : '';
+  $('w-predictor').textContent = p.method === 'xgboost' ? 'XGBoost' : p.settling ? 're-measuring' : 'trend estimate';
+
+  const dec = await j('/api/decisions');
+  const ck = window.LIVE?.last?.check, la = window.LIVE?.last?.laya;
+  if (ck && ck.t1 == null && !showT) {                     // a check is running (loop or button): never leave an old call up top
+    $('verdict').textContent = 'Checking now'; $('verdict').className = 'verdict water';
+    $('reason').textContent = la && la.ts >= ck.t0 ? `Laya's fast call: ${{water:'water', wait_rain:'wait for rain', wait_moist:'wait, the soil has water'}[la.pick] || la.pick}. The team is checking it.` : 'Reading the soil, the sky and its own memory.';
+    $('by').textContent = `started ${clock(ck.t0)}`; $('by').className = 'who';
+  } else if (dec.length && !$('runBtn').disabled && !showT) {
+    const x = dec[0], tr = x.brain === 'target run', water = x.action === 'water' && !tr, hit = tr && /^TARGET: Locked/.test(x.sentence);
+    const mins = Math.round((Date.now() / 1000 - x.ts) / 60), old = mins >= 30;
+    $('verdict').textContent = tr ? (hit ? 'Target hit' : 'Target run stopped') : water ? `Watering ${(+x.seconds).toFixed(0)} s` : 'Holding off';
+    $('verdict').className = 'verdict' + (old ? ' stale' : hit ? ' good' : water ? ' water' : '');
+    $('reason').textContent = x.sentence.replace(/^(WATER|WAIT|TARGET):\s*/, '');
+    const age = mins >= 90 ? Math.round(mins / 60) + ' h' : mins + ' min';
+    $('by').className = 'who' + (old ? ' old' : '');
+    $('by').textContent = old ? `Old call from ${clock(x.ts)}, ${age} ago. Press Run agents for a fresh one.`
+      : `${x.brain.startsWith('gemini') ? 'Gemini agent team' : x.brain === 'target run' ? 'Target run' : x.brain.startsWith('laya') ? 'Laya fast decider' : 'Rule brain'}, ${clock(x.ts)}${mins >= 5 ? `, ${age} ago` : ''}`;
+  }
+
+  if (tab === 'team') {
+    const g = S.guards || [], bad = g.filter(x => !x.ok);
+    $('w-guards').textContent = bad.length ? `${bad.length} blocking` : 'all clear';
+    $('rules').innerHTML = bad.map(x => `<li><i class="ph-fill ph-x-circle n"></i>${esc(x.rule)}<small>${esc(x.detail)}</small></li>`).join('');
+    const act = await j('/api/activity');
+    $('log').innerHTML = act.slice(0, 12).map(a => { const w = a.what || '', c = /^REFUSED|failed/i.test(w) ? 'bad' : /^approved|pump A/.test(w) ? 'good' : /^sent back/.test(w) ? 'warn' : '';
+      return `<li class="${c}"><span class="t num">${clock(a.ts).replace(/ ?[AP]M/, '')}</span><span><b>${esc(NAMES[a.agent] || a.agent)}</b> ${esc(w)}</span></li>`; }).join('');
+  } else if (tab === 'pours') {
+    $('learn').textContent = S.learned_pct_per_s ?? '–';
+    const soaks = await j('/api/soaks');
+    if (soaks.length) $('soaks').innerHTML = soaks.slice(0, 8).map(x => `<div class="soak"><b class="num" style="color:${x.ok ? 'var(--ai)' : 'var(--bad)'}">${x.ok ? '+' + x.rise_pct + '%' : 'Missed the soil'}</b> <span class="muted">${clock(x.ts)}</span>
+      <div>${x.poured_s} s pour, ${x.before_pct}% to ${x.peak_pct}%${x.first_rise_s != null ? `, reached the probe in ${x.first_rise_s} s` : ''}${x.ok ? '' : '. ' + esc(x.note)}</div></div>`).join('');
+  }
+}
+
+$('runBtn').onclick = async () => {
+  const b = $('runBtn'); b.disabled = true; b.lastChild.textContent = 'Agents working';
+  $('verdict').textContent = 'Thinking'; $('verdict').className = 'verdict'; $('reason').textContent = 'Reading the soil, the sky and its own memory.';
+  try { await j('/api/check-now', {method: 'POST'}); } finally { b.disabled = false; b.lastChild.textContent = 'Run agents'; slow(); }
+};
+$('pourBtn').onclick = async () => { const r = await j('/api/pour', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({seconds: 5})});
+  if (!r.watered) { $('verdict').textContent = 'Blocked'; $('verdict').className = 'verdict bad'; $('reason').textContent = 'Safety rules said no: ' + r.refused_because + '.'; } slow(); };
+$('stopBtn').onclick = () => fetch('/api/stop', {method: 'POST'});
+const setT = v => { tgt = Math.max(36, Math.min(68, v)); $('tVal').textContent = tgt + '%'; };
+$('tMinus').onclick = () => setT(tgt - 1); $('tPlus').onclick = () => setT(tgt + 1);
+$('goBtn').onclick = async () => { const r = await j('/api/target', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({pct: tgt})});
+  if (!r.ok) { $('verdict').textContent = 'Can\'t start'; $('verdict').className = 'verdict bad'; $('reason').textContent = r.why + '.'; } };
+$('pinchBtn').onclick = () => j('/api/demo/pinch', {method: 'POST'});
+const DONE = {locked:1, over:1, fault:1, blocked:1, stopped:1, short:1};
+function drawTarget(L) {
+  const T = L.target || {}, ph = T.phase || 'idle', end = DONE[ph], recent = end && Date.now() / 1000 - (T.t_end || 0) < 240;
+  $('pinchBtn').hidden = !L.fake; $('pinchBtn').lastChild.textContent = L.pinched ? 'Tube pinched: tap to release' : 'Pinch the tube (test)';
+  $('pinchBtn').style.color = L.pinched ? 'var(--bad)' : '';
+  showT = ph !== 'idle' && (!end || recent);
+  $('goBtn').disabled = ph !== 'idle' && !end;
+  $('hud').hidden = !showT; if (!showT) { $('pulses').innerHTML = ''; return; }
+  const now = end ? T.now : (L.a ?? T.now), good = ph === 'locked', bad = ph === 'fault' || ph === 'blocked';
+  $('hud').className = 'hud' + (good ? ' good' : bad ? ' bad' : '');
+  $('hudLbl').textContent = good ? 'Target hit' : bad ? 'Stopped' : end ? 'Target run over' : 'Aiming for target';
+  $('hudNow').textContent = now != null ? now.toFixed(1) + '%' : '–';
+  $('hudOf').textContent = `target ${T.target}% ±${T.band}, started at ${T.start}%`;
+  const pos = v => Math.max(0, Math.min(100, (v - T.start) / Math.max(1, T.target + T.band - T.start) * 100));
+  $('hudBar').style.transform = `scaleX(${pos(now) / 100})`; $('hudMark').style.left = pos(T.target) + '%';
+  const P = T.pulses || [];
+  $('pulses').innerHTML = P.map((p, i) => `<li class="num${ph === 'fault' && i === P.length - 1 ? ' bad' : ''}">${p.s} s ${p.rise >= 0 ? '+' : ''}${p.rise}%</li>`).join('');
+  $('verdict').className = 'verdict ' + (good ? 'good' : bad ? 'bad' : 'water');
+  $('verdict').textContent = good ? `Hit ${T.now}%` : ph === 'fault' ? 'Water isn\'t arriving' : ph === 'blocked' ? 'Blocked' : end ? 'Target run over' : `Aiming ${T.target}%`;
+  $('reason').textContent = T.msg || '';
+  $('by').textContent = end ? `${P.length} pulse${P.length === 1 ? '' : 's'}, ${T.secs} s of pumping, ${T.ml} ml, ${T.took_s} s total. Learned ${(+T.rate).toFixed(2)} % per second.`
+    : `Pulse ${P.length + 1}, learned ${(+T.rate).toFixed(2)} % per second${ph === 'settling' ? '. Waiting for the water to reach the probe.' : ''}`;
+}
+async function ask(q) { if (!q) return; $('reply').innerHTML = '<span class="muted">Gemini is checking its tools…</span>';
+  const r = await j('/api/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({q})}); $('reply').textContent = r.answer; }
+$('askBtn').onclick = () => ask($('q').value);
+$('q').onkeydown = e => { if (e.key === 'Enter') ask($('q').value); };
+document.querySelectorAll('.sugg button').forEach(x => x.onclick = () => { $('q').value = x.textContent; ask(x.textContent); });
+fast(); slow(); setInterval(fast, 400); setInterval(slow, 3000);
+</script>
+<script src="views.js"></script>
+<script type="module" src="scene.js"></script>
+</body>
+</html>

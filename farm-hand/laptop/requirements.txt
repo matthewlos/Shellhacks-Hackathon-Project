@@ -1,0 +1,9 @@
+google-adk
+litellm
+pyserial
+fastapi
+uvicorn
+xgboost
+scikit-learn
+numpy
+requests

@@ -1,0 +1,6 @@
+failed-pour soak row: (1790125541.8319032, 'A', 5.0, 60.1, 60.1, 0.0, None, 0.0, 0, "probe barely moved: check the pump is in water, the tube isn't kinked, and the tube points at the pot")
+learned pct/s (ignores failed pours): 1.242
+labeled rows available: 236
+train: {'rows': 236, 'mae_h': 0.0015807945623614447, 'slope_mae_h': 0.3125404942697641}
+predict: {'pot': 'A', 'pct_now': 11.4, 'drop_per_h': 99.32, 'dry_at_pct': 35, 'hours_until_dry': 0.0, 'method': 'already_dry'}
+deleted the fake-trained model so it can't be used for real

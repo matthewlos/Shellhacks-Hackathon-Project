@@ -1,0 +1,3207 @@
+{
+"Summerville, South Carolina": [
+{
+"place_id": 344185229,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 194124,
+"lat": "33.0186699",
+"lon": "-80.1762704",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4815572625868757,
+"addresstype": "town",
+"name": "Summerville",
+"display_name": "Summerville, Dorchester County, South Carolina, United States",
+"boundingbox": [
+"32.9448540",
+"33.0551744",
+"-80.2354780",
+"-80.1247970"
+]
+}
+],
+"Scout, South Carolina": [
+{
+"place_id": 344136922,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 357089469,
+"lat": "32.3596409",
+"lon": "-80.6976071",
+"class": "place",
+"type": "island",
+"place_rank": 17,
+"importance": 0.1733827901121538,
+"addresstype": "island",
+"name": "Scout Island",
+"display_name": "Scout Island, Port Royal, Beaufort County, South Carolina, 29905, United States",
+"boundingbox": [
+"32.0396409",
+"32.6796409",
+"-81.0176071",
+"-80.3776071"
+]
+}
+],
+"Eastover, South Carolina": [
+{
+"place_id": 344581971,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 194007,
+"lat": "33.8771147",
+"lon": "-80.6922594",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.3668857539234569,
+"addresstype": "town",
+"name": "Eastover",
+"display_name": "Eastover, Richland County, South Carolina, United States",
+"boundingbox": [
+"33.8642680",
+"33.8870460",
+"-80.7059420",
+"-80.6826580"
+]
+}
+],
+"Saluda County, South Carolina": [
+{
+"place_id": 342305328,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 2532520,
+"lat": "34.0008125",
+"lon": "-81.7468082",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.4990198087986086,
+"addresstype": "county",
+"name": "Saluda County",
+"display_name": "Saluda County, South Carolina, 29138, United States",
+"boundingbox": [
+"33.8142387",
+"34.1876644",
+"-82.0102720",
+"-81.4718307"
+]
+}
+],
+"Boone Hill, South Carolina": [
+{
+"place_id": 341053825,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1408524619,
+"lat": "32.9981419",
+"lon": "-80.2168489",
+"class": "landuse",
+"type": "cemetery",
+"place_rank": 24,
+"importance": 0.08003750133516438,
+"addresstype": "cemetery",
+"name": "Boone Hill Cemetery",
+"display_name": "Boone Hill Cemetery, Oakdale Estates, Dorchester County, South Carolina, United States",
+"boundingbox": [
+"32.9975379",
+"32.9988111",
+"-80.2177262",
+"-80.2159962"
+]
+}
+],
+"Dawson, South Carolina": [
+{
+"place_id": 343290577,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 665438047,
+"lat": "33.4986500",
+"lon": "-80.8447234",
+"class": "leisure",
+"type": "stadium",
+"place_rank": 30,
+"importance": 0.37817846516583514,
+"addresstype": "leisure",
+"name": "Oliver C. Dawson Stadium",
+"display_name": "Oliver C. Dawson Stadium, Buckley Street, Pecanway Terrace, Orangeburg, Orangeburg County, South Carolina, 29115, United States",
+"boundingbox": [
+"33.4977120",
+"33.4995214",
+"-80.8456459",
+"-80.8436587"
+]
+}
+],
+"Coit, South Carolina": [
+{
+"place_id": 342825544,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1169672504,
+"lat": "34.1944588",
+"lon": "-79.7702083",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.05339068055237656,
+"addresstype": "road",
+"name": "South Coit Street",
+"display_name": "South Coit Street, Florence, Florence County, South Carolina, 29501, United States",
+"boundingbox": [
+"34.1935676",
+"34.1953500",
+"-79.7702711",
+"-79.7701456"
+]
+}
+],
+"Gills Creek, South Carolina": [
+{
+"place_id": 344531770,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 278737149,
+"lat": "33.9162837",
+"lon": "-80.9901211",
+"class": "waterway",
+"type": "stream",
+"place_rank": 22,
+"importance": 0.1507975276546128,
+"addresstype": "stream",
+"name": "Gills Creek",
+"display_name": "Gills Creek, Richland County, South Carolina, United States",
+"boundingbox": [
+"33.9079713",
+"33.9425043",
+"-81.0165947",
+"-80.9809246"
+]
+}
+],
+"Okatie 230-, South Carolina": [
+{
+"place_id": 387997346,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 222840935,
+"lat": "32.2971185",
+"lon": "-80.9464623",
+"class": "place",
+"type": "house",
+"place_rank": 30,
+"importance": 9.99999999995449e-06,
+"addresstype": "place",
+"name": "",
+"display_name": "230, Okatie Village Drive, Beaufort County, South Carolina, 29909, United States",
+"boundingbox": [
+"32.2970685",
+"32.2971685",
+"-80.9465123",
+"-80.9464123"
+]
+}
+],
+"Okatie, South Carolina": [
+{
+"place_id": 343375218,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1152878522,
+"lat": "32.2956335",
+"lon": "-80.9448103",
+"class": "landuse",
+"type": "commercial",
+"place_rank": 24,
+"importance": 0.08005091554131377,
+"addresstype": "commercial",
+"name": "Okatie Village",
+"display_name": "Okatie Village, Beaufort County, South Carolina, United States",
+"boundingbox": [
+"32.2947781",
+"32.2966531",
+"-80.9458415",
+"-80.9436309"
+]
+}
+],
+"Riverport, South Carolina": [
+{
+"place_id": 344181452,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 268543933,
+"lat": "33.8578726",
+"lon": "-79.0828943",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053388838788433625,
+"addresstype": "road",
+"name": "Riverport Drive",
+"display_name": "Riverport Drive, Rivertown Row, Conway, Horry County, South Carolina, 29562, United States",
+"boundingbox": [
+"33.8568564",
+"33.8584332",
+"-79.0836892",
+"-79.0817574"
+]
+}
+],
+"Flat Rock, South Carolina": [
+{
+"place_id": 342484689,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 154288074,
+"lat": "34.4239956",
+"lon": "-82.6517992",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13336833524071104,
+"addresstype": "hamlet",
+"name": "Flat Rock",
+"display_name": "Flat Rock, Anderson County, South Carolina, 29684, United States",
+"boundingbox": [
+"34.4039956",
+"34.4439956",
+"-82.6717992",
+"-82.6317992"
+]
+}
+],
+"Saluda Hydro, South Carolina": [],
+"Bush River, South Carolina": [],
+"Charleston Transmission, South Carolina": [
+{
+"place_id": 344003847,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 862875634,
+"lat": "32.9198265",
+"lon": "-80.0286075",
+"class": "shop",
+"type": "car_repair",
+"place_rank": 30,
+"importance": 3.500190737769158e-05,
+"addresstype": "shop",
+"name": "Holt Transmission Service Plus Auto Repairs of North Charleston",
+"display_name": "Holt Transmission Service Plus Auto Repairs of North Charleston, Tipson Street, Atlantic on the Avenue, North Charleston, Charleston County, South Carolina, 29406, United States",
+"boundingbox": [
+"32.9195550",
+"32.9200774",
+"-80.0288050",
+"-80.0284830"
+]
+}
+],
+"Ritter, South Carolina": [],
+"Hooks, South Carolina": [],
+"St Helena, South Carolina": [],
+"Cameron Jct, South Carolina": [],
+"Atomic Road, South Carolina": [
+{
+"place_id": 344499582,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1503799638,
+"lat": "33.4877507",
+"lon": "-81.9189208",
+"class": "highway",
+"type": "primary",
+"place_rank": 26,
+"importance": 0.05339075989929042,
+"addresstype": "road",
+"name": "Atomic Road",
+"display_name": "Atomic Road, Aiken County, South Carolina, 29841, United States",
+"boundingbox": [
+"33.4867180",
+"33.4887988",
+"-81.9197059",
+"-81.9181160"
+]
+}
+],
+"Santee City, South Carolina": [],
+"Aiken PSA, South Carolina": [],
+"Hopkins, South Carolina": [
+{
+"place_id": 343241237,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 153985279,
+"lat": "33.9043212",
+"lon": "-80.8770342",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.3520298540975971,
+"addresstype": "hamlet",
+"name": "Hopkins",
+"display_name": "Hopkins, Richland County, South Carolina, 29061, United States",
+"boundingbox": [
+"33.8843212",
+"33.9243212",
+"-80.8970342",
+"-80.8570342"
+]
+}
+],
+"Red House Road, South Carolina": [
+{
+"place_id": 343288903,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 12155195,
+"lat": "32.5532225",
+"lon": "-80.2988982",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05336833524071104,
+"addresstype": "road",
+"name": "Red House Road",
+"display_name": "Red House Road, Charleston County, South Carolina, 29438, United States",
+"boundingbox": [
+"32.5504870",
+"32.5562198",
+"-80.3000495",
+"-80.2971990"
+]
+}
+],
+"Lyles, South Carolina": [
+{
+"place_id": 341071632,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 38311975,
+"lat": "34.8892175",
+"lon": "-81.8901365",
+"class": "water",
+"type": "reservoir",
+"place_rank": 20,
+"importance": 0.13336203326466772,
+"addresstype": "reservoir",
+"name": "Lyles Brothers Lake",
+"display_name": "Lyles Brothers Lake, Spartanburg County, South Carolina, United States",
+"boundingbox": [
+"34.8881125",
+"34.8903165",
+"-81.8921695",
+"-81.8885339"
+]
+}
+],
+"Kilbourne Park, South Carolina": [
+{
+"place_id": 343122299,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 370060881,
+"lat": "34.0024758",
+"lon": "-80.9786219",
+"class": "amenity",
+"type": "place_of_worship",
+"place_rank": 30,
+"importance": 6.700770580601233e-05,
+"addresstype": "amenity",
+"name": "Kilbourne Park Church",
+"display_name": "Kilbourne Park Church, Kilbourne Road, Heathwood, Columbia, Richland County, South Carolina, 29209, United States",
+"boundingbox": [
+"34.0023719",
+"34.0025807",
+"-80.9788584",
+"-80.9783853"
+]
+}
+],
+"Winnsboro West 230-, South Carolina": [],
+"Jackson, South Carolina": [
+{
+"place_id": 340971025,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 193856,
+"lat": "33.3254215",
+"lon": "-81.7878907",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.37694663196902717,
+"addresstype": "village",
+"name": "Jackson",
+"display_name": "Jackson, Aiken County, South Carolina, United States",
+"boundingbox": [
+"33.3107260",
+"33.3481770",
+"-81.8160910",
+"-81.7728110"
+]
+}
+],
+"Virgil C. Summer Nuclear #1-Denny Terrace, South Carolina": [],
+"Coast Guard, South Carolina": [
+{
+"place_id": 343963966,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 853717044,
+"lat": "32.8525085",
+"lon": "-79.9445324",
+"class": "military",
+"type": "office",
+"place_rank": 30,
+"importance": 5.7064927138124935e-05,
+"addresstype": "military",
+"name": "Coast Guard",
+"display_name": "Coast Guard, NOAA Pier Access, North Charleston, Charleston County, South Carolina, 29405, United States",
+"boundingbox": [
+"32.8524428",
+"32.8525741",
+"-79.9446319",
+"-79.9444329"
+]
+}
+],
+"Millrace, South Carolina": [],
+"Williams St Sub, South Carolina": [],
+"St Matthews, South Carolina": [
+{
+"place_id": 355527379,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 194125,
+"lat": "33.6648760",
+"lon": "-80.7778681",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.3990711390903937,
+"addresstype": "town",
+"name": "St. Matthews",
+"display_name": "St. Matthews, Calhoun County, South Carolina, 29135, United States",
+"boundingbox": [
+"33.6500240",
+"33.6757323",
+"-80.7915270",
+"-80.7639480"
+]
+}
+],
+"Killian, South Carolina": [
+{
+"place_id": 341080243,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 818424286,
+"lat": "32.5666980",
+"lon": "-81.2651824",
+"class": "highway",
+"type": "track",
+"place_rank": 26,
+"importance": 0.0533433333333333,
+"addresstype": "road",
+"name": "Killian",
+"display_name": "Killian, Jasper County, South Carolina, United States",
+"boundingbox": [
+"32.5657833",
+"32.5707385",
+"-81.2753320",
+"-81.2562643"
+]
+}
+],
+"Long Savannah, South Carolina": [
+{
+"place_id": 423605726,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1540113042,
+"lat": "33.0582168",
+"lon": "-79.8130629",
+"class": "natural",
+"type": "wetland",
+"place_rank": 22,
+"importance": 0.10670166857404438,
+"addresstype": "wetland",
+"name": "Long Pond Savannah",
+"display_name": "Long Pond Savannah, Old Joe, Berkeley County, South Carolina, United States",
+"boundingbox": [
+"33.0539978",
+"33.0624873",
+"-79.8206513",
+"-79.8121611"
+]
+}
+],
+"Stevens Creek, South Carolina": [],
+"Calhoun County, South Carolina": [
+{
+"place_id": 344772615,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 2532498,
+"lat": "33.6567769",
+"lon": "-80.7603948",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.4986976707455308,
+"addresstype": "county",
+"name": "Calhoun County",
+"display_name": "Calhoun County, South Carolina, 29135, United States",
+"boundingbox": [
+"33.4660060",
+"33.8800800",
+"-81.0605495",
+"-80.4962730"
+]
+}
+],
+"Union Pier 115-, South Carolina": [
+{
+"place_id": 343369698,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1433392301,
+"lat": "32.7843360",
+"lon": "-79.9255881",
+"class": "landuse",
+"type": "industrial",
+"place_rank": 24,
+"importance": 0.2636224323479305,
+"addresstype": "industrial",
+"name": "Union Pier Terminal",
+"display_name": "Union Pier Terminal, 32, Ansonborough, Charleston, Charleston County, South Carolina, 29401, United States",
+"boundingbox": [
+"32.7812028",
+"32.7875618",
+"-79.9281209",
+"-79.9235946"
+]
+}
+],
+"Bayfront, South Carolina": [
+{
+"place_id": 344737691,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 158550026,
+"lat": "32.7421220",
+"lon": "-79.9634237",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13340349050125885,
+"addresstype": "hamlet",
+"name": "Bayfront",
+"display_name": "Bayfront, James Island, Charleston County, South Carolina, 29412, United States",
+"boundingbox": [
+"32.7221220",
+"32.7621220",
+"-79.9834237",
+"-79.9434237"
+]
+}
+],
+"Clements Ferry Rd Sub, South Carolina": [],
+"ADAMSVILLE, Georgia": [
+{
+"place_id": 342572469,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 154075833,
+"lat": "33.7592737",
+"lon": "-84.5052090",
+"class": "place",
+"type": "quarter",
+"place_rank": 20,
+"importance": 0.31877743112977514,
+"addresstype": "quarter",
+"name": "Adamsville",
+"display_name": "Adamsville, Atlanta, Fulton County, Georgia, 10331, United States",
+"boundingbox": [
+"33.7492737",
+"33.7692737",
+"-84.5152090",
+"-84.4952090"
+]
+}
+],
+"BUZZARD ROOST, Georgia": [
+{
+"place_id": 349052543,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358716695,
+"lat": "32.9670734",
+"lon": "-84.5365906",
+"class": "natural",
+"type": "peak",
+"place_rank": 18,
+"importance": 0.16000999999999999,
+"addresstype": "peak",
+"name": "Buzzard Roost",
+"display_name": "Buzzard Roost, Meriwether County, Georgia, United States",
+"boundingbox": [
+"32.9670234",
+"32.9671234",
+"-84.5366406",
+"-84.5365406"
+]
+}
+],
+"BARTLETTS FERRY, Georgia": [],
+"BRUNSWICK, Georgia": [
+{
+"place_id": 302049171,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119696,
+"lat": "31.1499528",
+"lon": "-81.4914894",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.5116898075252918,
+"addresstype": "city",
+"name": "Brunswick",
+"display_name": "Brunswick, Glynn County, Georgia, United States",
+"boundingbox": [
+"31.1031670",
+"31.2049990",
+"-81.5304420",
+"-81.4022940"
+]
+}
+],
+"CASS PINE, Georgia": [],
+"EAST DALTON, Georgia": [
+{
+"place_id": 343345591,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9542515,
+"lat": "34.7798203",
+"lon": "-84.9656524",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.053382245365072065,
+"addresstype": "road",
+"name": "East Tyler Street",
+"display_name": "East Tyler Street, Dalton, Whitfield County, Georgia, 30721, United States",
+"boundingbox": [
+"34.7797630",
+"34.7798488",
+"-84.9669464",
+"-84.9643596"
+]
+}
+],
+"OOSTANAULA, Georgia": [],
+"LOOPERS FARM, Georgia": [],
+"SOUTH DALTON, Georgia": [
+{
+"place_id": 343366965,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9248353,
+"lat": "34.6947849",
+"lon": "-84.4833099",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338434500648505,
+"addresstype": "road",
+"name": "South Dalton Street",
+"display_name": "South Dalton Street, Ellijay, Gilmer County, Georgia, 30540, United States",
+"boundingbox": [
+"34.6944376",
+"34.6950902",
+"-84.4836582",
+"-84.4829293"
+]
+}
+],
+"EMBLEM RIVERSIDE, Georgia": [],
+"FAYETTEVILLE AREA TRANSMISSION NEEDS, Georgia": [],
+"FENWICK STREET, Georgia": [
+{
+"place_id": 343120206,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 389734559,
+"lat": "33.4686625",
+"lon": "-81.9665066",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339876020447086,
+"addresstype": "road",
+"name": "Fenwick Street",
+"display_name": "Fenwick Street, Augusta, Richmond County, Georgia, 30901, United States",
+"boundingbox": [
+"33.4680326",
+"33.4693314",
+"-81.9683957",
+"-81.9646045"
+]
+}
+],
+"SAND BAR FERRY, Georgia": [
+{
+"place_id": 344801615,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 858401457,
+"lat": "33.4485609",
+"lon": "-81.9225725",
+"class": "highway",
+"type": "primary",
+"place_rank": 26,
+"importance": 0.05339876020447086,
+"addresstype": "road",
+"name": "Sand Bar Ferry Road",
+"display_name": "Sand Bar Ferry Road, Marion Homes, Augusta, Richmond County, Georgia, 30901, United States",
+"boundingbox": [
+"33.4405773",
+"33.4552561",
+"-81.9290700",
+"-81.9176349"
+]
+}
+],
+"FULLER ROAD, Georgia": [],
+"COLUMBUS FIRST AVE, Georgia": [],
+"GARRETT ROAD, Georgia": [
+{
+"place_id": 344222433,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9413848,
+"lat": "32.5729763",
+"lon": "-84.8270214",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339740825513081,
+"addresstype": "road",
+"name": "Garrett Road",
+"display_name": "Garrett Road, Midland, Columbus, Muscogee County, Georgia, 31820, United States",
+"boundingbox": [
+"32.5709217",
+"32.5750110",
+"-84.8273020",
+"-84.8268423"
+]
+}
+],
+"GOAT ROCK, Georgia": [],
+"NORTH OPELIKA, Georgia": [],
+"N DUBLIN, Georgia": [],
+"WEST END, Georgia": [
+{
+"place_id": 342583699,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 4172450826,
+"lat": "33.7360535",
+"lon": "-84.4136642",
+"class": "railway",
+"type": "station",
+"place_rank": 30,
+"importance": 0.2636224323479305,
+"addresstype": "railway",
+"name": "West End",
+"display_name": "West End, 680, Lee Street Southwest, West End, Atlanta, Fulton County, Georgia, 30310, United States",
+"boundingbox": [
+"33.7310535",
+"33.7410535",
+"-84.4186642",
+"-84.4086642"
+]
+}
+],
+"GRID, Georgia": [
+{
+"place_id": 343590289,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 4237633137,
+"lat": "33.7540941",
+"lon": "-84.3804241",
+"class": "amenity",
+"type": "bicycle_rental",
+"place_rank": 30,
+"importance": 7.908064393067854e-05,
+"addresstype": "amenity",
+"name": "Sweet Auburn Market",
+"display_name": "Sweet Auburn Market, Jesse Hill Junior Drive Southeast, Sweet Auburn, Old Fourth Ward, Atlanta, Fulton County, Georgia, 30303, United States",
+"boundingbox": [
+"33.7540441",
+"33.7541441",
+"-84.3804741",
+"-84.3803741"
+]
+}
+],
+"GAINESVILLE #2 EQUIPMENT, Georgia": [],
+"CONYERS, Georgia": [
+{
+"place_id": 342998062,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119584,
+"lat": "33.6676103",
+"lon": "-84.0176904",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.49387410235614226,
+"addresstype": "town",
+"name": "Conyers",
+"display_name": "Conyers, Rockdale County, Georgia, United States",
+"boundingbox": [
+"33.6249660",
+"33.6950960",
+"-84.0457260",
+"-83.9230780"
+]
+}
+],
+"CORNISH MOUNTAIN, Georgia": [
+{
+"place_id": 343067460,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358683505,
+"lat": "33.6734475",
+"lon": "-83.8137912",
+"class": "natural",
+"type": "peak",
+"place_rank": 18,
+"importance": 0.16000999999999999,
+"addresstype": "peak",
+"name": "Cornish Mountain",
+"display_name": "Cornish Mountain, Newton County, Georgia, 30053, United States",
+"boundingbox": [
+"33.6733975",
+"33.6734975",
+"-83.8138412",
+"-83.8137412"
+]
+}
+],
+"LIZARD LOPE, Georgia": [
+{
+"place_id": 300030096,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9053342,
+"lat": "31.6139302",
+"lon": "-84.5196362",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.0533433333333333,
+"addresstype": "road",
+"name": "Lizard Lope Road",
+"display_name": "Lizard Lope Road, Calhoun County, Georgia, United States",
+"boundingbox": [
+"31.5917086",
+"31.6211177",
+"-84.5349760",
+"-84.5189761"
+]
+}
+],
+"WESTOVER, Georgia": [],
+"GULFPORT LANDON RD, Georgia": [],
+"KILN, Georgia": [
+{
+"place_id": 300770182,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 251159281,
+"lat": "31.8267437",
+"lon": "-81.5855134",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053385420767528766,
+"addresstype": "road",
+"name": "Kiln Lane",
+"display_name": "Kiln Lane, Hinesville, Liberty County, Georgia, 31313, United States",
+"boundingbox": [
+"31.8267437",
+"31.8267437",
+"-81.5862822",
+"-81.5847446"
+]
+}
+],
+"WEISS DAM, Georgia": [],
+"HILLS BRIDGE, Georgia": [],
+"JORDAN DAM, Georgia": [
+{
+"place_id": 343701894,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358737663,
+"lat": "32.5768054",
+"lon": "-85.0249338",
+"class": "waterway",
+"type": "dam",
+"place_rank": 20,
+"importance": 0.13339740825513083,
+"addresstype": "dam",
+"name": "Jordan Company Dam",
+"display_name": "Jordan Company Dam, Columbus, Muscogee County, Georgia, 31808, United States",
+"boundingbox": [
+"32.5767554",
+"32.5768554",
+"-85.0249838",
+"-85.0248838"
+]
+}
+],
+"MARTIN DAM B, Georgia": [],
+"KATHLEEN AREA IMPROVEMENTS, Georgia": [],
+"NORTH OPELIKA TS, Georgia": [],
+"LAUDERDALE EAST, Georgia": [],
+"VIMVILLE, Georgia": [],
+"WASHINGTON (WASHNGTN, Georgia": [],
+"MOUNTAIN VIEW, Georgia": [
+{
+"place_id": 339157980,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 154114741,
+"lat": "33.6417761",
+"lon": "-84.3902038",
+"class": "place",
+"type": "locality",
+"place_rank": 25,
+"importance": 0.2521482229732802,
+"addresstype": "locality",
+"name": "Mountain View",
+"display_name": "Mountain View, Coxs Crossing, Clayton County, Georgia, 30321, United States",
+"boundingbox": [
+"33.6317761",
+"33.6517761",
+"-84.4002038",
+"-84.3802038"
+]
+}
+],
+"OHARA LINE, Georgia": [],
+"PALMYRA, Georgia": [],
+"BIG OGEECHEE, Georgia": [],
+"SAW MILL ROAD, Georgia": [],
+"SCOTTDALE, Georgia": [
+{
+"place_id": 339679623,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 18407182,
+"lat": "33.7971080",
+"lon": "-84.2699125",
+"class": "boundary",
+"type": "census",
+"place_rank": 25,
+"importance": 0.35323154899007886,
+"addresstype": "census",
+"name": "Scottdale",
+"display_name": "Scottdale, Clarkston, DeKalb County, Georgia, 30079, United States",
+"boundingbox": [
+"33.7759990",
+"33.8182670",
+"-84.2807460",
+"-84.2453030"
+]
+}
+],
+"STONEWALL TELL ROAD, Georgia": [
+{
+"place_id": 342983824,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1444515093,
+"lat": "33.6055359",
+"lon": "-84.5527443",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.0533838063630121,
+"addresstype": "road",
+"name": "Stonewall Tell Road",
+"display_name": "Stonewall Tell Road, Stonewall, South Fulton, Fulton County, Georgia, 30349, United States",
+"boundingbox": [
+"33.6053741",
+"33.6056964",
+"-84.5528829",
+"-84.5526071"
+]
+}
+],
+"UNION CITY (WHITE), Georgia": [],
+"UNION CITY, Georgia": [
+{
+"place_id": 340313218,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119566,
+"lat": "33.5870558",
+"lon": "-84.5424299",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4353606624145101,
+"addresstype": "town",
+"name": "Union City",
+"display_name": "Union City, Fulton County, Georgia, United States",
+"boundingbox": [
+"33.5377980",
+"33.6345640",
+"-84.6675490",
+"-84.4861090"
+]
+}
+],
+"WANSLEY LINE, Georgia": [],
+"WEST TECH, Georgia": [],
+"AUTAUGAVILLE, Georgia": [],
+"EAST PELHAM, Georgia": [
+{
+"place_id": 343543900,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9260056,
+"lat": "33.8016738",
+"lon": "-84.3660285",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053412413977264026,
+"addresstype": "road",
+"name": "East Pelham Road Northeast",
+"display_name": "East Pelham Road Northeast, Atlanta, Fulton County, Georgia, 30324, United States",
+"boundingbox": [
+"33.8012320",
+"33.8019372",
+"-84.3675050",
+"-84.3645070"
+]
+}
+],
+"BESSEMER, Georgia": [
+{
+"place_id": 343207473,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 624107266,
+"lat": "32.4115112",
+"lon": "-84.9176750",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339740825513081,
+"addresstype": "road",
+"name": "Bessemer Loop",
+"display_name": "Bessemer Loop, Patton Village, Columbus, Muscogee County, Georgia, 31903, United States",
+"boundingbox": [
+"32.4101650",
+"32.4130468",
+"-84.9183866",
+"-84.9153600"
+]
+}
+],
+"SOUTH BESSEMER, Georgia": [],
+"BROADWAY, Georgia": [
+{
+"place_id": 343765849,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 532092711,
+"lat": "32.7806762",
+"lon": "-83.6549462",
+"class": "highway",
+"type": "primary",
+"place_rank": 26,
+"importance": 0.0533981330586709,
+"addresstype": "road",
+"name": "Broadway",
+"display_name": "Broadway, Tharpe Heights, Macon, Bibb County, Georgia, 31206, United States",
+"boundingbox": [
+"32.7803419",
+"32.7810104",
+"-83.6551138",
+"-83.6547784"
+]
+}
+],
+"ECHECONNEE, Georgia": [
+{
+"place_id": 342813164,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 153924933,
+"lat": "32.6851436",
+"lon": "-83.7004620",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13336833524071104,
+"addresstype": "hamlet",
+"name": "Echeconnee",
+"display_name": "Echeconnee, Houston County, Georgia, 31216, United States",
+"boundingbox": [
+"32.6651436",
+"32.7051436",
+"-83.7204620",
+"-83.6804620"
+]
+}
+],
+"NEW MERIDIAN, Georgia": [],
+"LG&E MONROE, Georgia": [],
+"ELLENWOOD AREA NETWORK IMPROVEMENTS, Georgia": [],
+"ENTERPRISE TS, Georgia": [
+{
+"place_id": 305398104,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 154053094,
+"lat": "31.1229608",
+"lon": "-84.8257558",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13336833524071104,
+"addresstype": "hamlet",
+"name": "Enterprise",
+"display_name": "Enterprise, Miller County, Georgia, United States",
+"boundingbox": [
+"31.1029608",
+"31.1429608",
+"-84.8457558",
+"-84.8057558"
+]
+}
+],
+"PINCKARD #, Georgia": [
+{
+"place_id": 341242282,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9390240,
+"lat": "34.0407456",
+"lon": "-83.2145284",
+"class": "highway",
+"type": "unclassified",
+"place_rank": 26,
+"importance": 0.05338193713282975,
+"addresstype": "road",
+"name": "Pinckard Avenue",
+"display_name": "Pinckard Avenue, Colbert, Madison County, Georgia, 30628, United States",
+"boundingbox": [
+"34.0405132",
+"34.0409581",
+"-83.2153510",
+"-83.2136683"
+]
+}
+],
+"GASKIN, Georgia": [
+{
+"place_id": 299923172,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1173508730,
+"lat": "31.4878572",
+"lon": "-82.8461489",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.05338548027771416,
+"addresstype": "road",
+"name": "South Gaskin Avenue",
+"display_name": "South Gaskin Avenue, Douglas, Coffee County, Georgia, 31533, United States",
+"boundingbox": [
+"31.4875915",
+"31.4881229",
+"-82.8461660",
+"-82.8461318"
+]
+}
+],
+"SOUTHPORT, Georgia": [],
+"GRID: ARKWRIGHT, Georgia": [],
+"LLOYD SHOALS, Georgia": [],
+"DOUGLASVILLE, Georgia": [
+{
+"place_id": 343215945,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119970,
+"lat": "33.7514966",
+"lon": "-84.7477136",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4908506518712273,
+"addresstype": "town",
+"name": "Douglasville",
+"display_name": "Douglasville, Douglas County, Georgia, United States",
+"boundingbox": [
+"33.6959670",
+"33.7909800",
+"-84.7948150",
+"-84.5898460"
+]
+}
+],
+"EAST WALTON, Georgia": [
+{
+"place_id": 341227838,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9010021,
+"lat": "33.0918951",
+"lon": "-83.2256872",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338803921568624,
+"addresstype": "road",
+"name": "East Walton Street",
+"display_name": "East Walton Street, Milledgeville, Baldwin County, Georgia, 31061, United States",
+"boundingbox": [
+"33.0909352",
+"33.0926816",
+"-83.2299059",
+"-83.2214584"
+]
+}
+],
+"GARRETT RD, Georgia": [
+{
+"place_id": 344999720,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9413852,
+"lat": "32.5374385",
+"lon": "-84.8274075",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339740825513081,
+"addresstype": "road",
+"name": "Garrett Road",
+"display_name": "Garrett Road, Columbus, Muscogee County, Georgia, 31820, United States",
+"boundingbox": [
+"32.5346454",
+"32.5402309",
+"-84.8275158",
+"-84.8272847"
+]
+}
+],
+"V. RICA, Georgia": [],
+"GLENWOOD SPRINGS, Georgia": [
+{
+"place_id": 343077792,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1147974425,
+"lat": "33.3076645",
+"lon": "-83.3965030",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.05338653467612722,
+"addresstype": "road",
+"name": "Glenwood Springs Road",
+"display_name": "Glenwood Springs Road, Eatonton, Putnam County, Georgia, 31024, United States",
+"boundingbox": [
+"33.3075449",
+"33.3077894",
+"-83.3966522",
+"-83.3963581"
+]
+}
+],
+"LICK CREEK, Georgia": [],
+"HICKORY LEVEL, Georgia": [],
+"MORNING HORNET, Georgia": [],
+"RIDDLEVILLE, Georgia": [
+{
+"place_id": 339735390,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119943,
+"lat": "32.9068227",
+"lon": "-82.6656894",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.3807705141182751,
+"addresstype": "hamlet",
+"name": "Riddleville",
+"display_name": "Riddleville, Washington County, Georgia, United States",
+"boundingbox": [
+"32.8996811",
+"32.9141627",
+"-82.6746919",
+"-82.6574449"
+]
+}
+],
+"SWITCH WAY, Georgia": [
+{
+"place_id": 343797476,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9193905,
+"lat": "33.7535466",
+"lon": "-84.5876494",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05337907454032193,
+"addresstype": "road",
+"name": "Switch Way",
+"display_name": "Switch Way, Mableton, Douglas County, Georgia, 30122, United States",
+"boundingbox": [
+"33.7525471",
+"33.7552567",
+"-84.5901798",
+"-84.5855240"
+]
+}
+],
+"THORNTON ROAD, Georgia": [
+{
+"place_id": 343758372,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 379438342,
+"lat": "33.7965114",
+"lon": "-84.6409988",
+"class": "highway",
+"type": "trunk",
+"place_rank": 26,
+"importance": 0.05337907454032193,
+"addresstype": "road",
+"name": "Thornton Road",
+"display_name": "Thornton Road, Lithia Springs, Douglas County, Georgia, 30122, United States",
+"boundingbox": [
+"33.7963779",
+"33.7966450",
+"-84.6413687",
+"-84.6406290"
+]
+}
+],
+"GULLATT ROAD TRANSMISSION IMPROVEMENTS, Georgia": [],
+"HILL VIEW & GRASSY HOLLOW SUBSTATION, Georgia": [],
+"LINE CREEK, Georgia": [
+{
+"place_id": 343962904,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1259570826,
+"lat": "33.4026618",
+"lon": "-84.6134509",
+"class": "waterway",
+"type": "stream",
+"place_rank": 22,
+"importance": 0.10671874799725335,
+"addresstype": "stream",
+"name": "Line Creek",
+"display_name": "Line Creek, Peachtree City, Fayette County, Georgia, 30269, United States",
+"boundingbox": [
+"33.3987080",
+"33.4088600",
+"-84.6159470",
+"-84.6095183"
+]
+}
+],
+"FORTSON SUBSTATION MODERNIZATION, Georgia": [],
+"MERIDIAN HWY 80 SOUTH, Georgia": [],
+"MERIDIAN NORTHEAST, Georgia": [],
+"OLIVER DAM & BULL CREEK, Georgia": [],
+"POSSUM BRANCH, Georgia": [],
+"WADLEY PRI., Georgia": [],
+"SHUGART FARMS AREA IMPROVEMENT, Georgia": [],
+"STANTON SP, Georgia": [],
+"THUMBS UP, Georgia": [],
+"SUMMER LAKE, Georgia": [
+{
+"place_id": 302995076,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 732901232,
+"lat": "30.7624953",
+"lon": "-84.6520737",
+"class": "waterway",
+"type": "dam",
+"place_rank": 20,
+"importance": 0.133364296177615,
+"addresstype": "dam",
+"name": "Summer Lake Dam",
+"display_name": "Summer Lake Dam, Decatur County, Georgia, United States",
+"boundingbox": [
+"30.7622043",
+"30.7628451",
+"-84.6527347",
+"-84.6514419"
+]
+}
+],
+"THURLOW DAM, Georgia": [],
+"UNION SPRINGS, Georgia": [
+{
+"place_id": 300845766,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 705602755,
+"lat": "30.9575506",
+"lon": "-83.3725226",
+"class": "place",
+"type": "neighbourhood",
+"place_rank": 24,
+"importance": 0.08002869993133437,
+"addresstype": "neighbourhood",
+"name": "Union Springs",
+"display_name": "Union Springs, Lowndes County, Georgia, United States",
+"boundingbox": [
+"30.9551620",
+"30.9596113",
+"-83.3757026",
+"-83.3675625"
+]
+}
+],
+"TOMOCHICHI, Georgia": [
+{
+"place_id": 342697094,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 130209213,
+"lat": "32.0781406",
+"lon": "-81.0929067",
+"class": "amenity",
+"type": "courthouse",
+"place_rank": 30,
+"importance": 0.13618373728802152,
+"addresstype": "amenity",
+"name": "Tomochichi United States Court House",
+"display_name": "Tomochichi United States Court House, West York Street, Savannah Historic District, Savannah, Chatham County, Georgia, 31401, United States",
+"boundingbox": [
+"32.0778520",
+"32.0784508",
+"-81.0934615",
+"-81.0927317"
+]
+}
+],
+"ACIPCO TS, Georgia": [],
+"BOYLES, Georgia": [
+{
+"place_id": 300796117,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358681218,
+"lat": "31.5821623",
+"lon": "-81.7295571",
+"class": "place",
+"type": "island",
+"place_rank": 17,
+"importance": 0.17334333333333332,
+"addresstype": "island",
+"name": "Boyles Island",
+"display_name": "Boyles Island, Wayne County, Georgia, United States",
+"boundingbox": [
+"31.2621623",
+"31.9021623",
+"-82.0495571",
+"-81.4095571"
+]
+}
+],
+"ANNISTON, Georgia": [],
+"BARRY, Georgia": [
+{
+"place_id": 417445340,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1511085408,
+"lat": "34.4349593",
+"lon": "-83.6095891",
+"class": "landuse",
+"type": "cemetery",
+"place_rank": 24,
+"importance": 0.08000999999999997,
+"addresstype": "cemetery",
+"name": "Hathcock Cemetery",
+"display_name": "Hathcock Cemetery, Banks County, Georgia, United States",
+"boundingbox": [
+"34.4347081",
+"34.4354442",
+"-83.6098661",
+"-83.6091793"
+]
+}
+],
+"ELLICOTT, Georgia": [],
+"BACKWATER TAP, Georgia": [],
+"CROOKED CREEK, Georgia": [
+{
+"place_id": 344414794,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 18407198,
+"lat": "33.2645625",
+"lon": "-83.2712186",
+"class": "boundary",
+"type": "census",
+"place_rank": 25,
+"importance": 0.23992860907835414,
+"addresstype": "census",
+"name": "Crooked Creek",
+"display_name": "Crooked Creek, Putnam County, Georgia, United States",
+"boundingbox": [
+"33.2426910",
+"33.2869940",
+"-83.2931250",
+"-83.2481650"
+]
+}
+],
+"EMERSON, Georgia": [
+{
+"place_id": 339870225,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119628,
+"lat": "34.1270427",
+"lon": "-84.7554925",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4132399184526773,
+"addresstype": "town",
+"name": "Emerson",
+"display_name": "Emerson, Bartow County, Georgia, 30137, United States",
+"boundingbox": [
+"34.0940150",
+"34.1609680",
+"-84.7849350",
+"-84.7198610"
+]
+}
+],
+"CENTRE, Georgia": [
+{
+"place_id": 303131875,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 12628412,
+"lat": "30.4277888",
+"lon": "-91.1752921",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053401412222476505,
+"addresstype": "road",
+"name": "Georgia Street",
+"display_name": "Georgia Street, Garden District, Downtown, Baton Rouge, East Baton Rouge Parish, Louisiana, 70802, United States",
+"boundingbox": [
+"30.4243954",
+"30.4311813",
+"-91.1754297",
+"-91.1751870"
+]
+}
+],
+"HAMMOND 115 KVTRANSMISSION LINE, Georgia": [],
+"LAUDERDALE WEST, Georgia": [],
+"PLANT SWEATT, Georgia": [],
+"CORN CRIB, Georgia": [
+{
+"place_id": 342526457,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 462957417,
+"lat": "33.7524511",
+"lon": "-84.8193609",
+"class": "landuse",
+"type": "residential",
+"place_rank": 24,
+"importance": 0.08003500190737771,
+"addresstype": "residential",
+"name": "Corn Crib",
+"display_name": "Corn Crib, Douglas County, Georgia, United States",
+"boundingbox": [
+"33.7470609",
+"33.7564960",
+"-84.8265039",
+"-84.8142704"
+]
+}
+],
+"DEER CREEK, Georgia": [
+{
+"place_id": 345453670,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 33152002,
+"lat": "33.3677571",
+"lon": "-85.2053636",
+"class": "waterway",
+"type": "stream",
+"place_rank": 22,
+"importance": 0.10670166857404438,
+"addresstype": "stream",
+"name": "Deer Creek",
+"display_name": "Deer Creek, Rockalo, Heard County, Georgia, United States",
+"boundingbox": [
+"33.3632680",
+"33.3700930",
+"-85.2114250",
+"-85.2006350"
+]
+}
+],
+"DYER ROAD, Georgia": [
+{
+"place_id": 343257221,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9073601,
+"lat": "34.9171919",
+"lon": "-85.2672835",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338311818112455,
+"addresstype": "road",
+"name": "Dyer Road",
+"display_name": "Dyer Road, Lytle, Fort Oglethorpe, Walker County, Georgia, 30707, United States",
+"boundingbox": [
+"34.9171340",
+"34.9182520",
+"-85.2738923",
+"-85.2606724"
+]
+}
+],
+"EAST ROANOKE, Georgia": [],
+"EUTAW, Georgia": [],
+"GREENE COUNTY, Georgia": [
+{
+"place_id": 343086745,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 1029450,
+"lat": "33.5492988",
+"lon": "-83.1660939",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5533799844369264,
+"addresstype": "county",
+"name": "Greene County",
+"display_name": "Greene County, Georgia, United States",
+"boundingbox": [
+"33.3550569",
+"33.7617740",
+"-83.4061890",
+"-82.9507230"
+]
+}
+],
+"FIRST AVENUE, Georgia": [
+{
+"place_id": 299073998,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9093148,
+"lat": "31.9902512",
+"lon": "-80.8509207",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338453269245438,
+"addresstype": "road",
+"name": "First Avenue",
+"display_name": "First Avenue, Tybee Island, Chatham County, Georgia, 31328, United States",
+"boundingbox": [
+"31.9898275",
+"31.9906597",
+"-80.8511283",
+"-80.8506834"
+]
+}
+],
+"NORTH COLUMBUS, Georgia": [],
+"PITTS, Georgia": [],
+"GASTON, Georgia": [
+{
+"place_id": 343768922,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1279370993,
+"lat": "33.5594735",
+"lon": "-84.9030640",
+"class": "waterway",
+"type": "dam",
+"place_rank": 20,
+"importance": 0.1333433333333333,
+"addresstype": "dam",
+"name": "Gaston Lake Dam",
+"display_name": "Gaston Lake Dam, Carroll County, Georgia, United States",
+"boundingbox": [
+"33.5592745",
+"33.5597066",
+"-84.9035692",
+"-84.9025379"
+]
+}
+],
+"BYNUM, Georgia": [
+{
+"place_id": 305092443,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 780455627,
+"lat": "31.6992499",
+"lon": "-84.5942045",
+"class": "water",
+"type": "reservoir",
+"place_rank": 20,
+"importance": 0.1333433333333333,
+"addresstype": "reservoir",
+"name": "Bynum Lake",
+"display_name": "Bynum Lake, Randolph County, Georgia, United States",
+"boundingbox": [
+"31.6954433",
+"31.7032525",
+"-84.5962768",
+"-84.5912396"
+]
+}
+],
+"BOSTWICK, Georgia": [
+{
+"place_id": 343225410,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119582,
+"lat": "33.7373712",
+"lon": "-83.5145092",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.35263345776344923,
+"addresstype": "village",
+"name": "Bostwick",
+"display_name": "Bostwick, Morgan County, Georgia, United States",
+"boundingbox": [
+"33.7232900",
+"33.7523050",
+"-83.5323220",
+"-83.4975920"
+]
+}
+],
+"MCDONOUGH, Georgia": [],
+"SOUTH GRIFFIN, Georgia": [
+{
+"place_id": 300292773,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1010157626,
+"lat": "31.7775694",
+"lon": "-83.3960317",
+"class": "waterway",
+"type": "dam",
+"place_rank": 20,
+"importance": 0.1333433333333333,
+"addresstype": "dam",
+"name": "Alvin Griffin Irrigation Pond Dam South",
+"display_name": "Alvin Griffin Irrigation Pond Dam South, Ben Hill County, Georgia, United States",
+"boundingbox": [
+"31.7775442",
+"31.7778689",
+"-83.3970407",
+"-83.3949764"
+]
+}
+],
+"NEW HAMPTON, Georgia": [],
+"NORTH DUBLIN, Georgia": [
+{
+"place_id": 343665255,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9364040,
+"lat": "32.5455833",
+"lon": "-82.9081260",
+"class": "highway",
+"type": "primary",
+"place_rank": 26,
+"importance": 0.053387119096665867,
+"addresstype": "road",
+"name": "North Jefferson Street",
+"display_name": "North Jefferson Street, Dublin, Laurens County, Georgia, 31921, United States",
+"boundingbox": [
+"32.5399423",
+"32.5507043",
+"-82.9124971",
+"-82.9045220"
+]
+}
+],
+"SOUTH COWETA BANK A LIMITING ELEMENTS, Georgia": [],
+"RUM CREEK, Georgia": [
+{
+"place_id": 340812086,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1015110440,
+"lat": "33.0323632",
+"lon": "-83.7534583",
+"class": "waterway",
+"type": "canal",
+"place_rank": 20,
+"importance": 0.1333433333333333,
+"addresstype": "canal",
+"name": "Rum Creek",
+"display_name": "Rum Creek, Monroe County, Georgia, 31046, United States",
+"boundingbox": [
+"33.0313256",
+"33.0337844",
+"-83.7546373",
+"-83.7528191"
+]
+}
+],
+"HAMPTON AREA 115 TO, Georgia": [],
+"PORTERDALE PRIMARY, Georgia": [],
+"MARTIN DAM, Georgia": [],
+"CROOKED CREEK #, Georgia": [
+{
+"place_id": 342989193,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 18407198,
+"lat": "33.2645625",
+"lon": "-83.2712186",
+"class": "boundary",
+"type": "census",
+"place_rank": 25,
+"importance": 0.23992860907835414,
+"addresstype": "census",
+"name": "Crooked Creek",
+"display_name": "Crooked Creek, Putnam County, Georgia, United States",
+"boundingbox": [
+"33.2426910",
+"33.2869940",
+"-83.2931250",
+"-83.2481650"
+]
+}
+],
+"BRUMBLEY CREEK, Georgia": [
+{
+"place_id": 303871855,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 711202180,
+"lat": "30.9016368",
+"lon": "-84.1515919",
+"class": "waterway",
+"type": "stream",
+"place_rank": 22,
+"importance": 0.10669266727702752,
+"addresstype": "stream",
+"name": "Brumbley Creek",
+"display_name": "Brumbley Creek, Grady County, Georgia, 31728, United States",
+"boundingbox": [
+"30.8958854",
+"30.9075183",
+"-84.1526968",
+"-84.1501877"
+]
+}
+],
+"NEW SOUTH GRIFFIN, Georgia": [],
+"MILLER SP, Georgia": [],
+"PITTMAN ROAD, Georgia": [
+{
+"place_id": 343167482,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1456287958,
+"lat": "33.6436229",
+"lon": "-84.5826202",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.053370834668497714,
+"addresstype": "road",
+"name": "Pittman Road",
+"display_name": "Pittman Road, Cliftondale, South Fulton, Fulton County, Georgia, 30349, United States",
+"boundingbox": [
+"33.6431903",
+"33.6440560",
+"-84.5828629",
+"-84.5823786"
+]
+}
+],
+"RAINBOW DRIVE AREA, Georgia": [],
+"MORROW BANK A LIMITING ELEMENTS, Georgia": [],
+"RICE HOPE, Georgia": [
+{
+"place_id": 344075254,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9085353,
+"lat": "32.2292702",
+"lon": "-81.1870795",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053382561226825324,
+"addresstype": "road",
+"name": "Rice Hope Plantation Road",
+"display_name": "Rice Hope Plantation Road, Port Wentworth, Chatham County, Georgia, 31322, United States",
+"boundingbox": [
+"32.2277890",
+"32.2302586",
+"-81.1940519",
+"-81.1803602"
+]
+}
+],
+"PIN OAKS, Georgia": [],
+"ASHLEY PARK, Georgia": [
+{
+"place_id": 342774909,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 474075445,
+"lat": "33.3908012",
+"lon": "-84.7643828",
+"class": "landuse",
+"type": "retail",
+"place_rank": 24,
+"importance": 0.08005441596093688,
+"addresstype": "retail",
+"name": "Ashley Park",
+"display_name": "Ashley Park, Newnan, Coweta County, Georgia, United States",
+"boundingbox": [
+"33.3863347",
+"33.3949945",
+"-84.7670021",
+"-84.7612379"
+]
+}
+],
+"ATKINSON, Georgia": [
+{
+"place_id": 300800207,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 966038,
+"lat": "31.3030105",
+"lon": "-82.8839362",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5515470675567089,
+"addresstype": "county",
+"name": "Atkinson County",
+"display_name": "Atkinson County, Georgia, United States",
+"boundingbox": [
+"31.1837253",
+"31.4204320",
+"-83.1414231",
+"-82.6289943"
+]
+}
+],
+"NORTHWEST, Georgia": [],
+"BASSETT CREEK, Georgia": [
+{
+"place_id": 342523843,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9107789,
+"lat": "33.5585200",
+"lon": "-84.2897838",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05336833524071104,
+"addresstype": "road",
+"name": "Bassett Drive",
+"display_name": "Bassett Drive, Creek Hollow, Clayton County, Georgia, 30236, United States",
+"boundingbox": [
+"33.5579890",
+"33.5589569",
+"-84.2898000",
+"-84.2894937"
+]
+}
+],
+"TENSAW, Georgia": [],
+"VIRGINIA AVENUE, Georgia": [
+{
+"place_id": 343398652,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9081947,
+"lat": "32.0546715",
+"lon": "-81.0649327",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.05340147631036847,
+"addresstype": "road",
+"name": "Virginia Avenue",
+"display_name": "Virginia Avenue, Gordonston, Savannah, Chatham County, Georgia, 31404, United States",
+"boundingbox": [
+"32.0514850",
+"32.0572270",
+"-81.0661430",
+"-81.0627513"
+]
+}
+],
+"FACTORY SHOALS, Georgia": [
+{
+"place_id": 344427809,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 10281025741,
+"lat": "33.4467303",
+"lon": "-83.8283004",
+"class": "leisure",
+"type": "park",
+"place_rank": 24,
+"importance": 0.08000999999999997,
+"addresstype": "park",
+"name": "Factory Shoals Recreation Park",
+"display_name": "Factory Shoals Recreation Park, 450, Covington, Newton County, Georgia, 30014, United States",
+"boundingbox": [
+"33.4466803",
+"33.4467803",
+"-83.8283504",
+"-83.8282504"
+]
+}
+],
+"CALVERT, Georgia": [
+{
+"place_id": 345040551,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1267300205,
+"lat": "32.8748141",
+"lon": "-83.2410802",
+"class": "waterway",
+"type": "dam",
+"place_rank": 20,
+"importance": 0.1333433333333333,
+"addresstype": "dam",
+"name": "Calvert Impoundment Dam",
+"display_name": "Calvert Impoundment Dam, Wilkinson County, Georgia, 31054, United States",
+"boundingbox": [
+"32.8715435",
+"32.8755845",
+"-83.2433387",
+"-83.2378126"
+]
+}
+],
+"COUNTY LINE RD TS, Georgia": [
+{
+"place_id": 342409661,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9049526,
+"lat": "33.2917066",
+"lon": "-82.1902231",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339876020447086,
+"addresstype": "road",
+"name": "County Line Road",
+"display_name": "County Line Road, Blythe, Augusta, Burke County, Georgia, 30805, United States",
+"boundingbox": [
+"33.2906020",
+"33.2927780",
+"-82.1933410",
+"-82.1870420"
+]
+}
+],
+"DEMOPOLIS, Georgia": [],
+"SELMA, Georgia": [],
+"ELISKA SW, Georgia": [],
+"FREEMANVILLE SW., Georgia": [],
+"GADSDEN, Georgia": [
+{
+"place_id": 343272778,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 634186910,
+"lat": "32.0681045",
+"lon": "-81.1060623",
+"class": "building",
+"type": "school",
+"place_rank": 30,
+"importance": 0.11734328469919902,
+"addresstype": "building",
+"name": "Gadsden Elementary school",
+"display_name": "Gadsden Elementary school, 919, May Street, Savannah, Chatham County, Georgia, 31415, United States",
+"boundingbox": [
+"32.0677089",
+"32.0686818",
+"-81.1064826",
+"-81.1054397"
+]
+}
+],
+"GULF STATES STEEL, Georgia": [],
+"NORTH SELMA, Georgia": [],
+"GRID: OFFERMAN, Georgia": [],
+"CLARKSBORO, Georgia": [
+{
+"place_id": 339446413,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 154034753,
+"lat": "34.0412232",
+"lon": "-83.4982174",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13336833524071104,
+"addresstype": "hamlet",
+"name": "Clarksboro",
+"display_name": "Clarksboro, Jackson County, Georgia, United States",
+"boundingbox": [
+"34.0212232",
+"34.0612232",
+"-83.5182174",
+"-83.4782174"
+]
+}
+],
+"CLIFTONDALE, Georgia": [],
+"NELSON (BLACK) TRANSMISSION LINE, Georgia": [],
+"TALBOT, Georgia": [
+{
+"place_id": 344529670,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 1073929,
+"lat": "32.6984691",
+"lon": "-84.5054040",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5527746941597433,
+"addresstype": "county",
+"name": "Talbot County",
+"display_name": "Talbot County, Georgia, United States",
+"boundingbox": [
+"32.5184841",
+"32.8835950",
+"-84.7031630",
+"-84.2862460"
+]
+}
+],
+"NEW TENASKA, Georgia": [],
+"TOMOCHICHI (BLACK), Georgia": [],
+"TALBOT CO #, Georgia": [
+{
+"place_id": 343501750,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 1073929,
+"lat": "32.6984691",
+"lon": "-84.5054040",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5527746941597433,
+"addresstype": "county",
+"name": "Talbot County",
+"display_name": "Talbot County, Georgia, United States",
+"boundingbox": [
+"32.5184841",
+"32.8835950",
+"-84.7031630",
+"-84.2862460"
+]
+}
+],
+"UNION CITY PRIMARY, Georgia": [],
+"POST RD, Georgia": [
+{
+"place_id": 342730976,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 133115201,
+"lat": "34.9415603",
+"lon": "-85.2617443",
+"class": "highway",
+"type": "secondary",
+"place_rank": 26,
+"importance": 0.05338311818112455,
+"addresstype": "road",
+"name": "Post Road",
+"display_name": "Post Road, Park City, Fort Oglethorpe, Catoosa County, Georgia, 30742, United States",
+"boundingbox": [
+"34.9415292",
+"34.9416086",
+"-85.2647065",
+"-85.2587824"
+]
+}
+],
+"HOLT STREET, Georgia": [],
+"JACKSON SHOALS, Georgia": [],
+"LOGAN MARTIN DAM, Georgia": [],
+"KETTLE CREEK PRIMARY, Georgia": [],
+"PEAR TREE, Georgia": [
+{
+"place_id": 342640906,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 11056937818,
+"lat": "33.6923939",
+"lon": "-84.3747655",
+"class": "natural",
+"type": "tree",
+"place_rank": 30,
+"importance": 7.908064393067854e-05,
+"addresstype": "natural",
+"name": "European Pear",
+"display_name": "European Pear, Access Route, Atlanta, Fulton County, Georgia, 30315, United States",
+"boundingbox": [
+"33.6923439",
+"33.6924439",
+"-84.3748155",
+"-84.3747155"
+]
+}
+],
+"SHOAL CREEK, Georgia": [
+{
+"place_id": 343130848,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 34525375,
+"lat": "33.8744275",
+"lon": "-83.6446738",
+"class": "waterway",
+"type": "river",
+"place_rank": 19,
+"importance": 0.14670166857404435,
+"addresstype": "river",
+"name": "Shoal Creek",
+"display_name": "Shoal Creek, Bradley, Walton County, Georgia, United States",
+"boundingbox": [
+"33.8729240",
+"33.8749850",
+"-83.6450610",
+"-83.6431890"
+]
+}
+],
+"SLAPPEY DRIVE, Georgia": [],
+"MOSS POINT EAST, Georgia": [
+{
+"place_id": 343292980,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 905243406,
+"lat": "33.6622692",
+"lon": "-84.4413238",
+"class": "building",
+"type": "school",
+"place_rank": 30,
+"importance": 5.3642328526695925e-05,
+"addresstype": "building",
+"name": "Joseph H. Moss Hall",
+"display_name": "Joseph H. Moss Hall, Cambridge Avenue, Elmwood, College Park, Fulton County, Georgia, 30337, United States",
+"boundingbox": [
+"33.6621244",
+"33.6624079",
+"-84.4418561",
+"-84.4409757"
+]
+}
+],
+"PASCAGOULA BAYOU CASOTTE, Georgia": [],
+"NORTH DRUID HILLS, Georgia": [],
+"SOUTH ENTERPRISE, Georgia": [],
+"HURRICANE CREEK, Georgia": [
+{
+"place_id": 340438495,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 967234549,
+"lat": "33.4686399",
+"lon": "-84.3387624",
+"class": "waterway",
+"type": "stream",
+"place_rank": 22,
+"importance": 0.10670540856031126,
+"addresstype": "stream",
+"name": "Hurricane Creek",
+"display_name": "Hurricane Creek, Orrs, Bonanza, Clayton County, Georgia, 30250, United States",
+"boundingbox": [
+"33.4685922",
+"33.4686877",
+"-84.3387865",
+"-84.3387383"
+]
+}
+],
+"TRUMAN PARKWAY, Georgia": [
+{
+"place_id": 343328886,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 87906490,
+"lat": "32.0631491",
+"lon": "-81.0729420",
+"class": "highway",
+"type": "motorway",
+"place_rank": 26,
+"importance": 0.05340147631036847,
+"addresstype": "road",
+"name": "Harry Truman Parkway",
+"display_name": "Harry Truman Parkway, Savannah, Chatham County, Georgia, 31414, United States",
+"boundingbox": [
+"32.0614095",
+"32.0642086",
+"-81.0748539",
+"-81.0716869"
+]
+}
+],
+"SOUTH TUSCALOOSA, Georgia": [],
+"31ST AVENUE, Georgia": [
+{
+"place_id": 347091103,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9412301,
+"lat": "32.4429918",
+"lon": "-84.9481519",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339740825513081,
+"addresstype": "road",
+"name": "31st Avenue",
+"display_name": "31st Avenue, Muscogee, Columbus, Muscogee County, Georgia, 31903, United States",
+"boundingbox": [
+"32.4416825",
+"32.4444396",
+"-84.9494639",
+"-84.9469984"
+]
+}
+],
+"TENASKA, Georgia": [
+{
+"place_id": 342664190,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1024311569,
+"lat": "33.3518271",
+"lon": "-85.0000947",
+"class": "landuse",
+"type": "industrial",
+"place_rank": 24,
+"importance": 0.04539457909600718,
+"addresstype": "industrial",
+"name": "Tenaska Georgia Generation Facility",
+"display_name": "Tenaska Georgia Generation Facility, 2100, Franklin, Heard County, Georgia, 30217, United States",
+"boundingbox": [
+"33.3497075",
+"33.3534755",
+"-85.0021432",
+"-84.9979685"
+]
+}
+],
+"WABASH AVENUE, Georgia": [
+{
+"place_id": 343717523,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9426725,
+"lat": "33.9048734",
+"lon": "-84.8349137",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338516899366747,
+"addresstype": "road",
+"name": "Wabash Avenue",
+"display_name": "Wabash Avenue, Dallas, Paulding County, Georgia, 30157, United States",
+"boundingbox": [
+"33.9038640",
+"33.9058972",
+"-84.8353045",
+"-84.8349050"
+]
+}
+],
+"WIGGINS SWITCHING STATION, Georgia": [],
+"ATTALLA, Georgia": [],
+"SUNNY SOUTH, Georgia": [
+{
+"place_id": 342673250,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9155759,
+"lat": "33.3621018",
+"lon": "-84.8136385",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.053387749294270204,
+"addresstype": "road",
+"name": "Sunny South Street",
+"display_name": "Sunny South Street, Newnan, Coweta County, Georgia, 30263, United States",
+"boundingbox": [
+"33.3616814",
+"33.3624715",
+"-84.8146615",
+"-84.8125956"
+]
+}
+],
+"BIG TAZEWELL, Georgia": [],
+"FARLEY 500 SS, Georgia": [],
+"JUDY MOUNTAIN, Georgia": [
+{
+"place_id": 343312207,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358717423,
+"lat": "34.2773149",
+"lon": "-85.3188439",
+"class": "natural",
+"type": "peak",
+"place_rank": 18,
+"importance": 0.1600286999313344,
+"addresstype": "peak",
+"name": "Judy Mountain",
+"display_name": "Judy Mountain, Floyd County, Georgia, United States",
+"boundingbox": [
+"34.2772649",
+"34.2773649",
+"-85.3188939",
+"-85.3187939"
+]
+}
+],
+"BRANDON FARM RD, Georgia": [
+{
+"place_id": 342114411,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9023331,
+"lat": "34.1013733",
+"lon": "-84.9012029",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.0533433333333333,
+"addresstype": "road",
+"name": "Brandon Farm Road Southwest",
+"display_name": "Brandon Farm Road Southwest, Stilesboro, Bartow County, Georgia, 30120, United States",
+"boundingbox": [
+"34.0956030",
+"34.1094211",
+"-84.9061708",
+"-84.9005624"
+]
+}
+],
+"TRIBUTARY, Georgia": [
+{
+"place_id": 341927890,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 34841154,
+"lat": "33.7129313",
+"lon": "-84.6426467",
+"class": "landuse",
+"type": "residential",
+"place_rank": 24,
+"importance": 0.08005336003662163,
+"addresstype": "neighbourhood",
+"name": "Tributary",
+"display_name": "Tributary, Douglasville, Douglas County, Georgia, United States",
+"boundingbox": [
+"33.7101982",
+"33.7162635",
+"-84.6474312",
+"-84.6370190"
+]
+}
+],
+"CAVENDER DRIVE, Georgia": [
+{
+"place_id": 343285503,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9540388,
+"lat": "34.7294377",
+"lon": "-85.0013674",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.0533620332646677,
+"addresstype": "road",
+"name": "Cavender Drive",
+"display_name": "Cavender Drive, Whitfield County, Georgia, 30720, United States",
+"boundingbox": [
+"34.7293709",
+"34.7295239",
+"-85.0047187",
+"-84.9980156"
+]
+}
+],
+"CORNELIA, Georgia": [
+{
+"place_id": 341930768,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119882,
+"lat": "34.5114883",
+"lon": "-83.5271166",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4246822253175736,
+"addresstype": "town",
+"name": "Cornelia",
+"display_name": "Cornelia, Habersham County, Georgia, United States",
+"boundingbox": [
+"34.4930740",
+"34.5471850",
+"-83.5580225",
+"-83.5021170"
+]
+}
+],
+"TALLULAH LODGE, Georgia": [],
+"WELLSTON, Georgia": [
+{
+"place_id": 343050692,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119990,
+"lat": "32.6200973",
+"lon": "-83.6065680",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.520289035327092,
+"addresstype": "city",
+"name": "Warner Robins",
+"display_name": "Warner Robins, Houston County, Georgia, United States",
+"boundingbox": [
+"32.5227150",
+"32.6663890",
+"-83.7477540",
+"-83.5758660"
+]
+}
+],
+"GOLDENS CREEK, Georgia": [],
+"S. BESSEMER, Georgia": [
+{
+"place_id": 341904926,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 624107266,
+"lat": "32.4115112",
+"lon": "-84.9176750",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339740825513081,
+"addresstype": "road",
+"name": "Bessemer Loop",
+"display_name": "Bessemer Loop, Patton Village, Columbus, Muscogee County, Georgia, 31903, United States",
+"boundingbox": [
+"32.4101650",
+"32.4130468",
+"-84.9183866",
+"-84.9153600"
+]
+}
+],
+"ROCKHOUSE RD, Georgia": [
+{
+"place_id": 342501280,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 814047800,
+"lat": "33.7783901",
+"lon": "-84.5734393",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05337907454032193,
+"addresstype": "road",
+"name": "Rockhouse Road",
+"display_name": "Rockhouse Road, Whisperwoods, Mableton, Cobb County, Georgia, 30168, United States",
+"boundingbox": [
+"33.7782129",
+"33.7785379",
+"-84.5734744",
+"-84.5733286"
+]
+}
+],
+"EAST VILLA RICA SS, Georgia": [
+{
+"place_id": 343776403,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 425043689,
+"lat": "33.7295140",
+"lon": "-84.9129225",
+"class": "highway",
+"type": "primary",
+"place_rank": 26,
+"importance": 0.05338367513542378,
+"addresstype": "road",
+"name": "East Montgomery Street",
+"display_name": "East Montgomery Street, Villa Rica, Carroll County, Georgia, 30180, United States",
+"boundingbox": [
+"33.7293163",
+"33.7298986",
+"-84.9141411",
+"-84.9117489"
+]
+}
+],
+"HARTWELL DAM, Georgia": [],
+"HARTWELL ENERGY, Georgia": [],
+"MIDDLE FORK, Georgia": [
+{
+"place_id": 341882628,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 16454061,
+"lat": "34.4225382",
+"lon": "-83.3586118",
+"class": "waterway",
+"type": "river",
+"place_rank": 18,
+"importance": 0.16000999999999999,
+"addresstype": "river",
+"name": "Middle Fork Broad River",
+"display_name": "Middle Fork Broad River, Franklin County, Georgia, United States",
+"boundingbox": [
+"34.2877498",
+"34.5775340",
+"-83.4850670",
+"-83.1773062"
+]
+}
+],
+"POND FORK, Georgia": [],
+"MIDWAY, Georgia": [
+{
+"place_id": 307906067,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119816,
+"lat": "31.8057690",
+"lon": "-81.4306642",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.4218210293457707,
+"addresstype": "village",
+"name": "Midway",
+"display_name": "Midway, Liberty County, Georgia, 31320, United States",
+"boundingbox": [
+"31.7750010",
+"31.8198830",
+"-81.4640650",
+"-81.3719150"
+]
+}
+],
+"ROCKVILLE, Georgia": [],
+"TIGER CREEK -WARTHEN, Georgia": [],
+"TALBOT #2, Georgia": [],
+"THORNTON RD, Georgia": [
+{
+"place_id": 342460944,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1076438834,
+"lat": "33.7908900",
+"lon": "-84.6273235",
+"class": "highway",
+"type": "trunk",
+"place_rank": 26,
+"importance": 0.05337907454032193,
+"addresstype": "road",
+"name": "Thornton Road",
+"display_name": "Thornton Road, Lithia Springs, Douglas County, Georgia, 30122, United States",
+"boundingbox": [
+"33.7907603",
+"33.7910197",
+"-84.6276411",
+"-84.6270060"
+]
+}
+],
+"LINE CREEK (GREEN), Georgia": [],
+"LINE CREEK (RED), Georgia": [],
+"KIA MOTORS, Georgia": [
+{
+"place_id": 344063087,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 230519208,
+"lat": "32.9170929",
+"lon": "-85.1252098",
+"class": "man_made",
+"type": "works",
+"place_rank": 30,
+"importance": 5.0660715648081444e-05,
+"addresstype": "man_made",
+"name": "Kia Motors Manufacturing Georgia",
+"display_name": "Kia Motors Manufacturing Georgia, KIA Parkway, West Point, Troup County, Georgia, 31833, United States",
+"boundingbox": [
+"32.9054959",
+"32.9274372",
+"-85.1384690",
+"-85.1138652"
+]
+}
+],
+"PITTMAN RD, Georgia": [
+{
+"place_id": 343167482,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1456287958,
+"lat": "33.6436229",
+"lon": "-84.5826202",
+"class": "highway",
+"type": "tertiary",
+"place_rank": 26,
+"importance": 0.053370834668497714,
+"addresstype": "road",
+"name": "Pittman Road",
+"display_name": "Pittman Road, Cliftondale, South Fulton, Fulton County, Georgia, 30349, United States",
+"boundingbox": [
+"33.6431903",
+"33.6440560",
+"-84.5828629",
+"-84.5823786"
+]
+}
+],
+"LEEDS TS, Georgia": [],
+"MOODY SS, Georgia": [
+{
+"place_id": 302936711,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9165003,
+"lat": "30.7493669",
+"lon": "-84.7875682",
+"class": "highway",
+"type": "service",
+"place_rank": 27,
+"importance": 0.040026000610360865,
+"addresstype": "road",
+"name": "Moody",
+"display_name": "Moody, Decatur County, Georgia, United States",
+"boundingbox": [
+"30.7486504",
+"30.7502848",
+"-84.7882137",
+"-84.7869155"
+]
+}
+],
+"NORTH AUBURN, Georgia": [
+{
+"place_id": 341296457,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1022219780,
+"lat": "34.0091414",
+"lon": "-83.8439992",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05338253986419467,
+"addresstype": "road",
+"name": "North Auburn Landing Place",
+"display_name": "North Auburn Landing Place, Auburn, Barrow County, Georgia, 30011, United States",
+"boundingbox": [
+"34.0080146",
+"34.0102693",
+"-83.8440953",
+"-83.8439165"
+]
+}
+],
+"GOSHEN AREA STRATEGIC SOLUTION, Georgia": [],
+"NORTH GEORGIA, Georgia": [
+{
+"place_id": 344673749,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 242751392,
+"lat": "33.9583384",
+"lon": "-83.3773921",
+"class": "amenity",
+"type": "music_venue",
+"place_rank": 30,
+"importance": 0.3307177672703685,
+"addresstype": "amenity",
+"name": "Georgia Theatre",
+"display_name": "Georgia Theatre, 215, North Lumpkin Street, Athens, Clarke County, Georgia, 30601, United States",
+"boundingbox": [
+"33.9582235",
+"33.9584499",
+"-83.3775735",
+"-83.3772107"
+]
+}
+],
+"BARNESVILLE AREA, Georgia": [],
+"ELLICOTT SUBSTATION, Georgia": [],
+"PORTERDALE, Georgia": [
+{
+"place_id": 343202420,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119607,
+"lat": "33.5751146",
+"lon": "-83.8937954",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.3756911839236167,
+"addresstype": "village",
+"name": "Porterdale",
+"display_name": "Porterdale, Newton County, Georgia, 30070, United States",
+"boundingbox": [
+"33.5572720",
+"33.5964330",
+"-83.9153540",
+"-83.8761530"
+]
+}
+],
+"HATCH, Georgia": [],
+"HOPE HULL AREA SOLUTION, Georgia": [],
+"PIO NONO, Georgia": [],
+"PELL CITY AREA SOLUTION, Georgia": [],
+"ALBERTA CITY, Georgia": [],
+"HOLT, Georgia": [
+{
+"place_id": 302680611,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 153918270,
+"lat": "31.5040637",
+"lon": "-84.4535229",
+"class": "place",
+"type": "hamlet",
+"place_rank": 20,
+"importance": 0.13336833524071104,
+"addresstype": "hamlet",
+"name": "Holt",
+"display_name": "Holt, Calhoun County, Georgia, United States",
+"boundingbox": [
+"31.4840637",
+"31.5240637",
+"-84.4735229",
+"-84.4335229"
+]
+}
+],
+"NORTHSIDE DRIVE, Georgia": [],
+"FLOMATON, Georgia": [],
+"ROME, Georgia": [
+{
+"place_id": 341908458,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 119515,
+"lat": "34.2570380",
+"lon": "-85.1646726",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 16,
+"importance": 0.527182184326605,
+"addresstype": "city",
+"name": "Rome",
+"display_name": "Rome, Floyd County, Georgia, United States",
+"boundingbox": [
+"34.1931590",
+"34.3565000",
+"-85.2789410",
+"-85.1122460"
+]
+}
+],
+"ALEX CITY AREA SOLUTION, Georgia": [],
+"ALICEVILLE, Georgia": [],
+"STANSEL, Georgia": [
+{
+"place_id": 341409756,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 9224133,
+"lat": "34.1564440",
+"lon": "-85.1208720",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05336833524071104,
+"addresstype": "road",
+"name": "Stansel Road",
+"display_name": "Stansel Road, Floyd County, Georgia, 30173, United States",
+"boundingbox": [
+"34.1557720",
+"34.1571160",
+"-85.1209040",
+"-85.1208400"
+]
+}
+],
+"BELLAMY, Georgia": [],
+"EPES, Georgia": [
+{
+"place_id": 301183529,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1338329959,
+"lat": "30.8003055",
+"lon": "-83.2961209",
+"class": "landuse",
+"type": "industrial",
+"place_rank": 24,
+"importance": 0.08005970168612189,
+"addresstype": "industrial",
+"name": "Epes Transport System",
+"display_name": "Epes Transport System, Valdosta, Lowndes County, Georgia, United States",
+"boundingbox": [
+"30.7998049",
+"30.8008306",
+"-83.2967949",
+"-83.2956010"
+]
+}
+],
+"POWERS FERRY, Georgia": [
+{
+"place_id": 420497740,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1529510570,
+"lat": "33.9048044",
+"lon": "-84.4325968",
+"class": "landuse",
+"type": "commercial",
+"place_rank": 24,
+"importance": 0.08005885175860224,
+"addresstype": "commercial",
+"name": "Powers Ferry Landing",
+"display_name": "Powers Ferry Landing, Sandy Springs, Fulton County, Georgia, United States",
+"boundingbox": [
+"33.9037960",
+"33.9051550",
+"-84.4349989",
+"-84.4314452"
+]
+}
+],
+"DEMOPOLIS TS, Georgia": [],
+"CEMEX, Georgia": [
+{
+"place_id": 342981226,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 9652362859,
+"lat": "34.1540161",
+"lon": "-83.9647193",
+"class": "railway",
+"type": "spur_junction",
+"place_rank": 30,
+"importance": 5.2284275577889944e-05,
+"addresstype": "railway",
+"name": "Cemex",
+"display_name": "Cemex, McEver Road, Green Crossing, Buford, Hall County, Georgia, 30518, United States",
+"boundingbox": [
+"34.1539661",
+"34.1540661",
+"-83.9647693",
+"-83.9646693"
+]
+}
+],
+"GORGAS, Georgia": [
+{
+"place_id": 341994229,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 733864538,
+"lat": "34.2798267",
+"lon": "-85.1993399",
+"class": "highway",
+"type": "residential",
+"place_rank": 26,
+"importance": 0.05339065461203933,
+"addresstype": "road",
+"name": "Gorgas Avenue",
+"display_name": "Gorgas Avenue, Rome, Floyd County, Georgia, 30149, United States",
+"boundingbox": [
+"34.2796211",
+"34.2798577",
+"-85.1997314",
+"-85.1993186"
+]
+}
+],
+"MILLER, Georgia": [
+{
+"place_id": 304409016,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 1073763,
+"lat": "31.1591063",
+"lon": "-84.7378360",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5511133538249068,
+"addresstype": "county",
+"name": "Miller County",
+"display_name": "Miller County, Georgia, United States",
+"boundingbox": [
+"31.0678370",
+"31.2594722",
+"-84.9224324",
+"-84.5368837"
+]
+}
+],
+"MOBILE AREA NETWORKING, Georgia": [],
+"3RD PATH, Georgia": [
+{
+"place_id": 342684249,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "way",
+"osm_id": 1073434087,
+"lat": "33.4364653",
+"lon": "-84.4598473",
+"class": "highway",
+"type": "footway",
+"place_rank": 27,
+"importance": 0.040053398184176386,
+"addresstype": "road",
+"name": "path",
+"display_name": "path, Medford Manor, Fayetteville, Fayette County, Georgia, 30215, United States",
+"boundingbox": [
+"33.4336383",
+"33.4390595",
+"-84.4601473",
+"-84.4586635"
+]
+}
+],
+"MOUNDVILLE, Georgia": [],
+"NORTH THEODORE AREA SOLUTION, Georgia": [],
+"DECATUR, Georgia": [
+{
+"place_id": 302807415,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "relation",
+"osm_id": 1073782,
+"lat": "30.8736613",
+"lon": "-84.5740953",
+"class": "boundary",
+"type": "administrative",
+"place_rank": 12,
+"importance": 0.5529723802688872,
+"addresstype": "county",
+"name": "Decatur County",
+"display_name": "Decatur County, Georgia, United States",
+"boundingbox": [
+"30.6901003",
+"31.0795374",
+"-84.8713856",
+"-84.3757780"
+]
+}
+],
+"MADISON PARK, Georgia": [
+{
+"place_id": 302743707,
+"licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+"osm_type": "node",
+"osm_id": 358774729,
+"lat": "31.5918405",
+"lon": "-84.1626857",
+"class": "leisure",
+"type": "park",
+"place_rank": 24,
+"importance": 0.08006217364766915,
+"addresstype": "park",
+"name": "Madison Park",
+"display_name": "Madison Park, Albany, Dougherty County, Georgia, 31701, United States",
+"boundingbox": [
+"31.5917905",
+"31.5918905",
+"-84.1627357",
+"-84.1626357"
+]
+}
+],
+"MOUNT MEIGS DS, Georgia": [],
+"PINCKARD, Georgia": []
+}

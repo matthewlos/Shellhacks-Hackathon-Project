@@ -1,0 +1,15 @@
+[brain] rules: WAIT: soil is 59%, about 48 hours of water left. Water only when it's low, then a real drink.
+[board] {"type": "pour_start", "pot": "A", "ms": 16500, "by": "laptop", "ts": 1790143750.3859}
+[brain] rules: WATER: soil is 35% and no rain is coming. Watering 16 s.
+[board] {"type": "pour_done", "pot": "A", "ran_ms": 16500, "by": "laptop", "why": "time_up", "ts": 1790143767.1007547}
+[soak] {'pot': 'A', 'poured_s': 16.5, 'before_pct': 36.1, 'peak_pct': 56.7, 'rise_pct': 20.6, 'first_rise_s': 2.0, 'pct_per_s': 1.248, 'ok': True, 'note': 'water reached the probe'}
+[board] {"type": "pour_start", "pot": "A", "ms": 15625, "by": "laptop", "ts": 1790144317.9830234}
+[brain] rules: WATER: soil is 36% and no rain is coming. Watering 16 s.
+[board] {"type": "pour_done", "pot": "A", "ran_ms": 15625, "by": "laptop", "why": "time_up", "ts": 1790144334.1289573}
+[brain] rules: WAIT: wanted to water but last pour is still soaking in.
+[soak] {'pot': 'A', 'poured_s': 15.625, 'before_pct': 36.8, 'peak_pct': 55.6, 'rise_pct': 18.8, 'first_rise_s': 5.5, 'pct_per_s': 1.203, 'ok': True, 'note': 'water reached the probe'}
+[board] {"type": "pour_start", "pot": "A", "ms": 15579, "by": "laptop", "ts": 1790144603.018022}
+[brain] rules: WATER: soil is 36% and no rain is coming. Watering 16 s.
+[board] {"type": "pour_done", "pot": "A", "ran_ms": 15579, "by": "laptop", "why": "time_up", "ts": 1790144618.8918293}
+[soak] {'pot': 'A', 'poured_s': 15.579, 'before_pct': 35.8, 'peak_pct': 55.5, 'rise_pct': 19.7, 'first_rise_s': 3.0, 'pct_per_s': 1.265, 'ok': True, 'note': 'water reached the probe'}
+[brain] rules: WAIT: soil is 54%, about 8 hours of water left. Water only when it's low, then a real drink.

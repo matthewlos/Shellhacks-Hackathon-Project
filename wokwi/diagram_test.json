@@ -1,0 +1,264 @@
+{
+ "version": 1,
+ "author": "Dechante",
+ "editor": "wokwi",
+ "parts": [
+  {
+   "type": "board-esp32-devkit-c-v4",
+   "id": "esp",
+   "top": 0,
+   "left": 0,
+   "attrs": {}
+  },
+  {
+   "type": "wokwi-potentiometer",
+   "id": "soilA",
+   "top": -60,
+   "left": -330,
+   "attrs": {
+    "value": "1023"
+   }
+  },
+  {
+   "type": "wokwi-potentiometer",
+   "id": "soilB",
+   "top": 110,
+   "left": -330,
+   "attrs": {}
+  },
+  {
+   "type": "wokwi-ds18b20",
+   "id": "temp",
+   "top": -110,
+   "left": -150,
+   "attrs": {}
+  },
+  {
+   "type": "wokwi-resistor",
+   "id": "pullup",
+   "top": 40,
+   "left": -110,
+   "rotate": 90,
+   "attrs": {
+    "value": "4700"
+   }
+  },
+  {
+   "type": "wokwi-relay-module",
+   "id": "relayA",
+   "top": -20,
+   "left": 220,
+   "attrs": {}
+  },
+  {
+   "type": "wokwi-relay-module",
+   "id": "relayB",
+   "top": 130,
+   "left": 220,
+   "attrs": {}
+  },
+  {
+   "type": "wokwi-led",
+   "id": "pumpA",
+   "top": -40,
+   "left": 470,
+   "attrs": {
+    "color": "blue",
+    "label": "PUMP A"
+   }
+  },
+  {
+   "type": "wokwi-led",
+   "id": "pumpB",
+   "top": 110,
+   "left": 470,
+   "attrs": {
+    "color": "cyan",
+    "label": "PUMP B"
+   }
+  },
+  {
+   "type": "wokwi-resistor",
+   "id": "rA",
+   "top": 10,
+   "left": 360,
+   "attrs": {
+    "value": "220"
+   }
+  },
+  {
+   "type": "wokwi-resistor",
+   "id": "rB",
+   "top": 160,
+   "left": 360,
+   "attrs": {
+    "value": "220"
+   }
+  }
+ ],
+ "connections": [
+  [
+   "esp:TX",
+   "$serialMonitor:RX",
+   "",
+   []
+  ],
+  [
+   "esp:RX",
+   "$serialMonitor:TX",
+   "",
+   []
+  ],
+  [
+   "soilA:VCC",
+   "esp:3V3",
+   "red",
+   []
+  ],
+  [
+   "soilA:GND",
+   "esp:GND.1",
+   "black",
+   []
+  ],
+  [
+   "soilA:SIG",
+   "esp:32",
+   "yellow",
+   []
+  ],
+  [
+   "soilB:VCC",
+   "esp:3V3",
+   "red",
+   []
+  ],
+  [
+   "soilB:GND",
+   "esp:GND.1",
+   "black",
+   []
+  ],
+  [
+   "soilB:SIG",
+   "esp:33",
+   "orange",
+   []
+  ],
+  [
+   "temp:VCC",
+   "esp:3V3",
+   "red",
+   []
+  ],
+  [
+   "temp:GND",
+   "esp:GND.1",
+   "black",
+   []
+  ],
+  [
+   "temp:DQ",
+   "esp:4",
+   "green",
+   []
+  ],
+  [
+   "pullup:1",
+   "esp:3V3",
+   "red",
+   []
+  ],
+  [
+   "pullup:2",
+   "esp:4",
+   "green",
+   []
+  ],
+  [
+   "relayA:VCC",
+   "esp:5V",
+   "red",
+   []
+  ],
+  [
+   "relayA:GND",
+   "esp:GND.2",
+   "black",
+   []
+  ],
+  [
+   "relayA:IN",
+   "esp:26",
+   "purple",
+   []
+  ],
+  [
+   "relayB:VCC",
+   "esp:5V",
+   "red",
+   []
+  ],
+  [
+   "relayB:GND",
+   "esp:GND.2",
+   "black",
+   []
+  ],
+  [
+   "relayB:IN",
+   "esp:27",
+   "violet",
+   []
+  ],
+  [
+   "relayA:COM",
+   "esp:5V",
+   "red",
+   []
+  ],
+  [
+   "relayA:NO",
+   "rA:1",
+   "blue",
+   []
+  ],
+  [
+   "rA:2",
+   "pumpA:A",
+   "blue",
+   []
+  ],
+  [
+   "pumpA:C",
+   "esp:GND.2",
+   "black",
+   []
+  ],
+  [
+   "relayB:COM",
+   "esp:5V",
+   "red",
+   []
+  ],
+  [
+   "relayB:NO",
+   "rB:1",
+   "cyan",
+   []
+  ],
+  [
+   "rB:2",
+   "pumpB:A",
+   "cyan",
+   []
+  ],
+  [
+   "pumpB:C",
+   "esp:GND.2",
+   "black",
+   []
+  ]
+ ],
+ "dependencies": {}
+}

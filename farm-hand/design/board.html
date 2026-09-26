@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Farm Hand Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --canvas:#e9ecef; --dot:rgba(14,22,33,.13); --panel:#fbfcfd; --line:rgba(14,22,33,.1);
+  --ink:#0e1621; --ink-2:#3d4a59; --muted:#5b6674; --ai:#1f64b8; --timer:#c4501f;
+  --f-display:"Bricolage Grotesque",system-ui,sans-serif; --f-body:"Atkinson Hyperlegible Next",system-ui,sans-serif; --f-num:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--canvas:#141619;--dot:rgba(255,255,255,.09);--panel:#1d2025;--line:rgba(255,255,255,.1);--ink:#eef1f4;--ink-2:#b9c1ca;--muted:#8d97a3}}
+:root[data-theme="dark"]{--canvas:#141619;--dot:rgba(255,255,255,.09);--panel:#1d2025;--line:rgba(255,255,255,.1);--ink:#eef1f4;--ink-2:#b9c1ca;--muted:#8d97a3}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--canvas);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+#view{position:fixed;inset:0;cursor:grab;touch-action:none;
+  background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:24px 24px}
+#view.drag{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+
+/* board content, in board units (1 unit = 1 px at 100%) */
+.colhead{position:absolute;font:700 44px/1.1 var(--f-display);letter-spacing:-.02em}
+.colhead small{display:block;font:600 26px/1.3 var(--f-num);color:var(--muted);letter-spacing:0;margin-bottom:10px}
+.rowhead{position:absolute;width:640px;display:grid;gap:22px;align-content:start}
+.rowhead .tag{font:600 26px var(--f-num);color:var(--muted)}
+.rowhead h2{margin:0;font:700 72px/1 var(--f-display);letter-spacing:-.03em}
+.rowhead p{margin:0;font-size:27px;line-height:1.45;color:var(--ink-2)}
+.rowhead img{width:100%;max-height:420px;object-fit:cover;object-position:top;border-radius:18px;border:1px solid var(--line)}
+.rowhead .src{font-size:22px;color:var(--muted)}
+.frame{position:absolute;border-radius:22px;overflow:hidden;background:var(--panel);box-shadow:0 2px 0 var(--line),0 30px 60px rgba(0,0,0,.14);cursor:zoom-in;transition:box-shadow .2s}
+.frame:hover{box-shadow:0 0 0 6px var(--ai),0 30px 60px rgba(0,0,0,.18)}
+.frame img{display:block;width:100%;height:100%;object-fit:cover}
+.frame .miss{position:absolute;inset:0;display:grid;place-items:center;font:600 32px var(--f-num);color:var(--muted);border:4px dashed var(--line);border-radius:22px}
+.arrow{position:absolute;height:6px;background:var(--muted);opacity:.5;border-radius:3px}
+.arrow::after{content:"";position:absolute;right:-4px;top:50%;width:26px;height:26px;border-top:6px solid var(--muted);border-right:6px solid var(--muted);transform:translateY(-50%) rotate(45deg);border-radius:3px}
+.flabel{position:absolute;font:600 24px var(--f-num);color:var(--muted);white-space:nowrap}
+
+/* chrome */
+.bar{position:fixed;left:16px;top:16px;z-index:5;display:flex;align-items:center;gap:14px;padding:10px 14px 10px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.08);max-width:calc(100% - 32px)}
+.bar h1{margin:0;font:700 17px/1.1 var(--f-display);white-space:nowrap}
+.bar .seg{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:rgba(127,127,127,.12);flex:none}
+.bar .seg button{height:28px;padding:0 10px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.bar .seg button.on{background:var(--ink);color:var(--canvas)}
+.bar .hint{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zoom{position:fixed;right:16px;bottom:16px;z-index:5;display:flex;align-items:center;gap:2px;padding:4px;border-radius:12px;background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.zoom button{height:34px;min-width:34px;padding:0 10px;border-radius:9px;font-weight:600;font-size:14px}
+.zoom button:hover{background:rgba(127,127,127,.12)}
+.zoom .pct{font:600 13px var(--f-num);min-width:52px;text-align:center;color:var(--ink-2)}
+.jump{position:fixed;left:16px;bottom:16px;z-index:5;display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.08);flex-wrap:wrap;max-width:calc(100% - 250px)}
+.jump button{height:32px;padding:0 11px;border-radius:9px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.jump button:hover{background:rgba(127,127,127,.12);color:var(--ink)}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:10;background:rgba(8,10,14,.92);display:grid;grid-template-rows:auto minmax(0,1fr) auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.lb.on{opacity:1;pointer-events:auto}
+.lb header{display:flex;align-items:center;gap:14px;padding:14px 18px;color:#fff}
+.lb header b{font:700 18px var(--f-display)} .lb header span{color:rgba(255,255,255,.65);font-size:14px}
+.lb header .x{margin-left:auto;width:40px;height:40px;border-radius:10px;font-size:22px;color:#fff}
+.lb header .x:hover{background:rgba(255,255,255,.12)}
+.lb .imgwrap{display:grid;place-items:center;min-height:0;padding:0 64px}
+.lb img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:22px}
+.lb .nav:hover{background:rgba(255,255,255,.22)} .lb .prev{left:10px} .lb .next{right:10px}
+.lb footer{padding:10px 18px 16px;color:rgba(255,255,255,.7);font-size:13.5px;text-align:center}
+@media (max-width:640px){.bar .hint{display:none}.jump{display:none}.lb .imgwrap{padding:0 8px}.lb .nav{top:auto;bottom:12px;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="view" aria-label="Design board. Drag to move, scroll or pinch to zoom."><div id="world"></div></div>
+
+<div class="bar"><h1>Farm Hand, every screen × 5 styles</h1><span class="hint">Scroll or drag to move · Ctrl+scroll or pinch to zoom · click a screen to open it</span><span class="seg" role="group" aria-label="Round"><button class="on" data-round="frames">Round 2 · design skills</button><button data-round="frames_v1">Round 1</button></span></div>
+<div class="jump" id="jump" aria-label="Jump to a style"></div>
+<div class="zoom"><button id="zOut" aria-label="Zoom out">−</button><span class="pct" id="zPct">100%</span><button id="zIn" aria-label="Zoom in">+</button><button id="zFit">Fit</button></div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screen viewer">
+  <header><b id="lbT"></b><span id="lbS"></span><button class="x" id="lbX" aria-label="Close">✕</button></header>
+  <div class="imgwrap"><img id="lbImg" alt=""></div>
+  <footer id="lbF"></footer>
+  <button class="nav prev" id="lbP" aria-label="Previous screen">‹</button><button class="nav next" id="lbN" aria-label="Next screen">›</button>
+</div>
+
+<script>
+const STYLES = [
+  {k:'A', name:'Blueprint', ref:'refs/nexvyn_components.jpg', src:'Nexvyn UI (via @voidyaps)', d:'Near-black cards, hairline borders, engineering dimension callouts, tiny mono labels.'},
+  {k:'B', name:'Signal Yellow', ref:'refs/motion_yellow.jpg', src:'motion.dev (via @voidyaps)', d:'Lemon yellow on black, heavy grotesk, diagonal hatch bands, mono buttons.'},
+  {k:'C', name:'Warm Editorial', ref:'refs/synais_warm.jpg', src:'Synais landing page', d:'Cream and oxblood, light big headlines fading to grey, product photo, circuit traces.'},
+  {k:'D', name:'Terrain Ops', ref:'refs/terrain_dashboard.jpg', src:'@srotimi_ui terrain dashboard', d:'Dark ops console over a landscape photo, 3D wireframe terrain, status pins, grid coords.'},
+  {k:'E', name:'Terminal Point Cloud', ref:'refs/terminal_pointcloud.jpg', src:'@srotimi_ui terminal dashboard', d:'Pure black, white mono data columns, point-cloud render, crosshair reticle.'},
+];
+const SCREENS = ['Landing page','Live dashboard','Agents thinking','Hit the target','Someone added water','Water saved graph','Field view','Ask the farm'];
+const FW = 1376, FH = 768, GX = 200, GY = 300, HEADW = 640, HEADGAP = 140, TOP = 170;
+const world = document.getElementById('world'), view = document.getElementById('view');
+const X0 = HEADW + HEADGAP;
+const ver = Date.now();
+let ROUND = 'frames';
+
+// column heads = the click-through flow
+SCREENS.forEach((s, i) => {
+  const h = document.createElement('div'); h.className = 'colhead';
+  h.style.left = (X0 + i * (FW + GX)) + 'px'; h.style.top = '0px';
+  h.innerHTML = `<small>STEP ${i + 1} / ${SCREENS.length}${i === 5 ? ' · SAMPLE NUMBERS' : ''}</small>${s}`; world.appendChild(h);
+});
+
+const order = [];
+STYLES.forEach((st, r) => {
+  const y = TOP + r * (FH + GY);
+  const head = document.createElement('div'); head.className = 'rowhead'; head.id = 'row-' + st.k;
+  head.style.left = '0px'; head.style.top = y + 'px';
+  head.innerHTML = `<span class="tag">STYLE ${st.k}</span><h2>${st.name}</h2><p>${st.d}</p><img src="${st.ref}" alt="Reference for ${st.name}"><span class="src">Inspired by ${st.src}</span>`;
+  world.appendChild(head);
+  SCREENS.forEach((s, i) => {
+    const id = st.k + (i + 1), x = X0 + i * (FW + GX);
+    const f = document.createElement('div'); f.className = 'frame'; f.tabIndex = 0;
+    f.style.cssText = `left:${x}px;top:${y}px;width:${FW}px;height:${FH}px`;
+    f.setAttribute('aria-label', `${st.name}, ${s}`);
+    const img = new Image(); img.alt = `${st.name}: ${s}`; img.loading = 'lazy'; img.decoding = 'async';
+    img.dataset.id = id; img.src = `${ROUND}/thumb/${id}.jpg?${ver}`;
+    img.onerror = () => { if (!img.src.includes('/thumb/')) return; img.src = `${ROUND}/${id}.png?${ver}`; };
+    f.appendChild(img); world.appendChild(f);
+    const idx = order.push({id, st, s, i}) - 1;
+    f.onclick = e => { if (!moved) openLB(idx); };
+    f.onkeydown = e => { if (e.key === 'Enter') openLB(idx); };
+    const lab = document.createElement('div'); lab.className = 'flabel'; lab.textContent = `${id} · ${s}`;
+    lab.style.left = x + 'px'; lab.style.top = (y + FH + 18) + 'px'; world.appendChild(lab);
+    if (i < SCREENS.length - 1) { const a = document.createElement('div'); a.className = 'arrow';
+      a.style.cssText = `left:${x + FW + 40}px;top:${y + FH / 2 - 3}px;width:${GX - 80}px`; world.appendChild(a); }
+  });
+});
+const WW = X0 + SCREENS.length * (FW + GX) - GX, WH = TOP + STYLES.length * (FH + GY) - GY + 60;
+
+// pan + zoom
+let s = 1, tx = 0, ty = 0, moved = false;
+const apply = () => { world.style.transform = `translate(${tx}px,${ty}px) scale(${s})`; document.getElementById('zPct').textContent = Math.round(s * 100) + '%';
+  view.style.backgroundSize = `${24 * Math.max(.5, Math.min(2, s * 4))}px ${24 * Math.max(.5, Math.min(2, s * 4))}px`; view.style.backgroundPosition = `${tx}px ${ty}px`; };
+const zoomAt = (k, cx, cy) => { const ns = Math.max(.03, Math.min(2.5, s * k)); tx = cx - (cx - tx) * ns / s; ty = cy - (cy - ty) * ns / s; s = ns; apply(); };
+const fit = (x = 0, y = 0, w = WW, h = WH, pad = 60) => { const vw = innerWidth, vh = innerHeight;
+  s = Math.min((vw - pad * 2) / w, (vh - pad * 2 - 40) / h); tx = (vw - w * s) / 2 - x * s; ty = (vh - h * s) / 2 - y * s + 20; apply(); };
+// like Figma: scroll / two-finger swipe moves the board, Ctrl+scroll or pinch zooms, Shift+scroll goes sideways
+view.addEventListener('wheel', e => { e.preventDefault();
+  if (e.ctrlKey || e.metaKey) return zoomAt(Math.exp(-e.deltaY * .01), e.clientX, e.clientY);
+  const k = e.deltaMode === 1 ? 32 : 1;
+  if (e.shiftKey && !e.deltaX) tx -= e.deltaY * k; else { tx -= e.deltaX * k; ty -= e.deltaY * k; }
+  apply(); }, {passive: false});
+const pts = new Map(); let last = null, pinch = null;
+view.addEventListener('pointerdown', e => { pts.set(e.pointerId, {x: e.clientX, y: e.clientY}); moved = false; view.setPointerCapture(e.pointerId);
+  if (pts.size === 1) { last = {x: e.clientX, y: e.clientY}; view.classList.add('drag'); }
+  if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = {d: Math.hypot(a.x - b.x, a.y - b.y)}; } });
+view.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, {x: e.clientX, y: e.clientY});
+  if (pts.size === 2 && pinch) { const [a, b] = [...pts.values()], d = Math.hypot(a.x - b.x, a.y - b.y); zoomAt(d / pinch.d, (a.x + b.x) / 2, (a.y + b.y) / 2); pinch.d = d; moved = true; return; }
+  if (last) { const dx = e.clientX - last.x, dy = e.clientY - last.y; if (Math.abs(dx) + Math.abs(dy) > 3) moved = true; tx += dx; ty += dy; last = {x: e.clientX, y: e.clientY}; apply(); } });
+const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) { last = null; view.classList.remove('drag'); } };
+view.addEventListener('pointerup', up); view.addEventListener('pointercancel', up);
+document.getElementById('zIn').onclick = () => zoomAt(1.25, innerWidth / 2, innerHeight / 2);
+document.getElementById('zOut').onclick = () => zoomAt(.8, innerWidth / 2, innerHeight / 2);
+document.getElementById('zFit').onclick = () => fit();
+addEventListener('resize', () => fit());
+
+// jump to a style row
+const jump = document.getElementById('jump');
+jump.innerHTML = STYLES.map((st, r) => `<button data-r="${r}">${st.k} · ${st.name}</button>`).join('') + '<button data-r="all">All</button>';
+jump.onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.r === 'all') return fit();
+  const r = +b.dataset.r, y = TOP + r * (FH + GY);            // row fills ~60% of the screen height, starts at its heading
+  s = Math.min(.6, innerHeight * .6 / FH); tx = 40; ty = (innerHeight - FH * s) / 2 - y * s; apply(); };
+
+// lightbox
+let cur = 0; const lb = document.getElementById('lb');
+function openLB(i) { cur = (i + order.length) % order.length; const o = order[cur];
+  document.getElementById('lbImg').src = `${ROUND}/${o.id}.png?${ver}`; document.getElementById('lbImg').alt = `${o.st.name}: ${o.s}`;
+  document.getElementById('lbT').textContent = `${o.id} · ${o.s}`; document.getElementById('lbS').textContent = `Style ${o.st.k}, ${o.st.name}`;
+  document.getElementById('lbF').textContent = `Step ${o.i + 1} of ${SCREENS.length}. ← → next screen · ↑ ↓ same screen in another style · Esc closes. AI mockup (Nano Banana Pro): any number not in the brief is made up by the model.${o.i === 5 ? ' The 3.4 cups / 412 ml / 1,212 ml here are sample numbers, not a real run.' : ''}`;
+  lb.classList.add('on'); }
+const closeLB = () => lb.classList.remove('on');
+document.getElementById('lbX').onclick = closeLB; lb.onclick = e => { if (e.target === lb || e.target.classList.contains('imgwrap')) closeLB(); };
+document.getElementById('lbP').onclick = () => openLB(cur - 1); document.getElementById('lbN').onclick = () => openLB(cur + 1);
+addEventListener('keydown', e => { if (!lb.classList.contains('on')) { if (e.key === '0') fit(); return; }
+  if (e.key === 'Escape') closeLB(); if (e.key === 'ArrowRight') openLB(cur + 1); if (e.key === 'ArrowLeft') openLB(cur - 1);
+  if (e.key === 'ArrowDown') openLB(cur + SCREENS.length); if (e.key === 'ArrowUp') openLB(cur - SCREENS.length); });
+document.querySelectorAll('[data-round]').forEach(b => b.onclick = () => { ROUND = b.dataset.round;
+  document.querySelectorAll('[data-round]').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.frame img').forEach(im => im.src = `${ROUND}/thumb/${im.dataset.id}.jpg?${ver}`); });
+fit();
+</script>
+</body>
+</html>

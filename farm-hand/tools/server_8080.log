@@ -1,0 +1,67 @@
+C:\Users\User\Documents\code\shellhacks2025\farm-hand\.venv\Lib\site-packages\google\adk\models\llm_request.py:298: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+  declaration = tool._get_declaration()
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is 59.3%, which is well above the 40% threshold, so it does not need water right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now, so we will wait to water it.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now at 59.4%, so we do not need to water it yet.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is already nicely moist at 58.9%, so it doesn't need any water right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture at 57.5%, so we don't need to water it right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of water right now at 57.5% moisture, which is well above the 40% threshold.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A moisture is at 57.9%, so the soil has plenty of water and does not need any right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is currently moist at 56.5%, so we don't need to water it until it drops to 40%.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: The soil in Pot A is still moist enough at 57.1%, so it does not need water right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now at 56.5%, so we do not need to water it.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture at 55.9%, so we will wait before watering again.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now, so we will wait before watering again.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now at 54.8%, so we do not need to water it yet.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now, so we do not need to water.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil is currently at 55.2% moisture, which is above the 40% threshold.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is at 54.6%, which is well above the 40% threshold, so no watering is needed right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is still nicely moist at 54.1%, so we don't need to water it yet.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is at 53.5% moisture, which is well above the 40% limit where we need to water.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now, so we do not need to water it.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil moisture is 52.6%, which is well above the 40% threshold, so we don't need to water right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture at 53.1%, so we do not need to water it right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A is at 52% moisture, which is well above the 40% threshold to water.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is at 52.1% moisture, so it does not need water until it drops to 40%.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is at 52.8%, which is well above the 40% threshold for watering.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is at 52%, so it has plenty of water right now and does not need watering.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: The soil is still nicely moist at 51.9%, so Pot A does not need any water right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now at 51.6%, so we do not need to water it yet.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 50% and the soil still has enough water (Laya, 90% sure).
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A is still moist enough at 49 percent, so we do not need to water it right now.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has enough water right now, so we will hold off on watering until the soil dries more.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is at 48.8%, which is comfortably above the 40% threshold for watering.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is currently at 48.4% moisture, which is plenty of water since we only water when it drops to 40% or below.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[board] {"type": "pour_start", "pot": "A", "ms": 6254, "by": "laptop", "ts": 1790326177.3584027}
+[brain] laya (AI failed): WATER: soil is 47% and no rain will cover it. Watering 6 s (Laya, 86% sure).
+[board] {"type": "pour_done", "pot": "A", "ran_ms": 6254, "by": "laptop", "why": "time_up", "ts": 1790326184.4999502}
+[soak] {'pot': 'A', 'poured_s': 6.254, 'before_pct': 46.7, 'peak_pct': 55.5, 'rise_pct': 8.8, 'first_rise_s': 3.5, 'pct_per_s': 1.407, 'ok': True, 'note': 'water reached the probe'}
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is still moist enough at 53.1%, so we will wait until it drops to 40% before watering.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 54% and the soil still has enough water (Laya, 94% sure).
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: The soil is at 52.6% moisture, which is above our 40% trigger, so Pot A has enough water right now.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 51% and the soil still has enough water (Laya, 92% sure).
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is still moist at 50.4%, so we will wait until it drops to 40% before watering.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A soil moisture is at 49.7%, which is above the 40% threshold to water.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[board] {"type": "pour_start", "pot": "A", "ms": 5367, "by": "laptop", "ts": 1790333242.1522446}
+[brain] laya (AI failed): WATER: soil is 48% and no rain will cover it. Watering 5 s (Laya, 78% sure).
+[board] {"type": "pour_done", "pot": "A", "ran_ms": 5367, "by": "laptop", "why": "time_up", "ts": 1790333248.028478}
+[soak] {'pot': 'A', 'poured_s': 5.367, 'before_pct': 49.1, 'peak_pct': 56.3, 'rise_pct': 7.1, 'first_rise_s': 4.0, 'pct_per_s': 1.323, 'ok': True, 'note': 'water reached the probe'}
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A has plenty of moisture right now at 54%, so we don't need to water it yet.
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A is still moist enough at 53.5%, so we do not need to water it right now.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 53% and the soil still has enough water (Laya, 94% sure).
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: Pot A's soil is at 52.5% moisture, which is well above our 40% watering threshold.
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 53% and the soil still has enough water (Laya, 94% sure).
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 51% and the soil still has enough water (Laya, 92% sure).
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 51% and the soil still has enough water (Laya, 94% sure).
+[brain] AI team failed, Laya then rules take over: TimeoutError()
+[brain] laya (AI failed): WAIT: soil is 51% and the soil still has enough water (Laya, 93% sure).
+[brain] gemini via right.codes (gemini-3.6-flash): WAIT: The plant has plenty of moisture right now at 50.8%, so it does not need water yet.

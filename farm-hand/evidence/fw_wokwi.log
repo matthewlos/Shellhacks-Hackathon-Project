@@ -1,0 +1,26 @@
+SHIPPED firmware, SIM=1, REPORT_MS=1000, non-blocking temp
+
+boot: PASS
+pour A start: PASS
+busy refusal: PASS
+pour A done: PASS
+timer pour: PASS
+timer off: PASS
+cap start 30000: PASS
+cap done ~30000 ms: PASS
+
+{"type":"boot","fw":"prompt-grass-1","sim":1,"probes":1}
+{"type":"pour_start","pot":"A","ms":3000,"by":"laptop"}
+{"type":"refused","pot":"B","why":"busy"}
+{"type":"pour_done","pot":"A","ran_ms":3000,"by":"laptop","why":"time_up"}
+{"type":"timer","every_s":4,"pour_ms":1000}
+{"type":"pour_start","pot":"B","ms":1000,"by":"timer"}
+{"type":"pour_done","pot":"B","ran_ms":1006,"by":"timer","why":"time_up"}
+{"type":"timer","every_s":0,"pour_ms":1000}
+{"type":"pour_start","pot":"B","ms":30000,"by":"laptop"}
+{"type":"pour_done","pot":"B","ran_ms":30000,"by":"laptop","why":"time_up"}
+
+first 3 readings:
+{"type":"reading","ms":1041,"a_raw":0,"b_raw":0,"a_pct":100,"b_pct":100,"temp_c":22.0,"pumping":"none"}
+{"type":"reading","ms":2047,"a_raw":0,"b_raw":0,"a_pct":100,"b_pct":100,"temp_c":22.0,"pumping":"none"}
+{"type":"reading","ms":3053,"a_raw":0,"b_raw":0,"a_pct":100,"b_pct":100,"temp_c":22.0,"pumping":"none"}

@@ -1,0 +1,8 @@
+dry: {'ok': True}
+start soil: 36.4 -> {'ok': True}
+     0s  reading   now=36.4  Soil is 36.4%. Target 50.0%.
+     1s  settling  now=36.4  Pulse 1: 8.0 s. Gap 13.6%, learned 1.14 % per second.
+    42s  settling  now=45.8  Pulse 2: 2.5 s. Gap 4.2%, learned 1.16 % per second.
+    67s  settling  now=48.6  Pulse 3: 1.0 s. Gap 1.4%, learned 1.14 % per second.
+    88s  locked    now=50.1  Locked at 50.1%, target 50.0%.
+RECEIPT: {"phase": "locked", "target": 50.0, "start": 36.4, "now": 50.1, "pulses": [{"s": 8.0, "before": 36.4, "after": 45.8, "rise": 9.4, "wait_s": 41}, {"s": 2.5, "before": 45.8, "after": 48.6, "rise": 2.8, "wait_s": 25}, {"s": 1.0, "before": 48.6, "after": 50.1, "rise": 1.5, "wait_s": 21}], "secs": 11.5, "ml": 230, "took_s": 88, "rate": 1.32}

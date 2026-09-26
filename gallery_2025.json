@@ -1,0 +1,1986 @@
+[
+ {
+  "name": "EcoSort",
+  "tagline": "Simplifying sustainability for everyone.",
+  "url": "https://devpost.com/software/ecosort-ofyuie",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER 1st, 2nd, & 3rd Best Overall\nWINNER Wix.com & Base44",
+   "WINNER 1st, 2nd, & 3rd Best Overall",
+   "WINNER",
+   "WINNER Wix.com & Base44",
+   "WINNER"
+  ],
+  "built_with": [
+   "base44",
+   "css",
+   "github",
+   "javascript"
+  ],
+  "links": []
+ },
+ {
+  "name": "FloodGuard",
+  "tagline": "FloodGuard turns rising tides into early alerts—an AI-powered system that predicts, detects, and coordinates responses to floods, protecting lives, property, and cities in real time.",
+  "url": "https://devpost.com/software/floodguard-okgzty",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER 1st, 2nd, & 3rd Best Overall",
+   "WINNER 1st, 2nd, & 3rd Best Overall",
+   "WINNER"
+  ],
+  "built_with": [
+   "a2a",
+   "adk",
+   "gemini",
+   "github",
+   "google-cloud",
+   "neon",
+   "node.js",
+   "postgresql",
+   "postman",
+   "prisma",
+   "react",
+   "typescript"
+  ],
+  "links": []
+ },
+ {
+  "name": "Lumi Lens",
+  "tagline": "Where neurodivergent support creates a fun, engaging experience! Lumi Lens gamifies socialization and reading emotions with playful overlays and AI dialogue. Social interaction is no longer daunting!",
+  "url": "https://devpost.com/software/magical-girl-os",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER 1st, 2nd, & 3rd Best Overall",
+   "WINNER 1st, 2nd, & 3rd Best Overall",
+   "WINNER"
+  ],
+  "built_with": [
+   "deepface",
+   "google-gemini",
+   "python",
+   "raspberry-pi",
+   "swift",
+   "xcode"
+  ],
+  "links": []
+ },
+ {
+  "name": "Happy Head",
+  "tagline": "Happy Head is a modular IoT safety platform dedicated to protecting the next generation of athletes",
+  "url": "https://devpost.com/software/happy-head",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Best First-Time Hacker",
+   "WINNER Best First-Time Hacker",
+   "WINNER"
+  ],
+  "built_with": [
+   "accelerometer",
+   "c",
+   "camera",
+   "gyroscope",
+   "i2c",
+   "lcd",
+   "led",
+   "mediapipe",
+   "microcontroller",
+   "next.js",
+   "opencv",
+   "postgresql",
+   "prisma",
+   "python",
+   "react",
+   "spi",
+   "sql",
+   "supabase",
+   "ti-launchpad",
+   "typescript",
+   "uart"
+  ],
+  "links": []
+ },
+ {
+  "name": "A11y Tools",
+  "tagline": "A Google Chrome extension that elevates the limitations of people with disabilities and makes web pages accessible to a wider audience.",
+  "url": "https://devpost.com/software/a11y-b8xg5i",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google Cloud",
+   "WINNER Google Cloud",
+   "WINNER"
+  ],
+  "built_with": [
+   "agent-based",
+   "css",
+   "fastapi",
+   "gemini",
+   "google-cloud-ai",
+   "googleadk",
+   "html",
+   "javascript",
+   "python",
+   "restapi"
+  ],
+  "links": []
+ },
+ {
+  "name": "iMPOSTURE",
+  "tagline": "AI powered ergonomic for healthier minds and bodies",
+  "url": "https://devpost.com/software/straightup-hvet3r",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google Cloud",
+   "WINNER Google Cloud",
+   "WINNER"
+  ],
+  "built_with": [
+   "google-adk",
+   "google-cloud",
+   "mediapipe",
+   "python",
+   "supabase",
+   "uv",
+   "yolov11"
+  ],
+  "links": []
+ },
+ {
+  "name": "BrainSafe",
+  "tagline": "AI-powered browser extension that protects infant brain development by detecting, modifying and filtering harmful digital content in real time across different video platforms like YouTube, etc.",
+  "url": "https://devpost.com/software/brainsafe-browser",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google Cloud",
+   "WINNER Google Cloud",
+   "WINNER"
+  ],
+  "built_with": [
+   "adk",
+   "django",
+   "gcp",
+   "gemini",
+   "javascript",
+   "multimodalaiagents",
+   "openai",
+   "promptengineering",
+   "python"
+  ],
+  "links": []
+ },
+ {
+  "name": "BirdsEye",
+  "tagline": "We all hate traffic, let us help get you out of it faster.",
+  "url": "https://devpost.com/software/birdseye-ck0j12",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Waymo\nWINNER Assurant",
+   "WINNER Waymo",
+   "WINNER",
+   "WINNER Assurant",
+   "WINNER"
+  ],
+  "built_with": [
+   "css",
+   "ec2",
+   "ffmpeg",
+   "flask",
+   "git",
+   "github",
+   "html",
+   "javascript",
+   "json",
+   "opencv",
+   "python",
+   "react",
+   "react-native",
+   "typescript",
+   "yolo"
+  ],
+  "links": []
+ },
+ {
+  "name": "OpenPotholeMap",
+  "tagline": "Leverages computer vision, GPS, and crowdsourcing to detect potholes, warn drivers, and share data with city authorities in real time.",
+  "url": "https://devpost.com/software/openpotholemap",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Waymo",
+   "WINNER Waymo",
+   "WINNER"
+  ],
+  "built_with": [
+   "ai",
+   "express.js",
+   "gcp",
+   "github-actions",
+   "google",
+   "google-maps",
+   "mongodb",
+   "node.js",
+   "react",
+   "roboflow",
+   "shadcn",
+   "tailwindcss",
+   "typescript",
+   "vite",
+   "yolov8"
+  ],
+  "links": []
+ },
+ {
+  "name": "VL-ADK",
+  "tagline": "A \"psuedo\" VLA model leveraging a fleet of autonomous ADK agents.",
+  "url": "https://devpost.com/software/vl-adk",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Waymo\nWINNER NVIDIA\nWINNER Microsoft",
+   "WINNER Waymo",
+   "WINNER",
+   "WINNER NVIDIA",
+   "WINNER",
+   "WINNER Microsoft",
+   "WINNER"
+  ],
+  "built_with": [
+   "gemini",
+   "google-adk",
+   "jetson-orin",
+   "python",
+   "react",
+   "typescript",
+   "yolo"
+  ],
+  "links": []
+ },
+ {
+  "name": "ClariTA",
+  "tagline": "Meet ClariTA, your late-night study partner! Make studying easier by uploading your PDF lecture that automatically generates practice quizzes, helping you effectively retain information.",
+  "url": "https://devpost.com/software/clarita",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Assurant",
+   "WINNER Assurant",
+   "WINNER"
+  ],
+  "built_with": [
+   "drizzle",
+   "express.js",
+   "javascript",
+   "node.js",
+   "postgresql",
+   "react",
+   "supabase",
+   "typescript",
+   "vite"
+  ],
+  "links": []
+ },
+ {
+  "name": "PrepBear",
+  "tagline": "A web-app developed to help prep students for their technical interviews through the use of AI mock interviewer.",
+  "url": "https://devpost.com/software/prep-bear",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Assurant\nWINNER Microsoft",
+   "WINNER Assurant",
+   "WINNER",
+   "WINNER Microsoft",
+   "WINNER"
+  ],
+  "built_with": [
+   "gemini",
+   "javascript",
+   "react"
+  ],
+  "links": []
+ },
+ {
+  "name": "TyodorAI",
+  "tagline": "Tyodor is a 10-year-old AI that students teach to, reinforcing learning while giving teachers real-time insights, powered by Google Gemini API for interactive learning.",
+  "url": "https://devpost.com/software/tyodor",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google",
+   "WINNER Google",
+   "WINNER"
+  ],
+  "built_with": [
+   "css",
+   "flask",
+   "googleai",
+   "html",
+   "javascript",
+   "openai",
+   "python"
+  ],
+  "links": []
+ },
+ {
+  "name": "Beacon",
+  "tagline": "Beacon is a smart navigation app that helps users plan safe routes by having readily available safety features, making them feel that someone is always by their side.",
+  "url": "https://devpost.com/software/beacon-fc3qis",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google",
+   "WINNER Google",
+   "WINNER"
+  ],
+  "built_with": [
+   "expo-go",
+   "expo.io",
+   "express.js",
+   "figma",
+   "firebase",
+   "firestore",
+   "google-cloud",
+   "google-directions",
+   "google-maps",
+   "javascript",
+   "json",
+   "nativewind",
+   "node.js",
+   "postman",
+   "reactnative",
+   "realtime-database",
+   "typescript.jsx"
+  ],
+  "links": []
+ },
+ {
+  "name": "EzSpeak",
+  "tagline": "Breaking language barriers, one word at a time!",
+  "url": "https://devpost.com/software/ezspeak-30hy1w",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Google",
+   "WINNER Google",
+   "WINNER"
+  ],
+  "built_with": [
+   "azure",
+   "azurecognitiveservices",
+   "chrome",
+   "chromeextensionapi",
+   "css",
+   "html",
+   "javascript",
+   "webaudioapi"
+  ],
+  "links": []
+ },
+ {
+  "name": "The Rat Race",
+  "tagline": "The Rat Race",
+  "url": "https://devpost.com/software/the-rat-race",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER State Farm\nWINNER Netflix",
+   "WINNER State Farm",
+   "WINNER",
+   "WINNER Netflix",
+   "WINNER"
+  ],
+  "built_with": [
+   "adobe",
+   "next.js",
+   "react"
+  ],
+  "links": []
+ },
+ {
+  "name": "Next Step",
+  "tagline": "Learn how to take your Next Step in insurance education by practicing in high pressure scenarios",
+  "url": "https://devpost.com/software/next-step-cme06a",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER State Farm",
+   "WINNER State Farm",
+   "WINNER"
+  ],
+  "built_with": [
+   "flask",
+   "nextjs",
+   "python",
+   "react",
+   "tailwind-css",
+   "typescript",
+   "vapi"
+  ],
+  "links": []
+ },
+ {
+  "name": "GreenLight",
+  "tagline": "GreenLight turns dashcam footage into a learning tool. Incidents become 3D simulations in Three.js with a quiz to boost your driving score, reinforce learning, plus tips on safe driving and insurance.",
+  "url": "https://devpost.com/software/greenlight-idnv6o",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER State Farm",
+   "WINNER State Farm",
+   "WINNER"
+  ],
+  "built_with": [
+   "adk",
+   "firebase",
+   "gemini",
+   "google",
+   "python",
+   "react",
+   "shadcn",
+   "tailwind",
+   "typescript"
+  ],
+  "links": []
+ },
+ {
+  "name": "Quests and Conflicts VR",
+  "tagline": "An original choose-your-own-adventure story born in VR: tabletop storytelling turned into immersive theater, where your choices create the journey.",
+  "url": "https://devpost.com/software/quests-and-conflicts-vr",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Netflix",
+   "WINNER Netflix",
+   "WINNER"
+  ],
+  "built_with": [
+   "c#",
+   "oculus-gear-vr",
+   "quest3",
+   "unity",
+   "vr"
+  ],
+  "links": []
+ },
+ {
+  "name": "Ctrl-ARM",
+  "tagline": "Your muscles. Your moves. Your control!",
+  "url": "https://devpost.com/software/ctrl-arm",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Microsoft",
+   "WINNER Microsoft",
+   "WINNER"
+  ],
+  "built_with": [
+   "css3",
+   "electron",
+   "gemini",
+   "google-a2a",
+   "google-adk",
+   "html5",
+   "matplotlib",
+   "myoware-2.0",
+   "numpy",
+   "pandas",
+   "python",
+   "react",
+   "scikit-learn",
+   "tensorflow",
+   "typescript",
+   "vite",
+   "whisper",
+   "xiao-sense"
+  ],
+  "links": []
+ },
+ {
+  "name": "Agent Zero",
+  "tagline": "False and duplicate invoices cost AP teams money. By routing extraction, matching, and anomaly checks to our best fit model, our benchmark-driven AI provides proof/confidence for acceptance review.",
+  "url": "https://devpost.com/software/agentzero-tnh9p3",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Capital One",
+   "WINNER Capital One",
+   "WINNER"
+  ],
+  "built_with": [
+   "bigquery",
+   "express.js",
+   "fastapi",
+   "gemini",
+   "node.js",
+   "pyarrow",
+   "react",
+   "tensorflow",
+   "typescript",
+   "yolov11"
+  ],
+  "links": []
+ },
+ {
+  "name": "MoneySensei",
+  "tagline": "Smart student budgeting app that gives students from monthly financial plans to personalized tips with an AI-generated financial education section that make students stay on top of their finances.",
+  "url": "https://devpost.com/software/moneysensei",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Wix.com & Base44",
+   "WINNER Wix.com & Base44",
+   "WINNER"
+  ],
+  "built_with": [
+   "base44",
+   "javascript",
+   "react"
+  ],
+  "links": []
+ },
+ {
+  "name": "Aviation Workflow Management (AWF)",
+  "tagline": "With AWF, private flight managers are able to easily access a complete report of the entire state of their operations, from individual employee management to customer relations & metrics",
+  "url": "https://devpost.com/software/devpost-weu7vz",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Wix.com & Base44",
+   "WINNER Wix.com & Base44",
+   "WINNER"
+  ],
+  "built_with": [
+   "base44",
+   "cloudskyapi",
+   "oauth",
+   "react",
+   "tailwind",
+   "typescript"
+  ],
+  "links": []
+ },
+ {
+  "name": "GitFlow",
+  "tagline": "Transform any GitHub repository into an interactive, visual tree structure. AI-powered intelligent insights, smart summaries, and code analysis to help you understand a codebase with confidence.",
+  "url": "https://devpost.com/software/gitflow-bzwcov",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Github",
+   "WINNER Github",
+   "WINNER"
+  ],
+  "built_with": [
+   "docker",
+   "elevenlabs",
+   "express.js",
+   "fastapi",
+   "gemini",
+   "githubapi",
+   "godaddy",
+   "javascript",
+   "openai",
+   "python",
+   "react",
+   "reactflow",
+   "vercel",
+   "voice-delivery-system"
+  ],
+  "links": []
+ },
+ {
+  "name": "Intelligent Poker League",
+  "tagline": "- Allow and encourage players to use technology in the game- Discourages cheating on other playing websites. - Collects data on technology and enables players to make the best solvers possible.",
+  "url": "https://devpost.com/software/intelligent-poker-league",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Wolfram",
+   "WINNER Wolfram",
+   "WINNER"
+  ],
+  "built_with": [
+   "django",
+   "git",
+   "github",
+   "postgresql",
+   "python",
+   "react",
+   "tailwindcss",
+   "wolfram-technologies"
+  ],
+  "links": []
+ },
+ {
+  "name": "Wolframination",
+  "tagline": "Math Visuals Made Simple.",
+  "url": "https://devpost.com/software/wolframination",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER Wolfram",
+   "WINNER Wolfram",
+   "WINNER"
+  ],
+  "built_with": [
+   "manim",
+   "numpy",
+   "python",
+   "wolfram-technologies",
+   "wolframscript"
+  ],
+  "links": []
+ },
+ {
+  "name": "SightSpeech",
+  "tagline": "Text-to-speech is a near-essential tool for the legally blind; However, normal things like signs, classroom boards, etc., do not have this tool. SightSpeech aims to help solve this issue.",
+  "url": "https://devpost.com/software/sightspeech",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER MLH || Best Use of Gemini API || Mechanical Keyboards",
+   "WINNER MLH || Best Use of Gemini API || Mechanical Keyboards",
+   "WINNER"
+  ],
+  "built_with": [
+   "ai",
+   "easyocr",
+   "flask",
+   "gemini-api",
+   "git",
+   "github",
+   "html",
+   "javascript",
+   "mediapipe",
+   "next.js",
+   "python",
+   "react",
+   "tailwind-css",
+   "text-to-speech-api"
+  ],
+  "links": []
+ },
+ {
+  "name": "Sylly",
+  "tagline": "Sylly is a smart academic organizer that centralizes courses, assignments, and syllabi, making it easy to upload, share, search, and download materials in one place.",
+  "url": "https://devpost.com/software/sylly",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER MLH || Best Use of Auth0 || Wireless Headphones",
+   "WINNER MLH || Best Use of Auth0 || Wireless Headphones",
+   "WINNER"
+  ],
+  "built_with": [
+   "auth0",
+   "node.js",
+   "prisma",
+   "react",
+   "vite"
+  ],
+  "links": []
+ },
+ {
+  "name": "memoray",
+  "tagline": "Memory just moved from your brain to your frames. Your memories are getting a firmware update. Memoray builds a second version of your life through smart glasses—one that never fades.",
+  "url": "https://devpost.com/software/memoray",
+  "winner": true,
+  "prizes": [
+   "ShellHacks 2025\n\nWINNER MLH || Best Domain Name from GoDaddy Registry || Digital Gift Card",
+   "WINNER MLH || Best Domain Name from GoDaddy Registry || Digital Gift Card",
+   "WINNER"
+  ],
+  "built_with": [
+   "api",
+   "expo.io",
+   "express.js",
+   "fastapi",
+   "firebase",
+   "googlea2a",
+   "googleadk",
+   "metaglasses",
+   "ollamaai",
+   "python",
+   "reactnative",
+   "typescript",
+   "websockets"
+  ],
+  "links": []
+ },
+ {
+  "name": "EcoQuest",
+  "tagline": "EcoQuest is an educational game that promotes ecological awareness, while using Google’s ADK to reduce coding redundancy and improve workflow efficiency for developers.",
+  "url": "https://devpost.com/software/ecoquest-9yqx0f",
+  "winner": false
+ },
+ {
+  "name": "Outagent",
+  "tagline": "Machine learning models to help families stay safe and first responders act when outages occur.",
+  "url": "https://devpost.com/software/outagent",
+  "winner": false
+ },
+ {
+  "name": "Project Replicant",
+  "tagline": "High-Performance Local LLM with STT, TTS, and A2A Interaction – Optimized for Both XR and Standard Applications",
+  "url": "https://devpost.com/software/project-replicant",
+  "winner": false
+ },
+ {
+  "name": "EcoBot",
+  "tagline": "Looking for quick tips on improving the planet's ecology. Learn faster and more using Google's A2A standard and their parallel processing.",
+  "url": "https://devpost.com/software/ecobot-t1p6ae",
+  "winner": false
+ },
+ {
+  "name": "PatchMind",
+  "tagline": "Milk expires in 2 weeks, your code shouldn't",
+  "url": "https://devpost.com/software/patchmind-ntb18f",
+  "winner": false
+ },
+ {
+  "name": "OneSource",
+  "tagline": "Our project creates a single place to ask a question and get one clear, trusted answer with citations from across all sources",
+  "url": "https://devpost.com/software/onesource",
+  "winner": false
+ },
+ {
+  "name": "Meal.ai",
+  "tagline": "Meal planning app",
+  "url": "https://devpost.com/software/meal-ai-kd8x2h",
+  "winner": false
+ },
+ {
+  "name": "AuraTracker",
+  "tagline": "AuraTrack is an AI-powered emotion analytics platform that uses facial expression and engagement tracking to understand how people feel.",
+  "url": "https://devpost.com/software/auratrack",
+  "winner": false
+ },
+ {
+  "name": "Google Storm",
+  "tagline": "Real time Storm Monitoring App with alerts and emergency resource finder with population density to avoid panic and congestion in times of emergencies.",
+  "url": "https://devpost.com/software/google-storm",
+  "winner": false
+ },
+ {
+  "name": "Meow Censor",
+  "tagline": "A cuter way to deal with unsavory language.",
+  "url": "https://devpost.com/software/meow-censor",
+  "winner": false
+ },
+ {
+  "name": "Body Quest",
+  "tagline": "An interactive platform where students click body parts on an illustration and a chatbot explains them in simple terms making anatomy engaging, curious, and playful for students.",
+  "url": "https://devpost.com/software/body-quest",
+  "winner": false
+ },
+ {
+  "name": "PromoGen",
+  "tagline": "Dynamic AI Video Creation for Every Product, no experience needed.",
+  "url": "https://devpost.com/software/promogen",
+  "winner": false
+ },
+ {
+  "name": "CodePT",
+  "tagline": "CodePT is an interactive ai tutor that teaches the user how to code. It will start with the user at any level and help build them up based on their code by giving suggestions and tips.",
+  "url": "https://devpost.com/software/codept",
+  "winner": false
+ },
+ {
+  "name": "InsuMas- Multi Agent System for Insurance",
+  "tagline": "One assistant, many experts — smarter insurance with AI.",
+  "url": "https://devpost.com/software/insumas-multi-agent-system",
+  "winner": false
+ },
+ {
+  "name": "UnityAid",
+  "tagline": "UnityAid is an intelligent disaster response coordination system built with Streamlit, featuring AI-powered ticket triage with conversational priority classification.",
+  "url": "https://devpost.com/software/unityaid",
+  "winner": false
+ },
+ {
+  "name": "Socratic Tutor, an educator's assistant",
+  "tagline": "The Socratic Tutor lets teachers upload class materials so AI answers only from their content, promoting critical thinking, aiding lesson planning, and can scale into a global adaptive tutor.",
+  "url": "https://devpost.com/software/socratic-tutor-an-educator-s-assistant",
+  "winner": false
+ },
+ {
+  "name": "UniteUS",
+  "tagline": "Applicants verify their identity with a quick, secure scan in the UniteUS app. The result: fewer fake applications, faster approvals, and a smoother experience for good customers",
+  "url": "https://devpost.com/software/uniteus-ldy67q",
+  "winner": false
+ },
+ {
+  "name": "Money Talk",
+  "tagline": "AI-powered expense tracking made as easy as talking or snapping a pic.",
+  "url": "https://devpost.com/software/money-talk-ha61nx",
+  "winner": false
+ },
+ {
+  "name": "PantherDen",
+  "tagline": "PantherDen is a modern off-campus housing solution for FIU students. This platform acts as a direct interface to the best housing for you.",
+  "url": "https://devpost.com/software/pantherden",
+  "winner": false
+ },
+ {
+  "name": "ACCESS-AI",
+  "tagline": "Access-AI: Instantly making any website accessible through AI-powered vision, voice, and summarization.",
+  "url": "https://devpost.com/software/access-ai-mqbo24",
+  "winner": false
+ },
+ {
+  "name": "Every Last Drop",
+  "tagline": "Cities like Oviedo face a water crisis as aquifers run dry. Our app helps you create a beautiful, sustainable lawn with smart watering techniques, conserving our most precious resource.Be the solution",
+  "url": "https://devpost.com/software/every-last-drop",
+  "winner": false
+ },
+ {
+  "name": "PCB Defect Detector",
+  "tagline": "This program is designed to detect defects in PCB's which will make it easier for students and professionals to work with PCB's in a more effective word.",
+  "url": "https://devpost.com/software/pcb-defect-detector",
+  "winner": false
+ },
+ {
+  "name": "FinePrint",
+  "tagline": "Simplify the text of a terms and conditions so anyone can understand it.",
+  "url": "https://devpost.com/software/fineprint-ar5zg9",
+  "winner": false
+ },
+ {
+  "name": "Local Lite",
+  "tagline": "We created Local Lite, a map-based mobile app that uses AI algorithms to discover and showcase small businesses in the user’s vicinity, supporting local and remote communities.",
+  "url": "https://devpost.com/software/local-lite",
+  "winner": false
+ },
+ {
+  "name": "Stacks",
+  "tagline": "Stacking more than money.",
+  "url": "https://devpost.com/software/stacks-qtigjl",
+  "winner": false
+ },
+ {
+  "name": "Sweeper",
+  "tagline": "Inspired by \"Wipeout,\" this is a reimagined version of sweeper.",
+  "url": "https://devpost.com/software/sweeper",
+  "winner": false
+ },
+ {
+  "name": "Tamagitto",
+  "tagline": "Make progress when focus is hard. A motivational GitHub companion offering real-time feedback, 5-minute sprints, and AI insights. Ship tiny wins to keep your companion happy and momentum strong.",
+  "url": "https://devpost.com/software/tamagitto",
+  "winner": false
+ },
+ {
+  "name": "CFPB Government Bot remastered",
+  "tagline": "I took an old open source with outdated modules with Hubot and made it more modern and lighter on system resources",
+  "url": "https://devpost.com/software/cfpb-government-bot-remastered",
+  "winner": false
+ },
+ {
+  "name": "Sleeper Trades",
+  "tagline": "We do the research so there is less risk in your pursuit to reward.",
+  "url": "https://devpost.com/software/sleeper-stocks",
+  "winner": false
+ },
+ {
+  "name": "Cultel California",
+  "tagline": "Thoughts become Reality in this CYOA game where you play as the result of a cult's experiment!",
+  "url": "https://devpost.com/software/cultel-california",
+  "winner": false
+ },
+ {
+  "name": "Wanderlust",
+  "tagline": "Philanthropic choose your own adventure game composed of multiple scenarios involving ventures like disaster relief.",
+  "url": "https://devpost.com/software/wanderlust-5yifou",
+  "winner": false
+ },
+ {
+  "name": "RecipAI",
+  "tagline": "Using Neural Seek mAIstro we curated an agent that recommends recipes to users after they've provided the agent with their availiable ingredients by using block based level programming.",
+  "url": "https://devpost.com/software/recipai-sp052r",
+  "winner": false
+ },
+ {
+  "name": "Draura",
+  "tagline": "A driving simulator powered by multimodal AI agents that analyzes and adapts to live map data to create dynamic, interactive driving challenges making training and practice more adaptive and engaging.",
+  "url": "https://devpost.com/software/draura",
+  "winner": false
+ },
+ {
+  "name": "Mechanical Documentation Analyzer",
+  "tagline": "Smarter analysis, fewer errors.",
+  "url": "https://devpost.com/software/mechanical-documentation-analyzer",
+  "winner": false
+ },
+ {
+  "name": "PyCAD",
+  "tagline": "Turn the power of Python into your next 3D print. Welcome to PyCad a web and desktop tool where you use Python in a built-in environment to create precise 2D sketches for 3D modeling.",
+  "url": "https://devpost.com/software/pycad",
+  "winner": false
+ },
+ {
+  "name": "AnatomyTutor",
+  "tagline": "AnatomyTutor on Vision Pro lets students watch anatomy videos, take AI-powered notes, chat with a tutor bot, and explore 3D models in AR—making studying immersive and interactive.",
+  "url": "https://devpost.com/software/anatomytutor",
+  "winner": false
+ },
+ {
+  "name": "TeamDock – Breaking the Ice in Communities",
+  "tagline": "TeamDock makes forming teams effortless at hackathons, schools, and meetups. Browse, join, and update status in real time — no awkward intros, just instant collaboration.",
+  "url": "https://devpost.com/software/teamdock-breaking-the-ice-in-communities",
+  "winner": false
+ },
+ {
+  "name": "AiExamteeth",
+  "tagline": "AIExamTeeth educates you on your dental X-ray: detects and labels cavities, shows cost estimates, and gives flexible payment options.",
+  "url": "https://devpost.com/software/aiexamteeth",
+  "winner": false
+ },
+ {
+  "name": "DestinAI",
+  "tagline": "We're DestinAI! We use Google's ADK to build 5 specialized AI agents that communicate using the A2A protocol, analyzing 45 inputs for a single, reliable travel plan. Stop planning; start traveling.",
+  "url": "https://devpost.com/software/destinai-8u56cw",
+  "winner": false
+ },
+ {
+  "name": "SwitchWayZ",
+  "tagline": "Reviving toy cars with interactive gaming magic.",
+  "url": "https://devpost.com/software/switchwayz",
+  "winner": false
+ },
+ {
+  "name": "Cubit",
+  "tagline": "Cubit: Providing power, communication, and information through compact energy and data for off grid resilience.",
+  "url": "https://devpost.com/software/cubit-come94",
+  "winner": false
+ },
+ {
+  "name": "LifeQuest",
+  "tagline": "LifeQuest gamifies real life - turn workouts into XP, assignments into quests, habits into streaks. We've made self-improvement as addictive as gaming. Level up your wellness, one task at a time!",
+  "url": "https://devpost.com/software/lifequest-17u34t",
+  "winner": false
+ },
+ {
+  "name": "GrocerEase AI",
+  "tagline": "Multi-agent system using Google ADK and A2A helping SNAP/WIC users maximize benefits via smart budgeting, nutrition advice & transit planning through 3 specialized agents.",
+  "url": "https://devpost.com/software/grocerease-ai",
+  "winner": false
+ },
+ {
+  "name": "CypherBank",
+  "tagline": "Full-Stack Banking App Built in 24 Hours - Microservices, Docker, and Modern UI",
+  "url": "https://devpost.com/software/cypherbank",
+  "winner": false
+ },
+ {
+  "name": "Your Right Pocket",
+  "tagline": "YourRightPocket is a web application designed to power a fintech platform that enables users to round up their purchases and donate the spare change to charity.",
+  "url": "https://devpost.com/software/your-right-pocket",
+  "winner": false
+ },
+ {
+  "name": "FatCat",
+  "tagline": "Play as an antagonistic kitty fleeing from his consequences!",
+  "url": "https://devpost.com/software/cat-game",
+  "winner": false
+ },
+ {
+  "name": "RouteTogether",
+  "tagline": "Smart campus transportation powered by AI - matching riders, optimizing routes, and reducing emissions in real-time.",
+  "url": "https://devpost.com/software/routetogether",
+  "winner": false
+ },
+ {
+  "name": "Aidly",
+  "tagline": "As a student, it can be hard to stay up to date on information regarding finances. Let Aidly help! Based on your major, career, and university, Aidly will provide you with everything you need to know.",
+  "url": "https://devpost.com/software/aidly",
+  "winner": false
+ },
+ {
+  "name": "Link!",
+  "tagline": "Ever wish you had a platform that can help you plan the perfect date or hangout with close friends? This is link! We use AI agents to for you to plan the perfect hangout.",
+  "url": "https://devpost.com/software/let-s-link-oiglqf",
+  "winner": false
+ },
+ {
+  "name": "Aio",
+  "tagline": "Learn by Doing",
+  "url": "https://devpost.com/software/aio-h9z2q3",
+  "winner": false
+ },
+ {
+  "name": "BridgeUp – Life After Graduation Dashboard",
+  "tagline": "BridgeUp is a post graduation hub that helps recent grads navigate the jump from campus life to real world responsibilities. It combines career tools, a finance tracker, mentor matcher, and more.",
+  "url": "https://devpost.com/software/bridgeup-life-after-graduation-dashboard",
+  "winner": false
+ },
+ {
+  "name": "Vitamax",
+  "tagline": "As a nurse practitioner, I see every day how my patients and family members need guidance when finding the correct daily vitamins and supplements they need.",
+  "url": "https://devpost.com/software/vitamax",
+  "winner": false
+ },
+ {
+  "name": "NexusHACK",
+  "tagline": "Are you a first time hacker? Do you need more members for your team? Dont worry, NexusHACK has you covered. With our platform, people will be able to connect and create teams so they are ready to hack",
+  "url": "https://devpost.com/software/nexushack",
+  "winner": false
+ },
+ {
+  "name": "PantherAI",
+  "tagline": "PantherAI: The AI designed for Panther - helping you succeed at FIU on and off campus.",
+  "url": "https://devpost.com/software/pantherai",
+  "winner": false
+ },
+ {
+  "name": "StartLift",
+  "tagline": "Multi-agent AI that grows your startup automatically.",
+  "url": "https://devpost.com/software/startlift",
+  "winner": false
+ },
+ {
+  "name": "TLDR",
+  "tagline": "Split one input into many outputs. Summaries, MP3s, and image prompts in one click.",
+  "url": "https://devpost.com/software/multi-part-input-distribution",
+  "winner": false
+ },
+ {
+  "name": "Goodwill Hunting",
+  "tagline": "Goodwill Hunting: Gamified giving that crowns local champions where help is needed most.",
+  "url": "https://devpost.com/software/goodwill-hunting",
+  "winner": false
+ },
+ {
+  "name": "CAD.ai",
+  "tagline": "Cad.ai is an AI-powered assistant that turns your ideas or even uploaded images into fully generated AutoCAD designs instantly, streamlining the way you go from concept to creation.",
+  "url": "https://devpost.com/software/cad-ai-lva435",
+  "winner": false
+ },
+ {
+  "name": "ReliefOps",
+  "tagline": "An AI Relief Agent using ADK & A2A runs in loops with parallel agents for news, maps & logistics delivering real time updates to save lives",
+  "url": "https://devpost.com/software/reliefops",
+  "winner": false
+ },
+ {
+  "name": "Travelistic",
+  "tagline": "Easily plan trips with friends. Vote on locations and get a clear daily itinerary showing meals, activities, travel times, and costs, so everyone can see the full plan at a glance.",
+  "url": "https://devpost.com/software/travelistic",
+  "winner": false
+ },
+ {
+  "name": "MediLoop",
+  "tagline": "A2A agents triage, schedule, and check coverage. MediLoop connects you to the right medical professional quickly, turning “I’ll do it later” into “it’s booked.”",
+  "url": "https://devpost.com/software/mediloop",
+  "winner": false
+ },
+ {
+  "name": "PeerLens",
+  "tagline": "We built an AI research assistant using Google ADK and Gemini API that analyzes uploaded papers, identifies research gaps, and uses parallel agents to debate and score publication potential.",
+  "url": "https://devpost.com/software/peerlens",
+  "winner": false
+ },
+ {
+  "name": "ReMind",
+  "tagline": "ReMind simplifies care with Voice AI Agents. Designed for Dementia and Parkinson’s care, it empowers families and caregivers to keep loved ones safe, connected, and self-sufficient",
+  "url": "https://devpost.com/software/remind-clyw5p",
+  "winner": false
+ },
+ {
+  "name": "LazyFood",
+  "tagline": "Make tracking your meals easy",
+  "url": "https://devpost.com/software/lazyfood",
+  "winner": false
+ },
+ {
+  "name": "AORA: AI Organization and Routine Assistant",
+  "tagline": "Unlock your potential.",
+  "url": "https://devpost.com/software/productivity-application",
+  "winner": false
+ },
+ {
+  "name": "Protect-Health",
+  "tagline": "Connect Health is an AI healthcare assistant that guides you through doctor visits with personalized tips, task reminders, and health tracking, making care simple and connected",
+  "url": "https://devpost.com/software/protect-health",
+  "winner": false
+ },
+ {
+  "name": "WealthAgent",
+  "tagline": "Multiple agents. One mission: your financial growth.",
+  "url": "https://devpost.com/software/agentwealth",
+  "winner": false
+ },
+ {
+  "name": "DoorDimension",
+  "tagline": "Step through an ordinary door and enter any world you can imagine. Simply speak your vision and watch as the environment behind the door transforms in real time using gen AI.",
+  "url": "https://devpost.com/software/doordimension",
+  "winner": false
+ },
+ {
+  "name": "KnightPool",
+  "tagline": "A carpooling platform that connects students and coworkers for ridesharing, with schedule integration for convenience-based matching.",
+  "url": "https://devpost.com/software/carpool-project",
+  "winner": false
+ },
+ {
+  "name": "Browser4All",
+  "tagline": "Browser4All is a general purpose, hands-free AI browser agent that can be used by anyone regardless of your age, background, or technical expertise.",
+  "url": "https://devpost.com/software/browser4all",
+  "winner": false
+ },
+ {
+  "name": "TailorQ",
+  "tagline": "TailorQ makes hiring fair. No more ‘dad’s connections.’ Candidates upload resumes, answer AI-driven questions, and are ranked by effort and results. Recruiters see performance-based rankings.",
+  "url": "https://devpost.com/software/tailorq",
+  "winner": false
+ },
+ {
+  "name": "Clickety Wrestling",
+  "tagline": "Two-player arm-wrestling race: fill your bar to 100% by matching arrow directions to color rhythms—green steady, red GO on cue, yellow 4-arrow combo for boost. Click fast, time it right, win!",
+  "url": "https://devpost.com/software/clickety-wrestling",
+  "winner": false
+ },
+ {
+  "name": "Rapid Aid",
+  "tagline": "Disaster response is slowed by manual coordination. RapidAid uses AI to instantly match aid requests with volunteer organizations—cutting delays and saving critical time.",
+  "url": "https://devpost.com/software/rapid-aid-ev3zhf",
+  "winner": false
+ },
+ {
+  "name": "Time travel box(TTB)",
+  "tagline": "In short: our app turns scattered alerts into focused action, so you stop ignoring what matters and start getting things done.",
+  "url": "https://devpost.com/software/time-travel-box-ttb",
+  "winner": false
+ },
+ {
+  "name": "JadeFootprinter",
+  "tagline": "Make sustainability social. Tracks users’ carbon emissions, visualizes their impact, and lets them share progress with friends through.",
+  "url": "https://devpost.com/software/jadefootprinter",
+  "winner": false
+ },
+ {
+  "name": "SparkTrend",
+  "tagline": "SparkTrend - Catch the world’s buzz and turn it into your next big idea. SparkTrend helps you spot the hottest Google searches in real time and transforms them into clear, practical marketing tips.",
+  "url": "https://devpost.com/software/sparktrend",
+  "winner": false
+ },
+ {
+  "name": "TA.I",
+  "tagline": "Helping teachers help students",
+  "url": "https://devpost.com/software/ta-i",
+  "winner": false
+ },
+ {
+  "name": "DiegoAI",
+  "tagline": "DiegoAI is CRM AI agent on steroids for middlemen brokers in transportation industry. It helps them 10x their conversion rate when reaching out to manufacturers and manage a large network of truckers.",
+  "url": "https://devpost.com/software/diegoai",
+  "winner": false
+ },
+ {
+  "name": "Panoptes",
+  "tagline": "In the insert_name_here, your todo list not only helps you accomplish your task but creates a custom network of AI agents that will be best fitted for you, continuing to expand, as your needs grow!",
+  "url": "https://devpost.com/software/panoptes",
+  "winner": false
+ },
+ {
+  "name": "CodeAtlas",
+  "tagline": "Your Smartest Teammate- An Agent-Powered Project Manager that creates tasks from your project description, updates progress automatically, and visualizes the project in mere minutes.",
+  "url": "https://devpost.com/software/codeatlas",
+  "winner": false
+ },
+ {
+  "name": "HealthHub",
+  "tagline": "We’re building HealthHub, an offline-first healthcare app designed for rural areas where internet access isn’t always reliable so patients can input basic health information, and the app stores it",
+  "url": "https://devpost.com/software/healthhub-5us93r",
+  "winner": false
+ },
+ {
+  "name": "CloudLens AI Dashbaord - Cloud Service Audit",
+  "tagline": "AI Cloud Auditor is a live, AI-powered platform that helps teams cut cloud costs and boost performanceperfect for medium-to-large projects where infrastructure complexity can spiral out of control.",
+  "url": "https://devpost.com/software/cloudlens-ai-dashbaord-cloud-service-audit",
+  "winner": false
+ },
+ {
+  "name": "Agent Fruity",
+  "tagline": "Evolutionary Strategy, in Suika game",
+  "url": "https://devpost.com/software/agent-fruity",
+  "winner": false
+ },
+ {
+  "name": "Guide Me",
+  "tagline": "We make the internet stop playing hide-and-seek with you! The Guide Me Extension uses AI to look at any webpage, tell you exactly what to click, and light up the right button with an audible voice.",
+  "url": "https://devpost.com/software/guide-me-pnb76m",
+  "winner": false
+ },
+ {
+  "name": "SLiM",
+  "tagline": "SLiM: Smart LLM Router that learns from repetitive prompts. Routes queries to a small or large model, auto-trains the small model, and reduces cost while improving speed.",
+  "url": "https://devpost.com/software/slim-ygzr9c",
+  "winner": false
+ },
+ {
+  "name": "Chat, is this real?",
+  "tagline": "AI Fact-Checking Copilot: a Chrome extension that uses a multi-agent loop to extract claims, research sources, and deliver real-time, data-driven verdicts to help stop the spread of misinformation.",
+  "url": "https://devpost.com/software/chat-is-this-real-ijdcrl",
+  "winner": false
+ },
+ {
+  "name": "crammr",
+  "tagline": "AI-powered, human-curated, free catalog of notes from fellow students, tailored EXACTLY for your uni and specific class. Crammer's special algorithm finds the best notes and improves with more data.",
+  "url": "https://devpost.com/software/crammr",
+  "winner": false
+ },
+ {
+  "name": "InsightUI",
+  "tagline": "Meant for designers to locate issues in UX that are too distracting for users with ADHD using eyetracking and AI assistance.",
+  "url": "https://devpost.com/software/insightui",
+  "winner": false
+ },
+ {
+  "name": "ComfortQuest",
+  "tagline": "ComfortQuest is an interactive journey that learns your vibe through story-based choices and recommends the perfect comfort shows for you to watch.",
+  "url": "https://devpost.com/software/comforquest",
+  "winner": false
+ },
+ {
+  "name": "LockedIn",
+  "tagline": "AI-powered study companion that tracks focus with face mesh and object detection, helping students stay accountable and minimize distractions.",
+  "url": "https://devpost.com/software/lockedin-5qtwge",
+  "winner": false
+ },
+ {
+  "name": "Global News Network (GNN)",
+  "tagline": "Global News App reimagines how people consume news, In a world where misinformation spreads fast, we’re making news consumption both engaging and trustworthy.",
+  "url": "https://devpost.com/software/global-news-network-gnn",
+  "winner": false
+ },
+ {
+  "name": "NextMove",
+  "tagline": "Our AI relocation assistant guides your move, recommending neighborhoods, jobs, and activities via Housing, Lifestyle, Finance, and Career ADK agents, with instant insights through React + Next.js.",
+  "url": "https://devpost.com/software/nextmove",
+  "winner": false
+ },
+ {
+  "name": "Clinix",
+  "tagline": "Clinix is an AI assistant that streamlines hospital front-desk tasks—scheduling, records, and insurance—quickly and securely while protecting patient privacy.",
+  "url": "https://devpost.com/software/clinix-69f2n3",
+  "winner": false
+ },
+ {
+  "name": "Road Mage",
+  "tagline": "Un-learn Road Rage.",
+  "url": "https://devpost.com/software/shellhacks-2025-4nakdj",
+  "winner": false
+ },
+ {
+  "name": "Toureigner",
+  "tagline": "Toureigner takes the stress out of travel planning by turning your ideas into personalized itineraries. Instead of juggling maps, guides, and countless tabs, just tell Toureigner where you want to go!",
+  "url": "https://devpost.com/software/toureignor",
+  "winner": false
+ },
+ {
+  "name": "Face2Learn",
+  "tagline": "Face2Learn helps you understand social interactions when it can be hard. It uses face recognition to detect anchor emotions on YouTube videos to teach individuals with social impairments.",
+  "url": "https://devpost.com/software/face2learn",
+  "winner": false
+ },
+ {
+  "name": "SynthStep",
+  "tagline": "Make music with movement: an AI-powered loop station controlled entirely by your hands in front of a webcam",
+  "url": "https://devpost.com/software/synthstep",
+  "winner": false
+ },
+ {
+  "name": "CivicLens",
+  "tagline": "You probably know what's going on in Washington, but do you know what's being voted on in YOUR city next week? Most of us don't, which is why I built this ai civic tool to help you stay up to date.",
+  "url": "https://devpost.com/software/civiclens-61m9hk",
+  "winner": false
+ },
+ {
+  "name": "ARC: Action, Resources, Care",
+  "tagline": "ARC: Confidential support when you need it most",
+  "url": "https://devpost.com/software/arc-action-resources-care",
+  "winner": false
+ },
+ {
+  "name": "ShadeSmith",
+  "tagline": "Shadesmith is an AI app for artists to instantly match and mix paint colors. Snap a shade, get a recipe with your paints, or discover new ones. Color it. Snap it. Mix it. That’s Shadesmith.",
+  "url": "https://devpost.com/software/shadesmith",
+  "winner": false
+ },
+ {
+  "name": "Moola",
+  "tagline": "Moola is your AI money coach. In Miami we love our moolah, so we built a web app that makes every dollar make sense: helping you budget, save, and invest smarter.",
+  "url": "https://devpost.com/software/moola-r8b4fs",
+  "winner": false
+ },
+ {
+  "name": "SmartCart",
+  "tagline": "SmartCart: Scan, score & store. Your AI nutritionist + shopping assistant that tracks pantry, compares prices & suggests recipes for healthier, cheaper, waste-free living.",
+  "url": "https://devpost.com/software/smartcart-91qlky",
+  "winner": false
+ },
+ {
+  "name": "A Young Adult's Unrealistic Guide to Insurance",
+  "tagline": "Immerse yourself in the lessons of insurance in a fun choose-your-own-adventure format!",
+  "url": "https://devpost.com/software/shellhacks-vmqjsr",
+  "winner": false
+ },
+ {
+  "name": "Multi-Agent Smart Contract Security System",
+  "tagline": "Multi-agent smart contract auditor (Google’s ADK and A2A protocol) using autonomous agents that monitor, audit, and predict vulnerabilities in blockchain contracts.",
+  "url": "https://devpost.com/software/multi-agent-smart-contract-security-system",
+  "winner": false
+ },
+ {
+  "name": "OppTrack",
+  "tagline": "Too lazy to find campus opportunities? OppTrack does the work for you - we automatically match you to labs, clubs & events that actually fit your vibe. Zero effort required.",
+  "url": "https://devpost.com/software/opptrack",
+  "winner": false
+ },
+ {
+  "name": "YourΩdyssey",
+  "tagline": "Our Solution is creating a Virtual Travel Agent that can create and share vacation ideas with you and make more than the $586.9 million that Hopper Makes per year.",
+  "url": "https://devpost.com/software/yourodyssey",
+  "winner": false
+ },
+ {
+  "name": "Call Lead Summary Report + Call Transcript System",
+  "tagline": "Super Precise AI system based on a LLM API to automate call summary and feedback report to Sales Representatives, Additionally implemented recording call feature to generate the transcripts",
+  "url": "https://devpost.com/software/call-lead-summary-report-call-transcript-system",
+  "winner": false
+ },
+ {
+  "name": "AI Budget Locator Website",
+  "tagline": "We built an app that streamlines the financial aspect of the moving process by using GEMINI to generate personalized financial plans.",
+  "url": "https://devpost.com/software/ai-budget-app-locator",
+  "winner": false
+ },
+ {
+  "name": "SNaiL by iDontLikeAi.club",
+  "tagline": "SNaiL slows down the processing of your PDFs and redirects models away from your data and information. SNaiL seeks to help protect your text files from being easily consumed by AI models.",
+  "url": "https://devpost.com/software/snail-by-idontlikeai-club",
+  "winner": false
+ },
+ {
+  "name": "Safe Sign",
+  "tagline": "A Chrome extension that automatically scans websites you visit for predatory practices. It uses Google Gemini to analyze site policies and summarize risks.",
+  "url": "https://devpost.com/software/safe-sign-qxoj70",
+  "winner": false
+ },
+ {
+  "name": "MedEase",
+  "tagline": "An AI-powered pharmacy app that manages inventory, prescriptions, and insurance claims, boosting efficiency, reducing errors, and improving patient care.",
+  "url": "https://devpost.com/software/medease-xhnplg",
+  "winner": false
+ },
+ {
+  "name": "HandScape",
+  "tagline": "HandScape is a web-based “god simulator” that allows users to control and manipulate a virtual world using just their hands. Using computer vision to track hand gestures through a webcam.",
+  "url": "https://devpost.com/software/handscape-r5yxkq",
+  "winner": false
+ },
+ {
+  "name": "TranslateFlow",
+  "tagline": "Transform your website into any language with one-click translation",
+  "url": "https://devpost.com/software/parallellingo",
+  "winner": false
+ },
+ {
+  "name": "LeadLoop AI",
+  "tagline": "LeadLoop AI keeps leads warm with 24/7 AI agents that engage, qualify & follow up. So prospects book calls and you scale faster with guaranteed conversions",
+  "url": "https://devpost.com/software/leadloop-ai",
+  "winner": false
+ },
+ {
+  "name": "MimicIn",
+  "tagline": "Practice your coffee chat pitch. Any time, any place.",
+  "url": "https://devpost.com/software/mimicin",
+  "winner": false
+ },
+ {
+  "name": "Synthease",
+  "tagline": "Synthease: AI-powered synthetic patient data generation for faster, safer, and more accessible health research.",
+  "url": "https://devpost.com/software/synthease",
+  "winner": false
+ },
+ {
+  "name": "Altimate",
+  "tagline": "Taking web accessibility one step further by meeting developers and users where they are and making context-aware, meaningful accessibility fixes to any site.",
+  "url": "https://devpost.com/software/altimate",
+  "winner": false
+ },
+ {
+  "name": "Receding Coastlines",
+  "tagline": "tracking your receding coastline with satellite data and a transformer",
+  "url": "https://devpost.com/software/receding-coastlines",
+  "winner": false
+ },
+ {
+  "name": "Daily Reflection",
+  "tagline": "Have you ever regreted a moment in your life? thought how you could do better in the moment? well ive decided to adress this issue with AI, and no its not a wrapped LLM that gives you answers",
+  "url": "https://devpost.com/software/daily-reflection",
+  "winner": false
+ },
+ {
+  "name": "cAReeropoly",
+  "tagline": "An AR career education variation of Monopoly.",
+  "url": "https://devpost.com/software/careeropoly",
+  "winner": false
+ },
+ {
+  "name": "Insighter",
+  "tagline": "Insighter makes stock analysis accessible in a domain where many struggle, combining live data with AI agents that summarize news, explain trends, and deliver Bloomberg-like insights at no cost.",
+  "url": "https://devpost.com/software/insighter",
+  "winner": false
+ },
+ {
+  "name": "a11Yum",
+  "tagline": "a11Yum uses AI to adapt recipes for your dietary or disability needs, keeping the dish’s flavor while making cooking accessible and easy. Enjoy your favorite meals, tailored just for you!",
+  "url": "https://devpost.com/software/a11yum",
+  "winner": false
+ },
+ {
+  "name": "ChuuChuuRide",
+  "tagline": "Reinventing the way students commute. “Students drive students.” ChuuChuuRide transforms empty seats into safer, cheaper, greener rides—building stronger campuses.",
+  "url": "https://devpost.com/software/chuuchuuride",
+  "winner": false
+ },
+ {
+  "name": "Evacu-Mate",
+  "tagline": "Evacu-Mate is a web app that helps people request emergency evacuation pickups during natural disasters.",
+  "url": "https://devpost.com/software/evacu-mate",
+  "winner": false
+ },
+ {
+  "name": "Home Safe",
+  "tagline": "Home Safe uses Google Maps and Google ADK agents to suggest a variety of safer routes based on crime in the area, it's designed to be used by navigations companies to help them suggest safer options.",
+  "url": "https://devpost.com/software/home-safe-wgmri1",
+  "winner": false
+ },
+ {
+  "name": "Like A Good Neighbor",
+  "tagline": "This fun game provides real examples of everyday risks. It educates students on potential dangers and shows how State Farm can help through an engaging mix of visual novel and simulator elements.",
+  "url": "https://devpost.com/software/larry",
+  "winner": false
+ },
+ {
+  "name": "MindPath",
+  "tagline": "Your private mental wellness companion - secure journaling meets AI-powered insights.",
+  "url": "https://devpost.com/software/mindpath-neu0tc",
+  "winner": false
+ },
+ {
+  "name": "CalenPal",
+  "tagline": "Schedule your Stress",
+  "url": "https://devpost.com/software/calenpal",
+  "winner": false
+ },
+ {
+  "name": "Senior Helper",
+  "tagline": "Senior Helper is an AI-powered caregiver using the Gemini API's tool-use capability to proactively manage daily routines for the elderly.",
+  "url": "https://devpost.com/software/senior-helper",
+  "winner": false
+ },
+ {
+  "name": "ReVision",
+  "tagline": "Your very own real-time AI tutor with interactive written practice at your fingertips.",
+  "url": "https://devpost.com/software/revision-bdqpho",
+  "winner": false
+ },
+ {
+  "name": "Neighborly",
+  "tagline": "Neighborly makes helping local communities simple. Offer or request items, services, or time. AI highlights urgent needs nearby so goodwill turns into action fast, safe, and local.",
+  "url": "https://devpost.com/software/neighborly-7guroa",
+  "winner": false
+ },
+ {
+  "name": "Jet4Holiday",
+  "tagline": "Nothing beats a Jet4Holiday! Planning a trip is overwhelming, travelers waste hours and stress planning for a vacation. Now introducing an Agent to Agent solution that plans everything for you!",
+  "url": "https://devpost.com/software/jet4holiday",
+  "winner": false
+ },
+ {
+  "name": "KittyKonnect",
+  "tagline": "Spot the cat-egory! 🔍🐱",
+  "url": "https://devpost.com/software/kittykonnect",
+  "winner": false
+ },
+ {
+  "name": "Shadow Vision",
+  "tagline": "We have all played with our shadows before but what if they had a life of their own.",
+  "url": "https://devpost.com/software/shadow-vision",
+  "winner": false
+ },
+ {
+  "name": "Ops Mesh!",
+  "tagline": "Ops Mesh — AI agents that work together in real time to cut delays, manage tasks, and keep operations running smoothly",
+  "url": "https://devpost.com/software/ops-mesh",
+  "winner": false
+ },
+ {
+  "name": "Autonomous Email Risk Analyzer",
+  "tagline": "An autonomous multi-agent system that uses Google ADK and Gemini API to analyze email phishing threats. It assesses risk across four dimensions and provides an instant, clear verdict.",
+  "url": "https://devpost.com/software/autonomous-email-risk-analyzer",
+  "winner": false
+ },
+ {
+  "name": "CloneOps",
+  "tagline": "Operational Clones for messaging",
+  "url": "https://devpost.com/software/cloneops",
+  "winner": false
+ },
+ {
+  "name": "Safe2Walk",
+  "tagline": "An AI driven mobile app that empowers Miami students to navigate safer walking routes by analyzing crime and time patterns, with seamless Google Maps integration.",
+  "url": "https://devpost.com/software/safe2walk",
+  "winner": false
+ },
+ {
+  "name": "VEGA",
+  "tagline": "A content creation tool aimed towards creators and business who aim to test and fine tune their videos to engage with consumers in the most effective way possible.",
+  "url": "https://devpost.com/software/vega-video-engagement-growth-agent",
+  "winner": false
+ },
+ {
+  "name": "WayFinder",
+  "tagline": "In a world where more and more people use social media and thus have the ability to interact with others, we are lonelier than ever. But what if meeting people, was just a button press away?",
+  "url": "https://devpost.com/software/wayfinder-pmeow3",
+  "winner": false
+ },
+ {
+  "name": "GridGuard",
+  "tagline": "GridGuard is the energy grid prediction dashboard for those wanting an idea of if they'll lose power during incidents around the country.",
+  "url": "https://devpost.com/software/gridguard-09sw7l",
+  "winner": false
+ },
+ {
+  "name": "Paths To Recovery",
+  "tagline": "Paths to Recovery turns physical therapy into interactive, gamified adventure. With a Choose-Your-Own-Adventure story controlled by therapeutic hand gestures, patients become heroes of their recovery.",
+  "url": "https://devpost.com/software/paths-to-recovery",
+  "winner": false
+ },
+ {
+  "name": "TeachMe",
+  "tagline": "Take any problem through a screenshot, copy or paste, and TeachMe will animate it with AI, bringing the solution to life.",
+  "url": "https://devpost.com/software/teachme-9ung27",
+  "winner": false
+ },
+ {
+  "name": "Concord",
+  "tagline": "Concord, where true connection happens and not by discord. A open-source messaging platform that puts privacy and ownership first.",
+  "url": "https://devpost.com/software/concord",
+  "winner": false
+ },
+ {
+  "name": "Yappin Entertainment",
+  "tagline": "Yappin Entertainment, a playful Netflix extension that lets users leave live, Twitch-style comments on whatever it is that they are watching.",
+  "url": "https://devpost.com/software/yappin-entertainment",
+  "winner": false
+ },
+ {
+  "name": "FIU Panther Planner",
+  "tagline": "FIU Panther Planner: AI-powered Chrome extension that tracks degree progress, helps build conflict-free schedules, maps walking routes between classes, and recommends courses to keep you on track.",
+  "url": "https://devpost.com/software/fiu-panther-planner",
+  "winner": false
+ },
+ {
+  "name": "Potara",
+  "tagline": "Shape up your drawing potential",
+  "url": "https://devpost.com/software/potara",
+  "winner": false
+ },
+ {
+  "name": "F.R.A.N.K.",
+  "tagline": "Meet FRANK: Financial Responsibility And New Knowledge. Be frank with your money track, learn, and take control with simple, honest guidance. That’s FRANK.",
+  "url": "https://devpost.com/software/f-r-a-n-k",
+  "winner": false
+ },
+ {
+  "name": "LifeCompanionUltra",
+  "tagline": "This AI becomes a 24/7 virtual nurse + life coach + financial assistant for the entire household — covering prevention, monitoring, treatment, emotional support, cost management, social well-being.",
+  "url": "https://devpost.com/software/lifecompanionultra",
+  "winner": false
+ },
+ {
+  "name": "Can I Eat Here?",
+  "tagline": "Making food easily accessible for all by addressing dietary restrictions & allergies in restaurants.",
+  "url": "https://devpost.com/software/can-i-eat-here",
+  "winner": false
+ },
+ {
+  "name": "MealSync",
+  "tagline": "Smarter enrollment, more meals secured.",
+  "url": "https://devpost.com/software/tasklens",
+  "winner": false
+ },
+ {
+  "name": "LiveStream Lobby",
+  "tagline": "In this project we tried to combine both realtime chatting and gaming into this entertaining way to play games using majority based decision making gameplay.",
+  "url": "https://devpost.com/software/livestream-lobby",
+  "winner": false
+ },
+ {
+  "name": "Pawconnects",
+  "tagline": "The Tinder for dogs",
+  "url": "https://devpost.com/software/paw-connects",
+  "winner": false
+ },
+ {
+  "name": "StudyFinder",
+  "tagline": "Cram studying? Looking for help? We got you covered.",
+  "url": "https://devpost.com/software/studyfinder-9yn8qp",
+  "winner": false
+ },
+ {
+  "name": "WorldBuilder",
+  "tagline": "A powerful AI-based worldbuilding tool for creatives, combining realistic, scientific-based procedural map generation and genAI reasoning.",
+  "url": "https://devpost.com/software/world-builder",
+  "winner": false
+ },
+ {
+  "name": "Stock Trader",
+  "tagline": "Enjoy dividends whenever.",
+  "url": "https://devpost.com/software/stock-trader-p2orbg",
+  "winner": false
+ },
+ {
+  "name": "SymptomCheckerAi",
+  "tagline": "Symptom Checker AI is a mobile-friendly triage assistant that turns everyday symptoms into clear next steps. Users enter a brief description of a symptom, and the app returns an answer",
+  "url": "https://devpost.com/software/symptomcheckerai",
+  "winner": false
+ },
+ {
+  "name": "HackSpark",
+  "tagline": "Where developers find inspiration, stay motivated, and build together.",
+  "url": "https://devpost.com/software/ideabrowser",
+  "winner": false
+ },
+ {
+  "name": "Personalized AI Health Diagnostic",
+  "tagline": "Personalized AI chatbot that take into account your medical history including medicines, past surgery, chronic illnesses, and allergies to analyze what might be causing your symptoms.",
+  "url": "https://devpost.com/software/personalized-ai-health-diagnostic",
+  "winner": false
+ },
+ {
+  "name": "HaRi",
+  "tagline": "AI powered HR assistant that automates onboarding tasks, manages documents and training, answers HR questions, reduces costs and helps new employees become productive much faster.",
+  "url": "https://devpost.com/software/hari",
+  "winner": false
+ },
+ {
+  "name": "HurriAid GOOGLE ADK A2A",
+  "tagline": "Multi-Agent Hurricane Readiness",
+  "url": "https://devpost.com/software/hurriaid",
+  "winner": false
+ },
+ {
+  "name": "GoodLife",
+  "tagline": "An intuitive, modern, traveler-focused app that helps volunteers find the most meaningful opportunities abroad by matching them with the most compatible host experiences.",
+  "url": "https://devpost.com/software/goodlife-danwo1",
+  "winner": false
+ },
+ {
+  "name": "Combat Vision",
+  "tagline": "Combat Vision turns any webcam into an AR battle arena. Players duel with tracked lightsabers, striking hitboxes in real time! It's fast, immersive, and headset-free gameplay on any computer.",
+  "url": "https://devpost.com/software/combat-vision",
+  "winner": false
+ },
+ {
+  "name": "CareBridge",
+  "tagline": "CareBridge - Connecting patients and doctors with ease!",
+  "url": "https://devpost.com/software/carebridge-6zmpkw",
+  "winner": false
+ },
+ {
+  "name": "Unified Hackathon Platform",
+  "tagline": "A production-ready, comprehensive hackathon web platform featuring AI-powered team formation, real-time tracking, and intelligent resume analysis built with a modern microservices architecture.",
+  "url": "https://devpost.com/software/unified-hackathon-platform",
+  "winner": false
+ },
+ {
+  "name": "Developer Assistant",
+  "tagline": "Developers waste lot of time on repetitive tasks like code review, running tests checking deployments I built a lightweight autonomous system that monitors a code file as soon as a change is detected",
+  "url": "https://devpost.com/software/developer-assistant",
+  "winner": false
+ },
+ {
+  "name": "TruthMeter",
+  "tagline": "TruthMeter is a browser extension that uses AI to analyze and fact-check the information you see online in real time.",
+  "url": "https://devpost.com/software/truthmeter",
+  "winner": false
+ },
+ {
+  "name": "Learn-KuchBhi",
+  "tagline": "A truly personalized learning platform where you can learn anything. Literally, kuch bhi.",
+  "url": "https://devpost.com/software/learn-kuchbhi-skqti4",
+  "winner": false
+ },
+ {
+  "name": "Cvclone",
+  "tagline": "Cyclone: AI Driven Civilian & Business Hurricane Prep Assistant",
+  "url": "https://devpost.com/software/cvclone",
+  "winner": false
+ },
+ {
+  "name": "NOVA",
+  "tagline": "NOVA is a fast, lightweight vulnerability scanner built for small businesses that lack a cybersecurity team, providing clear, actionable reports to help strengthen defenses and better secure networks.",
+  "url": "https://devpost.com/software/nova-4c6nvb",
+  "winner": false
+ },
+ {
+  "name": "RaiLROAD",
+  "tagline": "Have you ever wanted to learn entire topics with visual representations in one click? Now you can.",
+  "url": "https://devpost.com/software/railroad",
+  "winner": false
+ },
+ {
+  "name": "Agent Powered Patient Moniter",
+  "tagline": "Imagine having an AI nurse that never sleeps, instantly answers questions about any patient, and monitors critical conditions 24/7. Built with Google's ADK, our systems transform patient care vastly.",
+  "url": "https://devpost.com/software/agent-powered-patient-moniter",
+  "winner": false
+ },
+ {
+  "name": "VPay",
+  "tagline": "VPay isn’t just another payment app — it’s the next step in how we interact with money. Unlike Google Pay or Apple Pay, you don’t need to tap or swipe. With VPay, your voice becomes your wallet.",
+  "url": "https://devpost.com/software/vpay-735c2k",
+  "winner": false
+ },
+ {
+  "name": "MangaMatcher",
+  "tagline": "Manga Matcher is a recommendation system that helps users discover their next read. Take a quiz, swipe through manga picks & chat with characters to see if you would be interested in reading.",
+  "url": "https://devpost.com/software/the-sigmas-pb4k3t",
+  "winner": false
+ },
+ {
+  "name": "Initial",
+  "tagline": "Agent booking hotels, flights, restaurants using Google ADK and Reactjs for the front end.",
+  "url": "https://devpost.com/software/initial-6djyba",
+  "winner": false
+ },
+ {
+  "name": "Arduino Snake Territory Game",
+  "tagline": "Competitive game played on a 16×16 LED matrix, powered by an Arduino. Players control their snakes with joysticks, racing to claim territory by moving across the board.",
+  "url": "https://devpost.com/software/arduino-snake-game-osiqau",
+  "winner": false
+ },
+ {
+  "name": "FinSight",
+  "tagline": "An AI-powered finance tracker with blockchain saving pots that makes money simple, smart, and social.",
+  "url": "https://devpost.com/software/aiconomy",
+  "winner": false
+ },
+ {
+  "name": "Euclid",
+  "tagline": "Euclid is a cutting-edge 3D computer graphics software tool set. With Euclid, users can easily create stunning 3D models and visual effects using intuitive tools and intelligent automation.",
+  "url": "https://devpost.com/software/euclid-o0uly2",
+  "winner": false
+ },
+ {
+  "name": "PathFinder",
+  "tagline": "An innovative, interactive Google Chrome extension that helps users navigate and find specific information on any website, assisting everyone with the power of Google Gemini.",
+  "url": "https://devpost.com/software/tbd-tub2ve",
+  "winner": false
+ },
+ {
+  "name": "Naboo",
+  "tagline": "Naboo cuts through misinformation, curating trusted news, social media, and AI insights into clear, unbiased summaries. In a world of noise and clickbait, Naboo helps you see the bigger picture.",
+  "url": "https://devpost.com/software/naboo",
+  "winner": false
+ },
+ {
+  "name": "CodeDoc",
+  "tagline": "A Software that automates making code Documentation",
+  "url": "https://devpost.com/software/documentation-schmockentation",
+  "winner": false
+ },
+ {
+  "name": "Google Drive Uploader & Manager",
+  "tagline": "GDU & M is an amazing Telegram bot that lets users upload files to any folder of a Drive. Also, it has a great password management system where an administrator can manage who accesses each folder.",
+  "url": "https://devpost.com/software/google-drive-uploader-manager",
+  "winner": false
+ },
+ {
+  "name": "FinMate",
+  "tagline": "Budgeting app for college students, have all of your transactions not only in one place but visualized, and chat with AI for recommendations based on your budget. See where your moneys' going!",
+  "url": "https://devpost.com/software/finmate-3ltqow",
+  "winner": false
+ },
+ {
+  "name": "Imagicle",
+  "tagline": "Imagicle uses AI to turn text into production-ready 3D point clouds and meshes (PLY/GLB), with in-browser rotation and a personal gallery to save, share, and reuse assets",
+  "url": "https://devpost.com/software/imagicle",
+  "winner": false
+ },
+ {
+  "name": "Murmur",
+  "tagline": "Catch it First, Stop it Fast",
+  "url": "https://devpost.com/software/murmur-653smc",
+  "winner": false
+ },
+ {
+  "name": "FLARE",
+  "tagline": "FLARE , a physics-aware AI that uses digital twins and multi-agent learning to reveal how EV charging attacks destabilize power grids, guiding resilient cybersecurity.",
+  "url": "https://devpost.com/software/flare-6u1om2",
+  "winner": false
+ },
+ {
+  "name": "Pebble",
+  "tagline": "Task Management System. A web app that allows teams to improve workflow by having a place to assign tasks and schedules.",
+  "url": "https://devpost.com/software/pebble-0jmk45",
+  "winner": false
+ },
+ {
+  "name": "BrainBoost",
+  "tagline": "Cut out the garbage on your feed and give your brain a boost!",
+  "url": "https://devpost.com/software/brainboost-z3ipxw",
+  "winner": false
+ },
+ {
+  "name": "SnapShell Email Assistant",
+  "tagline": "SnapShell Email Assistant uses AI to organize emails by content, provide quick summaries, and draft replies in the tone you choose, whether professional, empathetic, or urgent.",
+  "url": "https://devpost.com/software/snapshell-email-assistant",
+  "winner": false
+ },
+ {
+  "name": "Pirate's Revenge: A Pirate Adventure",
+  "tagline": "Pirate’s Revenge: A web-based multiplayer Node.js pirate adventure with hand-built physics, combat, and story — no game engine required.”",
+  "url": "https://devpost.com/software/pirate-s-revenge-a-pirate-adventure",
+  "winner": false
+ },
+ {
+  "name": "Pixel Closet",
+  "tagline": "Pixel Closet turns your Pinterest boards into shoppable outfits. Four AI agents analyze your style, search real products from major retailers, and create complete looks you can buy instantly.",
+  "url": "https://devpost.com/software/pixel-closet",
+  "winner": false
+ },
+ {
+  "name": "FraudBuster",
+  "tagline": "FraudBuster leverages big transaction data and Machine Learning, reaching 100% accuracy in fraud detection—delivering unmatched protection and trust at every swipe.",
+  "url": "https://devpost.com/software/fraudbuster",
+  "winner": false
+ },
+ {
+  "name": "Tough Love",
+  "tagline": "Our project assists in minimizing the exposure of Ultraviolet Rays and harmful air quality. Sensors collect data, pass it through an api, stores it in a database, and is displayed in a live dashboard.",
+  "url": "https://devpost.com/software/tough-love-6xf5c4",
+  "winner": false
+ },
+ {
+  "name": "Coven",
+  "tagline": "Short game where orbs chase after the player and attack them.",
+  "url": "https://devpost.com/software/coven-wxjvhb",
+  "winner": false
+ },
+ {
+  "name": "Policy Hero",
+  "tagline": "Policy Hero makes insurance simple with interactive games and quizzes. Students learn health, auto, and home coverage in practical ways, gaining confidence in financial literacy and risk management.",
+  "url": "https://devpost.com/software/policy-hero",
+  "winner": false
+ },
+ {
+  "name": "ScholarshipAI",
+  "tagline": "Don't let financial barriers stop you from achieving your educational dreams. Start your scholarship search today and unlock opportunities you never knew existed.",
+  "url": "https://devpost.com/software/scholarshipai",
+  "winner": false
+ },
+ {
+  "name": "Neuro",
+  "tagline": "A professional networking platform that goes beyond static resumes, making it easier to connect, showcase projects, and help recruiters discover talent more effectively.",
+  "url": "https://devpost.com/software/neuro-9au10l",
+  "winner": false
+ },
+ {
+  "name": "ContractLock",
+  "tagline": "A blockchain based app designed to disburse funds to a certain party once all parties have made payments. Otherwise, the funds are returned to the original paying parties.",
+  "url": "https://devpost.com/software/contractlock",
+  "winner": false
+ },
+ {
+  "name": "MOVE",
+  "tagline": "MOVE is a real-time computer vision game that keeps remote workers moving, literally.",
+  "url": "https://devpost.com/software/move-itm1lp",
+  "winner": false
+ },
+ {
+  "name": "SecureFlow: Parallel A2A Security Scanner Pipeline",
+  "tagline": "SecureFlow transforms CI/CD security from a bottleneck into a competitive advantage. DevSecOps by turning serial processes into parallel, self-healing systems.",
+  "url": "https://devpost.com/software/secureflow-parallel-a2a-security-scanner-pipeline",
+  "winner": false
+ },
+ {
+  "name": "VarietyShoppingHour",
+  "tagline": "Shopping's Golden Hour finally has some variety!",
+  "url": "https://devpost.com/software/varietyshoppinghour",
+  "winner": false
+ },
+ {
+  "name": "Roava",
+  "tagline": "Planning a trip can be overwhelming, searching for things to do, figuring out what’s nearby, and trying not to waste time crisscrossing a city. Roava does that heavy lifting for you.",
+  "url": "https://devpost.com/software/roava",
+  "winner": false
+ },
+ {
+  "name": "DEBUGTIONARY",
+  "tagline": "The AI site explains known error codes and provides detailed solutions. For unknown issues, a separate input yields possible diagnoses and next steps. It also features a collaborative IT forum.",
+  "url": "https://devpost.com/software/shellhacks-2025",
+  "winner": false
+ },
+ {
+  "name": "YC in Your Pocket",
+  "tagline": "Have $ 600 billion worth of analysis to help you decide whether to invest in companies through a suite of agentic VC agents.",
+  "url": "https://devpost.com/software/yc-in-your-pocket",
+  "winner": false
+ },
+ {
+  "name": "WhisperLink",
+  "tagline": "Whisperlink is a zero-knowledge pastebin for secrets. Every API key or token you share is end-to-end encrypted, accessible only to your chosen teammates.",
+  "url": "https://devpost.com/software/whisperlink",
+  "winner": false
+ },
+ {
+  "name": "Green Guardian - Plant Care App",
+  "tagline": "Cultivating connections and growth with AI—where technology meets community to nurture innovation and togetherness.",
+  "url": "https://devpost.com/software/green-guardian-plant-care-app",
+  "winner": false
+ },
+ {
+  "name": "PractiCode",
+  "tagline": "Can't focus on your homework? Still struggling to understand that else statement? If else, let us introduce..: PractiCode. Where we turn learning, into a game.",
+  "url": "https://devpost.com/software/practicode",
+  "winner": false
+ },
+ {
+  "name": "SyllabusSync",
+  "tagline": "SyllabusSync automatically extracts assignment dates from course syllabi, organizes them, and syncs deadlines to your calendar so students never miss due dates.",
+  "url": "https://devpost.com/software/syllabussync-kbposd",
+  "winner": false
+ },
+ {
+  "name": "VoiceRouter AI",
+  "tagline": "Transform customer service navigation with an AI-powered voice interface that instantly connects users to the right department based on natural language queries.",
+  "url": "https://devpost.com/software/voicerouter-ai-smart-helpdesk-navigation",
+  "winner": false
+ },
+ {
+  "name": "OptiCard",
+  "tagline": "OptiCard is a Capital One-focused credit card application that leverages AI to help determine which cards benefit the users. It simulates real-world transaction data that reflects monthly expenses.",
+  "url": "https://devpost.com/software/opticard",
+  "winner": false
+ },
+ {
+  "name": "Fortify",
+  "tagline": "Fortify is a Linux hardening tool that scans for weak configs, applies fixes, and gamifies security with badges, ranks, and GitHub Octocat approval.",
+  "url": "https://devpost.com/software/fortify-mkslnx",
+  "winner": false
+ },
+ {
+  "name": "IssueSwarm",
+  "tagline": "IssueSwarm is a FastAPI-based webhook service that validates GitHub signatures, triages new issues with Gemini, and posts automated fix suggestions back to GitHub using PyGithub.",
+  "url": "https://devpost.com/software/issueswarm",
+  "winner": false
+ },
+ {
+  "name": "ProfitPilot",
+  "tagline": "As a dropshipper, I struggled to efficiently track profitability across dozens of weekly orders. That's why I created ProfitPilot - a web app that transforms the tedious process into 2 simple clicks.",
+  "url": "https://devpost.com/software/profitpilot-isqha0",
+  "winner": false
+ },
+ {
+  "name": "Veritas Populi",
+  "tagline": "Truth for the people.",
+  "url": "https://devpost.com/software/veritas-populi",
+  "winner": false
+ },
+ {
+  "name": "Careline",
+  "tagline": "Fixing Healthcare’s Broken Referral System.",
+  "url": "https://devpost.com/software/careline-24abc1",
+  "winner": false
+ },
+ {
+  "name": "MemorAI",
+  "tagline": "AI-powered facial recognition that help people with Alzheimer's remember loved ones through real-time AR assistance.",
+  "url": "https://devpost.com/software/memorai-37h0oa",
+  "winner": false
+ }
+]

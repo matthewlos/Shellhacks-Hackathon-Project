@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand</title>
+<meta name="description" content="AI irrigation for Florida's drought: a Gemini agent team waters one pot, a timer waters the other.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a78d6'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='16' fill='white' text-anchor='middle'%3EFH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1"></script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<style>
+/* Dechante house style (visual-page light tokens). Blue = the AI pot and the agents. Orange = the timer pot. */
+:root{
+  --ground:#edf0f3; --surface:#fbfcfd; --surface-2:#f1f4f7; --ink:#0e1621; --ink-2:#435060; --muted:#626d7a;
+  --grid:#e2e7ec; --hair:rgba(14,22,33,.11);
+  --bt:#2a78d6; --bt-wash:rgba(42,120,214,.10); --live:#eb6834; --live-wash:rgba(235,104,52,.12);
+  --good:#0ca30c; --bad:#d03b3b; --warn:#fab219; --good-wash:rgba(12,163,12,.13); --bad-wash:rgba(208,59,59,.12); --warn-wash:rgba(250,178,25,.2);
+  --shadow:0 1px 2px rgba(14,22,33,.05),0 10px 28px rgba(14,22,33,.06);
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit}
+button:disabled{cursor:progress;opacity:.6}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bt);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);margin:0;letter-spacing:-.015em;text-wrap:balance}
+
+.shell{height:100dvh;display:grid;grid-template-rows:64px minmax(0,1fr)}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--hair);background:var(--surface)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--bt);color:#fff;display:grid;place-items:center}
+.logo .ph{font-size:19px}
+.brand h1{font-size:1.35rem}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.status{display:flex;gap:18px;align-items:center;font-size:13px;color:var(--ink-2)}
+.status span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.status .ph{font-size:16px}
+.s-ok .ph{color:var(--good)} .s-warn .ph{color:#b7860b} .s-ai .ph{color:var(--bt)}
+
+main{display:grid;grid-template-columns:320px minmax(0,1fr) 360px;min-height:0}
+
+/* left: the call and the scoreboard */
+.left{padding:22px;display:grid;gap:18px;align-content:start;overflow-y:auto;overflow-x:hidden;border-right:1px solid var(--hair)}
+.call{display:grid;gap:10px}
+.verdict{font:700 2.3rem/1.02 var(--f-display);letter-spacing:-.02em}
+.verdict.water{color:var(--bt)} .verdict.wait{color:var(--ink)} .verdict.bad{color:var(--bad)}
+.reason{color:var(--ink-2);font-size:14.5px;max-width:34ch}
+.by{font:500 12px var(--f-mono);color:var(--muted)}
+.actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.actions .btn-main{grid-column:1/-1;justify-content:center}
+.actions .btn-quiet{justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:12px;font-weight:700;font-size:14px;transition:transform .15s var(--ease),background .2s,box-shadow .2s;white-space:nowrap}
+.btn .ph{font-size:17px}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn-main{background:var(--bt);color:#fff;box-shadow:0 8px 22px -10px rgba(42,120,214,.8)}
+.btn-main:hover:not(:disabled){background:#2069c2}
+.btn-quiet{background:var(--surface);border:1px solid var(--hair)}
+.btn-quiet:hover{background:var(--surface-2)}
+.btn-stop{background:var(--bad-wash);color:var(--bad)}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pot{background:var(--surface);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:grid;gap:6px;border-top:4px solid var(--c)}
+.pot .who{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px}
+.pot .pct{font:700 2rem/1 var(--f-body);white-space:nowrap}
+.pot .pct.small{font-size:1.55rem}
+.pot .sub{font:500 12px var(--f-mono);color:var(--muted)}
+.gauge{height:8px;border-radius:99px;background:var(--surface-2);position:relative;overflow:hidden}
+.gauge .band{position:absolute;top:0;bottom:0;background:var(--good-wash)}
+.gauge i{position:absolute;top:0;bottom:0;left:0;background:var(--c);border-radius:99px;transition:width .6s var(--ease)}
+.facts{display:grid;gap:2px}
+.fact{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--hair)}
+.fact:first-child{border-top:0}
+.fact .ic{width:34px;height:34px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;color:var(--ink-2);font-size:17px}
+.fact .k{font-size:13.5px;color:var(--ink-2)} .fact .d{font-size:12px;color:var(--muted)}
+.fact .v{font:700 1.05rem var(--f-body);text-align:right;white-space:nowrap}
+.saved{background:var(--surface);border-radius:14px;padding:14px;box-shadow:var(--shadow);display:grid;gap:8px}
+.saved .big{font:700 1.9rem/1 var(--f-body)}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:52px 1fr 64px;gap:8px;align-items:center;font:500 12px var(--f-mono);color:var(--ink-2)}
+.bar .t{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:99px;transition:width .8s var(--ease)}
+.bar b{text-align:right;font-weight:600;color:var(--ink)}
+
+/* center: the model */
+.stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(80% 70% at 50% 40%,#fbfcfd 0%,#e6ebf0 80%)}
+#field{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;touch-action:none}
+.lens{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:2px;padding:4px;border-radius:12px;background:rgba(251,252,253,.85);border:1px solid var(--hair);backdrop-filter:blur(10px);z-index:3}
+.lens button{height:32px;padding:0 14px;border-radius:9px;font-size:13px;font-weight:600;color:var(--ink-2);display:flex;align-items:center;gap:6px;transition:.2s}
+.lens button.on{background:var(--ink);color:#fff}
+.tag{position:absolute;left:0;top:0;z-index:2;pointer-events:none;display:grid;justify-items:center;gap:4px}
+.tag .n{font:700 1.9rem/1 var(--f-body);text-shadow:0 1px 0 #fff}
+.tag .l{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;color:#fff;background:var(--c)}
+.front{position:absolute;left:0;top:0;z-index:2;pointer-events:none;font:600 12px var(--f-mono);color:var(--bt);display:flex;align-items:center;gap:6px;background:rgba(251,252,253,.9);padding:4px 8px;border-radius:99px}
+
+.caption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;color:var(--muted)}
+.ramp{width:110px;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--r0),var(--r1),var(--r2))}
+.working{position:absolute;right:18px;bottom:16px;z-index:2;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:99px;background:var(--bt);color:#fff;font:600 12.5px var(--f-body);box-shadow:0 10px 24px -12px rgba(42,120,214,.9);transition:opacity .3s,transform .3s var(--ease)}
+.working.idle{opacity:0;transform:translateY(6px)}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* right: the agent team */
+.right{border-left:1px solid var(--hair);background:var(--surface);display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0}
+.tabs{display:flex;gap:4px;padding:14px 16px 0;border-bottom:1px solid var(--hair)}
+.tabs button{padding:10px 12px;font-size:14px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-color:var(--bt)}
+.pane{overflow-y:auto;padding:16px;display:grid;gap:16px;align-content:start}
+.team{display:grid;gap:0;position:relative}
+.node{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:8px 6px;border-radius:12px;position:relative;transition:background .25s}
+.node .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);color:var(--ink-2);font-size:18px;transition:.25s;position:relative;z-index:1}
+.node .n{font-weight:700;font-size:14px} .node .w{font:500 11.5px/1.35 var(--f-mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.node.on{background:var(--bt-wash)} .node.on .ic{background:var(--bt);color:#fff;box-shadow:0 0 0 5px rgba(42,120,214,.15)}
+.node.bad .ic{background:var(--bad);color:#fff} .node.warn .ic{background:var(--warn);color:#241a00}
+.team::before{content:'';position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:var(--grid)}
+.fan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px 0 6px 48px}
+.fan .node{grid-template-columns:1fr;justify-items:center;text-align:center;padding:8px 4px;background:var(--surface-2)}
+.fan .node.on{background:var(--bt-wash)}
+.fan .node .w{max-width:100%}
+.loopmark{font:600 11.5px var(--f-mono);color:var(--bt);padding:0 0 4px 54px;display:flex;align-items:center;gap:6px}
+.sect{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.sect .ph{color:var(--bt);font-size:17px}
+.log{list-style:none;margin:0;padding:0}
+.log li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;padding:8px 0;border-top:1px solid var(--hair);font-size:13px}
+.log li:first-child{border-top:0}
+.log .t{font:500 11.5px/1.6 var(--f-mono);color:var(--muted)}
+.log b{font-weight:700} .log .bad b{color:var(--bad)} .log .warn b{color:#b7860b} .log .good b{color:var(--good)}
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rules li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:2px 8px;align-items:center;font-size:13.5px}
+.rules .ph{font-size:18px} .rules .ok{color:var(--good)} .rules .no{color:var(--bad)}
+.rules small{grid-column:2;font:500 11.5px var(--f-mono);color:var(--muted)}
+.soak{display:grid;gap:3px;padding:12px 0;border-top:1px solid var(--hair)}
+.soak:first-child{border-top:0}
+.soak .top{display:flex;justify-content:space-between;align-items:baseline}
+.soak .big{font:700 1.25rem var(--f-body)} .soak small{font:500 11.5px var(--f-mono);color:var(--muted)}
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;height:44px;border-radius:12px;border:1px solid var(--hair);background:var(--surface-2);padding:0 12px;font-size:15px;outline:none}
+.ask input:focus{border-color:var(--bt);box-shadow:0 0 0 3px var(--bt-wash)}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.sugg button{font-size:13px;padding:7px 11px;border-radius:99px;border:1px solid var(--hair)}
+.sugg button:hover{background:var(--surface-2)}
+.reply{background:var(--surface-2);border-radius:12px;padding:14px;font-size:15px;line-height:1.55;min-height:60px}
+.note{font-size:12.5px;color:var(--muted)}
+.muted{color:var(--muted)}
+
+@media (max-width:1180px){main{grid-template-columns:290px minmax(0,1fr)} .right{grid-column:1/-1;border-left:0;border-top:1px solid var(--hair);max-height:none}
+  .shell{height:auto;min-height:100dvh} main{grid-template-rows:minmax(560px,70dvh) auto} .left{grid-row:1}}
+@media (max-width:760px){main{grid-template-columns:1fr;grid-template-rows:auto 440px auto} .left{border-right:0;border-bottom:1px solid var(--hair)} .stage{grid-row:2}
+  .status span:not(.keep){display:none} header{padding:0 14px} .brand p{display:none} .verdict{font-size:1.9rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <div class="logo"><i class="ph-bold ph-plant"></i></div>
+      <div><h1>Farm Hand</h1><p id="subline">The AI waters the pot. We count what a normal timer would have poured.</p></div>
+    </div>
+    <div class="status">
+      <span class="keep" id="modeS"><i class="ph ph-plugs-connected"></i><span id="mode">connecting</span></span>
+      <span class="s-ai"><i class="ph ph-cpu"></i><span id="brainName">–</span></span>
+      <span class="s-warn"><i class="ph ph-sun"></i><span id="drought">–</span></span>
+      <span><i class="ph ph-clock"></i><span id="next">–</span></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="left" aria-label="Decision and scoreboard">
+      <div class="call">
+        <div class="verdict wait" id="verdict">Waiting</div>
+        <div class="reason" id="reason">The agents haven't checked the soil yet.</div>
+        <div class="by" id="by"></div>
+        <div class="actions">
+          <button class="btn btn-main" id="runBtn"><i class="ph-bold ph-play"></i><span>Run agents</span></button>
+          <button class="btn btn-quiet" id="pourBtn"><i class="ph ph-drop"></i>Test pour</button>
+          <button class="btn btn-stop" id="stopBtn" aria-label="Stop pumps"><i class="ph-bold ph-stop"></i></button>
+        </div>
+      </div>
+
+      <div class="duel">
+        <div class="pot" style="--c:var(--bt)"><div class="who"><i class="ph ph-cpu"></i>Pot A, AI</div><div class="pct mono" id="pA">–</div><div class="gauge"><span class="band" id="bandA"></span><i id="gA" style="width:0"></i></div><div class="sub" id="sA">–</div></div>
+        <div class="pot" style="--c:var(--live)"><div class="who"><i class="ph ph-timer"></i><span id="bTitle">Timer schedule</span></div><div class="pct mono" id="pB">–</div><div class="gauge"><span class="band" id="bandB"></span><i id="gB" style="width:0"></i></div><div class="sub" id="sB">–</div></div>
+      </div>
+
+      <div class="facts">
+        <div class="fact"><div class="ic"><i class="ph ph-hourglass-medium"></i></div><div><div class="k">Pot A goes dry</div><div class="d" id="dryD">–</div></div><div class="v" id="dry">–</div></div>
+        <div class="fact"><div class="ic"><i class="ph ph-cloud-rain"></i></div><div><div class="k">Rain next 24 h</div><div class="d" id="rainD">–</div></div><div class="v" id="rain">–</div></div>
+        <div class="fact"><div class="ic"><i class="ph ph-sun"></i></div><div><div class="k">Water the air pulls out</div><div class="d">evaporation, next 24 h</div></div><div class="v" id="et0">–</div></div>
+        <div class="fact"><div class="ic"><i class="ph ph-map-trifold"></i></div><div><div class="k">County in drought</div><div class="d" id="drD">–</div></div><div class="v" id="drV">–</div></div>
+      </div>
+
+      <div class="saved">
+        <div class="k muted" style="font-size:13.5px">Water saved vs the timer</div>
+        <div class="big" id="saved">–</div>
+        <div class="bars">
+          <div class="bar"><span>AI</span><div class="t"><i id="barA" style="width:0;background:var(--bt)"></i></div><b id="mlA">–</b></div>
+          <div class="bar"><span id="barBName">Timer</span><div class="t"><i id="barB" style="width:0;background:var(--live)"></i></div><b id="mlB">–</b></div>
+        </div>
+        <div class="note" id="savedNote"></div>
+      </div>
+    </section>
+
+    <section class="stage" aria-label="3D view: both pots cut open">
+      <canvas id="field" tabindex="0" aria-label="Both pots cut in half, showing moisture through the soil"></canvas>
+      <div class="lens" role="group" aria-label="Color the soil by">
+        <button class="on" data-lens="natural"><i class="ph ph-plant"></i>Soil</button>
+        <button data-lens="moisture"><i class="ph ph-drop"></i>Moisture</button>
+        <button data-lens="temp"><i class="ph ph-thermometer-simple"></i>Heat</button>
+      </div>
+      <div class="tag" id="tagA" style="--c:var(--bt)"><div class="n mono" id="tA">–</div><div class="l">A · AI</div></div>
+      <div class="tag" id="tagB" style="--c:var(--live)"><div class="n mono" id="tB">–</div><div class="l">B · timer</div></div>
+      <div class="front" id="front" hidden></div>
+      <div class="caption" id="caption"><span>dry</span><span class="ramp" id="ramp"></span><span>wet</span><span>depth shading and the water front are a model; only the probe % is measured</span></div>
+      <div class="working idle" id="working"><span class="spin"></span><span id="workTxt"></span></div>
+    </section>
+
+    <aside class="right">
+      <div class="tabs" role="tablist">
+        <button class="on" data-tab="team" role="tab">Agent team</button>
+        <button data-tab="pours" role="tab">Pours</button>
+        <button data-tab="ask" role="tab">Ask</button>
+      </div>
+      <div class="pane" id="pane-team">
+        <div class="team" id="team">
+          <div class="node" data-k="predictor"><div class="ic"><i class="ph ph-trend-up"></i></div><div><div class="n">Dry-time model</div><div class="w" id="w-predictor">–</div></div></div>
+          <div class="fan">
+            <div class="node" data-k="weather_agent"><div class="ic"><i class="ph ph-cloud-sun"></i></div><div class="n">Weather</div><div class="w" id="w-weather_agent">idle</div></div>
+            <div class="node" data-k="soil_agent"><div class="ic"><i class="ph ph-plant"></i></div><div class="n">Soil</div><div class="w" id="w-soil_agent">idle</div></div>
+            <div class="node" data-k="memory_agent"><div class="ic"><i class="ph ph-clock-counter-clockwise"></i></div><div class="n">Memory</div><div class="w" id="w-memory_agent">idle</div></div>
+          </div>
+          <div class="node" data-k="planner_agent"><div class="ic"><i class="ph ph-clipboard-text"></i></div><div><div class="n">Planner</div><div class="w" id="w-planner_agent">proposes water or wait</div></div></div>
+          <div class="node" data-k="critic_agent"><div class="ic"><i class="ph ph-magnifying-glass"></i></div><div><div class="n">Critic</div><div class="w" id="w-critic_agent">checks the math, can send it back</div></div></div>
+          <div class="loopmark"><i class="ph ph-arrows-clockwise"></i>up to 3 rounds</div>
+          <div class="node" data-k="guards"><div class="ic"><i class="ph ph-shield-check"></i></div><div><div class="n">Safety rules</div><div class="w" id="w-guards">–</div></div></div>
+          <div class="node" data-k="executor"><div class="ic"><i class="ph ph-lightning"></i></div><div><div class="n">Pump</div><div class="w" id="w-executor">30 s cap in the chip</div></div></div>
+          <div class="node" data-k="soak"><div class="ic"><i class="ph ph-waves"></i></div><div><div class="n">Pour detector</div><div class="w" id="w-soak">teaches Memory</div></div></div>
+        </div>
+        <div class="sect"><i class="ph ph-shield-check"></i>Before any pour</div>
+        <ul class="rules" id="rules"></ul>
+        <div class="sect"><i class="ph ph-list-bullets"></i>Every step, newest first</div>
+        <ul class="log" id="log"><li><span></span><span class="muted">Press Run agents to watch them work.</span></li></ul>
+      </div>
+      <div class="pane" id="pane-pours" hidden>
+        <p class="muted" style="margin:0">After every pour the probe is watched for 3 minutes. What it sees sets the size of the next pour.</p>
+        <div class="fact" style="border:0"><div class="ic"><i class="ph ph-drop"></i></div><div><div class="k">Learned rate</div><div class="d">% moisture per second of pumping</div></div><div class="v" id="learn">–</div></div>
+        <div id="soaks"><p class="muted">No pours yet.</p></div>
+      </div>
+      <div class="pane" id="pane-ask" hidden>
+        <p class="muted" style="margin:0">Gemini answers from the live sensors, the forecast, the drought map and its own decision log.</p>
+        <div class="ask"><input id="q" placeholder="Why did you water pot A?" aria-label="Question"><button class="btn btn-main" id="askBtn">Ask</button></div>
+        <div class="sugg"><button>Why did you water pot A?</button><button>How much has the timer used today?</button><button>How dry is the county?</button></div>
+        <div class="reply" id="reply"><span class="muted">Answers show up here.</span></div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const j = async (u, o) => (await fetch(u, o)).json();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clock = ts => new Date(ts * 1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}).replace(/\s(?=[AP]M)/, ' ');
+const NAMES = {weather_agent:'Weather', soil_agent:'Soil', memory_agent:'Memory', planner_agent:'Planner', critic_agent:'Critic', guards:'Safety', executor:'Pump', farm_helper:'Chat'};
+window.LIVE = {busy:{}, soak:{}}; window.LENS = 'natural';
+let S = null, tab = 'team';
+
+document.querySelectorAll('[data-lens]').forEach(b => b.onclick = () => { document.querySelectorAll('[data-lens]').forEach(x => x.classList.toggle('on', x === b)); window.LENS = b.dataset.lens; setRamp(); });
+function setRamp() { const r = {natural:['#c8a878','#7a5534','#2a1c12'], moisture:['#c8a878','#5a8fc8','#1f5fb0'], temp:['#2a78d6','#c9b89a','#eb6834']}[window.LENS];
+  ['--r0','--r1','--r2'].forEach((k, i) => $('ramp').style.setProperty(k, r[i])); }
+setRamp();
+document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { tab = b.dataset.tab;
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x === b));
+  ['team','pours','ask'].forEach(t => $('pane-' + t).hidden = t !== tab); slow(); });
+
+async function fast() {
+  let L; try { L = await j('/api/live'); } catch (e) { return; }
+  window.LIVE = L;
+  const ONE = L.cfg?.one_pot ?? true;
+  for (const [k, v, g, band] of (ONE ? [['A', L.a, 'gA', 'bandA']] : [['A', L.a, 'gA', 'bandA'], ['B', L.b, 'gB', 'bandB']])) {
+    const txt = v != null ? v.toFixed(1) + '%' : '–';
+    $('p' + k).textContent = txt; $('t' + k).textContent = txt;
+    $(g).style.width = Math.max(0, Math.min(100, v ?? 0)) + '%';
+    if (L.cfg) { $(band).style.left = L.cfg.dry + '%'; $(band).style.width = (L.cfg.wet - L.cfg.dry) + '%'; }
+  }
+  const busy = Object.entries(L.busy || {}), w = $('working');
+  if (L.pumping !== 'none') { w.classList.remove('idle'); $('workTxt').textContent = `Pump ${L.pumping} running`; }
+  else if (busy.length) { const [k, x] = busy[busy.length - 1]; w.classList.remove('idle'); $('workTxt').textContent = `${NAMES[k] || k}: ${x}`; }
+  else if (L.soak?.phase === 'soaking') { w.classList.remove('idle'); $('workTxt').textContent = `Soaking in: ${L.soak.before?.toFixed(1)}% to ${L.soak.now?.toFixed(1)}%`; }
+  else w.classList.add('idle');
+  document.querySelectorAll('.node[data-k]').forEach(el => {
+    const k = el.dataset.k, what = (L.busy || {})[k];
+    let on = !!what; if (k === 'executor') on = on || L.pumping !== 'none'; if (k === 'soak') on = L.soak?.phase === 'soaking';
+    el.classList.toggle('on', on); el.classList.toggle('bad', k === 'guards' && /^REFUSED/.test(what || '')); el.classList.toggle('warn', k === 'critic_agent' && /^sent back/.test(what || ''));
+    const ww = $('w-' + k); if (ww && what) ww.textContent = what;
+    if (k === 'soak' && L.soak?.phase === 'soaking') ww.textContent = `${L.soak.before?.toFixed(1)}% to ${L.soak.now?.toFixed(1)}%`;
+    if (k === 'executor' && L.pumping !== 'none') ww.textContent = `pump ${L.pumping} on`;
+  });
+}
+
+async function slow() {
+  try { S = await j('/api/state'); } catch (e) { $('mode').textContent = 'server offline'; return; }
+  $('mode').textContent = S.fake ? 'Test data' : S.online ? 'Board live' : 'Board offline';
+  $('modeS').className = 'keep ' + (S.fake ? 's-warn' : S.online ? 's-ok' : 's-warn');
+  $('brainName').textContent = S.brain.startsWith('gemini') ? 'Gemini agents' : 'Rule brain';
+  $('next').textContent = `next check in ${Math.max(0, Math.round(S.next_check_s / 60))} min`;
+  const d = S.drought || {}, f = S.forecast || {}, p = S.prediction || {};
+  $('drought').textContent = d.level ? `${(d.county || '').replace(' County', '')} ${d.level}` : 'drought offline';
+  $('drV').textContent = d.pct_in_D1_or_worse != null ? `${d.pct_in_D1_or_worse}%` : '–';
+  $('drD').textContent = d.level ? `${d.level} ${d.level_name}, week of ${d.week_of}` : (d.error || '–');
+  $('rain').textContent = f.rain_mm_next_24h != null ? `${f.rain_mm_next_24h} mm` : '–';
+  $('rainD').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance, ${S.config.outdoors ? 'pots outside' : 'pots indoors, ignored'}` : (f.error || '–');
+  $('et0').textContent = f.et0_mm_next_24h != null ? `${f.et0_mm_next_24h} mm` : '–';
+  if (p.settling) { $('dry').textContent = 'measuring'; $('dryD').textContent = 'soil just changed'; }
+  else if (p.hours_until_dry != null) { $('dry').textContent = p.hours_until_dry < .05 ? 'now' : p.hours_until_dry >= 48 ? '2+ days' : `${p.hours_until_dry.toFixed(1)} h`; $('dryD').textContent = `${p.method === 'xgboost' ? 'XGBoost' : 'trend'}, ${p.drop_per_h}% per hour`; }
+  else { $('dry').textContent = '–'; $('dryD').textContent = p.error || '–'; }
+  $('w-predictor').textContent = p.method === 'xgboost' ? 'XGBoost, trained on your runs' : p.settling ? 're-measuring after a change' : 'trend estimate until XGBoost has enough data';
+  const temp = S.latest?.temp_c; $('sA').textContent = temp != null ? `${temp.toFixed(1)}°C soil` : '–'; if (!S.config.one_pot) $('sB').textContent = 'no temp probe in this pot';
+
+  const [dec, rep] = await Promise.all([j('/api/decisions'), j('/api/report')]);
+  if (dec.length && !$('runBtn').disabled) {
+    const x = dec[0], water = x.action === 'water';
+    $('verdict').textContent = water ? `Watering ${(+x.seconds).toFixed(0)} s` : 'Holding off';
+    $('verdict').className = 'verdict ' + (water ? 'water' : 'wait');
+    $('reason').textContent = x.sentence.replace(/^(WATER|WAIT):\s*/, '');
+    $('by').textContent = `${x.brain.startsWith('gemini') ? 'Gemini agent team' : 'Rule brain'}, ${clock(x.ts)}`;
+  }
+  const max = Math.max(1, rep.ai_pot_ml, rep.timer_pot_ml);
+  $('barA').style.width = 100 * rep.ai_pot_ml / max + '%'; $('barB').style.width = 100 * rep.timer_pot_ml / max + '%';
+  $('mlA').textContent = rep.ai_pot_ml + ' ml'; $('mlB').textContent = rep.timer_pot_ml + ' ml';
+  if (rep.timer_is_virtual) {
+    $('bTitle').textContent = 'Timer schedule'; $('barBName').textContent = 'Timer';
+    $('pB').textContent = rep.timer_pot_ml + ' ml'; $('pB').classList.add('small');
+    $('gB').style.width = Math.min(100, 100 * rep.timer_pot_ml / Math.max(1, rep.ai_pot_ml, rep.timer_pot_ml)) + '%';
+    $('bandB').style.width = '0';
+    $('sB').textContent = `${rep.timer_ml_per_pour} ml, ${rep.timer_schedule.replace(/^[\d.]+ s /, '')}`;
+  } else { $('bTitle').textContent = 'Pot B, timer'; }
+  $('saved').textContent = rep.water_saved_pct != null ? `${rep.water_saved_pct}%` : 'Not enough data yet';
+  $('saved').style.color = rep.water_saved_pct == null ? 'var(--muted)' : rep.water_saved_pct >= 0 ? 'var(--good)' : 'var(--bad)';
+  $('saved').style.fontSize = rep.water_saved_pct == null ? '1.1rem' : '';
+  $('savedNote').textContent = `${rep.hours_logged} h logged${rep.includes_fake_data ? ', test data, not for slides' : ''}`;
+
+  if (tab === 'team') {
+    const g = S.guards || [], okN = g.filter(x => x.ok).length;
+    $('w-guards').textContent = okN === g.length ? `${okN} of ${g.length} clear` : `${g.length - okN} blocking`;
+    $('rules').innerHTML = g.map(x => `<li><i class="ph-fill ${x.ok ? 'ph-check-circle ok' : 'ph-x-circle no'}"></i><span>${esc(x.rule)}</span><small>${esc(x.detail)}</small></li>`).join('');
+    const act = await j('/api/activity');
+    if (act.length) $('log').innerHTML = act.slice(0, 30).map(a => { const w = a.what || '', c = /^REFUSED|failed/i.test(w) ? 'bad' : /^approved|pump A/.test(w) ? 'good' : /^sent back/.test(w) ? 'warn' : '';
+      return `<li class="${c}"><span class="t">${clock(a.ts)}</span><span><b>${esc(NAMES[a.agent] || a.agent)}</b> ${esc(w)}</span></li>`; }).join('');
+  } else if (tab === 'pours') {
+    $('learn').textContent = S.learned_pct_per_s != null ? `${S.learned_pct_per_s}` : '–';
+    const soaks = await j('/api/soaks');
+    if (soaks.length) $('soaks').innerHTML = soaks.slice(0, 8).map(x => `<div class="soak"><div class="top"><span class="big" style="color:${x.ok ? 'var(--bt)' : 'var(--bad)'}">${x.ok ? '+' + x.rise_pct + '% in the soil' : 'Missed the soil'}</span><small>${clock(x.ts)}</small></div>
+      <small>Pot ${x.pot}, ${x.poured_s} s pour, ${x.before_pct}% to ${x.peak_pct}%${x.first_rise_s != null ? `, reached the probe in ${x.first_rise_s} s` : ''}</small>${x.ok ? '' : `<small style="color:var(--bad)">${esc(x.note)}</small>`}</div>`).join('');
+  }
+}
+
+$('runBtn').onclick = async () => {
+  const b = $('runBtn'); b.disabled = true; b.lastChild.textContent = 'Working';
+  $('verdict').textContent = 'Thinking'; $('verdict').className = 'verdict wait'; $('reason').textContent = 'The team is reading the soil, the sky and its memory.';
+  try { await j('/api/check-now', {method: 'POST'}); } finally { b.disabled = false; b.lastChild.textContent = 'Run agents'; slow(); }
+};
+$('pourBtn').onclick = async () => { const r = await j('/api/pour', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({seconds: 5})});
+  if (!r.watered) { $('verdict').textContent = 'Blocked'; $('verdict').className = 'verdict bad'; $('reason').textContent = 'Safety rules: ' + r.refused_because; } slow(); };
+$('stopBtn').onclick = () => fetch('/api/stop', {method: 'POST'});
+async function ask(q) { if (!q) return; $('reply').innerHTML = '<span class="muted">Gemini is calling its tools…</span>';
+  const r = await j('/api/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({q})}); $('reply').textContent = r.answer; }
+$('askBtn').onclick = () => ask($('q').value);
+$('q').onkeydown = e => { if (e.key === 'Enter') ask($('q').value); };
+document.querySelectorAll('.sugg button').forEach(x => x.onclick = () => { $('q').value = x.textContent; ask(x.textContent); });
+fast(); slow(); setInterval(fast, 400); setInterval(slow, 3000);
+</script>
+
+<script type="module" src="scene.js"></script>
+</body>
+</html>
