@@ -15,9 +15,10 @@ import { History } from './History';
 import { IconClose } from './icons';
 import { LayaCall, useCallGlance } from './LayaCall';
 import { MapPanel } from './Region';
+import { ResultsPanel } from './Results';
 import { SavingsPanel, useSavings } from './Savings';
 
-export type PanelId = 'box-a' | 'box-b' | 'laya' | 'saves' | 'history' | 'forecast' | 'crops' | 'map';
+export type PanelId = 'box-a' | 'box-b' | 'laya' | 'saves' | 'results' | 'history' | 'forecast' | 'crops' | 'map';
 type Place = 'side' | 'bottom' | 'wide';
 
 const PANELS: Record<PanelId, { title: string; place: Place; body: () => ReactNode }> = {
@@ -25,6 +26,7 @@ const PANELS: Record<PanelId, { title: string; place: Place; body: () => ReactNo
   'box-b': { title: `Box B, ${brand.boxes.B.name}`, place: 'side', body: () => <BoxPanel id="B" /> },
   laya: { title: "Laya's call for box A", place: 'side', body: () => <LayaCall /> },
   saves: { title: 'What Farm Hand saves', place: 'side', body: () => <SavingsPanel /> },
+  results: { title: 'Results (fake)', place: 'wide', body: () => <ResultsPanel /> },
   history: { title: 'Soil moisture over time', place: 'bottom', body: () => <History /> },
   forecast: { title: 'Rain forecast', place: 'side', body: () => <Forecast /> },
   crops: { title: 'What can grow in each box', place: 'side', body: () => <CropsPanel /> },
@@ -59,6 +61,7 @@ export function Dock({ open, onToggle }: { open: PanelId | null; onToggle: (p: P
       <DockButton id="box-b" open={open} onToggle={onToggle} label="Box B" glance={b} />
       <DockButton id="laya" open={open} onToggle={onToggle} label="Laya's call" glance={call} />
       <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks.toLocaleString()} checks` : 'time, water'} />
+      <DockButton id="results" open={open} onToggle={onToggle} label="Results" />
       <i className="dock-sep" aria-hidden />
       <DockButton id="history" open={open} onToggle={onToggle} label="History" />
       <DockButton id="forecast" open={open} onToggle={onToggle} label="Forecast" />

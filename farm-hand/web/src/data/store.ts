@@ -41,6 +41,12 @@ interface AppState {
   overrides: Overrides;
   /** Farm Hand: the latest decision for box A (null until the first one arrives) */
   decision: Decision | null;
+  /**
+   * True while the Results timelapse drives the 3D scene: `live` and `pumps` then hold the timelapse's
+   * values, and real samples are parked (see `endTimelapse`) instead of overwriting them.
+   */
+  timelapse: boolean;
+  endTimelapse(): void;
   /** Farm Hand: pump state as the ESP32 last reported it */
   pumps: Pumps;
 
@@ -97,6 +103,8 @@ interface AppState {
 }
 
 const board: BoardSource = new BackendBoard();
+/** the latest real sample, kept so the live view comes back exactly when a timelapse ends */
+let parkedSample: { live: Record<ZoneId, ZoneLive>; pumps?: Pumps } | null = null;
 let callSeq = 0;
 
 export const useApp = create<AppState>((set, get) => ({
@@ -110,6 +118,11 @@ export const useApp = create<AppState>((set, get) => ({
   notes: [],
   overrides: { forecast: null, zoneMoisture: {} },
   decision: null,
+  timelapse: false,
+  endTimelapse: () => {
+    if (!get().timelapse) return;
+    set({ timelapse: false, ...(parkedSample ? { live: parkedSample.live, pumps: parkedSample.pumps ?? { A: false, B: false } } : { live: {}, pumps: { A: false, B: false } }) });
+  },
   pumps: { A: false, B: false },
 
   stage: 'welcome',
@@ -224,7 +237,10 @@ export function startBoard(): void {
         first = false;
         break;
       }
-      case 'sample': useApp.setState(e.pumps ? { live: e.zones, pumps: e.pumps } : { live: e.zones }); break;
+      case 'sample':
+        parkedSample = { live: e.zones, pumps: e.pumps };
+        if (!useApp.getState().timelapse) useApp.setState(e.pumps ? { live: e.zones, pumps: e.pumps } : { live: e.zones });
+        break;
       case 'decision': useApp.setState({ decision: { brain: e.brain, pick: e.pick, seconds: e.seconds, why: e.why, t: e.t } }); break;
       case 'pour': {
         const prev = useApp.getState().pour.phase;
