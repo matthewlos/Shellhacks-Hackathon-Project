@@ -1,6 +1,6 @@
 # Farm Hand virtual rig (UI)
 
-A web page that acts out the real Farm Hand build: one box of soil, the soil and temp probes, the pump in its cup, the relay and the ESP32, plus the laptop logic around them. It runs the same rules as the real code in `farm-hand/` on `main`, in the browser, with a modeled box of soil instead of the real one. No build step, no dependencies.
+A web page that acts out the real Farm Hand build: one box of soil, the soil and temp probes, the pump in its cup, the relay and the ESP32, plus the laptop logic around them. It runs the same rules as the real code in `farm-hand/`, in the browser, with a modeled box of soil instead of the real one. No build step, no dependencies.
 
 **Run it:** open `ui/index.html` in a browser (double-click works). Or `python -m http.server` in `ui/` and go to http://localhost:8000.
 
