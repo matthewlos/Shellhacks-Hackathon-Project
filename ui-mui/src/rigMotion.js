@@ -19,7 +19,8 @@ import {
 const SOIL_TOP = 224, SOIL_BOT = 381;
 export const levelY = (pct) => SOIL_BOT - (Math.max(0, Math.min(100, pct)) / 100) * (SOIL_BOT - SOIL_TOP);
 export const NOZZLE = { x: 306, y: 190 };
-export const TUBE = `M115 328 C 115 200, 175 150, 255 150 L 296 150 Q 306 150 306 160 L ${NOZZLE.x} ${NOZZLE.y}`;
+// One smooth arc, two cubic segments: up out of the cup, over the rim, and straight down into the nozzle.
+export const TUBE = `M115 328 C 115 222, 150 148, 228 148 C 282 148, ${NOZZLE.x} 158, ${NOZZLE.x} ${NOZZLE.y}`;
 export const PINCH_AT = 0.28;   // where the clamp sits on the tube, as a fraction of its length
 
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
@@ -240,7 +241,11 @@ export function createRigWriter(n, fh, palette) {
       if (n.tempText && n.tempText.__t !== s) {
         text(n.tempText, s);
         const r = n.tempText.previousSibling;
-        if (r) attr(r, 'width', Math.max(n.tempText.getComputedTextLength() + 12, 0));
+        if (r) {
+          const w = Math.max(n.tempText.getComputedTextLength() + 12, 0);
+          attr(r, 'width', w);
+          if (n.tempText.getAttribute('text-anchor') === 'end') attr(r, 'x', -w);
+        }
       }
     }
 

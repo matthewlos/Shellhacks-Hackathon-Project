@@ -1,23 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTheme, alpha } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { visuallyHidden } from '@mui/utils';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 import { CFG } from '../sim.js';
 import { hrs, makeTime, ml } from '../format.js';
 import { useSim } from '../useFarmHand.js';
 import { pumpClock, currentAlert } from '../live.js';
 import { drawAB } from '../chartAB.js';
+import { grid12 } from '../components/Page.jsx';
+import TextChoice from '../components/TextChoice.jsx';
 import Roll from '../components/Roll.jsx';
 import AlertOverlay from '../components/AlertOverlay.jsx';
 
 /*
- * Vs timer (PLAN 5e): Farm Hand (box A) vs the chip's plain timer (box B), same soil, same room.
- * The computed headline is the page's one focal point, on top. No estimates and no virtual timer:
- * box B is a second simulated box with its own pours (the "Simulated board" chip in the header covers both).
+ * Vs timer (PLAN 5e, round 6 "the chart is the headline"): Farm Hand (box A) vs the chip's plain timer (box B),
+ * same soil, same room. The computed sentence, then the chart large, then a small ledger that annotates it.
+ * No estimates: box B is a second simulated box with its own pours (the header tag covers both).
+ * Temperature is not on this page: it drives no decision here.
  */
 
 function boxStats(fh, pot) {
@@ -42,9 +49,7 @@ function timeOutside(fh) {
 // Compare only with enough evidence: 2 pours in each box, or 24 h of simulated time (copy audit call a).
 const MIN_POURS = 2, MIN_S = 24 * 3600;
 
-// The headline is computed from the numbers, never typed (PLAN 5e).
-// Owner decision (round 4): lead with how each box did at its job, time in the band from fh.report();
-// the water ratio stays as the second line, whichever way it goes.
+// The headline is computed from the numbers, never typed (PLAN 5e): time in band first, then the water ratio.
 const bandPct = (v) => (v >= 99.95 ? '100' : String(Math.min(99, Math.round(v))));
 function headline(fh, A, B, T) {
   const enough = fh.t >= MIN_S || (A.pours >= MIN_POURS && B.pours >= MIN_POURS);
@@ -66,69 +71,16 @@ function headline(fh, A, B, T) {
   else if (B.ml >= A.ml) parts.push(`The timer used ${(B.ml / A.ml).toFixed(1)}x the water${soFar}.`);
   else parts.push(`Farm Hand used ${(A.ml / B.ml).toFixed(1)}x the water${soFar}.`);
   if (T.aUnder) parts.push(`Farm Hand below minimum: ${hrs(T.aUnder)}.`);
-  if (T.bWet) parts.push(`Timer too wet: ${hrs(T.bWet)}.`);
+  if (T.bWet) parts.push(`Timer above full: ${hrs(T.bWet)}.`);
   return { first, rest: parts.join(' ') };
 }
 
-function Reading({ label, marker, children }) {
-  return (
-    <Box sx={{ minWidth: 0 }}>
-      <Box aria-hidden="true" sx={{ width: 24, height: 3, bgcolor: marker, mb: 0.75 }} />
-      <Typography variant="body2" color="text.secondary">{label}</Typography>
-      {children}
-    </Box>
-  );
-}
-
-function BoxPanel({ fh, act, frac, pot }) {
-  const isA = pot === 'A';
-  const L = fh.latest;
-  const pct = isA ? fh.nowPct() : fh.nowPctB();
-  const st = boxStats(fh, pot);
-  const pc = pumpClock(fh, frac(), pot);
-  const accentText = isA ? 'moisture.main' : 'timer.text';
-  const unit = { fontSize: '0.5em', fontWeight: 400, color: 'text.secondary' };
-  return (
-    <Box component="section" aria-labelledby={`box-${pot}`} sx={{ minWidth: 0 }}>
-      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'baseline', gap: 1, flexWrap: 'wrap' }}>
-        <Typography variant="h3" component="h2" id={`box-${pot}`} sx={{ color: accentText }}>{isA ? 'Farm Hand' : 'Timer'}</Typography>
-        <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums', fontWeight: pc ? 600 : 400 }} color={pc ? accentText : 'text.secondary'}>
-          {pc ? `Watering ${Math.ceil(pc.left)} s` : 'Pump off'}
-        </Typography>
-      </Stack>
-      <Typography variant="body2" sx={{ mt: 0.25 }}>
-        {isA ? `Keeps soil above ${CFG.DRY_PCT}%` : `${CFG.TIMER_POUR_MS / 1000} s every ${CFG.TIMER_EVERY_S / 3600} h, no matter what`}
-      </Typography>
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, mt: 2 }}>
-        <Reading label="Soil moisture" marker={isA ? 'moisture.main' : 'timer.main'}>
-          <Typography variant="readoutXL" sx={{ whiteSpace: 'nowrap' }}><Roll value={pct} />{pct != null && <Box component="span" sx={unit}>%</Box>}</Typography>
-        </Reading>
-        <Reading label="Soil temperature" marker="temp.main">
-          {isA
-            ? <Typography variant="readoutXL" sx={{ whiteSpace: 'nowrap' }}><Roll value={L ? L.temp_c : null} />{L && <Box component="span" sx={unit}>{'\u2009'}°C</Box>}</Typography>
-            : <Typography variant="body2" sx={{ mt: 1.5 }}>No temp probe</Typography>}
-        </Reading>
-      </Box>
-      <Stack direction="row" useFlexGap sx={{ mt: 2, columnGap: 4, rowGap: 1, alignItems: 'flex-end', flexWrap: 'wrap' }}>
-        <Box>
-          <Typography variant="body2" color="text.secondary">Water used</Typography>
-          <Typography variant="readout"><Roll value={Math.round(st.ml)} decimals={0} /><Box component="span" sx={unit}> ml</Box></Typography>
-        </Box>
-        <Box>
-          <Typography variant="body2" color="text.secondary">Pours</Typography>
-          <Typography variant="readout">{st.pours}</Typography>
-        </Box>
-        <Button variant="text" color="inherit" onClick={() => act((f) => f.demoHandPour(pot))} sx={{ ml: 'auto', mr: -1 }} aria-label={`Hand pour into the ${isA ? 'Farm Hand' : 'timer'} box`}>
-          Hand pour
-        </Button>
-      </Stack>
-    </Box>
-  );
-}
+const WINDOWS = [{ value: 1, label: '1 h' }, { value: 6, label: '6 h' }, { value: 24, label: '24 h' }, { value: 'all', label: 'All' }];
 
 function ABChart({ fh }) {
   const theme = useTheme();
   const P = theme.palette;
+  const wide = useMediaQuery(theme.breakpoints.up('md'));
   const cv = useRef(null);
   const [win, setWin] = useState('all');
   const [hoverX, setHoverX] = useState(null);
@@ -145,55 +97,103 @@ function ABChart({ fh }) {
   useEffect(() => {
     if (!fontsReady) return;
     const next = drawAB(cv.current, fh, win, hoverX, T.hhmm, {
-      a: P.moisture.main, b: P.timer.main, muted: P.text.secondary, grid: P.divider, baseline: P.text.secondary,
-      wetFill: alpha(P.text.primary, 0.05), surface: P.background.paper, cursor: P.cursor, font: theme.fonts.body,
+      a: P.moisture.main, b: P.timer.main, aText: P.moisture.main, bText: P.timer.text,
+      band: P.chartBand, edge: P.range.edge, ink: P.text.primary, muted: P.text.secondary, grid: P.divider,
+      surface: P.background.default, cursor: P.cursor, font: theme.fonts.body, padR: wide ? 128 : 96,
     });
     setTip((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
   });
   const tipLeft = tip ? (tip.x + 12 + 160 > tip.W ? tip.x - 12 - 160 : tip.x + 12) : 0;
-  const key = (sw, text) => (
-    <Stack component="li" direction="row" spacing={0.75} sx={{ alignItems: 'center' }}>{sw}<Typography variant="caption">{text}</Typography></Stack>
-  );
   return (
-    <Box component="section" aria-labelledby="ab-title">
-      <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 1, gap: 1, flexWrap: 'wrap' }}>
-        <Typography variant="h3" component="h2" id="ab-title">Soil moisture</Typography>
-        <ToggleButtonGroup size="small" exclusive value={win} onChange={(_, v) => v != null && setWin(v)} aria-label="Chart window">
-          <ToggleButton value={1}>1 h</ToggleButton>
-          <ToggleButton value={6}>6 h</ToggleButton>
-          <ToggleButton value={24}>24 h</ToggleButton>
-          <ToggleButton value="all">All</ToggleButton>
-        </ToggleButtonGroup>
-      </Stack>
-      <Stack component="ul" direction="row" useFlexGap sx={{ flexWrap: 'wrap', columnGap: 2, rowGap: 0.5, listStyle: 'none', m: 0, mb: 1, p: 0 }} aria-label="Chart key">
-        {key(<Box sx={{ width: 20, borderTop: '2px solid', borderColor: 'moisture.main' }} />, 'Farm Hand')}
-        {key(<Box sx={{ width: 20, borderTop: '2px solid', borderColor: 'timer.main' }} />, 'Timer')}
-        {key(<Box sx={{ width: 20, borderTop: '1.5px dashed', borderColor: 'text.secondary' }} />, 'Minimum')}
-        {key(<Box sx={(t) => ({ width: 14, height: 10, bgcolor: alpha(t.palette.text.primary, 0.08) })} />, 'Wet limit')}
-        {key(<Stack direction="row" spacing={0.5}><Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'moisture.main' }} /><Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'timer.main' }} /></Stack>, 'Pour')}
-      </Stack>
+    <Box component="section" aria-labelledby="ab-title" sx={{ gridColumn: '1 / -1', mt: 4 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', columnGap: 2, rowGap: 0.5, flexWrap: 'wrap', mb: 1 }}>
+        <Typography variant="caption" component="h3" id="ab-title" color="text.secondary">Soil moisture, %</Typography>
+        <TextChoice label="Chart window" hideLabel value={win} onChange={setWin} options={WINDOWS} />
+      </Box>
       <Box sx={{ position: 'relative' }}>
         <Box
           component="canvas"
           ref={cv}
           role="img"
-          aria-label="Soil moisture, Farm Hand vs timer, with the minimum and the wet limit."
+          aria-label={`Soil moisture over time. Farm Hand ${fh.nowPct()?.toFixed(1) ?? '-'}%, timer ${fh.nowPctB()?.toFixed(1) ?? '-'}%, against the minimum of ${CFG.DRY_PCT}% and full at ${CFG.WET_PCT}%.`}
           onMouseMove={(e) => setHoverX(e.nativeEvent.offsetX)}
           onMouseLeave={() => setHoverX(null)}
-          sx={{ display: 'block', width: '100%', height: { xs: 220, md: 280 } }}
+          sx={{ display: 'block', width: '100%', height: { xs: 240, md: 'clamp(280px, 44vh, 520px)' } }}
         />
         {tip && (
           <Box aria-hidden="true" sx={{
             position: 'absolute', top: 0, left: tipLeft, width: 160, pointerEvents: 'none', bgcolor: 'text.primary', color: 'common.white',
-            p: 1, borderRadius: 1, typography: 'caption', fontVariantNumeric: 'tabular-nums',
+            p: 1, borderRadius: theme.radius.control, typography: 'caption', fontVariantNumeric: 'tabular-nums',
             animation: `fh-tip ${theme.dur.tip}ms ${theme.ease}`, '@keyframes fh-tip': { from: { opacity: 0 } },
+            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
           }}>
             <Box sx={{ fontWeight: 600 }}>{tip.time}</Box>
-            <Stack direction="row" sx={{ justifyContent: 'space-between' }}><Box sx={{ color: 'moisture.tip' }}>Farm Hand</Box><span>{tip.a == null ? '-' : tip.a.toFixed(1) + '%'}</span></Stack>
-            <Stack direction="row" sx={{ justifyContent: 'space-between' }}><Box sx={{ color: 'timer.tip' }}>Timer</Box><span>{tip.b == null ? '-' : tip.b.toFixed(1) + '%'}</span></Stack>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}><Box sx={{ color: 'moisture.tip' }}>Farm Hand</Box><span>{tip.a == null ? '-' : tip.a.toFixed(1) + '%'}</span></Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}><Box sx={{ color: 'timer.tip' }}>Timer</Box><span>{tip.b == null ? '-' : tip.b.toFixed(1) + '%'}</span></Box>
           </Box>
         )}
       </Box>
+    </Box>
+  );
+}
+
+// The ledger: two columns of figures that annotate the chart. Lab-table look from the theme (section 5).
+function Ledger({ fh, act, frac, A, B, T }) {
+  const cols = [
+    { pot: 'A', name: 'Farm Hand', sw: 'moisture.main', text: 'moisture.main', st: A, inPct: T.aInPct,
+      rule: `Waters near ${CFG.DRY_PCT + CFG.LOW_MARGIN}%, never below ${CFG.DRY_PCT}%` },
+    { pot: 'B', name: 'Timer', sw: 'timer.main', text: 'timer.text', st: B, inPct: T.bInPct,
+      rule: `${CFG.TIMER_POUR_MS / 1000} s every ${CFG.TIMER_EVERY_S / 3600} h, no matter what` },
+  ];
+  const fig = { typography: 'data', textAlign: 'right' };
+  const label = { typography: 'body2', color: 'text.secondary', pr: 2, verticalAlign: 'top' };
+  const row = (name, cell) => (
+    <TableRow>
+      <TableCell component="th" scope="row" sx={label}>{name}</TableCell>
+      {cols.map((c) => <TableCell key={c.pot} sx={fig}>{cell(c)}</TableCell>)}
+    </TableRow>
+  );
+  return (
+    <Box component="section" aria-label="Ledger" sx={{ gridColumn: { xs: '1 / -1', md: '1 / span 8' }, mt: 6, maxWidth: 720 }}>
+      <Table size="small" sx={{ tableLayout: 'fixed', '& td, & th': { px: 0 }, '& td': { pl: 2 }, '& col.lab': { width: { xs: 88, sm: 160 } } }}>
+        <colgroup><col className="lab" /><col /><col /></colgroup>
+        <TableHead>
+          <TableRow>
+            <TableCell><Box component="span" sx={visuallyHidden}>Metric</Box></TableCell>
+            {cols.map((c) => {
+              const pc = pumpClock(fh, frac(), c.pot);
+              return (
+                <TableCell key={c.pot} sx={{ textAlign: 'right', verticalAlign: 'bottom', pl: 2 }}>
+                  <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="subtitle2" component="span" color="text.primary">{c.name}</Typography>
+                    <Box aria-hidden="true" sx={{ width: 16, height: 2, bgcolor: c.sw, flex: 'none' }} />
+                  </Box>
+                  <Typography variant="caption" component="div" sx={{ color: c.text, fontWeight: 600, minHeight: 16, fontVariantNumeric: 'tabular-nums' }}>
+                    {pc ? `Watering ${Math.ceil(pc.left)} s` : ''}
+                  </Typography>
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {row('Rule', (c) => <Box component="span" sx={{ typography: 'body2' }}>{c.rule}</Box>)}
+          {row('Water used', (c) => <><Roll value={Math.round(c.st.ml)} decimals={0} /> ml</>)}
+          {row('Pours', (c) => c.st.pours)}
+          {row('In band', (c) => (c.inPct == null ? '-' : `${bandPct(c.inPct)}%`))}
+          <TableRow>
+            <TableCell><Box component="span" sx={visuallyHidden}>Add water</Box></TableCell>
+            {cols.map((c) => (
+              <TableCell key={c.pot} sx={{ textAlign: 'right', pt: 1.5 }}>
+                <Button variant="outlined" size="small" onClick={() => act((f) => f.demoHandPour(c.pot))}
+                  aria-label={`Hand pour into the ${c.pot === 'A' ? 'Farm Hand' : 'timer'} box`}>
+                  Hand pour
+                </Button>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableBody>
+      </Table>
     </Box>
   );
 }
@@ -206,27 +206,22 @@ export default function ControlPage({ fh, act, frac }) {
   const time = makeTime(fh);
   const alert = currentAlert(fh);
   return (
-    <Stack spacing={4}>
-      <Box component="section" aria-label="Result" sx={{ position: 'relative', minHeight: 120 }}>
+    <Box sx={{ ...grid12, rowGap: 0, alignItems: 'start' }}>
+      <Box component="section" aria-labelledby="vs-title" sx={{ gridColumn: { xs: '1 / -1', md: '1 / span 8' }, position: 'relative', minHeight: { md: 96 } }}>
+        <Typography component="h2" id="vs-title" sx={visuallyHidden}>Farm Hand vs timer</Typography>
         <AlertOverlay alert={alert} />
         <Box inert={alert ? true : undefined} sx={(t) => ({ opacity: alert ? 0 : 1, transition: `opacity ${t.dur.panel}ms ${t.ease}` })}>
-          <Typography variant="readoutXL" sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, lineHeight: 1.2, maxWidth: '32ch' }} aria-live="polite">{h.first}</Typography>
-          <Typography variant="body1" sx={{ mt: 1, maxWidth: '70ch', fontVariantNumeric: 'tabular-nums' }}>{h.rest}</Typography>
-          <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 1 }}>
-            {fh.t < 60 ? `Started ${time.hhmm(0)}` : `${hrs(fh.t)} of data since ${time.hhmm(0)}`}. Same soil, same room.
-          </Typography>
+          <Typography variant="headline" aria-live="polite">{h.first}</Typography>
+          <Typography variant="body1" sx={{ mt: 1, maxWidth: '60ch', fontVariantNumeric: 'tabular-nums' }}>{h.rest}</Typography>
         </Box>
       </Box>
-      <Box sx={{
-        display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, rowGap: 3, columnGap: 4, borderTop: 1, borderColor: 'divider', pt: 3,
-        '& > :last-child': { borderLeft: { md: 1 }, borderTop: { xs: 1, md: 0 }, borderColor: { xs: 'divider', md: 'divider' }, pl: { md: 4 }, pt: { xs: 3, md: 0 } },
+      <Typography variant="body2" color="text.secondary" sx={{
+        gridColumn: { xs: '1 / -1', md: '9 / -1' }, textAlign: { md: 'right' }, mt: { xs: 1, md: 0.75 }, maxWidth: { xs: '60ch', md: 'none' },
       }}>
-        <BoxPanel fh={fh} act={act} frac={frac} pot="A" />
-        <BoxPanel fh={fh} act={act} frac={frac} pot="B" />
-      </Box>
-      <Box sx={{ borderTop: 1, borderColor: 'divider', pt: 3 }}>
-        <ABChart fh={fh} />
-      </Box>
-    </Stack>
+        {fh.t < 60 ? `Started ${time.hhmm(0)}` : `${hrs(fh.t)} of data since ${time.hhmm(0)}`}. Same soil, same room.
+      </Typography>
+      <ABChart fh={fh} />
+      <Ledger fh={fh} act={act} frac={frac} A={A} B={B} T={T} />
+    </Box>
   );
 }

@@ -62,3 +62,8 @@ export function isStale(fh, d) {
   const then = d ? soilAt(fh, d.ts) : null, now = fh.nowPct();
   return then != null && now != null && Math.abs(now - then) > 2;
 }
+
+// A wait as words: a count while it is short ("in 18 s"), a clock time once it is over 90 s ("at 8:15 AM").
+export const whenNext = (fh, t) => { const s = t - fh.t; return s <= 90 ? `in ${Math.max(0, Math.ceil(s))} s` : `at ${makeTime(fh).hhmm(t)}`; };
+// When something happened: "12 s ago" inside 90 s, a clock time after that.
+export const clockOrAgo = (fh, ts) => (fh.t - ts < 90 ? ago(fh.t - ts) : makeTime(fh).hhmm(ts));

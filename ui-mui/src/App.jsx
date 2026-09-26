@@ -1,15 +1,17 @@
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
 import { theme } from './theme.js';
 import { useFarmHand } from './useFarmHand.js';
 import { useHashRoute } from './useHashRoute.js';
 import TopBar from './components/TopBar.jsx';
+import { Page } from './components/Page.jsx';
 import LivePage from './pages/LivePage.jsx';
+import DemoPage from './pages/DemoPage.jsx';
 import ControlPage from './pages/ControlPage.jsx';
 import SimPage from './pages/SimPage.jsx';
 
-// Three pages, one header (PLAN 5e). The sim keeps running whichever page is open.
+// Four pages, one header. Live is the real box A; the sim keeps running for Demo, Vs timer and Outside
+// whichever page is open. Header and main share one container (<Page>), so they share one left edge.
 export default function App() {
   const sim = useFarmHand();
   const route = useHashRoute();
@@ -18,11 +20,12 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <TopBar {...sim} route={route} />
-      <Box component="main" sx={{ maxWidth: 1600, mx: 'auto', px: { xs: 2, md: 3 }, pt: { xs: 2, md: 3 }, pb: 6 }}>
-        {route === '/' && <LivePage fh={fh} act={act} frac={frac} />}
+      <Page component="main" sx={{ pt: { xs: 2, md: 4 }, pb: { xs: 6, md: 8 } }}>
+        {route === '/' && <LivePage />}
+        {route === '/demo' && <DemoPage fh={fh} act={act} frac={frac} />}
         {route === '/control' && <ControlPage fh={fh} act={act} frac={frac} />}
         {route === '/sim' && <SimPage fh={fh} act={act} />}
-      </Box>
+      </Page>
     </ThemeProvider>
   );
 }

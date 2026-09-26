@@ -1,80 +1,112 @@
+import { useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
 import { CFG } from '../sim.js';
-import { clamp } from '../format.js';
-import { pumpClock, readingAge } from '../live.js';
-import { useSim } from '../useFarmHand.js';
+import { makeTime } from '../format.js';
+import { pumpState } from '../live.js';
+import { sim, useSim } from '../useFarmHand.js';
 import Roll from './Roll.jsx';
+import Bullet from './Bullet.jsx';
 
 /*
- * Tier 1 (PLAN 5d): moisture and temperature at the same size, both in ink. Each carries a short bar in its house
- * color (blue moisture, purple temperature), so the color still names the quantity without a 96px purple glyph
- * pulling the eye (visual audit F2). Moisture is the 6-reading median, the same "now" as the drawing, the brain
- * and the alerts. The pump state is a 24px status line under them.
+ * The rail's readings (spec 9.L.2): moisture over temperature, both tier 1 in ink, stacked so they can never
+ * collide at any width (B1). Moisture is the 6-reading median, the same "now" as the drawing, the brain and the
+ * alerts. Under them, the status word and the reading dot (B9). Phone: the two numbers side by side, the bullet
+ * under both.
  */
-function Big({ label, value, unit, marker, children }) {
+function Reading({ area, label, value, unit, sx }) {
   return (
-    <Box sx={{ minWidth: 0 }}>
-      <Box aria-hidden="true" sx={{ width: 24, height: 3, bgcolor: marker, mb: 0.75 }} />
-      <Typography variant="body2" color="text.secondary">{label}</Typography>
-      <Typography variant="tier1" sx={{ mt: 0.5, whiteSpace: 'nowrap' }}>
+    <Box sx={{ gridArea: area, minWidth: 0, ...sx }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>{label}</Typography>
+      <Typography variant="tier1" sx={{ whiteSpace: 'nowrap' }}>
         <Roll value={value} />
-        {value != null && <Typography variant="unit" sx={{ ml: '0.06em' }}>{unit}</Typography>}
+        {value != null && <Typography variant="unit">{unit}</Typography>}
       </Typography>
-      {children}
     </Box>
   );
 }
 
-export function pumpState(fh, frac) {
-  const run = fh.run;
-  const pc = pumpClock(fh, frac);
-  const last = fh.decisions[fh.decisions.length - 1];
-  if (pc) return { word: 'Watering', num: `${Math.ceil(pc.left)} s`, tone: 'moisture.main' };
-  if (fh.tgt) return { word: 'Hitting', num: `${run.target}%`, tone: 'moisture.main' };
-  if (last && last.brain === 'target run' && run.phase === 'locked') return { word: 'Locked at', num: `${run.now.toFixed(1)}%`, tone: 'success.text' };
-  if (fh.live.phase === 'soaking' && fh.live.pot !== 'B') return { word: 'Soaking in', num: '', tone: 'text.primary' };
-  if (!last) return { word: 'Starting up', num: '', tone: 'text.primary' };
-  return { word: 'Holding off', num: '', tone: 'text.primary' };
+// The target tick shows during a run and for 20 real seconds after it ends (the same window as the drawing).
+function useTargetShown(fh) {
+  const st = useRef({ end: fh.run.t_end, real: -1e9 });
+  if (fh.run.t_end !== st.current.end) st.current = { end: fh.run.t_end, real: performance.now() };
+  const tgt = fh.run.target;
+  if (tgt == null) return null;
+  const recent = fh.run.phase !== 'idle' && performance.now() - st.current.real < 20000;
+  return fh.tgt || recent ? tgt : null;
+}
+
+// A 6px dot that flashes once per new reading, at most once per 800 ms real time. Hollow while paused.
+function ReadingDot({ ts }) {
+  const el = useRef(null);
+  const last = useRef({ ts, at: 0 });
+  useEffect(() => {
+    const node = el.current;
+    if (!node || ts == null || ts === last.current.ts) return;
+    last.current.ts = ts;
+    const now = performance.now();
+    if (now - last.current.at < 800) return;
+    last.current.at = now;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    node.animate([{ opacity: 1 }, { opacity: 0.25 }], { duration: 600, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', });
+  }, [ts]);
+  const paused = sim.paused;
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      {paused && <Typography variant="caption" color="text.secondary">Paused</Typography>}
+      <Box
+        ref={el}
+        aria-hidden="true"
+        sx={{
+          width: 6, height: 6, borderRadius: '50%', flex: 'none',
+          bgcolor: paused ? 'transparent' : 'text.primary',
+          boxShadow: paused ? 'inset 0 0 0 1.5px currentColor' : 'none',
+          color: 'text.primary',
+          opacity: paused ? 1 : 0.25,
+          '@media (prefers-reduced-motion: reduce)': { opacity: 1 },
+        }}
+      />
+      <Box component="span" sx={visuallyHidden} aria-live="off">New reading every second</Box>
+    </Box>
+  );
 }
 
 export default function LiveNow({ fh, frac }) {
   useSim(4);
   const L = fh.latest;
   const pct = fh.nowPct();
-  const age = readingAge(fh, frac());
-  const ps = pumpState(fh, frac());
+  const T = makeTime(fh);
+  const ps = pumpState(fh, frac(), T.hhmm);
+  const target = useTargetShown(fh);
   return (
-    <Box component="section" aria-label="Live readings">
-      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 2, sm: 3 } }}>
-        <Big label="Soil moisture" value={pct} unit="%" marker="moisture.main">
-          {/* The band (min to wet limit) with the minimum as a tick; the needle moves on transform, not `left`. */}
-          <Box sx={{ position: 'relative', height: 8, bgcolor: 'track', borderRadius: '4px', mt: 1.5 }} aria-hidden="true">
-            <Box sx={{ position: 'absolute', left: `${CFG.DRY_PCT}%`, width: `${CFG.WET_PCT - CFG.DRY_PCT}%`, top: 0, bottom: 0, bgcolor: 'success.light' }} />
-            <Box sx={{ position: 'absolute', left: `${CFG.DRY_PCT}%`, top: -3, bottom: -3, width: '1px', bgcolor: 'text.secondary' }} />
-            {pct != null && (
-              <Box sx={(t) => ({
-                position: 'absolute', inset: 0, transform: `translateX(${clamp(pct, 0, 100)}%)`, transition: `transform ${t.dur.number}ms ${t.ease}`,
-                '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
-              })}>
-                <Box sx={{ position: 'absolute', left: -1, top: -4, height: 16, width: 3, bgcolor: 'text.primary', borderRadius: '1px' }} />
-              </Box>
-            )}
-          </Box>
-          <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 0.75 }}>min {CFG.DRY_PCT}%, wet {CFG.WET_PCT}%</Typography>
-        </Big>
-        <Big label="Soil temperature" value={L ? L.temp_c : null} unit={' °C'} marker="temp.main" />
+    <Box component="section" aria-label="Readings">
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr 1fr', md: '1fr' },
+          gridTemplateAreas: { xs: '"m t" "b b"', md: '"m" "b" "t"' },
+          columnGap: 2,
+        }}
+      >
+        <Reading area="m" label="Soil moisture" value={pct} unit="%" />
+        <Bullet
+          value={pct}
+          min={CFG.DRY_PCT}
+          full={CFG.WET_PCT}
+          target={target}
+          sx={{ gridArea: 'b', mt: 1.5 }}
+        />
+        <Reading area="t" label="Soil temperature" value={L ? L.temp_c : null} unit={' °C'} sx={{ mt: { xs: 0, md: 4 } }} />
       </Box>
 
-      <Stack direction="row" useFlexGap sx={{ mt: 2.5, alignItems: 'baseline', flexWrap: 'wrap', columnGap: 2, rowGap: 0.25 }}>
-        <Typography variant="status" aria-live="polite" sx={{ color: ps.num ? 'text.primary' : ps.tone }}>
-          {ps.word}{ps.num && <Box component="span" sx={{ color: ps.tone }}> {ps.num}</Box>}
+      <Box sx={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', columnGap: 2, mt: { xs: 2, md: 4 } }}>
+        <Typography variant="status" aria-live="polite" sx={{ color: ps.tone }}>
+          {ps.word}
+          {ps.num && <>{' '}<Box component="span" sx={{ display: 'inline-block', minWidth: '5ch' }}>{ps.num}</Box></>}
         </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ fontVariantNumeric: 'tabular-nums' }}>
-          {age == null ? 'No reading yet' : `Read ${age.toFixed(1)} s ago`}
-        </Typography>
-      </Stack>
+        <ReadingDot ts={L ? L.ts : null} />
+      </Box>
     </Box>
   );
 }

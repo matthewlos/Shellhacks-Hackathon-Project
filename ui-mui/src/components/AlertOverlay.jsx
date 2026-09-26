@@ -4,7 +4,9 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 
 /*
- * Alerts slide in over the call in the right column (PLAN 5d): never a modal, never pushing the layout.
+ * Alerts slide in over the block they cover (the call on Demo, the headline on Vs timer): never a modal, never
+ * pushing the layout. A fault is filled red (the one red thing on screen); a hand pour is a paper box with a 1 px
+ * ink border (theme MuiAlert). The owner makes the covered content `inert` while an alert is up.
  * Enter: 10 px + opacity, 250 ms strong ease-out, 60 ms after the content under it starts fading, so the two
  * never double-expose. Exit: opacity only, 150 ms (exit faster than enter; Emil, impeccable). Reduced motion:
  * opacity only both ways. They don't time out (WCAG 2.2.1); they clear when the condition ends or when closed.
@@ -55,9 +57,9 @@ export default function AlertOverlay({ alert }) {
         role={a.severity === 'error' ? 'alert' : 'status'}
         onClose={() => setClosed(a.key)}
         slotProps={{ closeButton: { sx: { width: 44, height: 44 } } }}
-        sx={(t) => ({ boxShadow: `0 6px 16px ${t.palette.shadow}` })}
+        sx={(t) => ({ boxShadow: `0 6px 16px ${t.palette.shadow}`, alignItems: 'flex-start', '& .MuiAlert-message': { minWidth: 0 } })}
       >
-        <AlertTitle sx={{ fontWeight: 700, mb: 0.25 }}>{a.title}</AlertTitle>
+        <AlertTitle sx={{ fontWeight: 600, fontSize: 16, lineHeight: '24px', mb: 0.25 }}>{a.title}</AlertTitle>
         {a.msg}
       </Alert>
     </Box>

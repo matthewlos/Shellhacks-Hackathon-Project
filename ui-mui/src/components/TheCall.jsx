@@ -1,33 +1,38 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
-import { ago, BRAIN, PICK, callSentence, isStale, makeTime, soilAt } from '../format.js';
+import { BRAIN, PICK, callSentence, isStale, makeTime, soilAt, whenNext } from '../format.js';
 import { useSim } from '../useFarmHand.js';
+import Notice from './Notice.jsx';
 
 /*
- * Tier 2 (PLAN 5d): the call in one sentence, Laya's pick, and the Gemini team counting while it works.
- * A call whose soil has since moved more than 2 points becomes a past-tense line with the next check time,
- * so an old sentence never reads as the current state next to the live number.
+ * The call (spec 9.L.3): one sentence, Laya's first call while the Gemini team is on it, and a meta line that
+ * ends in "Check now". A call whose soil has since moved more than 2 points becomes a past-tense line with the
+ * next check time, so an old sentence never reads as the current state next to the live number.
+ * The team's running count lives in the status word ("Checking 32 s"), so it isn't repeated here.
  */
-export default function TheCall({ fh, act, frac, covered }) {
+export default function TheCall({ fh, act, covered }) {
   useSim(2);
   const [msg, setMsg] = useState('');
   const T = makeTime(fh);
-  // Target runs are a person's, so they show in the pump state and the receipt instead.
+  // Target runs are a person's, so they show in the status word and the receipt instead.
   const d = [...fh.decisions].reverse().find((x) => x.brain !== 'target run');
   const la = fh.LAST.laya;
-  const then = d ? soilAt(fh, d.ts) : null;
   const stale = d && isStale(fh, d);
   let sentence;
-  if (!d) sentence = `First check in ${Math.max(0, Math.ceil(fh.nextCheck - fh.t))} s, then every 15 min.`;
-  else if (stale) {
+  if (!d) {
+    const s = fh.nextCheck - fh.t;
+    sentence = `First check ${whenNext(fh, fh.nextCheck)}${s <= 90 ? ', then every 15 min' : ''}.`;
+  } else if (stale) {
+    const then = soilAt(fh, d.ts);
     const did = d.action === 'water' ? `Watered ${Math.round(d.seconds)} s` : 'Waited';
     sentence = `${did} at ${T.hhmm(d.ts)} (soil ${then.toFixed(1)}%). Next check ${T.hhmm(fh.nextCheck)}.`;
   } else sentence = callSentence(fh, d);
-  const layaFresh = la && fh.brainMode !== 'rules';
+
+  // Laya's instant pick, only in Gemini mode (in Laya or rules mode the sentence already names the brain).
+  const layaLine = fh.brainMode === 'gemini' && la && !stale
+    && (fh.team || (d && d.brain === 'gemini (simulated)' && la.ts >= d.ts - 60));
 
   return (
     <Box
@@ -35,33 +40,27 @@ export default function TheCall({ fh, act, frac, covered }) {
       aria-label="The call"
       inert={covered || undefined}
       aria-hidden={covered || undefined}
-      sx={(t) => ({ minHeight: 104, opacity: covered ? 0 : 1, transition: `opacity ${t.dur.panel}ms ${t.ease}` })}
+      sx={(t) => ({ opacity: covered ? 0 : 1, transition: `opacity ${t.dur.panel}ms ${t.ease}` })}
     >
       <Typography variant="body1" sx={{ maxWidth: '60ch' }} aria-live="polite">{sentence}</Typography>
-      {layaFresh && (
-        <Typography variant="body2" sx={{ mt: 1, fontVariantNumeric: 'tabular-nums' }}>
-          <b>Laya</b>: {PICK[la.pick] || la.pick}, <Box component="span" sx={{ color: 'moisture.main', fontWeight: 600 }}>{Math.round(la.sure * 100)}% sure, {Math.round(la.ms)} ms</Box>
+      {layaLine && (
+        <Typography variant="body2" sx={{ mt: 1 }}>
+          Laya&apos;s first call: {PICK[la.pick] || la.pick}, <Box component="span" sx={{ fontWeight: 600 }}>{Math.round(la.sure * 100)}% sure</Box>.
         </Typography>
       )}
-      {fh.team && (
-        <Typography variant="body2" sx={{ mt: 0.5, fontVariantNumeric: 'tabular-nums' }} aria-live="off">
-          <b>Gemini team</b> thinking, <Box component="span" sx={{ color: 'moisture.main', fontWeight: 600 }}>{Math.floor(fh.t - fh.team.t0 + frac())} s</Box>
-        </Typography>
-      )}
-      <Stack direction="row" useFlexGap sx={{ mt: 0.5, gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-        {d && <Typography variant="caption" color="text.secondary">{BRAIN[d.brain] || d.brain}, {ago(fh.t - d.ts)}</Typography>}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', columnGap: 1.5, mt: 0.5 }}>
+        {d && <Typography variant="caption" color="text.secondary">{BRAIN[d.brain] || d.brain}, {T.hhmm(d.ts)}</Typography>}
         <Button
           variant="text"
+          size="small"
           disabled={!!fh.team}
           onClick={() => setMsg(act((f) => f.checkNow('button')) ? '' : 'Already checking.')}
-          sx={{ ml: 'auto' }}
+          sx={{ ml: d ? -0.5 : -1 }}
         >
           Check now
         </Button>
-      </Stack>
-      <Box role="status" aria-live="polite">
-        {msg && <Alert severity="warning" onClose={() => setMsg('')} sx={{ mt: 1.5 }}>{msg}</Alert>}
       </Box>
+      {msg && <Notice reserve={1}>{msg}</Notice>}
     </Box>
   );
 }

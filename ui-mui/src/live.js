@@ -42,3 +42,24 @@ export function currentAlert(fh) {
   }
   return null;
 }
+
+/*
+ * The Demo page's status word (spec 9.L.3). First match wins, so a word never contradicts the soil:
+ * "Holding off" only shows while the soil is above the watering line and nothing is running.
+ * Only "Watering" is blue (tone 'moisture.main'); every other word is ink.
+ */
+export function pumpState(fh, frac, hhmm) {
+  const run = fh.run;
+  const pc = pumpClock(fh, frac);
+  const last = fh.decisions[fh.decisions.length - 1];
+  const ink = 'text.primary';
+  if (pc) return { word: 'Watering', num: `${Math.ceil(pc.left)} s`, tone: 'moisture.main' };
+  if (fh.tgt) return { word: 'Hitting', num: `${run.target}%`, tone: ink };
+  if (last && last.brain === 'target run' && run.phase === 'locked') return { word: 'Locked at', num: `${run.now.toFixed(1)}%`, tone: ink };
+  if (fh.live.phase === 'soaking' && fh.live.pot !== 'B') return { word: 'Soaking in', num: '', tone: ink };
+  if (fh.team) return { word: 'Checking', num: `${Math.floor(fh.t - fh.team.t0 + frac)} s`, tone: ink };
+  if (!last) return { word: 'Starting up', num: '', tone: ink };
+  const now = fh.nowPct();
+  if (now != null && now <= CFG.DRY_PCT + CFG.LOW_MARGIN) return { word: 'Next check', num: hhmm(fh.nextCheck), tone: ink };
+  return { word: 'Holding off', num: '', tone: ink };
+}

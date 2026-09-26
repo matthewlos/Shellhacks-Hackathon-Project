@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -10,14 +8,12 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import ToggleButton from '@mui/material/ToggleButton';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import BlockIcon from '@mui/icons-material/Block';
 import { CFG } from '../sim.js';
 import { BY, RULE, callSentence, f1, isStale, ml, isBad, makeTime, signed } from '../format.js';
 import { useSim } from '../useFarmHand.js';
+import TextChoice from './TextChoice.jsx';
 
 const AGENTS = [
   { node: 'laya', name: 'Laya', note: 'first call' },
@@ -57,8 +53,8 @@ function StatusDot({ state }) {
       aria-hidden="true"
       sx={(t) => ({
         width: 8, height: 8, borderRadius: '50%', flex: 'none',
-        // No red and no halo: red is reserved for the one alert (von Restorff). Idle rows get no dot (taste-skill 9.F).
-        bgcolor: state === 'working' ? 'moisture.main' : state === 'blocked' ? 'text.primary' : state === 'recent' ? 'dotRecent' : 'transparent',
+        // Ink, never blue or red: blue is water, red is the one alert. The word beside it names the state.
+        bgcolor: state === 'working' || state === 'blocked' ? 'text.primary' : state === 'recent' ? 'dotRecent' : 'transparent',
         transition: `background-color ${t.dur.tip}ms ${t.ease}`,
       })}
     />
@@ -69,14 +65,13 @@ function TeamTab({ fh, act, hhmm }) {
   const state = agentStates(fh);
   return (
     <>
-      <Stack direction="row" useFlexGap sx={{ alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
-        <Typography variant="body2" id="brain-label">Decided by</Typography>
-        <ToggleButtonGroup size="small" exclusive value={fh.brainMode} onChange={(_, v) => v && act((f) => { f.brainMode = v; })} aria-labelledby="brain-label">
-          <ToggleButton value="gemini">Gemini team</ToggleButton>
-          <ToggleButton value="laya">Laya</ToggleButton>
-          <ToggleButton value="rules">Rules</ToggleButton>
-        </ToggleButtonGroup>
-      </Stack>
+      <TextChoice
+        label="Decided by"
+        value={fh.brainMode}
+        onChange={(v) => v && act((f) => { f.brainMode = v; })}
+        options={[{ value: 'gemini', label: 'Gemini team' }, { value: 'laya', label: 'Laya' }, { value: 'rules', label: 'Rules' }]}
+        sx={{ mb: 2 }}
+      />
       {(() => {
         const d = [...fh.decisions].reverse().find((x) => x.brain !== 'target run');
         // The live column already shows a fresh call word for word; repeat it here only once it has gone stale.
@@ -90,7 +85,7 @@ function TeamTab({ fh, act, hhmm }) {
       <Typography variant="caption" color="text.secondary" component="p" sx={{ mb: 0.5 }}>
         On the real rig: Gemini team on Google ADK (<Typography variant="code">brain.py</Typography>), Laya fine-tuned (<Typography variant="code">laya/</Typography>).
       </Typography>
-      <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0, maxWidth: 560 }}>
+      <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
         {AGENTS.map((a) => a.group ? (
           <Typography key={a.group} component="li" variant="overline" color="text.secondary" sx={{ display: 'block', pt: 1.5, pb: 0.25 }}>{a.group}</Typography>
         ) : (
@@ -99,25 +94,25 @@ function TeamTab({ fh, act, hhmm }) {
             {a.name.includes('_')
               ? <Typography variant="code">{a.name}</Typography>
               : <Typography variant="body2">{a.name}</Typography>}
-            {(state(a.node) === 'working' || state(a.node) === 'blocked') && <Typography variant="caption" color={state(a.node) === 'blocked' ? 'text.primary' : 'moisture.main'} sx={{ fontWeight: 600 }}>{state(a.node)}</Typography>}
+            {(state(a.node) === 'working' || state(a.node) === 'blocked') && <Typography variant="caption" sx={{ fontWeight: 600 }}>{state(a.node)}</Typography>}
             {a.note && <Typography variant="caption" color="text.secondary">{a.note}</Typography>}
           </Stack>
         ))}
       </Box>
 
       <Typography variant="overline" color="text.secondary" component="h2" sx={{ display: 'block', mt: 1.5 }}>Safety rules</Typography>
-      <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0, maxWidth: 560 }}>
+      <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
         {fh.guardReport().map((g) => (
           <Stack key={g.rule} component="li" direction="row" spacing={1} sx={{ alignItems: 'center', py: 0.25 }}>
             {g.ok ? <CheckCircleIcon sx={{ fontSize: 16, color: 'success.text' }} titleAccess="pass" /> : <BlockIcon sx={{ fontSize: 16, color: 'text.primary' }} titleAccess="blocked" />}
             <Typography variant="body2" sx={{ flex: 1, fontWeight: g.ok ? 400 : 600 }}>{RULE[g.rule] || g.rule}{g.ok ? '' : ': not now'}</Typography>
-            <Typography variant="code" sx={{ color: g.ok ? 'text.secondary' : 'text.primary', textAlign: 'right' }}>{g.detail.replace('–', '-')}</Typography>
+            <Typography variant="code" sx={{ color: g.ok ? 'text.secondary' : 'text.primary', textAlign: 'right' }}>{g.detail.replace(/\u2013/g, '-')}</Typography>
           </Stack>
         ))}
       </Box>
 
       <Typography variant="overline" color="text.secondary" component="h2" sx={{ display: 'block', mt: 1.5 }}>Activity</Typography>
-      <Box component="ol" sx={{ listStyle: 'none', m: 0, p: 0, maxWidth: 560, maxHeight: 240, overflow: 'auto', borderTop: 1, borderColor: 'divider', pt: 0.5 }} tabIndex={0} aria-label="Activity log, newest first">
+      <Box component="ol" sx={{ listStyle: 'none', m: 0, p: 0, maxHeight: 320, overflow: 'auto', borderTop: 1, borderColor: 'divider', pt: 0.5 }} tabIndex={0} aria-label="Activity log, newest first">
         {fh.activity.length === 0 && <Typography component="li" variant="body2" color="text.secondary">Nothing yet.</Typography>}
         {fh.activity.slice(-40).reverse().map((a, i) => (
           <Typography key={`${a.ts}-${i}`} component="li" variant="body2" sx={{ py: 0.25, fontWeight: isBad(a.what) ? 600 : 400 }}>
@@ -139,14 +134,14 @@ function PoursTab({ fh, hhmm }) {
     <TableContainer>
       <Table size="small" aria-label="Pours, newest first">
         <TableHead>
-          <TableRow>{['Time', 'By', 'Pump', 'Soil', 'Rise', 'Soak rate'].map((h, i) => <TableCell key={h} align={i >= 2 ? 'right' : 'left'}>{h}</TableCell>)}</TableRow>
+          <TableRow>{['Time', 'By', 'Pump (s)', 'Soil (%)', 'Rise (%)', 'Soak (%/s)'].map((h, i) => <TableCell key={h} align={i >= 2 ? 'right' : 'left'}>{h}</TableCell>)}</TableRow>
         </TableHead>
         <TableBody>
           {!rows.length && !w && <TableRow><TableCell colSpan={6} sx={{ color: 'text.secondary' }}>No pours yet.</TableCell></TableRow>}
           {w && (
             <TableRow>
               <TableCell>{hhmm(w.t0)}</TableCell><TableCell>{BY[w.by] || w.by}</TableCell>
-              <TableCell sx={num}>{w.poured_s} s</TableCell><TableCell colSpan={3} sx={{ color: 'text.secondary' }}>soaking</TableCell>
+              <TableCell sx={num}>{w.poured_s}</TableCell><TableCell colSpan={3} sx={{ color: 'text.secondary' }}>soaking</TableCell>
             </TableRow>
           )}
           {rows.map((s, i) => {
@@ -155,10 +150,10 @@ function PoursTab({ fh, hhmm }) {
               <TableRow key={`${s.ts}-${i}`}>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>{hhmm(s.ts)}</TableCell>
                 <TableCell>{s.note === 'target pulse' ? 'Target' : BY[s.by] || s.by}</TableCell>
-                <TableCell sx={num}>{s.poured_s} s<Box component="span" sx={{ display: 'block', typography: 'caption', color: 'text.secondary' }}>{Math.round(s.poured_s * CFG.FLOW_ML_S)} ml</Box></TableCell>
-                <TableCell sx={{ ...num, ...bad }}>{f1(s.before_pct)} to {f1(s.peak_pct)}%</TableCell>
-                <TableCell sx={{ ...num, ...bad }}>{signed(s.rise_pct)}%{!s.ok && <Box component="span" sx={{ display: 'block', typography: 'caption' }}>missed</Box>}</TableCell>
-                <TableCell sx={{ ...num, ...bad }}>{s.pct_per_s == null ? '-' : `${s.pct_per_s.toFixed(2)}%/s`}</TableCell>
+                <TableCell sx={num}>{s.poured_s}<Box component="span" sx={{ display: 'block', typography: 'caption', color: 'text.secondary' }}>{Math.round(s.poured_s * CFG.FLOW_ML_S)} ml</Box></TableCell>
+                <TableCell sx={{ ...num, ...bad }}>{f1(s.before_pct)} to {f1(s.peak_pct)}</TableCell>
+                <TableCell sx={{ ...num, ...bad }}>{signed(s.rise_pct)}{!s.ok && <Box component="span" sx={{ display: 'block', typography: 'caption' }}>missed</Box>}</TableCell>
+                <TableCell sx={{ ...num, ...bad }}>{s.pct_per_s == null ? '-' : s.pct_per_s.toFixed(2)}</TableCell>
               </TableRow>
             );
           })}
@@ -184,7 +179,7 @@ function Item({ label, note, value }) {
 function DetailsTab({ fh }) {
   const rep = fh.report();
   return (
-    <Box component="dl" sx={{ m: 0, maxWidth: 560 }}>
+    <Box component="dl" sx={{ m: 0 }}>
       <Item label="Water, 24 h" note={`cap ${CFG.DAILY_MAX_ML.toLocaleString()} ml`} value={ml(fh.mlToday())} />
       <Item label="Soak rate" note="median of last 5 pours" value={fh.learnedPctPerS().toFixed(2) + '% per s'} />
       <Item label="Time in band" value={rep.ai_pot_time_healthy_pct == null ? '-' : rep.ai_pot_time_healthy_pct.toFixed(1) + '%'} />
@@ -210,32 +205,30 @@ function SerialTab({ fh, clock }) {
       tabIndex={0}
       aria-label="Serial log: > is laptop to chip, < is chip to laptop"
       onScroll={(e) => { const el = e.currentTarget; stick.current = el.scrollTop + el.clientHeight >= el.scrollHeight - 20; }}
-      sx={{ m: 0, height: 260, overflow: 'auto', typography: 'code', bgcolor: 'serial.bg', color: 'serial.fg', p: 1.5, borderRadius: 1, whiteSpace: 'pre' }}
+      sx={{ m: 0, height: 260, overflow: 'auto', typography: 'code', bgcolor: 'serial.bg', color: 'serial.fg', p: 1.5, borderRadius: '4px', whiteSpace: 'pre' }}
     >
       {text}
     </Box>
   );
 }
 
-export default function LogTabs({ fh, act }) {
+export const VIEWS = [
+  { value: 'team', label: 'Agent team' },
+  { value: 'pours', label: 'Pours' },
+  { value: 'serial', label: 'Serial' },
+  { value: 'details', label: 'Details' },
+];
+
+// The log drawer's views (spec 9.L.8): data unchanged from the old tabs, restyled. The drawer picks the view.
+export default function LogViews({ fh, act, view }) {
   useSim(1);
-  const phone = useMediaQuery((t) => t.breakpoints.down('sm'));
-  const [tab, setTab] = useState('team');
   const T = makeTime(fh);
   return (
-    <Box component="section" aria-label="Agents, pours and serial log">
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable" scrollButtons={false} aria-label="Detail view" sx={{ borderBottom: 1, borderColor: 'divider', mb: 1.5 }}>
-        <Tab value="team" label={phone ? 'Team' : 'Agent team'} id="tab-team" aria-controls="panel-team" />
-        <Tab value="pours" label="Pours" id="tab-pours" aria-controls="panel-pours" />
-        <Tab value="serial" label="Serial" id="tab-serial" aria-controls="panel-serial" />
-        <Tab value="details" label="Details" id="tab-details" aria-controls="panel-details" />
-      </Tabs>
-      <Box role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} sx={{ maxWidth: 960 }}>
-        {tab === 'team' && <TeamTab fh={fh} act={act} hhmm={T.hhmm} />}
-        {tab === 'pours' && <PoursTab fh={fh} hhmm={T.hhmm} />}
-        {tab === 'serial' && <SerialTab fh={fh} clock={T.clock} />}
-        {tab === 'details' && <DetailsTab fh={fh} />}
-      </Box>
+    <Box role="region" aria-label={VIEWS.find((v) => v.value === view)?.label}>
+      {view === 'team' && <TeamTab fh={fh} act={act} hhmm={T.hhmm} />}
+      {view === 'pours' && <PoursTab fh={fh} hhmm={T.hhmm} />}
+      {view === 'serial' && <SerialTab fh={fh} clock={T.clock} />}
+      {view === 'details' && <DetailsTab fh={fh} />}
     </Box>
   );
 }
