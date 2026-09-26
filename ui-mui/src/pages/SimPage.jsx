@@ -21,10 +21,115 @@ import BaselineSlider from '../components/BaselineSlider.jsx';
  */
 
 // farm-hand/laya/data/eval.md, run 2026-09-23 on the team's GPU. Quoted, not recomputed here.
+// color: timer orange, Laya blue (the AI), rules and the oracle in ink (neither is the product or the timer).
 const EVAL = [
-  { brain: 'Timer', mm: 3316.8, gal: 3545691, stress: 12 },
-  { brain: 'Laya (Farm Hand)', mm: 1452.8, gal: 1553052, stress: 0 },
+  { key: 'timer', brain: 'Timer', how: '5.29 mm every morning, sized for the hottest month', mm: 3316.8, gal: 3545691, stress: 12, drain: 3181.2, color: 'timer.main' },
+  { key: 'rules', brain: 'Rules', how: 'soil probe + if-statements', mm: 1419.7, gal: 1517632, stress: 10, drain: 1284.1, color: 'text.secondary' },
+  { key: 'laya', brain: 'Laya (Farm Hand)', how: 'soil probe + the trained classifier', mm: 1452.8, gal: 1553052, stress: 0, drain: 1317.2, color: 'primary.main' },
+  { key: 'oracle', brain: 'Oracle', how: 'knows the real rain in advance; the ceiling, not a real option', mm: 1415.2, gal: 1512888, stress: 0, drain: 1279.6, color: 'text.disabled', ceiling: true },
 ];
+const BY = Object.fromEntries(EVAL.map((r) => [r.key, r]));
+const lessThanTimer = (r) => (1 - r.mm / BY.timer.mm) * 100;
+// eval.md section 1: held-out accuracy on 7,524 decisions; wait_rain 161 of 240 right
+const ACC = { overall: 94.1, waitRain: (161 / 240) * 100 };
+
+const f1 = (x) => x.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+// One labeled bar per brain. Bars are drawn to the largest value in the set; the number is always printed.
+function Bars({ label, unit, field, digits = 1 }) {
+  const max = Math.max(...EVAL.map((r) => r[field]));
+  return (
+    <Box component="figure" sx={{ m: 0 }}>
+      <Typography variant="subtitle2" component="figcaption" sx={{ mb: 1 }}>{label}</Typography>
+      <Stack spacing={0.75}>
+        {EVAL.map((r) => (
+          <Box key={r.key} sx={{ display: 'grid', gridTemplateColumns: { xs: '64px 1fr auto', sm: '140px 1fr 96px' }, columnGap: 1.5, alignItems: 'center' }}>
+            <Typography variant="body2" sx={{ fontWeight: r.key === 'laya' ? 600 : 400 }}>{r.brain.replace(' (Farm Hand)', '')}</Typography>
+            <Box sx={{ position: 'relative', height: 12, bgcolor: 'action.hover', borderRadius: 999 }} aria-hidden="true">
+              <Box sx={{
+                position: 'absolute', left: 0, top: 0, bottom: 0, borderRadius: 999, bgcolor: r.ceiling ? 'transparent' : r.color,
+                border: r.ceiling && r[field] ? 1 : 0, borderStyle: 'dashed', borderColor: 'text.secondary',
+                width: max ? `${Math.max(r[field] / max * 100, r[field] ? 1.5 : 0)}%` : 0,
+              }} />
+            </Box>
+            <Typography variant="data" sx={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+              {digits ? f1(r[field]) : r[field]} {unit}
+            </Typography>
+          </Box>
+        ))}
+      </Stack>
+    </Box>
+  );
+}
+
+function WhereSavingsComeFrom() {
+  const rules = lessThanTimer(BY.rules), laya = lessThanTimer(BY.laya);
+  return (
+    <Paper variant="outlined" component="section" aria-labelledby="split-title" sx={{ px: { xs: 2, lg: 3 }, py: 2.5 }}>
+      <Typography variant="h3" component="h2" id="split-title">Where the savings come from</Typography>
+      <Typography variant="body2" sx={{ mt: 0.5, maxWidth: '75ch' }}>
+        Four brains watering the same simulated field on the same real weather. Only the brain differs.
+      </Typography>
+      <Typography variant="caption" color="text.secondary" component="p">
+        From the team's 2026-09-23 run (<Typography variant="code" sx={{ fontSize: 'inherit' }}>laya/data/eval.md</Typography>), not recomputed here.
+        Jan 1 2025 to Sep 19 2026, weather Laya never trained on. FAO-56 bucket, sandy soil, Kc 1.05.
+      </Typography>
+
+      <Box sx={{ mt: 2.5, display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, maxWidth: 1040 }}>
+        <Bars label="Irrigation used" unit="mm" field="mm" />
+        <Bars label="Hours past the stress line" unit="h" field="stress" digits={0} />
+      </Box>
+
+      <Stack spacing={1.5} sx={{ mt: 3, maxWidth: '80ch' }}>
+        <Typography variant="body1">
+          <strong>Measuring the soil saves the water.</strong> The rule brain, a soil probe with plain if-statements, used{' '}
+          {f1(rules)}% less water than the timer. Laya used {f1(laya)}% less, {f1(BY.laya.mm - BY.rules.mm)} mm more than the rules.
+        </Typography>
+        <Typography variant="body1">
+          <strong>The classifier protects the crop.</strong> Laya was the only real brain that never let the field past the stress line:{' '}
+          {BY.laya.stress} hours, against {BY.rules.stress} for the rules and {BY.timer.stress} for the timer. That matches the oracle, which knows the rain ahead of time.
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          On held-out decisions Laya picked the right move {f1(ACC.overall)}% of the time. Its weakest move is waiting for rain ({f1(ACC.waitRain)}% right, 161 of 240),
+          which depends on the forecast. Indoors there is no rain, so this advantage only shows outside.
+        </Typography>
+      </Stack>
+
+      <TableContainer sx={{ mt: 2.5, maxWidth: 960 }}>
+        <Table size="small" aria-label="Season totals for each brain">
+          <TableHead>
+            <TableRow>
+              <TableCell>Brain</TableCell>
+              <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>What decides</TableCell>
+              <TableCell align="right">Irrigation</TableCell>
+              <TableCell align="right" sx={{ display: { xs: 'none', sm: 'table-cell' } }}>Gallons per acre</TableCell>
+              <TableCell align="right">Less than the timer</TableCell>
+              <TableCell align="right">Hours past the stress line</TableCell>
+              <TableCell align="right" sx={{ display: { xs: 'none', sm: 'table-cell' } }}>Lost below the roots</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {EVAL.map((r) => (
+              <TableRow key={r.key}>
+                <TableCell sx={{ fontWeight: r.key === 'laya' ? 600 : 400, whiteSpace: 'nowrap' }}>{r.brain}</TableCell>
+                <TableCell sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'table-cell' } }}>{r.how}</TableCell>
+                <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>{f1(r.mm)} mm</TableCell>
+                <TableCell align="right" sx={{ display: { xs: 'none', sm: 'table-cell' } }}>{r.gal.toLocaleString()}</TableCell>
+                <TableCell align="right">{r.key === 'timer' ? '' : `${f1(lessThanTimer(r))}%`}</TableCell>
+                <TableCell align="right">{r.stress}</TableCell>
+                <TableCell align="right" sx={{ whiteSpace: 'nowrap', display: { xs: 'none', sm: 'table-cell' } }}>{f1(r.drain)} mm</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 1, maxWidth: '80ch' }}>
+        The timer here waters every day at the hottest month's rate, the way real timers are usually set. A timer tuned to each season would close part of the gap.
+        Simulated field on real weather, not a measured farm.
+      </Typography>
+    </Paper>
+  );
+}
 
 // FAO-56 Table 22: p = fraction of available water a crop can use before stress. Stress line = 20 + 45 x (1 - p)
 // on our scale (wilting point 20%, field capacity 65%).
@@ -61,37 +166,6 @@ function SeasonReplay() {
         </Typography>
       </Box>
 
-      <Typography variant="subtitle1" component="h3" sx={{ mt: 3 }}>Expected totals</Typography>
-      <Typography variant="caption" color="text.secondary" component="p">
-        From the team's 2026-09-23 run (<Typography variant="code" sx={{ fontSize: 'inherit' }}>laya/data/eval.md</Typography>), not recomputed here.
-        Jan 1 2025 to Sep 19 2026, weather Laya never trained on.
-      </Typography>
-      <TableContainer sx={{ mt: 1, maxWidth: 720 }}>
-        <Table size="small" aria-label="Expected season totals">
-          <TableHead>
-            <TableRow>
-              <TableCell>Brain</TableCell>
-              <TableCell align="right">Irrigation</TableCell>
-              <TableCell align="right">Gallons per acre</TableCell>
-              <TableCell align="right">Hours past the stress line</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {EVAL.map((r) => (
-              <TableRow key={r.brain}>
-                <TableCell>{r.brain}</TableCell>
-                <TableCell align="right">{r.mm.toLocaleString(undefined, { minimumFractionDigits: 1 })} mm</TableCell>
-                <TableCell align="right">{r.gal.toLocaleString()}</TableCell>
-                <TableCell align="right">{r.stress}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Typography variant="h2" component="p" sx={{ mt: 2, fontSize: { xs: '1.75rem', lg: '2rem' }, fontVariantNumeric: 'tabular-nums' }}>
-        56.2% less water, 1,992,639 gallons per acre saved.
-      </Typography>
-      <Typography variant="body2" color="text.secondary">Stress hours 0 vs 12. Recorded result, simulated field.</Typography>
     </Paper>
   );
 }
@@ -173,6 +247,7 @@ export default function SimPage({ fh, act }) {
         </Typography>
       </Box>
       <SeasonReplay />
+      <WhereSavingsComeFrom />
       <Crops fh={fh} act={act} />
     </Stack>
   );
