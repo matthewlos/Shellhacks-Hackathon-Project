@@ -9,7 +9,7 @@ export function fmtArea(wCm: number, lCm: number): string {
 }
 
 export function fmtDoy(doy: number | null): string {
-  if (doy == null) return '–';
+  if (doy == null) return 'unknown';
   return new Date(2025, 0, doy).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 

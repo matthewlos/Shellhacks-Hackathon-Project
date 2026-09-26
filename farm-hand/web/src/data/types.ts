@@ -53,7 +53,27 @@ export interface ZoneLive {
   tempC: number | null;
   moistureOnline: boolean;
   tempOnline: boolean;
+  /** Farm Hand: the probe's raw ADC count (same as moistureRaw), null before the first reading */
+  raw: number | null;
+  /** Farm Hand: false when raw < 500, i.e. the probe is disconnected (NOT wet). moisturePct is null then. */
+  probeOk: boolean;
 }
+
+/** Farm Hand: what the server decided for box A on the latest reading (Laya, or the baseline rule). */
+export interface Decision {
+  /** 'laya' | 'rules' */
+  brain: string;
+  /** 'water' | 'wait_moist' | 'wait_rain' | 'wait' */
+  pick: string;
+  /** pump seconds asked for (0 unless pick is 'water') */
+  seconds: number;
+  why: string;
+  /** epoch ms */
+  t: number;
+}
+
+/** Farm Hand: pump state as the ESP32 reports it (pumps are disarmed in firmware for now). */
+export interface Pumps { A: boolean; B: boolean }
 
 export type PourPhase = 'idle' | 'armed' | 'running' | 'done' | 'timeout';
 

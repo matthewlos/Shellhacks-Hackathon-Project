@@ -1,19 +1,21 @@
 /**
  * BoardSource: everything the web app needs from "the board".
  *
- * Implementation: BackendBoard (data/backendBoard.ts), which talks to the local backend
- * that owns the three UNO Q boards. Real data only: the in-browser simulator was removed.
+ * Implementation: BackendBoard (data/backendBoard.ts), which talks to the Farm Hand server
+ * (farm-hand/cloud/receiver.py, /farmhand/api/). Real data only: nothing is simulated.
  *
  * The UI, the 3D scene and the WebMCP tools only ever talk to this interface.
  */
 import type {
-  BoardConfig, Connectivity, CropScore, Diagnosis, Forecast, FrostDates, HistorySeries, Note, Overrides, Place,
+  BoardConfig, Connectivity, Decision, Pumps, CropScore, Diagnosis, Forecast, FrostDates, HistorySeries, Note, Overrides, Place,
   PlantingWindow, Plot, PourState, ProbeId, RegionView, SoilProfile, Zone, ZoneId, ZoneLive, ZoneReading,
 } from './types';
 
 export type BoardEvent =
   | { type: 'config'; config: BoardConfig }
-  | { type: 'sample'; t: number; zones: Record<ZoneId, ZoneLive> }
+  | { type: 'sample'; t: number; zones: Record<ZoneId, ZoneLive>; pumps?: Pumps }
+  /** Farm Hand: a decision was made for box A (one per ESP32 reading) */
+  | ({ type: 'decision' } & Decision)
   | { type: 'pour'; pour: PourState }
   | { type: 'profile'; profile: SoilProfile | null }
   | { type: 'notes'; notes: Note[] }
@@ -24,7 +26,7 @@ export type BoardEvent =
   | { type: 'ui_command'; view?: string; drawer?: string; zone?: string; lens?: string; crop?: string; farm?: string }
   /** the land around the plot changed state (a new place was set, or its data arrived) */
   | { type: 'region'; status: string }
-  /** the live stream to the backend went up or down */
+  /** the live stream went up or down, or (Farm Hand) the ESP32 stopped/started reporting (no reading for > 60 s) */
   | { type: 'link'; online: boolean };
 
 export interface BoardSource {
@@ -65,6 +67,6 @@ export interface BoardSource {
 
   // hidden demo controls
   setOverrides(o: Overrides): void;
-  /** Future pump. Always refuses today: hardware not fitted. */
+  /** Always refuses today: the pumps are disarmed until the box mapping is confirmed. */
   runPump(seconds: number): Promise<{ ok: false; reason: string }>;
 }

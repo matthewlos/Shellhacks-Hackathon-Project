@@ -1,42 +1,69 @@
 /**
  * BRAND: the one place to change name, logo, colors and product copy.
  *
- * To rebrand: edit this file. Nothing else in the app hard-codes
- * the name or a color: CSS reads the tokens below as custom properties and the
- * 3D scene reads `brand.scene`.
+ * Farm Hand's UI is based on the Prompt Grass Grow Grass web app (MIT, see
+ * LICENSE-PromptGrassGrowGrass). CSS reads the tokens below as custom properties and the
+ * 3D scene reads `brand.colors` and `brand.scene`: keep every existing key when you edit.
  */
 export const brand = {
-  name: 'PromptGrass',
-  tagline: 'Read your ground.',
-  pitch: 'Push two probes into the soil. In minutes, see your plot alive, and know what to plant, when, and whether it needs water.',
+  name: 'Farm Hand',
+  tagline: 'Two boxes of soil. One is watered by AI, one by a timer.',
+  pitch: 'When a crop dies, you lose the time it took to grow it. Farm Hand waters from the soil, not the clock.',
+  credit: 'UI based on Prompt Grass Grow Grass (MIT)',
 
   /** Inline SVG path for the mark (24x24 viewBox). A drop that is also a seed. */
   logoPath:
     'M12 2.5c3.4 4.2 6 7.300 6 10.700a6 6 0 1 1-12 0c0-3.400 2.600-6.500 6-10.700zm0 6.200c-1.500 2.100-2.500 3.600-2.500 5a2.500 2.500 0 0 0 2.500 2.500',
 
-  /** UI tokens -> CSS custom properties (see applyBrand). */
+  /** The two storage-tote boxes. Box A is the AI, box B is the control. */
+  boxes: {
+    A: { name: 'Farm Hand', how: 'Watered by Laya, the AI', color: 'var(--water)' },
+    B: { name: 'Timer', how: 'Watered on a fixed schedule', color: 'var(--warm)' },
+  },
+  /** The baseline rule Laya falls back to, and the line drawn on the meters and the chart. */
+  baselinePct: 45,
+  /**
+   * The pumps are disarmed in firmware until the box wiring mapping is confirmed.
+   * Flip to true when they are armed (a store field `pumpsArmed`, if the data layer adds one, wins).
+   */
+  pumpsArmed: false,
+  disarmedReason: 'disarmed until wiring is confirmed',
+
+  /**
+   * UI tokens -> CSS custom properties (see applyBrand).
+   * Light theme on purpose: the demo runs on a projector in a bright hall (PLAN 5d).
+   * Blue is Farm Hand (box A, Laya), orange is the Timer (box B). Red is kept for one alert at a time.
+   */
   colors: {
-    bg: '#080c0a',
-    bgGlow: '#15251b',
-    panel: 'rgba(13, 19, 15, 0.72)',
-    panelSolid: '#0f1612',
-    transcript: '#14171b',
-    line: 'rgba(255, 255, 255, 0.09)',
-    text: '#eef3ea',
-    textDim: 'rgba(238, 243, 234, 0.62)',
-    textFaint: 'rgba(238, 243, 234, 0.52)',
-    accent: '#b6f36a', // growth
-    accentInk: '#10200a',
-    water: '#5cc8ff',
-    warm: '#ffb454',
-    cool: '#7fb4ff',
-    agent: '#a596ff', // the AI's color: anything violet on screen is the agent
-    danger: '#ff7161',
+    bg: '#e9ede7',
+    bgGlow: '#f4f6f2',
+    panel: '#fafbf8',
+    panelSolid: '#fafbf8',
+    sunk: '#f0f3ee',
+    transcript: '#f0f3ee',
+    line: 'rgba(22, 32, 26, 0.13)',
+    lineStrong: 'rgba(22, 32, 26, 0.24)',
+    text: '#16201a',
+    textDim: '#44504a',
+    textFaint: '#5e6a63',
+    accent: '#1b66c9',
+    accentInk: '#fafbf8',
+    water: '#1b66c9',
+    waterSoft: 'rgba(27, 102, 201, 0.12)',
+    warm: '#b3540c',
+    warmSoft: 'rgba(179, 84, 12, 0.12)',
+    cool: '#1b66c9',
+    agent: '#1b66c9',
+    good: '#2b7a45',
+    caution: '#8a5a00',
+    cautionSoft: 'rgba(176, 116, 0, 0.12)',
+    danger: '#b9362a',
+    dangerSoft: 'rgba(185, 54, 42, 0.1)',
   },
 
   fonts: {
-    display: "'Fraunces Variable', 'Iowan Old Style', Georgia, serif",
-    ui: "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    display: "'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif",
+    ui: "'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif",
     mono: "'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace",
   },
 
@@ -72,5 +99,5 @@ export function applyBrand(): void {
   root.style.setProperty('--font-display', brand.fonts.display);
   root.style.setProperty('--font-ui', brand.fonts.ui);
   root.style.setProperty('--font-mono', brand.fonts.mono);
-  document.title = `${brand.name} · ${brand.tagline}`;
+  document.title = brand.name;
 }

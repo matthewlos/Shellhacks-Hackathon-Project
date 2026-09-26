@@ -1,202 +1,271 @@
 /**
- * The region: the same field view with the camera pulled up, NOT a page of its own.
- * These are the few pieces of UI that sit over the land while it is zoomed out.
+ * "Your farm in Miami-Dade": the fields around the boxes, map first.
  *
- * Everything shown is a lookup (USDA cropland map, USDA soil survey), a measurement (this
- * plot's pour test) or a calculation (the crop rules run on both soils). The farm names and
- * people are illustrative and say so: the cropland map knows crops, not owners.
+ * Data: the store's RegionView (board.region()), fed by the AlphaEarth v2 build (per-field predicted crop,
+ * USDA SSURGO soil, a moisture baseline from the crop's FAO-56 stress line, similar-field counts, a trend).
+ * Everything on the map is a prediction from satellite data and is labeled that way.
+ *
+ * TODO(data): the v2-only fields (baseline, similar count, trend, water holding) are read defensively
+ * below until they are added to RegionField in data/types.ts.
  */
-import { useEffect, useState } from 'react';
-import { useExitValue } from './useExitValue';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../data/store';
-import type { FarmMatch, RegionField } from '../data/types';
-import { IconArrow, IconClose, IconHome, IconMail, IconPin, IconRegion, IconSpark } from './icons';
+import type { Region, RegionField, RegionView } from '../data/types';
+import { IconClose } from './icons';
 
-const names = (xs: { name: string }[], n = 3) => xs.slice(0, n).map((x) => x.name.toLowerCase().replace(' (cover crop)', '')).join(', ');
+// ------------------------------------------------------------------ v2 extras, read defensively
+type Trend = { year: number; value: number }[];
+interface FieldExtra {
+  baselinePct?: number; stressLinePct?: number; baseline_pct?: number;
+  similarCount?: number; similar?: number; similar_count?: number;
+  trend?: Trend | number[]; trendYears?: number[]; trendLabel?: string; trend_label?: string;
+  confidence?: number;
+}
+interface SoilExtra { awcCm?: number; awc_cm?: number; waterHoldingCm?: number; waterHoldsCm?: number }
 
-/** The zoom control. It lives with the navigation but it is a camera move, not a tab. */
-export function RegionControl() {
-  const on = useApp((s) => s.regionOn);
-  const has = useApp((s) => !!s.regionData);
-  return (
-    <div className="rail-group rail-zoom" role="group" aria-label="Camera zoom" title="Scroll out from the plot to get here, scroll in to come home">
-      <button aria-pressed={on} className={`rail-btn rail-btn-sm ${on ? 'is-on' : ''}`} disabled={!has} onClick={() => useApp.getState().goRegion(true)}><IconRegion /><span>Region</span></button>
-      <button aria-pressed={!on} className={`rail-btn rail-btn-sm ${!on ? 'is-on' : ''}`} onClick={() => useApp.getState().goRegion(false)}><IconHome /><span>Plot</span></button>
-    </div>
-  );
+const num = (...xs: unknown[]): number | null => { for (const x of xs) if (typeof x === 'number' && Number.isFinite(x)) return x; return null; };
+function extras(f: RegionField) {
+  const e = f as RegionField & FieldExtra;
+  const s = { ...(f as unknown as SoilExtra), ...((f.soil ?? {}) as SoilExtra) };
+  let trend: Trend | null = null;
+  if (Array.isArray(e.trend) && e.trend.length > 1) {
+    trend = typeof e.trend[0] === 'number'
+      ? (e.trend as number[]).map((value, i) => ({ year: e.trendYears?.[i] ?? 2017 + i, value }))
+      : (e.trend as Trend);
+  }
+  return {
+    baseline: num(e.baselinePct, e.stressLinePct, e.baseline_pct),
+    similar: num(e.similarCount, e.similar, e.similar_count),
+    waterCm: num(s.awcCm, s.awc_cm, s.waterHoldingCm, s.waterHoldsCm),
+    confidence: num(e.confidence),
+    trend, trendLabel: e.trendLabel ?? e.trend_label ?? 'Change in the satellite signal',
+  };
 }
 
-export function RegionOverlay() {
-  const on = useApp((s) => s.regionOn);
-  const view = useApp((s) => s.view);
-  const { shown, exiting } = useExitValue(on && view === 'field' ? true : null);
-  if (!shown) return null;
-  return (<div className={`region-overlay ${exiting ? 'is-exiting' : ''}`} inert={exiting}><MatchRail /><FarmCard /><Legend /><ContactDraft /></div>);
-}
+const acres = (ha: number) => ha * 2.47105;
+const fmtAcres = (ha: number) => { const a = acres(ha); return a >= 100 ? Math.round(a).toLocaleString() : a.toFixed(1); };
+const hex = (c: string): [number, number, number] => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(c.trim());
+  if (!m) return [200, 200, 200];
+  const v = parseInt(m[1], 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+};
 
-// ------------------------------------------------------------ best matches nearby
-function MatchRail() {
-  const data = useApp((s) => s.regionData);
-  const place = useApp((s) => s.config?.place ?? null);
+// -------------------------------------------------------------------------------- the map
+function MapCanvas({ region }: { region: Region }) {
+  const wrap = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const [size, setSize] = useState(0);
   const selected = useApp((s) => s.selectedFarm);
-  const drawer = useApp((s) => s.drawer);
-  const { selectFarm, setView, setStage, goRegion } = useApp.getState();
-  const region = data?.region ?? null;
+  const hover = useApp((s) => s.hoverFarm);
+  const n = region.n;
+
+  // base layer: one pixel per cell, crops in their legend colour, other land paled out
+  const base = useMemo(() => {
+    const byCode = new Map(region.legend.map((l) => [l.code, l]));
+    const img = new ImageData(n, n);
+    for (let i = 0; i < n * n; i++) {
+      const l = byCode.get(region.cells[i]);
+      let [r, g, b] = hex(l?.color ?? '#d9ddd6');
+      if (!(region.fieldOf[i] >= 0)) { r = Math.round(r * 0.25 + 222 * 0.75); g = Math.round(g * 0.25 + 226 * 0.75); b = Math.round(b * 0.25 + 219 * 0.75); }
+      img.data.set([r, g, b, 255], i * 4);
+    }
+    const c = document.createElement('canvas'); c.width = n; c.height = n;
+    c.getContext('2d')!.putImageData(img, 0, 0);
+    return c;
+  }, [region, n]);
+
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setSize(Math.floor(Math.min(el.clientWidth, el.clientHeight))));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const c = canvas.current;
+    if (!c || !size) return;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = size * dpr; c.height = size * dpr;
+    const g = c.getContext('2d')!;
+    g.imageSmoothingEnabled = false;
+    g.drawImage(base, 0, 0, c.width, c.height);
+    const k = c.width / n;
+    const idx = (id: string | null) => (id ? region.fields.findIndex((f) => f.id === id) : -1);
+    const paint = (fi: number, fill: string) => {
+      if (fi < 0) return;
+      g.fillStyle = fill;
+      for (let i = 0; i < n * n; i++) if (region.fieldOf[i] === fi) g.fillRect((i % n) * k, Math.floor(i / n) * k, k + 0.5, k + 0.5);
+    };
+    const sel = idx(selected), hov = idx(hover);
+    if (sel >= 0) {
+      // veil the land, bring the chosen field back at full colour, then ink its outline
+      g.fillStyle = 'rgba(250, 251, 248, 0.6)';
+      g.fillRect(0, 0, c.width, c.height);
+      g.strokeStyle = '#16201a';
+      g.lineWidth = Math.max(2, k * 0.3);
+      g.beginPath();
+      for (let i = 0; i < n * n; i++) {
+        if (region.fieldOf[i] !== sel) continue;
+        const x = i % n, y = Math.floor(i / n);
+        g.drawImage(base, x, y, 1, 1, x * k, y * k, k + 0.5, k + 0.5);
+        const out = (xx: number, yy: number) => xx < 0 || yy < 0 || xx >= n || yy >= n || region.fieldOf[yy * n + xx] !== sel;
+        if (out(x, y - 1)) { g.moveTo(x * k, y * k); g.lineTo((x + 1) * k, y * k); }
+        if (out(x, y + 1)) { g.moveTo(x * k, (y + 1) * k); g.lineTo((x + 1) * k, (y + 1) * k); }
+        if (out(x - 1, y)) { g.moveTo(x * k, y * k); g.lineTo(x * k, (y + 1) * k); }
+        if (out(x + 1, y)) { g.moveTo((x + 1) * k, y * k); g.lineTo((x + 1) * k, (y + 1) * k); }
+      }
+      g.stroke();
+    }
+    if (hov >= 0 && hov !== sel) paint(hov, 'rgba(22, 32, 26, 0.28)');
+  }, [base, size, selected, hover, region, n]);
+
+  const cellAt = (e: { clientX: number; clientY: number }) => {
+    const r = canvas.current!.getBoundingClientRect();
+    const x = Math.floor(((e.clientX - r.left) / r.width) * n), y = Math.floor(((e.clientY - r.top) / r.height) * n);
+    if (x < 0 || y < 0 || x >= n || y >= n) return null;
+    const fi = region.fieldOf[y * n + x];
+    return fi >= 0 ? region.fields[fi]?.id ?? null : null;
+  };
 
   return (
-    <aside className={`panel region-rail ${drawer ? 'is-covered' : ''}`} inert={!!drawer}>
-      <header className="drawer-head">
-        <div>
-          <div className="eyebrow">Around this plot</div>
-          <h2>Best matches nearby</h2>
-        </div>
-        <button className="btn btn-icon" onClick={() => goRegion(false)} aria-label="Back to the plot"><IconClose /></button>
-      </header>
-      <div className="drawer-body">
-        {place && <p className="muted small region-where"><IconPin /> {place.name}{region ? ` · ${region.halfKm * 2} km across · cropland map ${region.year}` : ''}</p>}
-
-        {(!data || data.status === 'loading') && <div className="card"><div className="shimmer-line" /><p className="muted small">Fetching the USDA cropland map and soil survey for this place. It is stored after the first time.</p></div>}
-        {data?.status === 'no_place' && (
-          <div className="card"><p className="muted">The land around a plot comes from its location. Set one and the region loads by itself.</p>
-            <button className="btn btn-primary" onClick={() => setStage('location')}>Set location <IconArrow /></button></div>
-        )}
-        {data?.status === 'unavailable' && <div className="card"><p className="muted">{data.reason}</p><button className="btn btn-ghost" onClick={() => setStage('location')}>Change location</button></div>}
-        {data?.status === 'ready' && !data.you.measured && (
-          <div className="card"><p className="muted">The land you see is real. Finding who complements you needs one thing from this plot: how its soil drains.</p>
-            <button className="btn btn-primary" onClick={() => setView('pour')}>Run the pour test <IconArrow /></button></div>
-        )}
-
-        {data?.status === 'ready' && data.you.measured && data.matches.length === 0 && <p className="muted">No nearby field has soil different enough from yours to complement it.</p>}
-        {data?.matches.map((m) => (
-          <button key={m.fieldId} className={`match ${selected === m.fieldId ? 'is-on' : ''}`} onClick={() => selectFarm(m.fieldId)}
-            onMouseEnter={() => useApp.setState({ hoverFarm: m.fieldId })} onMouseLeave={() => useApp.setState({ hoverFarm: null })}>
-            <i className="match-rank">{m.rank}</i>
-            <span className="match-main">
-              <b>{m.identity.farm}</b><small className="illustrative">Illustrative farm</small>
-              <span>{m.theyGrow.join(', ')}</span>
-            </span>
-            <span className="match-side">
-              <b>{m.distanceKm} km {m.bearing}</b>
-              <span className="match-bar" title={`Complement score ${m.score} of 100`}><i style={{ width: `${m.score}%` }} /></span>
-            </span>
-          </button>
-        ))}
-
-        {!!data?.unserved.length && data.matches.length > 0 && (
-          <p className="estimate">Your soil also suits {names(data.unserved, 4)}, and the cropland map shows nobody growing them within {region?.halfKm} km.</p>
-        )}
-        {data?.status === 'ready' && data.matches.length > 0 && (
-          <p className="muted small">Ranked by how much each soil adds to the other, nearer first. Farm names and people are illustrative: the cropland map knows crops, not owners.</p>
-        )}
+    <div className="map-wrap" ref={wrap}>
+      <div className="map-square" style={{ width: size, height: size }}>
+        <canvas
+          ref={canvas}
+          className={`map-canvas ${hover ? 'is-pointing' : ''}`}
+          style={{ width: size, height: size }}
+          onPointerMove={(e) => { const id = cellAt(e); if (id !== useApp.getState().hoverFarm) useApp.setState({ hoverFarm: id }); }}
+          onPointerLeave={() => useApp.setState({ hoverFarm: null })}
+          onClick={(e) => useApp.getState().selectFarm(cellAt(e))}
+          role="img"
+          aria-label={`Map of ${region.fields.length} fields around the Farm Hand boxes`}
+        />
+        <span className="map-you" style={{ left: '50%', top: '50%' }}><i /><b>Farm Hand boxes</b></span>
       </div>
-    </aside>
+    </div>
   );
 }
 
-// ------------------------------------------------------------ the card: three lines, no more
-function FarmCard() {
+function Legend({ region }: { region: Region }) {
+  const crops = region.legend.filter((l) => l.farmed).sort((a, b) => b.sharePct - a.sharePct).slice(0, 6);
+  return (
+    <ul className="map-legend" aria-label="Map key">
+      {crops.map((l) => <li key={l.code}><i style={{ background: l.color }} />{l.name}</li>)}
+      <li><i className="is-land" />Not farmed</li>
+    </ul>
+  );
+}
+
+// ------------------------------------------------------------------------------ the side
+function Spark({ trend }: { trend: Trend }) {
+  const W = 220, H = 48;
+  const vs = trend.map((p) => p.value), lo = Math.min(...vs), hi = Math.max(...vs), span = hi - lo || 1;
+  const pts = trend.map((p, i) => `${((i / (trend.length - 1)) * W).toFixed(1)},${(H - 4 - ((p.value - lo) / span) * (H - 8)).toFixed(1)}`).join(' ');
+  const last = trend[trend.length - 1];
+  return (
+    <figure className="spark">
+      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label={`Trend from ${trend[0].year} to ${last.year}`}>
+        <polyline points={pts} />
+      </svg>
+      <figcaption className="num"><span>{trend[0].year}</span><span>{last.year}</span></figcaption>
+    </figure>
+  );
+}
+
+function FieldCard({ f, year }: { f: RegionField; year: number }) {
+  const x = extras(f);
+  const soil = f.soil;
+  return (
+    <section className="field-card" key={f.id} aria-label={`Field: ${f.crop}`}>
+      <header>
+        <div>
+          <p className="predicted">Predicted from satellite, {year}</p>
+          <h2>{f.crop}</h2>
+          <p className="muted num">About {fmtAcres(f.areaHa)} acres, {f.distanceKm.toFixed(1)} km {f.bearing} of the boxes</p>
+        </div>
+        <button className="btn btn-icon" onClick={() => useApp.getState().selectFarm(null)} aria-label="Close field"><IconClose /></button>
+      </header>
+      {x.baseline != null && (
+        <div className="field-baseline">
+          <p>Farm Hand would keep this field at <b className="num">{x.baseline.toFixed(1)}%</b> or more.</p>
+          <p className="small">That is where {f.crop.toLowerCase()} starts to feel dry (FAO-56 stress line).</p>
+        </div>
+      )}
+      <dl className="field-lines">
+        <div><dt>Grows here</dt><dd>{f.grows.slice(0, 3).map((g) => `${g.name.toLowerCase()} ${Math.round(g.sharePct)}%`).join(', ') || 'unknown'}</dd></div>
+        <div><dt>Soil</dt><dd>{soil ? <>{soil.series}{soil.texture ? `, ${soil.texture.toLowerCase()}` : ''}{soil.drainagecl ? `, ${soil.drainagecl.toLowerCase()}` : ''}</> : 'unknown (no soil survey here)'}</dd></div>
+        <div><dt>Water it holds</dt><dd className="num">{x.waterCm != null ? `${x.waterCm.toFixed(1)} cm in the root zone` : 'unknown'}</dd></div>
+        <div><dt>Fields like this one</dt><dd className="num">{x.similar != null ? `${Math.round(x.similar).toLocaleString()} in Miami-Dade` : 'unknown'}</dd></div>
+      </dl>
+      {x.trend && (
+        <div className="field-trend">
+          <h3>{x.trendLabel}</h3>
+          <Spark trend={x.trend} />
+        </div>
+      )}
+      <p className="small muted">Crop and trend are predictions from AlphaEarth satellite embeddings, not a survey. Soil is from USDA SSURGO. The baseline is FAO-56 guidance for the predicted crop.</p>
+    </section>
+  );
+}
+
+function Overview({ data }: { data: RegionView }) {
+  const region = data.region!;
+  const farmedHa = region.fields.reduce((s, f) => s + f.areaHa, 0);
+  const top = region.legend.filter((l) => l.farmed).sort((a, b) => b.sharePct - a.sharePct).slice(0, 4);
+  return (
+    <section className="field-card" aria-label="Miami-Dade overview">
+      <h2>Your farm in Miami-Dade</h2>
+      <p>Every field around the boxes, predicted from satellite. Pick one on the map to see its crop, its soil, and the moisture Farm Hand would hold it at.</p>
+      <dl className="overview-stats">
+        <div><dt>Fields</dt><dd className="num">{region.fields.length.toLocaleString()}</dd></div>
+        <div><dt>Farmland</dt><dd className="num">{fmtAcres(farmedHa)}<small> acres</small></dd></div>
+      </dl>
+      {top.length > 0 && <p className="muted">Mostly {top.map((l) => l.name.toLowerCase()).join(', ')}.</p>}
+    </section>
+  );
+}
+
+export function RegionPage() {
   const data = useApp((s) => s.regionData);
-  const requested = useApp((s) => s.selectedFarm);
-  const drawer = useApp((s) => s.drawer);
-  const { shown: id, exiting } = useExitValue(drawer ? null : requested);
-  if (!id || !data?.region) return null;
-  const match = data.matches.find((m) => m.fieldId === id);
-  const field = data.region.fields.find((f) => f.id === id);
-  if (!field) return null;
-  return <div className={`farm-presence ${exiting ? 'is-exiting' : ''}`} inert={exiting}>{match ? <MatchCard m={match} year={data.region.year} /> : <PlainCard f={field} year={data.region.year} measured={data.you.measured} />}</div>;
-}
+  const selected = useApp((s) => s.selectedFarm);
+  useEffect(() => {
+    void useApp.getState().loadRegion();
+    return () => useApp.setState({ hoverFarm: null });
+  }, []);
+  const region = data?.status === 'ready' ? data.region : null;
+  const field = region && selected ? region.fields.find((f) => f.id === selected) ?? null : null;
 
-function Sources({ year, soil }: { year: number; soil: boolean }) {
-  return <footer className="farm-sources">Crops: USDA Cropland Data Layer {year}{soil ? ' · Their soil: USDA SSURGO survey (drainage class is an estimate) · Your soil: measured by the pour test · Scores: this app\'s crop rules' : ''}</footer>;
-}
-
-function MatchCard({ m, year }: { m: FarmMatch; year: number }) {
   return (
-    <section className="panel farm-card" key={m.fieldId}>
-      <header>
-        <div>
-          <div className="eyebrow">{m.distanceKm} km {m.bearing} · {m.soil.series}{m.soil.texture ? ` ${m.soil.texture.toLowerCase()}` : ''}</div>
-          <h3>{m.identity.farm}</h3><span className="illustrative">Illustrative farm and contact</span>
-        </div>
-        <button className="btn btn-icon" onClick={() => useApp.getState().selectFarm(null)} aria-label="Close"><IconClose /></button>
-      </header>
-      <dl className="farm-lines">
-        <div><dt>They grow</dt><dd>{m.theyGrow.join(', ')}</dd></div>
-        <div><dt>You could grow, they can't</dt><dd>{m.youNotThey.length ? <>{names(m.youNotThey)} <em>({m.youWhy})</em></> : <em>nothing their soil cannot also grow</em>}</dd></div>
-        <div><dt>They could grow, you can't</dt><dd>{m.theyNotYou.length ? <>{names(m.theyNotYou)} <em>({m.theyWhy})</em></> : <em>nothing your soil cannot also grow</em>}</dd></div>
-      </dl>
-      <p className="farm-say">{m.sentence}</p>
-      <div className="farm-actions">
-        <button className="btn btn-primary" onClick={() => useApp.setState({ contactFarm: m.fieldId })}><IconMail /> Contact {m.identity.person}</button>
-        <span className="muted small">Illustrative person. Nothing is sent.</span>
-      </div>
-      <Sources year={year} soil />
-    </section>
-  );
-}
-
-function PlainCard({ f, year, measured }: { f: RegionField; year: number; measured: boolean }) {
-  return (
-    <section className="panel farm-card" key={f.id}>
-      <header>
-        <div><div className="eyebrow">{f.distanceKm} km {f.bearing} · about {f.areaHa} ha</div><h3>{f.crop}</h3></div>
-        <button className="btn btn-icon" onClick={() => useApp.getState().selectFarm(null)} aria-label="Close"><IconClose /></button>
-      </header>
-      <dl className="farm-lines">
-        <div><dt>They grow</dt><dd>{f.grows.map((g) => g.name.toLowerCase()).join(', ')}</dd></div>
-        <div><dt>Their soil</dt><dd>{f.soil ? <>{f.soil.mapUnit}{f.soil.drainagecl ? <em> ({f.soil.drainagecl.toLowerCase()})</em> : null}</> : <em>no soil survey at this point</em>}</dd></div>
-        <div><dt>Pairing</dt><dd><em>{!measured ? 'unknown until this plot\'s drainage is measured' : 'not a strong complement: the two soils suit and fail much the same crops'}</em></dd></div>
-      </dl>
-      <Sources year={year} soil={!!f.soil} />
-    </section>
-  );
-}
-
-// ------------------------------------------------------------ legend, sitting in a corner of the land
-function Legend() {
-  const region = useApp((s) => s.regionData?.region ?? null);
-  if (!region) return null;
-  const crops = region.legend.filter((l) => l.farmed).slice(0, 9);
-  const land = new Map<string, string>();
-  for (const l of region.legend) if (!l.farmed && l.sharePct >= 2 && !land.has(l.familyLabel)) land.set(l.familyLabel, l.color);
-  return (
-    <div className="region-legend">
-      <ul>
-        {crops.map((l) => <li key={l.code}><i style={{ background: l.color }} />{l.name}</li>)}
-        {[...land].slice(0, 4).map(([label, color]) => <li key={label} className="is-land"><i style={{ background: color }} />{label}</li>)}
-      </ul>
-      <p>Each tile is about {Math.round(region.cellM / 50) * 50} m of real land, tinted by its main crop; not property boundaries. Not to scale: your plot is drawn far larger than life.</p>
-    </div>
-  );
-}
-
-// ------------------------------------------------------------ contact: a draft, clearly illustrative
-function ContactDraft() {
-  const id = useApp((s) => s.contactFarm);
-  const m = useApp((s) => s.regionData?.matches.find((x) => x.fieldId === id) ?? null);
-  const [text, setText] = useState('');
-  const [copied, setCopied] = useState(false);
-  useEffect(() => { setText(m?.draft ?? ''); setCopied(false); }, [m?.fieldId, m?.draft]);
-  if (!m) return null;
-  const close = () => useApp.setState({ contactFarm: null });
-  const copy = async () => { try { await navigator.clipboard.writeText(text); setCopied(true); } catch { setCopied(false); } };
-  return (
-    <div className="modal-scrim" onClick={close}>
-      <section className="panel contact" onClick={(e) => e.stopPropagation()}>
-        <header className="drawer-head">
-          <div><div className="eyebrow">First message · draft</div><h2>To {m.identity.person} at {m.identity.farm}</h2></div>
-          <button className="btn btn-icon" onClick={close} aria-label="Close"><IconClose /></button>
-        </header>
-        <div className="drawer-body">
-          <p className="contact-note"><b>Illustrative contact.</b> {m.identity.person} and {m.identity.farm} are made up for this demo: the public cropland map says what grows on that land, not who farms it. Nothing is sent. The crops, soils and pairing in the message are real lookups.</p>
-          <p className="muted small">{m.identity.note}</p>
-          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={12} spellCheck />
-          <div className="row-end">
-            <span className="muted small"><IconSpark /> Ask the assistant to rewrite it: "draft a friendlier message to {m.identity.farm}".</span>
-            <button className="btn btn-primary" onClick={() => void copy()}>{copied ? 'Copied' : 'Copy message'}</button>
+    <>
+      <div className="map-area">
+        {region ? (
+          <>
+            <MapCanvas region={region} />
+            <p className="map-label">Predicted from satellite: AlphaEarth, {region.year}. Not property lines.</p>
+            <Legend region={region} />
+          </>
+        ) : (
+          <div className="map-empty">
+            <h2>Your farm in Miami-Dade</h2>
+            <p className="muted">
+              {!data || data.status === 'loading' ? 'Loading the fields around the boxes.'
+                : data.status === 'no_place' ? 'The map needs the boxes\' location. It loads as soon as the server has one.'
+                : data.reason ?? 'The field map is not available right now.'}
+            </p>
           </div>
-        </div>
-      </section>
-    </div>
+        )}
+      </div>
+      <aside className="side">
+        {region && data && (field ? <FieldCard f={field} year={region.year} /> : <Overview data={data} />)}
+        {region && region.sources.length > 0 && (
+          <section className="sources">
+            <h2>Sources</h2>
+            <ul>{region.sources.map((s) => <li key={s.name}><a href={s.url} target="_blank" rel="noreferrer">{s.name}</a>: {s.what}</li>)}</ul>
+          </section>
+        )}
+      </aside>
+    </>
   );
 }

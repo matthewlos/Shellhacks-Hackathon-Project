@@ -628,6 +628,8 @@ Skills: `design-skills/` (README says which to use for what). Prompts that work 
 
 ## 5f. Where Farm Hand fits: the AlphaEarth farm map (2026-09-26)
 
+**Replaced by AlphaEarth v2 (see 5g).** This first map is not linked from the demo any more; its page stays reachable.
+
 **Live:** https://farmhand.dmchang.xyz/farmhand/fields/ (served by the Mac mini). Code: `farm-hand/alphaearth/`.
 
 The scale story as a real map, not an illustration: Miami-Dade's farm belt (Redland / Homestead, just south of FIU), found from space with Google DeepMind's **AlphaEarth Foundations** Satellite Embedding dataset. Strong for the Google Cloud and AI for Social Good tracks (a DeepMind model on Google's data).
@@ -665,6 +667,38 @@ Rerun: `python farm-hand/alphaearth/build_fields.py`, then copy `fields.html`, `
 - Put it on the **Simulation page** as the "outside, at scale" section (replaces the illustrated "A whole field" view from 5b). Either embed `/farmhand/fields/` in an iframe, or rebuild it in `ui-mui` with the same layers: the PNGs + `fields.json` are the data (bounds = `box_wsen`).
 - Demo order: live box → control box → season replay → **this map** ("and here's every farm in Miami-Dade that needs one").
 - Nice next step (not built): click a field → "a Farm Hand station here would cost / save …", or AlphaEarth similarity search ("fields most like this one").
+
+## 5g. The UI is Prompt Grass now (2026-09-26)
+
+**What changed.** The team switched the Farm Hand frontend to the Prompt Grass Grow Grass web app: `farm-hand/web/` (Vite + React + three.js, MIT, license in `farm-hand/web/LICENSE-PromptGrassGrowGrass`, upstream commit in `farm-hand/web/UPSTREAM_COMMIT`). It is wired to the Mac mini's `/farmhand/api` (server: `farm-hand/cloud/receiver.py`; the browser code talks to it through `src/data/backendBoard.ts`). The footer credits it: "UI based on Prompt Grass Grow Grass (MIT)".
+
+- **ui-mui** (Matthew's MUI UI) stays in the repo but is no longer deployed.
+- **The 3D scene** now shows the two real boxes (box A Farm Hand, box B Timer) from `farmhand.glb`, driven by live readings.
+- **Deploy:** the Mac mini builds `farm-hand/web` from `main` every minute. Push to `main` and it is live at https://farmhand.dmchang.xyz/farmhand/ within about a minute.
+
+**Three pages** (tabs in the header, also linkable as `#crops` and `#region`):
+
+| Page | What it shows | Data |
+|---|---|---|
+| **Live** | The 3D boxes. Per box: soil moisture % and soil temperature °C (one decimal, readable from 3 m), raw ADC count, probe status ("Probe disconnected" instead of a number when `probeOk` is false), pump row ("Pump A: off, disarmed until wiring is confirmed"). **Laya's call** for box A: the pick in plain words (Water now / Holding off: the soil has water / Waiting for rain), seconds, who decided (Laya or the baseline rule, keep soil at 45% or more), the why sentence, the time. Moisture over time, A (blue) vs B (orange) with the 45% baseline, drag to replay. Rain forecast (Open-Meteo). Online / offline and "last reading N s ago" in the header. | `/farmhand/api` live stream: `sample`, `decision`, `link`; history; forecast |
+| **Crops** | Per box, the 26-crop rules engine (`src/data/sim/crops.ts`), ranked. One focal crop at a time with its score, verdict, summary and planting window; "Why this score" opens the per-factor sentences. Unknown factors say "unknown", never guessed. Growing season card with frost dates, labeled as an estimate (Miami rarely frosts). | `scoreCrops`, `plantingWindow`, `frostDates` |
+| **Miami-Dade** ("Your farm in Miami-Dade") | Map first: every field around the boxes, colored by predicted crop, labeled "Predicted from satellite". Click a field for its card: crop, soil (USDA SSURGO: series, texture, drainage, water it holds), the moisture baseline Farm Hand would hold it at (that crop's FAO-56 stress line), "fields like this one" count, 2017-2025 trend sparkline, sources. The map opening out from the boxes is the page's one authored motion. | `region()` (RegionView), fed by the new **AlphaEarth v2** dataset |
+
+**Removed from Prompt Grass, and why:** the voice assistant (voice orb, `src/voice/`) and the in-browser WebMCP agent (`src/agent/`, agent presence, demo panel): they depend on the Prompt Grass backend and its voice service, and Farm Hand's AI is Laya on the Mac mini. The onboarding flow (draw the plot, place probes, set location, calibrate in the app): the boxes are set up on the bench and calibrated in firmware. The pour test, diagnose and the Network page: Farm Hand has no data for them. Fonts: Fraunces and Inter replaced by Archivo (one family; JetBrains Mono only for raw sensor counts). Theme: light, for a projector in a bright hall (5d).
+
+**Kept and redesigned:** crops, planting window and frost dates, and the region view, which is now a headline feature powered by AlphaEarth v2 (this replaces the 5f map; see the note there).
+
+**Design rules applied** (from `design-skills/`: taste-skill, impeccable craft floor, Emil's motion rules, Owl-Listener density / Miller / Von Restorff / Doherty): one radius scale (6 px controls, 12 px panels, pill for chips), no eyebrow labels, no glow halos, no emoji, no em dashes, tabular numbers on everything that changes, one red thing at a time (only "Offline" is red; a disconnected probe is amber), UI transitions 140-240 ms ease-out `cubic-bezier(0.23, 1, 0.32, 1)`, nothing from `scale(0)`, `prefers-reduced-motion` respected, themed focus rings, selection and scrollbars.
+
+**Checklist for Matthew**
+- [ ] Open https://farmhand.dmchang.xyz/farmhand/ on the projector at 1920x1080. The moisture and temperature numbers must read from 3 m.
+- [ ] Unplug a probe: its box says "Probe disconnected" (not a number) within one reading.
+- [ ] Laya's call updates when the server logs a new decision; "Decided by" says Laya or the baseline rule.
+- [ ] Pump rows say "disarmed until wiring is confirmed" until the firmware arms the pumps; then flip `pumpsArmed` in `farm-hand/web/src/brand.ts` (or have the server send it).
+- [ ] Crops tab: both boxes list crops; "Why this score" shows the sentences; nothing says a number where the engine said unknown.
+- [ ] Miami-Dade tab: the map loads from the AlphaEarth v2 data, a field click opens its card, and every predicted value is labeled as predicted.
+- [ ] Check it at 1440x900 and on a phone (390 px wide).
+- [ ] Don't edit `ui-mui` for the demo; it is not deployed.
 
 ## 6. Hackathon plan
 

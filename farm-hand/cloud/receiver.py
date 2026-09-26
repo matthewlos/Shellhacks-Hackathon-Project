@@ -4,6 +4,7 @@ Runs on the Mac mini (always on), reachable from anywhere:
     https://farmhand.dmchang.xyz/                    Matthew's site (ui-mui), auto-deployed from GitHub (see cloud/deploy.sh)
     https://farmhand.dmchang.xyz/farmhand/            simple live page
     https://farmhand.dmchang.xyz/farmhand/data        live data (JSON) for the site
+    https://farmhand.dmchang.xyz/farmhand/api/...     the web app's API (SSE at api/events + REST, see api() below)
     POST .../farmhand/reading                         the ESP32 (header X-Farmhand-Token)
   (also on Tailscale Funnel: https://dantes-mac-mini.tailb2bea0.ts.net/farmhand/...)
 
@@ -18,6 +19,7 @@ Storage: SQLite, farmhand_home.db next to this file. Stdlib only, plus laya/torc
 """
 import json
 import os
+import queue
 import sqlite3
 import threading
 import time
@@ -40,12 +42,29 @@ TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": 
          ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".woff2": "font/woff2", ".ico": "image/x-icon",
          ".glb": "model/gltf-binary", ".webp": "image/webp", ".map": "application/json", ".txt": "text/plain"}
 
-db = sqlite3.connect(HERE / "farmhand_home.db", check_same_thread=False)
+DB_PATH = Path(os.environ.get("FARMHAND_DB", HERE / "farmhand_home.db"))
+CONFIG_PATH = Path(os.environ.get("FARMHAND_CONFIG", HERE / "farmhand_config.json"))   # the web app's plot/zones/place
+PROBE_MIN_RAW = 500                          # raw below this = soil probe disconnected (NOT wet): moisture is null
+LINK_TIMEOUT_S = 60                          # no reading for this long = the ESP32 is offline
+# Which DS18B20 chip sits in which box. NOT confirmed yet: swap the ids here if the boxes turn out the other way round.
+# Applied at read time (the chip ids are stored with every reading), so fixing it also fixes the history.
+TEMP_BOX = {"A": "2872EB240000003C", "B": "28B60E2400000077"}
+# The ESP32 turns raw into % itself (firmware/sensors_live/lib/comp_soil/comp_soil.cpp). Mirrored here for the web app.
+FIRMWARE_CAL = {"A": {"airRaw": 3400, "waterRaw": 1507, "calibratedAt": 1790179200000},    # D34, measured 2026-09-23
+                "B": {"airRaw": 3450, "waterRaw": 1875, "calibratedAt": 1790438400000}}    # D35, water measured 2026-09-26
+
+db = sqlite3.connect(DB_PATH, check_same_thread=False)
 db.executescript("""
 CREATE TABLE IF NOT EXISTS readings (ts REAL, ms INT, a_raw INT, a_pct REAL, b_raw INT, b_pct REAL,
                                      t1 REAL, t2 REAL, pump_a INT, pump_b INT, rssi INT, ip TEXT);
 CREATE TABLE IF NOT EXISTS decisions (ts REAL, brain TEXT, pick TEXT, pump_a_s REAL, why TEXT);
 """)
+_cols = {r[1] for r in db.execute("PRAGMA table_info(readings)")}
+for _c in ("t1_id", "t2_id"):                # which chip t1/t2 came from (older rows: unknown)
+    if _c not in _cols:
+        db.execute(f"ALTER TABLE readings ADD COLUMN {_c} TEXT")
+db.execute("CREATE INDEX IF NOT EXISTS readings_ts ON readings(ts)")
+db.commit()
 LOCK = threading.Lock()
 LAST = {"reading": None, "decision": None, "rx": None}
 
@@ -118,14 +137,453 @@ def decide(r):
 
 
 def save(r, d, ip):
-    t = [x.get("c") if isinstance(x, dict) else x for x in (r.get("temps") or [])] + [None, None]
+    temps = r.get("temps") or []
+    t = [x.get("c") if isinstance(x, dict) else x for x in temps] + [None, None]
+    tid = [x.get("id") if isinstance(x, dict) else None for x in temps] + [None, None]
     p = (r.get("pumps") or []) + [None, None]
     with LOCK:
-        db.execute("INSERT INTO readings VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        db.execute("INSERT INTO readings (ts,ms,a_raw,a_pct,b_raw,b_pct,t1,t2,pump_a,pump_b,rssi,ip,t1_id,t2_id) "
+                   "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                    (time.time(), r.get("ms"), r.get("a_raw"), r.get("a_pct"), r.get("b_raw"), r.get("b_pct"),
-                    t[0], t[1], p[0], p[1], r.get("rssi"), ip))
+                    t[0], t[1], p[0], p[1], r.get("rssi"), ip, tid[0], tid[1]))
         db.execute("INSERT INTO decisions VALUES (?,?,?,?,?)", (time.time(), *d))
         db.commit()
+
+
+# ---------- the web app's API under /farmhand/api/ (the Prompt Grass BoardSource contract, answered from real data) ----------
+NOT_HERE = "not on Farm Hand"
+PUMPS_DISARMED = "pumps are disarmed until the box mapping is confirmed"
+FIU = {"name": "FIU", "region": "Florida", "country": "United States", "lat": LAT, "lon": LON}
+DEFAULT_CONFIG = {
+    "plot": {"name": "Farm Hand bench", "width": 120, "length": 60},
+    "zones": [{"id": "A", "name": "Farm Hand box", "probe": "A", "x": 30, "y": 30, "sun": "partial", "ph": None},
+              {"id": "B", "name": "Timer box (control)", "probe": "B", "x": 90, "y": 30, "sun": "partial", "ph": None}],
+    "place": FIU, "onboarded": True}
+CFG_LOCK = threading.Lock()
+
+
+def _load_config():
+    try:
+        c = json.loads(CONFIG_PATH.read_text())
+    except (OSError, ValueError):
+        c = {}
+    base = json.loads(json.dumps(DEFAULT_CONFIG))
+    base.update({k: v for k, v in c.items() if k in DEFAULT_CONFIG})
+    return base
+
+
+CONFIG = _load_config()
+
+
+def _save_config():                          # caller holds CFG_LOCK
+    tmp = CONFIG_PATH.with_suffix(".tmp")
+    tmp.write_text(json.dumps(CONFIG, indent=1))
+    tmp.replace(CONFIG_PATH)
+
+
+def board_config():
+    with CFG_LOCK:
+        c = json.loads(json.dumps(CONFIG))
+    c["calibration"] = {p: {**FIRMWARE_CAL[p], "source": "default"} for p in ("A", "B")}
+    return c
+
+
+def _zone(zid):
+    with CFG_LOCK:
+        return next((dict(z) for z in CONFIG["zones"] if z.get("id") == zid), None)
+
+
+def _num(x):
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def _temp_ok(c):                             # DS18B20: -127 = not answering, 85 = power-on value
+    return _num(c) and -55 < c < 85
+
+
+def box_temp(r, box):
+    for x in r.get("temps") or []:
+        if isinstance(x, dict) and x.get("id") == TEMP_BOX.get(box):
+            return x.get("c") if _temp_ok(x.get("c")) else None
+    return None
+
+
+def probe_live(r, rx, box):
+    """One box's live values (ZoneLive + raw/probeOk)."""
+    k = box.lower()
+    raw, pct = r.get(f"{k}_raw"), r.get(f"{k}_pct")
+    ok = _num(raw) and raw >= PROBE_MIN_RAW
+    tc = box_temp(r, box)
+    return {"t": int(rx * 1000), "moistureRaw": raw if _num(raw) else None,
+            "moisturePct": round(pct, 1) if ok and _num(pct) else None,
+            "tempC": round(tc, 2) if tc is not None else None,
+            "moistureOnline": ok, "tempOnline": tc is not None, "raw": raw if _num(raw) else None, "probeOk": ok}
+
+
+def pumps_of(r):
+    p = (r.get("pumps") or []) + [0, 0]
+    return {"A": bool(p[0]), "B": bool(p[1])}
+
+
+def sample_event(r, rx):
+    with CFG_LOCK:
+        zones = [dict(z) for z in CONFIG["zones"]]
+    return {"type": "sample", "t": int(rx * 1000), "zones": {z["id"]: probe_live(r, rx, z.get("probe", "A")) for z in zones},
+            "pumps": pumps_of(r)}
+
+
+def decision_event(d, t):
+    return {"type": "decision", "brain": d[0], "pick": d[1], "seconds": round(d[2], 1), "why": d[3], "t": int(t * 1000)}
+
+
+def _age():
+    return None if LAST["rx"] is None else time.time() - LAST["rx"]
+
+
+def _online():
+    a = _age()
+    return a is not None and a < LINK_TIMEOUT_S
+
+
+def _load_last():
+    """Pick up the latest reading + decision from SQLite so a restart doesn't blank the page."""
+    row = db.execute("SELECT ts,ms,a_raw,a_pct,b_raw,b_pct,t1,t2,pump_a,pump_b,rssi,t1_id,t2_id FROM readings "
+                     "ORDER BY ts DESC LIMIT 1").fetchone()
+    if row:
+        ts, ms, ar, ap, br, bp, t1, t2, pa, pb, rssi, i1, i2 = row
+        temps = [{"id": i, "c": c} for i, c in ((i1, t1), (i2, t2)) if c is not None]
+        LAST.update(reading={"ms": ms, "a_raw": ar, "a_pct": ap, "b_raw": br, "b_pct": bp, "t1": t1, "t2": t2,
+                             "temps": temps, "pumps": [pa or 0, pb or 0], "rssi": rssi}, rx=ts)
+    d = db.execute("SELECT ts,brain,pick,pump_a_s,why FROM decisions ORDER BY ts DESC LIMIT 1").fetchone()
+    if d:
+        LAST["decision"] = (d[1], d[2], d[3] or 0, d[4])
+        LAST["decision_t"] = d[0]
+
+
+_load_last()
+
+
+class Hub:
+    """Thread-safe fan-out to every open /api/events stream (one queue per client)."""
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.clients = set()
+        self.online = _online()
+
+    def add(self):
+        q = queue.Queue(maxsize=200)
+        with self.lock:
+            self.clients.add(q)
+        return q
+
+    def remove(self, q):
+        with self.lock:
+            self.clients.discard(q)
+
+    def send(self, ev):
+        msg = (ev["type"], json.dumps(ev))
+        with self.lock:
+            for q in self.clients:
+                try:
+                    q.put_nowait(msg)
+                except queue.Full:                # a stuck client just misses events
+                    pass
+
+    def set_online(self, online):
+        with self.lock:
+            changed, self.online = self.online != online, online
+        if changed:
+            self.send({"type": "link", "online": online})
+
+
+HUB = Hub()
+
+
+def _link_watch():
+    while True:
+        time.sleep(5)
+        HUB.set_online(_online())
+
+
+def water_advice(box, lv):
+    age = _age()
+    if age is None:
+        return {"needsWater": None, "action": "unknown", "headline": "No reading yet", "reasons": ["The ESP32 has not reported since the server started."]}
+    if age > LINK_TIMEOUT_S:
+        return {"needsWater": None, "action": "unknown", "headline": f"No reading for {int(age)} s",
+                "reasons": ["The ESP32 is offline, so there is no fresh reading to judge from."]}
+    if not lv["probeOk"]:
+        return {"needsWater": None, "action": "unknown", "headline": "Probe offline",
+                "reasons": [f"Raw {lv['raw']} is under {PROBE_MIN_RAW}: the probe is disconnected, not wet."]}
+    if box != "A":
+        return {"needsWater": None, "action": "none", "headline": "Control box: Farm Hand does not water it",
+                "reasons": [f"Soil {lv['moisturePct']:.1f}%.", "Box B is the comparison, on a timer; the decision is for box A only."]}
+    d = LAST["decision"]
+    if not d:
+        return {"needsWater": None, "action": "unknown", "headline": "No decision yet", "reasons": []}
+    brain, pick, secs, why = d
+    who = "Laya" if brain == "laya" else "the baseline rule"
+    tail = ["Pumps are disarmed in the firmware right now, so nothing is watered automatically."]
+    if pick == "water":
+        return {"needsWater": True, "action": "water", "headline": f"Water now: a {secs:.0f} s drink", "reasons": [why, f"Decided by {who}."] + tail}
+    if pick == "wait_rain":
+        return {"needsWater": False, "action": "wait_for_rain", "headline": "Waiting for rain", "reasons": [why, f"Decided by {who}."]}
+    if pick == "wait_moist":
+        return {"needsWater": False, "action": "none", "headline": "No water needed", "reasons": [why, f"Decided by {who}."]}
+    return {"needsWater": None, "action": "unknown", "headline": "Waiting", "reasons": [why]}
+
+
+def zone_reading(z):
+    r, rx = LAST["reading"] or {}, LAST["rx"] or 0
+    lv = probe_live(r, rx, z.get("probe", "A")) if LAST["reading"] else \
+        {"t": 0, "moistureRaw": None, "moisturePct": None, "tempC": None, "moistureOnline": False, "tempOnline": False, "raw": None, "probeOk": False}
+    return {"zone": z, "live": lv, "calibrated": True, "water": water_advice(z.get("probe", "A"), lv), "soil": None}
+
+
+def diagnosis(z):
+    rd = zone_reading(z)
+    lv, w = rd["live"], rd["water"]
+    f = [{"key": "water", "status": "unknown" if w["needsWater"] is None else ("warn" if w["needsWater"] else "good"),
+          "headline": w["headline"], "reason": " ".join(x if x.endswith(".") else x + "." for x in w["reasons"])}]
+    t = lv["tempC"]
+    f.append({"key": "temperature", "status": "unknown" if t is None else ("good" if 10 <= t <= 35 else "warn"),
+              "headline": "No soil temperature" if t is None else f"Soil {t:.1f} °C",
+              "reason": "The DS18B20 for this box is not reporting." if t is None else f"Chip {TEMP_BOX.get(z.get('probe'))} (box mapping not confirmed yet)."})
+    for k in ("drainage", "texture"):
+        f.append({"key": k, "status": "unknown", "headline": "Not measured", "reason": "Farm Hand has no pour test, so drainage and texture are unknown."})
+    return {"zoneId": z["id"], "at": int(time.time() * 1000), "findings": f}
+
+
+def history(z, hours):
+    hours = min(24 * 30, max(0.1, hours))
+    since, bucket = time.time() - hours * 3600, max(10.0, hours * 3600 / 400)
+    box = z.get("probe", "A")
+    col, tid = ("a" if box == "A" else "b"), TEMP_BOX.get(box)
+    sql = (f"SELECT CAST(ts / ? AS INT) k, AVG(ts), AVG(CASE WHEN {col}_raw >= ? THEN {col}_pct END), "
+           "AVG(CASE WHEN t1_id = ? AND t1 > -55 AND t1 < 85 THEN t1 WHEN t2_id = ? AND t2 > -55 AND t2 < 85 THEN t2 END) "
+           "FROM readings WHERE ts >= ? GROUP BY k ORDER BY k")
+    with LOCK:
+        rows = db.execute(sql, (bucket, PROBE_MIN_RAW, tid, tid, since)).fetchall()
+    pts = [{"t": int(ts * 1000), "moisturePct": None if m is None else round(m, 1), "tempC": None if t is None else round(t, 2)}
+           for _, ts, m, t in rows]
+    return {"zoneId": z["id"], "points": pts, "simulated": False}
+
+
+_fcd = {"t": 0, "v": None, "ok": None}
+
+
+def _summarize(days):
+    """Same wording as the web app's services/openMeteo.ts summarizeForecast."""
+    d48 = days[:2]
+    rain48 = sum(d["precipMm"] for d in d48)
+    probs = [d["precipProb"] for d in d48 if d["precipProb"] is not None]
+    mp = max(probs) if probs else None
+    expected = rain48 >= 5 and (mp is None or mp >= 60)
+    dry = 0
+    for d in days:
+        if d["precipMm"] >= 1:
+            break
+        dry += 1
+    fw = next((i for i, d in enumerate(days) if d["precipMm"] >= 1), -1)
+    when = ["today", "tomorrow"][fw] if fw in (0, 1) else (time.strftime("%A", time.strptime(days[fw]["date"], "%Y-%m-%d")) if fw > 1 else "")
+    if expected:
+        text = f"Rain likely {when}: about {round(rain48)} mm in the next 48 hours" + (f" ({mp}% chance)." if mp is not None else ".")
+    elif dry >= len(days):
+        text = f"No rain in the {len(days)}-day forecast."
+    elif dry == 0:
+        text = (f"Rain possible {when}: about {round(rain48)} mm in the next 48 hours, but only a {mp if mp is not None else '?'}% chance. "
+                "Not certain enough to skip watering.") if rain48 >= 5 else \
+               f"Light rain possible {when}, under {max(1, -(-rain48 // 1)):.0f} mm: not enough to count on."
+    else:
+        text = f"No rain expected for {dry} day{'' if dry == 1 else 's'}."
+    return {"source": "open-meteo", "sample": False, "fetchedAt": int(time.time() * 1000), "days": days,
+            "rainNext48hMm": round(rain48, 1), "maxPrecipProb48h": mp, "rainExpected": expected, "dryDaysAhead": dry, "text": text}
+
+
+def forecast_daily():
+    """7-day outlook at FIU for the web app (Open-Meteo, cached 15 min). Never canned numbers."""
+    if _fcd["v"] and time.time() - _fcd["t"] < 900:
+        return _fcd["v"]
+    try:
+        url = (f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}&forecast_days=7"
+               "&daily=precipitation_sum,precipitation_probability_max,temperature_2m_max,temperature_2m_min&timezone=America%2FNew_York")
+        d = json.load(urllib.request.urlopen(url, timeout=10))["daily"]
+        days = [{"date": t, "precipMm": (d["precipitation_sum"][i] or 0), "precipProb": d["precipitation_probability_max"][i],
+                 "tmaxC": d["temperature_2m_max"][i], "tminC": d["temperature_2m_min"][i]} for i, t in enumerate(d["time"])]
+        _fcd.update(t=time.time(), v=_summarize(days), ok=True)
+    except Exception as e:
+        print("[forecast daily]", e)
+        _fcd["ok"] = False
+        if _fcd["v"]:
+            return _fcd["v"]
+        return {"source": "open-meteo", "sample": False, "fetchedAt": int(time.time() * 1000), "days": [], "rainNext48hMm": 0,
+                "maxPrecipProb48h": None, "rainExpected": False, "dryDaysAhead": 0, "unavailable": True,
+                "text": "Forecast unavailable: Open-Meteo did not answer."}
+    return _fcd["v"]
+
+
+def connectivity():
+    r, age, online = LAST["reading"] or {}, _age(), _online()
+    links = [{"id": "esp32", "layer": "gateway_internet", "label": "ESP32 to Farm Hand server",
+              "state": "connected" if online else "down",
+              "detail": "no reading yet" if age is None else f"last reading {age:.0f} s ago" + (f", Wi-Fi {r.get('rssi')} dBm" if r.get("rssi") is not None else ""),
+              "note": "The ESP32 posts every ~10 s over Wi-Fi and gets the decision back in the reply.", "active": online}]
+    for box, pin in (("A", "D34"), ("B", "D35")):
+        lv = probe_live(r, LAST["rx"] or 0, box)
+        links.append({"id": f"soil_{box}", "layer": "probe_gateway", "label": f"Soil probe {box} ({pin})",
+                      "state": "wired" if online and lv["probeOk"] else "down",
+                      "detail": "no reading" if lv["raw"] is None else f"raw {lv['raw']}" + ("" if lv["probeOk"] else f" (under {PROBE_MIN_RAW}: disconnected)"),
+                      "note": "Capacitive probe on the ESP32's ADC.", "active": online and lv["probeOk"]})
+        links.append({"id": f"temp_{box}", "layer": "probe_gateway", "label": f"Soil temperature {box}",
+                      "state": "wired" if online and lv["tempOnline"] else "down",
+                      "detail": f"DS18B20 {TEMP_BOX.get(box)}" + ("" if lv["tempOnline"] else ", not reporting"),
+                      "note": "Chip-to-box mapping not confirmed yet.", "active": online and lv["tempOnline"]})
+    pa = pumps_of(r)
+    for box in ("A", "B"):
+        links.append({"id": f"pump_{box}", "layer": "probe_gateway", "label": f"Pump {box}", "state": "not_fitted",
+                      "detail": ("running" if pa[box] else "off") + ", disarmed in firmware", "note": PUMPS_DISARMED, "active": pa[box]})
+    return {"links": links, "internetReachable": _fcd["ok"]}
+
+
+REGION_NONE = {"status": "unavailable", "reason": "The USDA cropland and soil map is not on Farm Hand.", "region": None,
+               "matches": [], "unserved": [], "you": {"measured": False, "drainageClass": None, "label": None, "ph": None}}
+# AlphaEarth v2 (farm-hand/alphaearth/build_region.py): the farm fields around FIU, a ready-made RegionView
+REGION_PATH = Path(os.environ.get("FARMHAND_REGION", HERE / "region_v2.json"))
+_REGION = {"mtime": None, "view": None, "byId": {}}
+_REGION_LOCK = threading.Lock()
+
+
+def region_view():
+    """region_v2.json, re-read only when the file changes. REGION_NONE if it's missing or broken."""
+    try:
+        m = REGION_PATH.stat().st_mtime
+    except OSError:
+        return REGION_NONE
+    with _REGION_LOCK:
+        if _REGION["mtime"] != m:
+            try:
+                v = json.loads(REGION_PATH.read_text())
+                _REGION.update(mtime=m, view=v, byId={f["id"]: f for f in (v.get("region") or {}).get("fields", [])})
+            except (OSError, ValueError) as e:
+                print(f"region_v2.json unreadable: {e}", flush=True)
+                return REGION_NONE
+        return _REGION["view"]
+
+
+def region_fields_index():
+    """Light list for /api/fields: no polygons, no soil detail."""
+    region_view()
+    keep = ("id", "crop", "group", "confidence", "acres", "lat", "lon", "distanceKm", "bearing", "baselinePct", "p")
+    return [{k: f.get(k) for k in keep} for f in _REGION["byId"].values()]
+
+
+def _valid_zone(z):
+    return (isinstance(z, dict) and isinstance(z.get("id"), str) and isinstance(z.get("name"), str) and z.get("probe") in ("A", "B")
+            and _num(z.get("x")) and _num(z.get("y")) and z.get("sun") in ("full", "partial", "shade") and (z.get("ph") is None or _num(z.get("ph"))))
+
+
+def _valid_place(p):
+    return p is None or (isinstance(p, dict) and isinstance(p.get("name"), str) and _num(p.get("lat")) and _num(p.get("lon")))
+
+
+def api(method, parts, qs, body):
+    """Route one /api/... call. Returns (status, json-able)."""
+    nope = (501, {"ok": False, "error": NOT_HERE})
+    head = parts[0] if parts else ""
+    if method == "GET":
+        if parts == ["config"]:
+            return 200, {"config": board_config()}
+        if head == "zones" and len(parts) >= 2:
+            z = _zone(parts[1])
+            if not z:
+                return 404, {"error": f"no zone {parts[1]}"}
+            if len(parts) == 2:
+                return 200, {"reading": zone_reading(z)}
+            if parts[2:] == ["history"]:
+                return 200, {"history": history(z, float((qs.get("hours") or ["36"])[0]))}
+            if parts[2:] == ["crops"]:
+                return 200, {"crops": [], "available": False, "reason": "Crop scoring is " + NOT_HERE}
+            if parts[2] == "planting-window":
+                return 200, {"window": None, "available": False, "reason": "Planting windows are " + NOT_HERE}
+            if parts[2:] == ["findings"]:
+                return 200, {"diagnosis": diagnosis(z)}
+        if parts == ["history"]:
+            z = _zone((qs.get("zone") or ["A"])[0])
+            if not z:
+                return 404, {"error": "no such zone"}
+            return 200, {"history": history(z, float((qs.get("hours") or ["36"])[0]))}
+        if parts == ["forecast"]:
+            return 200, {"forecast": forecast_daily()}
+        if parts == ["frost-dates"]:
+            return 200, {"frost": None, "available": False, "reason": "Frost dates are " + NOT_HERE}
+        if parts == ["soil-profile"]:
+            return 200, {"profile": None}
+        if parts == ["notes"]:
+            return 200, {"notes": []}
+        if parts == ["connectivity"]:
+            return 200, {"connectivity": connectivity()}
+        if parts == ["region"]:
+            return 200, region_view()
+        if parts == ["fields"]:
+            v = region_view()
+            if v is REGION_NONE:
+                return 404, {"error": "no AlphaEarth fields on this server"}
+            return 200, {"fields": region_fields_index(), "alphaearth": {k: x for k, x in v["region"].get("alphaearth", {}).items()}}
+        if head == "fields" and len(parts) == 2:
+            region_view()
+            f = _REGION["byId"].get(parts[1])
+            return (200, {"field": f}) if f else (404, {"error": f"no field {parts[1]}"})
+        if parts == ["region", "demo-place"]:
+            return 200, {"place": FIU}
+        if parts == ["overrides"]:
+            return 200, {"overrides": {"forecast": None, "zoneMoisture": {}}}
+        if parts == ["decision"]:
+            d = LAST["decision"]
+            return 200, {"decision": decision_event(d, LAST.get("decision_t") or LAST["rx"] or 0) if d else None}
+        if parts == ["pour", "status"]:
+            return 200, {"actuator": {"connected": False}, "reason": PUMPS_DISARMED}
+        if parts == ["voice", "status"]:
+            return 200, {"enabled": False, "reason": "The voice assistant is " + NOT_HERE + " yet."}
+        return 404, {"error": "not found"}
+    if method == "PUT" and parts == ["config", "plot"]:
+        plot, zones = body.get("plot"), body.get("zones")
+        if not (isinstance(plot, dict) and isinstance(plot.get("name"), str) and _num(plot.get("width")) and _num(plot.get("length"))
+                and isinstance(zones, list) and zones and all(_valid_zone(z) for z in zones)):
+            return 400, {"ok": False, "error": "bad plot or zones"}
+        with CFG_LOCK:
+            CONFIG["plot"] = {k: plot[k] for k in ("name", "width", "length")}
+            CONFIG["zones"] = [{k: z.get(k) for k in ("id", "name", "probe", "x", "y", "sun", "ph")} for z in zones]
+            _save_config()
+    elif method == "PUT" and parts == ["config", "place"]:
+        if not _valid_place(body.get("place")):
+            return 400, {"ok": False, "error": "bad place"}
+        with CFG_LOCK:
+            CONFIG["place"] = body.get("place")
+            _save_config()
+    elif method == "POST" and parts == ["config", "onboarded"]:
+        with CFG_LOCK:
+            CONFIG["onboarded"] = bool(body.get("done"))
+            _save_config()
+    elif method == "PATCH" and head == "zones" and len(parts) == 2:
+        patch = {k: v for k, v in body.items() if k in ("sun", "ph", "name")}
+        if ("sun" in patch and patch["sun"] not in ("full", "partial", "shade")) or ("ph" in patch and not (patch["ph"] is None or _num(patch["ph"]))) \
+                or ("name" in patch and not isinstance(patch["name"], str)):
+            return 400, {"ok": False, "error": "bad zone patch"}
+        with CFG_LOCK:
+            z = next((z for z in CONFIG["zones"] if z["id"] == parts[1]), None)
+            if not z:
+                return 404, {"ok": False, "error": f"no zone {parts[1]}"}
+            z.update(patch)
+            _save_config()
+    elif method == "POST" and head == "calibrate":
+        return 501, {"ok": False, "error": "Calibration lives in the ESP32 firmware (comp_soil.cpp) and can't be changed from the app: " + NOT_HERE + "."}
+    elif method == "POST" and parts in (["pump"], ["pour"]):
+        return 403, {"ok": False, "result": "refused", "reason": PUMPS_DISARMED, "guard": "hard"}
+    else:
+        return nope if method in ("POST", "PUT", "PATCH") else (405, {"error": "method not allowed"})
+    HUB.send({"type": "config", "config": board_config()})     # every config write goes out on the stream
+    return 200, {"ok": True, "config": board_config()}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -158,10 +616,88 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(b)))
+        if self._path().startswith("/api/"):
+            self.send_header("Access-Control-Allow-Origin", "*")      # lets `npm run dev` on another port use it
         self.end_headers()
         self.wfile.write(b)
 
+    # ---------- /api/ (the web app) ----------
+    def _api(self, method):
+        u = urllib.parse.urlsplit(self.path)
+        parts = [urllib.parse.unquote(x) for x in self._path()[len("/api/"):].split("/") if x]
+        if method == "GET" and parts == ["events"]:
+            return self._events()
+        body = {}
+        if method != "GET":
+            try:
+                n = int(self.headers.get("Content-Length", 0) or 0)
+                body = json.loads(self.rfile.read(n)) if n else {}
+                if not isinstance(body, dict):
+                    raise ValueError
+            except ValueError:
+                return self._send(400, '{"ok":false,"error":"bad json"}')
+        try:
+            code, obj = api(method, parts, urllib.parse.parse_qs(u.query), body)
+        except Exception as e:                                        # never kill the thread over one bad request
+            print("[api]", method, self.path, repr(e)[:200])
+            code, obj = 500, {"ok": False, "error": type(e).__name__}
+        self._send(code, json.dumps(obj))
+
+    def _sse(self, text):
+        self.wfile.write(text.encode())
+        self.wfile.flush()
+
+    def _events(self):
+        """Server-Sent Events: config, then sample/decision per reading, link on ESP32 up/down, keep-alive every 15 s."""
+        self.close_connection = True
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream")
+        self.send_header("Cache-Control", "no-cache, no-transform")
+        self.send_header("X-Accel-Buffering", "no")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        q = HUB.add()
+        try:
+            first = [{"type": "config", "config": board_config()}]
+            if LAST["reading"]:
+                first.append(sample_event(LAST["reading"], LAST["rx"]))
+            if LAST["decision"]:
+                first.append(decision_event(LAST["decision"], LAST.get("decision_t") or LAST["rx"]))
+            first.append({"type": "link", "online": _online()})
+            self._sse("retry: 2000\n\n" + "".join(f"event: {e['type']}\ndata: {json.dumps(e)}\n\n" for e in first))
+            while True:
+                try:
+                    typ, data = q.get(timeout=15)
+                except queue.Empty:
+                    self._sse(": keep-alive\n\n")
+                    continue
+                self._sse(f"event: {typ}\ndata: {data}\n\n")
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError, OSError):
+            pass
+        finally:
+            HUB.remove(q)
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Max-Age", "86400")
+        self.end_headers()
+
+    def do_PUT(self):
+        if not self._path().startswith("/api/"):
+            return self._send(404, '{"error":"not found"}')
+        self._api("PUT")
+
+    def do_PATCH(self):
+        if not self._path().startswith("/api/"):
+            return self._send(404, '{"error":"not found"}')
+        self._api("PATCH")
+
     def do_POST(self):
+        if self._path().startswith("/api/"):
+            return self._api("POST")
         if self._path() != "/reading":
             return self._send(404, '{"error":"not found"}')
         if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
@@ -175,7 +711,11 @@ class Handler(BaseHTTPRequestHandler):
         r["t2"] = (t[1].get("c") if len(t) > 1 and isinstance(t[1], dict) else (t[1] if len(t) > 1 else None))
         d = decide(r)
         save(r, d, self.headers.get("X-Forwarded-For", self.client_address[0]))
-        LAST.update(reading=r, decision=d, rx=time.time())
+        now = time.time()
+        LAST.update(reading=r, decision=d, rx=now, decision_t=now)
+        HUB.set_online(True)
+        HUB.send(sample_event(r, now))
+        HUB.send(decision_event(d, now))
         self._send(200, json.dumps({"brain": d[0], "pick": d[1], "pump_a_s": round(d[2], 1), "why": d[3],
                                     "baseline": BASELINE, "server_time": int(time.time())}))
 
@@ -199,6 +739,8 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if p.startswith("/api/"):
+            return self._api("GET")
         if p in ("", "/"):
             return self._send(200, PAGE, "text/html; charset=utf-8")
         if p == "/data":
@@ -259,4 +801,5 @@ if __name__ == "__main__":
     if not TOKEN:
         raise SystemExit("Set FARMHAND_TOKEN (the same token as the ESP32's secrets.h).")
     print(f"Farm Hand home server on 127.0.0.1:{PORT} (brain: {'laya' if LAYA else 'baseline rule'}, baseline {BASELINE}%)")
+    threading.Thread(target=_link_watch, daemon=True).start()
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()

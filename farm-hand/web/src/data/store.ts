@@ -3,8 +3,8 @@ import type { BoardSource } from './source';
 import { BackendBoard } from './backendBoard';
 import { idlePour } from './sim/pour';
 import type {
-  AgentCall, BoardConfig, CropScore, Diagnosis, Forecast, FrostDates, HistorySeries, Note, Overrides, PlantingWindow,
-  Plot, PourState, RegionView, SoilProfile, Zone, ZoneId, ZoneLive, ZoneReading,
+  AgentCall, BoardConfig, CropScore, Decision, Diagnosis, Forecast, FrostDates, HistorySeries, Note, Overrides, PlantingWindow,
+  Plot, PourState, Pumps, RegionView, SoilProfile, Zone, ZoneId, ZoneLive, ZoneReading,
 } from './types';
 
 export type Stage = 'welcome' | 'build' | 'location' | 'calibrate' | 'live';
@@ -39,6 +39,10 @@ interface AppState {
   profile: SoilProfile | null;
   notes: Note[];
   overrides: Overrides;
+  /** Farm Hand: the latest decision for box A (null until the first one arrives) */
+  decision: Decision | null;
+  /** Farm Hand: pump state as the ESP32 last reported it */
+  pumps: Pumps;
 
   stage: Stage;
   view: View;
@@ -105,6 +109,8 @@ export const useApp = create<AppState>((set, get) => ({
   profile: null,
   notes: [],
   overrides: { forecast: null, zoneMoisture: {} },
+  decision: null,
+  pumps: { A: false, B: false },
 
   stage: 'welcome',
   view: 'field',
@@ -218,7 +224,8 @@ export function startBoard(): void {
         first = false;
         break;
       }
-      case 'sample': useApp.setState({ live: e.zones }); break;
+      case 'sample': useApp.setState(e.pumps ? { live: e.zones, pumps: e.pumps } : { live: e.zones }); break;
+      case 'decision': useApp.setState({ decision: { brain: e.brain, pick: e.pick, seconds: e.seconds, why: e.why, t: e.t } }); break;
       case 'pour': {
         const prev = useApp.getState().pour.phase;
         useApp.setState({ pour: e.pour });
