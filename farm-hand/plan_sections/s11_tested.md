@@ -1,0 +1,42 @@
+## 11. What was tested on 2026-09-22 (before any parts)
+
+Every ✅ has a saved proof file in `farm-hand\evidence\`. Anything without one is marked.
+
+- ✅ **Firmware, the shipped version, in Wokwi**: `evidence\fw_wokwi.log`, 8/8 checks PASS.
+  - boot, 1 reading a second, temp probe 22.0C
+  - `P A 3000` ran `3000` ms, and `P B` while it was busy got `refused busy`
+  - the timer poured Pot B by itself (`1006` ms), and `T 0` turned it off
+  - `P B 99999` got capped to `30000` and ran `30000` ms
+- Firmware fixes, 2026-09-22:
+  - bug: the timer spammed `refused` every 10 ms while it waited
+  - bug: `T 0` let one queued pour through
+  - bug (found by the Fable audit): the temp probe read blocked the loop ~750 ms a second on real hardware, so pours could overrun. The read is non-blocking now.
+  - change: readings come every 1 s instead of 5 s
+- Laptop fixes from the Fable audit:
+  - pot B's timer is re-sent every time the ESP32 boots (opening the USB port resets the ESP32, so the first command used to get lost)
+  - a timed-out agent team gets cancelled, so no more paid calls and no orbs lighting up after the rules already decided
+- ✅ **Rule brain + guards + fallback**: `evidence\team.log`, 2 runs on the shipped config.
+  - The Gemini team timed out (lane speed), and the rule brain took over both times.
+  - Wet pot (61.7%) → WAIT.
+  - Dry pot (37.7%) → WATER 14 s.
+  - The guard refusal "watered 12 min ago, rule is 30 min" is in `evidence\team_timing.log`.
+- ✅ **Pour detector**:
+  - good pour, `evidence\team.log`: +17.9%, water reached the probe in 1.5 s, learned 1.242 %/s
+  - failed pour, `evidence\soak_xgb.log`: +0.0%, flagged "check the pump…", and the learned %/s ignored it (stayed 1.242)
+- ✅ **XGBoost path**: `evidence\soak_xgb.log`. It trained on 188 fake rows and tested on 48, then the fake model was deleted. The fake world is too simple for its accuracy to mean anything; only the real overnight run counts.
+- ✅ **Live feeds**: Open-Meteo and the Drought Monitor both answered for Miami (the numbers are in section 5).
+- ✅ **3D dashboard**: `laptop\data\shot2_pump.png` (pump pouring), `shot4_scene.png` (blue soak ring + agent orbs).
+  - ⚠️ `shot1_agents.png` shows the RULE brain's steps lighting up, not Gemini's.
+- ⚠️ **Gemini agent team, full success: not in the saved evidence.**
+  - Early session runs (not saved to a file) completed and watered: 56.6 s, with the critic rejecting once, and 154.3 s on a 240 s timeout.
+  - Every saved rerun timed out on the right.codes lane: 120.9 s, 120.0 s, 120.0 s, 120.0 s, and 400 s with the long timeout.
+  - The agents themselves work, and each one called its tools (`evidence\team_timing.log`). The lane is just too slow with tools: 64-180 s per step.
+  - 🔴 Re-prove it with Google's direct API on Sep 23 before trusting it on stage.
+- ❌ **Farm chat**: timed out on the lane (`evidence\team.log`). Not proven.
+- ❌ **Not tested yet**:
+  - real hardware (arrives Sep 23)
+  - Google's direct Gemini API
+  - `calibrate.py` (needs the real board)
+  - XGBoost on real data
+  - a full overnight A-vs-B run
+  - the `OUTDOORS` switch in a live Gemini run

@@ -1,0 +1,2 @@
+result shape: {"model": "laya-rl-agent", "answers": {"action": {"type": "choice", "choice": "wait_moist", "probabilities": {"water": 0.3999, "wait_rain": 0.1566, "wait_moist": 0.4435}, "confidence": 0.0739, "action": {"act_probability": 1.0}}}, "usage": {"input_tokens": 254, "output_tokens": 0}}
+zero-shot accuracy: 0.333 {'water': '35/164', 'wait_rain': '0/5', 'wait_moist': '65/131'} | ms/decision: 17.4

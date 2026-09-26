@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Grass</title>
+<meta name="description" content="AI irrigation for Florida's drought: two soil containers, a Gemini agent team, and a timer to beat.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%233987e5' stroke-width='2' d='M12 2.5c3.4 4.2 6 7.3 6 10.7a6 6 0 1 1-12 0c0-3.4 2.6-6.5 6-10.7z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1"></script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<style>
+/* Dechante house style (visual-page tokens): blue = the AI pot / the agents, orange = the timer pot.
+   Layout idea borrowed from the HackMIT PromptGrass app: the 3D model is the page, everything else floats on it. */
+:root{
+  --ground:#0a0e13; --surface:#131a22; --surface-2:#19222c; --glass:rgba(19,26,34,.74); --line:rgba(237,242,247,.11);
+  --ink:#edf2f7; --ink-2:#b3bec9; --muted:#8c98a5;
+  --bt:#3987e5; --bt-wash:rgba(57,135,229,.16); --live:#d95926; --live-wash:rgba(217,89,38,.16);
+  --good:#0ca30c; --bad:#d03b3b; --warn:#fab219; --water:#7cc8ff;
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0;text-align:inherit}
+button:disabled{cursor:progress;opacity:.55}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bt);outline-offset:2px}
+.mono{font-family:var(--f-mono)}
+.disp{font-family:var(--f-display);font-weight:700;letter-spacing:-.015em}
+
+.app{position:fixed;inset:0;overflow:hidden}
+.backdrop{position:absolute;inset:0;background:radial-gradient(1100px 620px at 50% 46%,#16212c,transparent 70%),radial-gradient(900px 500px at 50% 110%,rgba(57,135,229,.08),transparent 70%),var(--ground)}
+.backdrop::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.5))}
+#field{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;touch-action:none}
+.overlay{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.anchor{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap}
+
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);box-shadow:0 24px 60px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.05)}
+.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;font:500 12px/1 var(--f-mono);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);color:var(--ink-2)}
+.pill .ph{font-size:14px}
+.pill.ok .ph{color:var(--good)} .pill.warn .ph{color:var(--warn)} .pill.ai .ph{color:var(--bt)}
+
+.top{position:absolute;top:16px;left:20px;right:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:5}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--bt-wash);color:var(--bt);display:grid;place-items:center}
+.logo svg{width:19px;height:19px}
+.brand .name{font-size:22px}
+.brand .ctx{color:var(--muted);font-size:13px;padding-left:14px;margin-left:4px;border-left:1px solid var(--line)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+.rail{position:absolute;left:16px;top:72px;display:grid;gap:10px;z-index:4}
+.rail-group{display:grid;gap:2px;padding:5px;border-radius:14px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(18px)}
+.rail-btn{width:64px;padding:9px 0 7px;border-radius:10px;display:grid;justify-items:center;gap:3px;color:var(--muted);font-size:11px;font-weight:600;transition:.2s}
+.rail-btn .ph{font-size:18px}
+.rail-btn:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.rail-btn.on{color:var(--bt);background:var(--bt-wash)}
+
+.ptag{display:flex;align-items:center;gap:10px;height:34px;padding:0 12px 0 4px;border-radius:999px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);font:500 12px/1 var(--f-mono)}
+.ptag b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff}
+.ptag .v{display:flex;align-items:center;gap:4px;color:var(--ink)} .ptag .v .ph{color:var(--muted)}
+.ptag small{font:600 11px var(--f-body);color:var(--muted)}
+.ftag{font:500 11px/1 var(--f-mono);color:var(--water);display:flex;align-items:center;gap:6px}
+.ftag::before{content:'';width:26px;height:1px;background:var(--water)}
+
+.agentline{position:absolute;left:50%;bottom:156px;transform:translateX(-50%);z-index:4;display:flex;align-items:center;gap:10px;height:36px;padding:0 14px;border-radius:999px;background:var(--bt-wash);border:1px solid rgba(57,135,229,.4);color:#9cc3f5;font:500 12px/1 var(--f-mono);backdrop-filter:blur(14px);transition:opacity .3s,transform .3s var(--ease)}
+.agentline.idle{opacity:0;transform:translate(-50%,6px);pointer-events:none}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(57,135,229,.3);border-top-color:var(--bt);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.answers-wrap{position:absolute;left:100px;right:16px;bottom:18px;display:grid;justify-items:center;z-index:4;transition:right .4s var(--ease)}
+.app.drawer-open .answers-wrap{right:424px}
+.answers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:1px;width:100%;max-width:1180px;border-radius:14px;overflow:hidden;background:var(--line);border:1px solid var(--line);box-shadow:0 30px 70px -24px rgba(0,0,0,.8)}
+.ans{background:color-mix(in srgb,var(--surface) 94%,transparent);padding:16px 18px;display:grid;gap:4px;align-content:start;min-width:0}
+.ans .q{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:13px}
+.ans .q .ph{font-size:15px}
+.ans .a{font:700 clamp(1.3rem,1.8vw,1.6rem)/1.15 var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ans .s{color:var(--ink-2);font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.a.blue{color:#6aa8f0} .a.good{color:#35c235} .a.warn{color:var(--warn)} .a.bad{color:#ff7a7a}
+.meter{height:5px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden;margin:4px 0 2px}
+.meter i{display:block;height:100%;border-radius:9px;background:var(--bt);transition:width .7s var(--ease)}
+.duo{display:flex;align-items:center;gap:8px;font:500 12px var(--f-mono);color:var(--ink-2)}
+.duo i{display:inline-block;width:9px;height:9px;border-radius:3px}
+.run{background:var(--bt);display:grid;place-items:center;align-content:center;gap:6px;padding:0 28px;color:#fff;font-weight:700;font-size:14px;transition:filter .2s,transform .15s}
+.run .ph{font-size:22px}
+.run:hover:not(:disabled){filter:brightness(1.1)}
+.run:active:not(:disabled){transform:scale(.98)}
+
+.drawer{position:absolute;top:62px;right:16px;bottom:16px;width:392px;z-index:6;display:flex;flex-direction:column;overflow:hidden;animation:slide .32s var(--ease) both}
+@keyframes slide{from{opacity:0;transform:translateX(16px)}}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:18px 18px 10px}
+.drawer h2{margin:0;font-size:1.5rem;line-height:1.1}
+.drawer .body{padding:4px 18px 18px;overflow-y:auto;overflow-x:hidden;display:grid;gap:14px;align-content:start}
+.x{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted)}
+.card{background:var(--surface-2);border-radius:10px;padding:14px;display:grid;gap:10px}
+.card-t{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px}
+.lede{color:var(--ink-2);font-size:13.5px;margin:0}
+.flow{display:grid;gap:6px}
+.step{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;padding:7px 8px;border-radius:10px;transition:background .25s}
+.step .ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.06);color:var(--ink-2);font-size:16px;transition:.25s}
+.step .n{font-weight:700;font-size:13.5px} .step .w{font:500 11px/1.3 var(--f-mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step.on{background:var(--bt-wash)} .step.on .ic{background:var(--bt);color:#fff;box-shadow:0 0 14px rgba(57,135,229,.6)}
+.step.bad .ic{background:var(--bad);color:#fff} .step.warn .ic{background:var(--warn);color:#241a00}
+.par{margin-left:15px;padding-left:10px;border-left:2px dashed rgba(57,135,229,.35);display:grid;gap:4px}
+.loopnote{font:500 11px var(--f-mono);color:#6aa8f0;padding-left:50px}
+.trace{list-style:none;margin:0;padding:0;display:grid}
+.trace li{display:grid;grid-template-columns:62px 76px minmax(0,1fr);overflow-wrap:anywhere;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:12.5px}
+.trace li:first-child{border-top:0}
+.trace .t{font:500 11px/1.5 var(--f-mono);color:var(--muted)} .trace .a{font:600 11px/1.5 var(--f-mono);color:#6aa8f0}
+.trace li.bad .a{color:#ff7a7a} .trace li.warn .a{color:var(--warn)} .trace li.good .a{color:#35c235}
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.rules li{display:grid;grid-template-columns:18px 1fr;gap:2px 8px;align-items:center;font-size:13px}
+.rules li small{grid-column:2}
+.rules .ph{font-size:16px} .rules .ph-check-circle{color:var(--good)} .rules .ph-x-circle{color:var(--bad)}
+.rules small{font:500 11px var(--f-mono);color:var(--muted)}
+.kv{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:13.5px}
+.kv span{color:var(--ink-2)} .kv b{font:600 13px var(--f-mono)}
+.soak{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-top:1px solid var(--line)}
+.soak:first-child{border-top:0}
+.soak .big{font:700 1.15rem/1.2 var(--f-body)} .soak small{font:500 11px var(--f-mono);color:var(--muted)}
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;height:42px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.28);padding:0 12px;font-size:14.5px;outline:none}
+.ask input:focus{border-color:rgba(57,135,229,.6);box-shadow:0 0 0 3px rgba(57,135,229,.15)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;font-weight:700;font-size:13.5px;transition:transform .15s,filter .2s;white-space:nowrap}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn-bt{background:var(--bt);color:#fff}
+.btn-soft{background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.btn-bad{background:var(--bad-wash,rgba(208,59,59,.2));color:#ff9a9a}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.sugg button{font-size:12.5px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2)}
+.sugg button:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.reply{font-size:14.5px;line-height:1.55}
+.spark{width:100%;height:120px;display:block}
+.note{font-size:12px;color:var(--muted);border-left:2px solid var(--line);padding-left:8px}
+
+@media (max-width:900px){
+  .rail{top:auto;bottom:12px;left:50%;transform:translateX(-50%);display:flex}
+  .rail-group{display:flex} .rail-btn{width:54px}
+  .answers-wrap,.app.drawer-open .answers-wrap{left:10px;right:10px;bottom:84px}
+  .answers{grid-template-columns:1fr 1fr} .run{grid-column:1/-1;padding:12px;display:flex;justify-content:center}
+  .drawer{left:10px;right:10px;width:auto;top:56px;bottom:84px}
+  .brand .ctx,.pills .pill:not(.keep){display:none}
+  .agentline{bottom:340px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="backdrop"></div>
+  <canvas id="field" tabindex="0" aria-label="3D view of the two soil containers"></canvas>
+  <div class="overlay">
+    <div class="anchor" id="tagA"><div class="ptag"><b style="background:var(--bt)">A</b><span class="v"><i class="ph ph-drop"></i><span id="tA">–</span></span><span class="v"><i class="ph ph-thermometer-simple"></i><span id="tTa">–</span></span><small>AI agents</small></div></div>
+    <div class="anchor" id="tagB"><div class="ptag"><b style="background:var(--live)">B</b><span class="v"><i class="ph ph-drop"></i><span id="tB">–</span></span><span class="v"><i class="ph ph-thermometer-simple"></i><span id="tTb">–</span></span><small>fixed timer</small></div></div>
+    <div class="anchor" id="frontTag" hidden><div class="ftag" id="frontTxt"></div></div>
+  </div>
+
+  <div class="top">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2.5c3.4 4.2 6 7.3 6 10.7a6 6 0 1 1-12 0c0-3.4 2.6-6.5 6-10.7z"/></svg></div>
+      <span class="name disp">Prompt Grass</span>
+      <span class="ctx">Florida drought test: AI vs a timer</span>
+    </div>
+    <div class="pills">
+      <span class="pill keep" id="modePill"><i class="ph ph-plugs"></i><span id="mode">connecting</span></span>
+      <span class="pill ai"><i class="ph ph-cpu"></i><span id="brainName">–</span></span>
+      <span class="pill warn"><i class="ph ph-sun"></i><span id="drought">–</span></span>
+    </div>
+  </div>
+
+  <nav class="rail" aria-label="Views">
+    <div class="rail-group" role="group" aria-label="Lens">
+      <button class="rail-btn on" data-lens="natural"><i class="ph ph-eye"></i>Natural</button>
+      <button class="rail-btn" data-lens="moisture"><i class="ph ph-drop"></i>Moisture</button>
+      <button class="rail-btn" data-lens="temp"><i class="ph ph-thermometer-simple"></i>Heat</button>
+    </div>
+    <div class="rail-group" role="group" aria-label="Panels">
+      <button class="rail-btn" data-drawer="agents"><i class="ph ph-cpu"></i>Agents</button>
+      <button class="rail-btn" data-drawer="pours"><i class="ph ph-waves"></i>Pours</button>
+      <button class="rail-btn" data-drawer="history"><i class="ph ph-chart-line"></i>History</button>
+      <button class="rail-btn" data-drawer="ask"><i class="ph ph-chat-circle-text"></i>Ask</button>
+    </div>
+  </nav>
+
+  <div class="agentline idle" id="agentline" role="status" aria-live="polite"><span class="spin"></span><span id="agentTxt"></span></div>
+
+  <div class="answers-wrap">
+    <div class="answers">
+      <div class="ans"><div class="q"><i class="ph ph-drop"></i>Does pot A need water?</div><div class="a" id="aWater">–</div><div class="s" id="sWater">Waiting for the first check</div></div>
+      <div class="ans"><div class="q"><i class="ph ph-hourglass-medium"></i>When will it be dry?</div><div class="a" id="aDry">–</div><div class="meter"><i id="mDry" style="width:0"></i></div><div class="s" id="sDry">–</div></div>
+      <div class="ans"><div class="q"><i class="ph ph-cloud-rain"></i>Is rain coming?</div><div class="a" id="aRain">–</div><div class="s" id="sRain">–</div></div>
+      <div class="ans"><div class="q"><i class="ph ph-scales"></i>Water saved vs the timer</div><div class="a" id="aSaved">–</div><div class="duo"><i style="background:var(--bt)"></i><span id="mlA">–</span><i style="background:var(--live);margin-left:6px"></i><span id="mlB">–</span></div></div>
+      <button class="run" id="runBtn"><i class="ph ph-play"></i><span>Run agents</span></button>
+    </div>
+  </div>
+
+  <aside class="drawer panel" id="drawer" hidden aria-live="polite">
+    <header><h2 class="disp" id="dTitle">Agents</h2><button class="x" id="dClose" aria-label="Close"><i class="ph ph-x"></i></button></header>
+    <div class="body" id="dBody"></div>
+  </aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const j = async (u, o) => (await fetch(u, o)).json();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clock = ts => new Date(ts * 1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'}).replace(/\s(?=[AP]M)/, ' ');
+const NAMES = {weather_agent:'Weather', soil_agent:'Soil', memory_agent:'Memory', planner_agent:'Planner', critic_agent:'Critic', guards:'Safety rules', executor:'Pump', farm_helper:'Farm chat'};
+window.LIVE = {busy:{}, soak:{}}; window.LENS = 'natural';
+let S = null, drawer = null, lastAnswer = '';
+
+document.querySelectorAll('[data-lens]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-lens]').forEach(x => x.classList.toggle('on', x === b)); window.LENS = b.dataset.lens; });
+document.querySelectorAll('[data-drawer]').forEach(b => b.onclick = () => openDrawer(drawer === b.dataset.drawer ? null : b.dataset.drawer));
+$('dClose').onclick = () => openDrawer(null);
+function openDrawer(name) {
+  drawer = name;
+  document.querySelectorAll('[data-drawer]').forEach(x => x.classList.toggle('on', x.dataset.drawer === name));
+  $('drawer').hidden = !name; $('app').classList.toggle('drawer-open', !!name);
+  if (name) renderDrawer(true);
+}
+
+async function fast() {
+  let L; try { L = await j('/api/live'); } catch (e) { return; }
+  window.LIVE = L;
+  $('tA').textContent = L.a != null ? L.a.toFixed(1) + '%' : '–';
+  $('tB').textContent = L.b != null ? L.b.toFixed(1) + '%' : '–';
+  const t = L.temp != null ? L.temp.toFixed(1) + '°' : '–'; $('tTa').textContent = t; $('tTb').textContent = t;
+  const busy = Object.entries(L.busy || {}), line = $('agentline');
+  if (L.pumping !== 'none') { line.classList.remove('idle'); $('agentTxt').textContent = `Pump ${L.pumping} is running`; }
+  else if (busy.length) { const [k, w] = busy[busy.length - 1]; line.classList.remove('idle'); $('agentTxt').textContent = `${NAMES[k] || k}: ${w}`; }
+  else if (L.soak?.phase === 'soaking') { line.classList.remove('idle'); $('agentTxt').textContent = `Water soaking into pot ${L.soak.pot}: ${L.soak.before?.toFixed(1)}% to ${L.soak.now?.toFixed(1)}%`; }
+  else line.classList.add('idle');
+  if (drawer === 'agents') paintFlow();
+}
+
+async function slow() {
+  try { S = await j('/api/state'); } catch (e) { $('mode').textContent = 'server offline'; $('modePill').className = 'pill keep warn'; return; }
+  $('mode').textContent = S.fake ? 'Test data' : S.online ? 'Board live' : 'Board offline';
+  $('modePill').className = 'pill keep ' + (S.fake ? 'warn' : S.online ? 'ok' : 'warn');
+  $('brainName').textContent = S.brain.startsWith('gemini') ? 'Gemini agent team' : 'Rule brain';
+  const d = S.drought || {};
+  $('drought').textContent = d.level ? `${(d.county || '').replace(' County', '')}: ${d.level} ${d.level_name}` : 'Drought data offline';
+
+  const [dec, rep] = await Promise.all([j('/api/decisions'), j('/api/report')]);
+  if (dec.length && !$('runBtn').disabled) {
+    const x = dec[0], water = x.action === 'water';
+    $('aWater').textContent = water ? `Watering ${(+x.seconds).toFixed(0)} s` : 'Not yet';
+    $('aWater').className = 'a ' + (water ? 'blue' : 'good');
+    $('sWater').textContent = x.sentence.replace(/^(WATER|WAIT):\s*/, '');
+  }
+  const p = S.prediction || {};
+  if (p.settling) { $('aDry').textContent = 'Re-measuring'; $('aDry').className = 'a'; $('sDry').textContent = 'Soil just changed, so the drying rate is being measured again'; }
+  else if (p.hours_until_dry != null) {
+    $('aDry').textContent = p.hours_until_dry < .05 ? 'Dry now' : p.hours_until_dry >= 48 ? 'Over 2 days' : `In ${p.hours_until_dry.toFixed(1)} h`;
+    $('aDry').className = 'a ' + (p.hours_until_dry < 2 ? 'warn' : 'good');
+    $('sDry').textContent = `${p.method === 'xgboost' ? 'XGBoost forecast' : 'Trend estimate'}, losing ${p.drop_per_h}% an hour`;
+  } else { $('aDry').textContent = '–'; $('sDry').textContent = p.error || '–'; }
+  const pct = S.latest?.a_pct ?? 0;
+  $('mDry').style.width = Math.max(0, Math.min(100, (pct - S.config.dry) / (S.config.wet - S.config.dry) * 100)) + '%';
+  $('mDry').style.background = pct < S.config.dry ? 'var(--bad)' : 'var(--bt)';
+  const f = S.forecast || {};
+  if (f.rain_mm_next_24h != null) {
+    $('aRain').textContent = f.hours_until_real_rain != null ? `In ${f.hours_until_real_rain} h` : f.rain_mm_next_24h >= 1 ? `${f.rain_mm_next_24h} mm, patchy` : 'No';
+    $('aRain').className = 'a blue';
+    $('sRain').textContent = `Up to ${f.max_rain_chance_next_24h}% chance in 24 h. ${S.config.outdoors ? 'Pots are outside.' : 'Pots are indoors, so the agents ignore it.'}`;
+  } else { $('aRain').textContent = 'Offline'; $('sRain').textContent = f.error || '–'; }
+  $('aSaved').textContent = rep.water_saved_pct != null ? `${rep.water_saved_pct}%` : 'Too early';
+  $('aSaved').className = 'a ' + (rep.water_saved_pct == null ? '' : rep.water_saved_pct >= 0 ? 'good' : 'warn');
+  $('mlA').textContent = `AI ${rep.ai_pot_ml} ml`; $('mlB').textContent = `timer ${rep.timer_pot_ml} ml`;
+  window.REPORT = rep;
+  if (drawer) renderDrawer(false);
+}
+
+const FLOW = [['predictor','ph-trend-up','Dry-time model','XGBoost on moisture, slope, heat, time of day'],
+  ['par',[['weather_agent','ph-cloud-sun','Weather'],['soil_agent','ph-plant','Soil'],['memory_agent','ph-clock-counter-clockwise','Memory']]],
+  ['planner_agent','ph-clipboard-text','Planner','proposes water or wait'],['critic_agent','ph-magnifying-glass','Critic','checks the math, can send it back'],
+  ['loop'],['guards','ph-shield-check','Safety rules','code the model cannot override'],['executor','ph-lightning','Pump','relay, 30 s cap in the chip'],['soak','ph-waves','Pour detector','measures the soak, teaches Memory']];
+function stepHTML(k, ic, n, w) { return `<div class="step" data-k="${k}"><div class="ic"><i class="ph ${ic}"></i></div><div><div class="n">${n}</div><div class="w" id="w-${k}">${w || 'idle'}</div></div></div>`; }
+function paintFlow() {
+  const L = window.LIVE || {};
+  document.querySelectorAll('.step[data-k]').forEach(el => {
+    const k = el.dataset.k, what = (L.busy || {})[k];
+    let on = !!what; if (k === 'executor') on = on || L.pumping !== 'none'; if (k === 'soak') on = L.soak?.phase === 'soaking';
+    el.classList.toggle('on', on); el.classList.toggle('bad', k === 'guards' && /^REFUSED/.test(what || '')); el.classList.toggle('warn', k === 'critic_agent' && /^sent back/.test(what || ''));
+    const w = $('w-' + k); if (w && what) w.textContent = what;
+  });
+}
+async function renderDrawer(first) {
+  const b = $('dBody');
+  if (drawer === 'agents') {
+    $('dTitle').textContent = 'Agent team';
+    const act = await j('/api/activity');
+    if (first || !$('flow')) {
+      b.innerHTML = `<p class="lede">Google ADK. Three agents gather at once, a planner and a critic go back and forth until the plan holds, then code decides if the pump may run.</p>
+        <div class="card"><div class="flow" id="flow">${FLOW.map(s => s[0] === 'par' ? `<div class="par">${s[1].map(x => stepHTML(...x)).join('')}</div>` : s[0] === 'loop' ? '<div class="loopnote">loops up to 3 rounds</div>' : stepHTML(...s)).join('')}</div></div>
+        <div class="card"><div class="card-t"><i class="ph ph-shield-check"></i>Safety rules right now</div><ul class="rules" id="rules"></ul></div>
+        <div class="card"><div class="card-t"><i class="ph ph-list-bullets"></i>Every tool call</div><ul class="trace" id="trace"></ul></div>`;
+    }
+    $('rules').innerHTML = (S?.guards || []).map(g => `<li><i class="ph ${g.ok ? 'ph-check-circle' : 'ph-x-circle'}"></i><span>${esc(g.rule)}</span><small>${esc(g.detail)}</small></li>`).join('');
+    $('trace').innerHTML = act.length ? act.slice(0, 30).map(a => { const w = a.what || '', c = /^REFUSED|failed/i.test(w) ? 'bad' : /^approved|pump A/.test(w) ? 'good' : /^sent back/.test(w) ? 'warn' : '';
+      return `<li class="${c}"><span class="t">${clock(a.ts).replace(/ ?[AP]M/, '')}</span><span class="a">${esc(NAMES[a.agent] || a.agent)}</span><span>${esc(w)}</span></li>`; }).join('') : '<li><span></span><span></span><span class="lede">Run the agents to see them work.</span></li>';
+    paintFlow();
+  } else if (drawer === 'pours') {
+    $('dTitle').textContent = 'What each pour did';
+    const soaks = await j('/api/soaks');
+    b.innerHTML = `<p class="lede">After every pour the probe is watched for 3 minutes. The rise it sees sets the size of the next pour.</p>
+      <div class="card"><div class="kv"><span>Learned rate</span><b>${S?.learned_pct_per_s ?? '–'}% per pump second</b></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-bt" id="pourBtn"><i class="ph ph-drop"></i>Test pour 5 s</button><button class="btn btn-bad" id="stopBtn"><i class="ph ph-stop"></i>Stop pumps</button></div></div>
+      <div class="card">${soaks.length ? soaks.slice(0, 8).map(x => `<div class="soak"><div class="big" style="color:${x.ok ? 'var(--water)' : '#ff7a7a'}">${x.ok ? '+' + x.rise_pct + '%' : 'Missed the soil'}</div><small>${clock(x.ts)}</small>
+        <small>Pot ${x.pot}, ${x.poured_s} s pour, ${x.before_pct}% to ${x.peak_pct}%${x.first_rise_s != null ? `, reached the probe in ${x.first_rise_s} s` : ''}</small></div>`).join('') : '<p class="lede">No pours yet.</p>'}</div>
+      <p class="note">The depth shading in the 3D view is a model built from the probe reading and this pour data. Only the probe's number is measured.</p>`;
+    $('pourBtn').onclick = async () => { const r = await j('/api/pour', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({seconds: 5})});
+      if (!r.watered) { $('aWater').textContent = 'Blocked'; $('aWater').className = 'a bad'; $('sWater').textContent = 'Safety rules: ' + r.refused_because; } slow(); };
+    $('stopBtn').onclick = () => fetch('/api/stop', {method:'POST'});
+  } else if (drawer === 'history') {
+    $('dTitle').textContent = 'Last 6 hours';
+    const h = await j('/api/history?hours=6'), r = window.REPORT || {};
+    b.innerHTML = `<div class="card"><div class="duo"><i style="background:var(--bt)"></i>Pot A, AI<i style="background:var(--live);margin-left:10px"></i>Pot B, timer</div><svg class="spark" id="spark" viewBox="0 0 360 120" preserveAspectRatio="none"></svg></div>
+      <div class="card"><div class="kv"><span>Time healthy, AI pot</span><b>${r.ai_pot_time_healthy_pct ?? '–'}%</b></div><div class="kv"><span>Time healthy, timer pot</span><b>${r.timer_pot_time_healthy_pct ?? '–'}%</b></div>
+      <div class="kv"><span>Pours, AI / timer</span><b>${r.ai_pours ?? '–'} / ${r.timer_pours ?? '–'}</b></div><div class="kv"><span>Logged</span><b>${r.hours_logged ?? '–'} h</b></div></div>
+      ${r.includes_fake_data ? '<p class="note">Test data from the simulated board. Not for slides.</p>' : ''}`;
+    const rows = h.readings, svg = $('spark'), W = 360, H = 120;
+    if (rows.length > 1) { const step = Math.max(1, Math.ceil(rows.length / 300)), pts = rows.filter((_, i) => i % step === 0);
+      const t0 = pts[0][0], t1 = pts.at(-1)[0], X = t => (t - t0) / Math.max(1, t1 - t0) * W, Y = v => H - v / 100 * H;
+      const path = c => pts.map((r, i) => `${i ? 'L' : 'M'}${X(r[0]).toFixed(1)},${Y(r[c] ?? 0).toFixed(1)}`).join('');
+      svg.innerHTML = `<rect x="0" y="${Y(S.config.wet)}" width="${W}" height="${Y(S.config.dry) - Y(S.config.wet)}" fill="rgba(12,163,12,.12)"/><path d="${path(2)}" fill="none" stroke="#d95926" stroke-width="2" vector-effect="non-scaling-stroke"/><path d="${path(1)}" fill="none" stroke="#3987e5" stroke-width="2.4" vector-effect="non-scaling-stroke"/>`; }
+  } else if (drawer === 'ask') {
+    $('dTitle').textContent = 'Ask the farm';
+    if (first) {
+      b.innerHTML = `<p class="lede">Gemini answers from the live sensors, the forecast, the drought map and its own decision log.</p>
+        <div class="ask"><input id="q" placeholder="Why did you water pot A?" aria-label="Question"><button class="btn btn-bt" id="askBtn">Ask</button></div>
+        <div class="sugg"><button>Why did you water pot A?</button><button>How much has the timer pot used today?</button><button>How dry is the county right now?</button></div>
+        <div class="card"><div class="reply" id="reply">${esc(lastAnswer) || '<span class="lede">Answers show up here.</span>'}</div></div>`;
+      const ask = async q => { if (!q) return; $('reply').innerHTML = '<span class="lede">Gemini is calling its tools…</span>';
+        const r = await j('/api/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({q})}); lastAnswer = r.answer; $('reply').textContent = r.answer; };
+      $('askBtn').onclick = () => ask($('q').value);
+      $('q').onkeydown = e => { if (e.key === 'Enter') ask($('q').value); };
+      b.querySelectorAll('.sugg button').forEach(x => x.onclick = () => { $('q').value = x.textContent; ask(x.textContent); });
+    }
+  }
+}
+
+$('runBtn').onclick = async () => {
+  const b = $('runBtn'); b.disabled = true; b.lastChild.textContent = 'Working';
+  $('aWater').textContent = 'Thinking'; $('aWater').className = 'a'; $('sWater').textContent = 'The agent team is checking the soil, the sky and its memory';
+  try { await j('/api/check-now', {method: 'POST'}); } finally { b.disabled = false; b.lastChild.textContent = 'Run agents'; slow(); }
+};
+fast(); slow(); setInterval(fast, 400); setInterval(slow, 3000);
+</script>
+
+<script type="module">
+// Our model: two clear plastic containers of soil (Pot A = AI, Pot B = timer), each with the ESP32 soil probe,
+// its cable, and the pump tube. The front of each container is cut open: moisture by depth (modeled from the
+// probe + pour detector), a sinking water front after each pour, faint roots. Blue light = the agents working.
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('field');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+const scene = new THREE.Scene();
+const cam = new THREE.PerspectiveCamera(32, 1, .1, 200);
+cam.position.set(5.5, 6.4, 12.5);
+const controls = new OrbitControls(cam, canvas);
+controls.target.set(0, .5, 0); controls.enablePan = false; controls.enableDamping = true; controls.minDistance = 8; controls.maxDistance = 22;
+controls.maxPolarAngle = 1.35; controls.minAzimuthAngle = -0.9; controls.maxAzimuthAngle = 0.9;   // the cut-open front always stays in view
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches; let touched = false;
+canvas.addEventListener('pointerdown', () => touched = true);
+
+scene.add(new THREE.HemisphereLight(0xe6eefc, 0x1a140e, 1.1));
+const key = new THREE.DirectionalLight(0xfff6ec, 2.4); key.position.set(6, 10, 7); scene.add(key);
+const fill = new THREE.DirectionalLight(0x3987e5, .6); fill.position.set(-8, 4, -4); scene.add(fill);
+
+const dust = new THREE.BufferGeometry(), N = 500, dp = new Float32Array(N * 3);
+for (let i = 0; i < N; i++) { dp[i*3] = (Math.random() - .5) * 60; dp[i*3+1] = (Math.random() - .3) * 30; dp[i*3+2] = (Math.random() - .5) * 60 - 10; }
+dust.setAttribute('position', new THREE.BufferAttribute(dp, 3));
+scene.add(new THREE.Points(dust, new THREE.PointsMaterial({ color: 0xcdd9e6, size: .05, transparent: true, opacity: .4 })));
+
+const W = 3.4, D = 2.3, H = 1.5, GAP = 1.2, DEPTH_CM = 20;
+const PAL = { natural: [[150,128,100],[110,80,52],[42,30,20]], moisture: [[70,58,44],[36,86,140],[124,200,255]], temp: [[57,135,229],[180,160,120],[217,89,38]] };
+const lerp = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+function soilRGB(m, lens, temp) {
+  const p = PAL[lens] || PAL.natural;
+  const t = lens === 'temp' ? Math.max(0, Math.min(1, ((temp ?? 27) - 18) / 16)) : Math.max(0, Math.min(1, m / 80));
+  return t < .5 ? lerp(p[0], p[1], t * 2) : lerp(p[1], p[2], (t - .5) * 2);
+}
+
+function makeContainer(x, tint, seed) {
+  const g = new THREE.Group(); g.position.x = x; scene.add(g);
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const side = new THREE.MeshStandardMaterial({ map: tex, roughness: .95 });
+  const top = new THREE.MeshStandardMaterial({ color: 0x8d7d68, roughness: 1 });
+  const soil = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), [side, side, top, side, side, side]);
+  soil.position.y = H / 2; g.add(soil);
+  // clear plastic container + a colored rim so A (blue) and B (orange) read at a glance
+  const box = new THREE.Mesh(new THREE.BoxGeometry(W + .12, H + .5, D + .12), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: .05, roughness: .08, depthWrite: false }));
+  box.position.y = (H + .5) / 2 - .02; g.add(box);
+  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(box.geometry), new THREE.LineBasicMaterial({ color: 0xdce6ef, transparent: true, opacity: .32 }));
+  edges.position.copy(box.position); g.add(edges);
+  const rimGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(W + .14, .001, D + .14));
+  const rim = new THREE.LineSegments(rimGeo, new THREE.LineBasicMaterial({ color: tint })); rim.position.y = H + .48; g.add(rim);
+  let rs = seed; const rnd = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
+  const sprouts = [];
+  for (let i = 0; i < 90; i++) {
+    const s = new THREE.Mesh(new THREE.ConeGeometry(.018, .22 + rnd() * .28, 3), new THREE.MeshStandardMaterial({ color: 0x7fcf55, roughness: .7 }));
+    s.position.set((rnd() - .5) * (W - .3), H + .12, (rnd() - .5) * (D - .3)); s.userData.lean = (rnd() - .5) * .4; g.add(s); sprouts.push(s);
+  }
+  // capacitive soil probe (v1.2 style board) + its 3-wire cable back to the ESP32
+  const probe = new THREE.Group(); probe.position.set(W * .18, H, D * .05); g.add(probe);
+  const board = new THREE.Mesh(new THREE.BoxGeometry(.32, 1.0, .03), new THREE.MeshStandardMaterial({ color: 0x14202c, roughness: .45 }));
+  board.position.y = .05; probe.add(board);
+  const band = new THREE.Mesh(new THREE.BoxGeometry(.33, .04, .035), new THREE.MeshStandardMaterial({ color: 0xe6edf3 })); band.position.y = .02; probe.add(band);
+  const hdr = new THREE.Mesh(new THREE.BoxGeometry(.2, .07, .07), new THREE.MeshStandardMaterial({ color: 0xeeeade })); hdr.position.set(0, .57, 0); probe.add(hdr);
+  const chip = new THREE.Mesh(new THREE.BoxGeometry(.1, .08, .012), new THREE.MeshStandardMaterial({ color: 0x2b2f2d })); chip.position.set(0, .4, .022); probe.add(chip);
+  const led = new THREE.Mesh(new THREE.SphereGeometry(.022), new THREE.MeshBasicMaterial({ color: 0x0ca30c })); led.position.set(.11, .48, .025); probe.add(led);
+  const cablePts = [new THREE.Vector3(0, .6, 0), new THREE.Vector3(-.1, 1.05, -.1), new THREE.Vector3(-.9, 1.15, -.6), new THREE.Vector3(-1.6, .9, -1.1), new THREE.Vector3(-1.9, .1, -1.4)];
+  for (const [c, dx] of [[0x1b1f24, 0], [0xc0392b, .03], [0xd1ab48, -.03]]) {
+    const pts = cablePts.map(p => p.clone().add(new THREE.Vector3(dx, 0, dx)));
+    probe.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 40, .016, 6), new THREE.MeshStandardMaterial({ color: c, roughness: .6 })));
+  }
+  // pump tube arching in from the back
+  const tubeCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(-.5, H + .02 + .9, -.2), new THREE.Vector3(-.7, H + 1.35, -.6), new THREE.Vector3(-1.1, H + 1.1, -1.4), new THREE.Vector3(-1.3, .2, -1.6)]);
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(tubeCurve, 40, .035, 8), new THREE.MeshPhysicalMaterial({ color: 0xdfe8ef, transparent: true, opacity: .55, roughness: .2 })));
+  const drops = [];
+  for (let i = 0; i < 80; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(.03, 6, 6), new THREE.MeshBasicMaterial({ color: 0x7cc8ff, transparent: true, opacity: .85 })); d.visible = false; d.userData.v = Math.random(); g.add(d); drops.push(d); }
+  const roots = []; for (let i = 0; i < 34; i++) { const x0 = .06 + rnd() * .88; const pts = [[x0, 0]]; let px = x0, py = 0; const len = .2 + rnd() * .45; while (py < len) { px += (rnd() - .5) * .04; py += .02 + rnd() * .03; pts.push([px, py]); } roots.push(pts); }
+  const grain = []; for (let i = 0; i < 1400; i++) grain.push([rnd(), rnd(), rnd() * 2.2 + .6, rnd()]);
+  return { g, ctx: cv.getContext('2d'), tex, top, sprouts, drops, roots, grain, led, shown: 50, frontCm: null, x };
+}
+const pots = { A: makeContainer(-(W + GAP) / 2, 0x3987e5, 1234), B: makeContainer((W + GAP) / 2, 0xd95926, 98765) };
+
+function profile(pct, soak, now) {
+  const base = d => pct + (d - 7) * .9;
+  let front = null, add = 0;
+  if (soak && soak.phase === 'soaking') { const prog = Math.min(1, (now - soak.t0) / Math.max(15, soak.watch_s * .5)); front = 1 + prog * (DEPTH_CM - 2); add = Math.max(6, (soak.now - soak.before) * 1.6 + 8) * (1 - prog * .4); }
+  return { at: d => Math.max(0, Math.min(100, base(d) + (front != null && d < front ? add * (1 - d / (front + 4)) + 4 : 0))), front };
+}
+function paint(b, pct, temp, soak, lens, now) {
+  const c = b.ctx, CW = 512, CH = 256, pr = profile(pct, soak, now);
+  for (let y = 0; y < CH; y += 2) { const d = y / CH * DEPTH_CM, rgb = soilRGB(pr.at(d), lens, temp).map(v => v * (1 - d / DEPTH_CM * .35)); c.fillStyle = `rgb(${rgb.map(Math.round)})`; c.fillRect(0, y, CW, 2); }
+  for (const [gx, gy, gs, ga] of b.grain) { c.fillStyle = ga > .55 ? 'rgba(255,245,230,.16)' : 'rgba(0,0,0,.22)'; c.fillRect(gx * CW, gy * CH, gs, gs * .7); }
+  const health = Math.max(.3, Math.min(1, (pct - 15) / 40));
+  c.strokeStyle = `rgba(230,214,176,${.12 + .22 * health})`; c.lineWidth = 1.2;
+  for (const r of b.roots) { c.beginPath(); r.forEach(([x, y], i) => { const yy = y * health * CH * 1.2; i ? c.lineTo(x * CW, yy) : c.moveTo(x * CW, yy); }); c.stroke(); }
+  if (pr.front != null) {
+    const fy = pr.front / DEPTH_CM * CH, gr = c.createLinearGradient(0, fy - 50, 0, fy + 4);
+    gr.addColorStop(0, 'rgba(124,200,255,0)'); gr.addColorStop(1, 'rgba(124,200,255,.45)'); c.fillStyle = gr; c.fillRect(0, fy - 50, CW, 54);
+    c.fillStyle = 'rgba(170,220,255,.9)'; c.fillRect(0, fy - 1, CW, 2);
+  }
+  const px = CW * .68, pb = 11 / DEPTH_CM * CH;       // probe blade under the surface, with its sensing zone
+  c.fillStyle = 'rgba(20,32,44,.55)'; c.fillRect(px - 9, 0, 18, pb);
+  c.strokeStyle = 'rgba(220,232,242,.35)'; c.setLineDash([4, 4]); c.strokeRect(px - 26, 4 / DEPTH_CM * CH, 52, 6 / DEPTH_CM * CH); c.setLineDash([]);
+  b.tex.needsUpdate = true; b.frontCm = pr.front;
+  const t = soilRGB(pr.at(0), lens, temp); b.top.color.setRGB(t[0] / 255, t[1] / 255, t[2] / 255, THREE.SRGBColorSpace);
+}
+
+const AG = new THREE.PointLight(0x3987e5, 0, 6); AG.position.set(pots.A.x, H + 1.4, 0); scene.add(AG);
+const motes = []; for (let i = 0; i < 40; i++) { const m = new THREE.Mesh(new THREE.SphereGeometry(.025, 6, 6), new THREE.MeshBasicMaterial({ color: 0x6aa8f0, transparent: true, opacity: 0 })); m.userData = { a: Math.random() * 6.28, r: .6 + Math.random() * 1.3, y: Math.random() }; scene.add(m); motes.push(m); }
+
+const tagA = document.getElementById('tagA'), tagB = document.getElementById('tagB'), fTag = document.getElementById('frontTag'), fTxt = document.getElementById('frontTxt');
+const v = new THREE.Vector3();
+function place(el, p) { v.copy(p).project(cam); const r = canvas.getBoundingClientRect(); el.style.transform = `translate(${(v.x + 1) / 2 * r.width}px, ${(1 - v.y) / 2 * r.height}px) translate(-50%, -100%)`; el.style.visibility = v.z < 1 ? 'visible' : 'hidden'; }
+function resize() { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(canvas); resize();
+
+let last = performance.now(), lastPaint = 0, glow = 0;
+function frame(ms) {
+  const dt = Math.min(.05, (ms - last) / 1000); last = ms;
+  const now = Date.now() / 1000, L = window.LIVE || {}, lens = window.LENS, dry = L.cfg?.dry ?? 35;
+  for (const k of ['A', 'B']) {
+    const b = pots[k], target = k === 'A' ? L.a : L.b;
+    if (target != null) b.shown += (target - b.shown) * Math.min(1, dt * 2.5);
+    const droop = Math.max(0, (dry + 10 - b.shown) / 25);
+    b.sprouts.forEach(s => { s.rotation.z = s.userData.lean + droop * 1.1 + Math.sin(ms / 1100 + s.id) * .03; s.material.color.setHSL(.27 - droop * .15, .55 - droop * .2, .46 - droop * .1); });
+    b.led.material.color.setHex(L.pumping === k ? 0x7cc8ff : b.shown < dry ? 0xd03b3b : 0x0ca30c);
+    const pumping = L.pumping === k;
+    b.drops.forEach(d => { d.visible = pumping || d.userData.fall; if (!d.visible) return; d.userData.v += dt * 1.4;
+      if (d.userData.v > 1) { d.userData.v = 0; d.userData.fall = pumping; }
+      const t = d.userData.v; d.position.set(-.5 + Math.sin(t * 9 + d.id) * .06, H + .9 - t * .85, -.2 + Math.cos(t * 7 + d.id) * .06); });
+  }
+  if (ms - lastPaint > 90) { lastPaint = ms; const s = L.soak || {}; for (const k of ['A', 'B']) paint(pots[k], pots[k].shown, L.temp, s.pot === k ? s : null, lens, now); }
+  const working = Object.keys(L.busy || {}).some(k => k !== 'farm_helper');
+  glow += ((working ? 1 : 0) - glow) * Math.min(1, dt * 3);
+  AG.intensity = glow * (3 + Math.sin(ms / 160));
+  motes.forEach(m => { m.userData.a += dt * (.6 + glow); m.position.set(pots.A.x + Math.cos(m.userData.a) * m.userData.r, H + .4 + m.userData.y * 1.4 + Math.sin(ms / 700 + m.id) * .1, Math.sin(m.userData.a) * m.userData.r * .7); m.material.opacity = glow * .9; });
+  if (!REDUCE && !touched) { const a = .42 + Math.sin(ms / 9000) * .28, r = Math.hypot(cam.position.x - controls.target.x, cam.position.z - controls.target.z); cam.position.x = controls.target.x + Math.sin(a) * r; cam.position.z = controls.target.z + Math.cos(a) * r; }
+  controls.update(); renderer.render(scene, cam);
+  place(tagA, new THREE.Vector3(pots.A.x + W * .18, H + 1.05, D * .05)); place(tagB, new THREE.Vector3(pots.B.x + W * .18, H + 1.05, D * .05));
+  const fb = pots.A.frontCm != null ? pots.A : pots.B.frontCm != null ? pots.B : null;
+  if (fb) { fTag.hidden = false; fTxt.textContent = `water front ${fb.frontCm.toFixed(1)} cm down`; place(fTag, new THREE.Vector3(fb.x + W / 2 + .1, H - fb.frontCm / DEPTH_CM * H, D / 2)); } else fTag.hidden = true;
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relay Test</title>
+<meta name="description" content="Farm Hand relay-only test: 3 wires from the ESP32 to the relay, with a live check.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf1;--panel:#fbfcfd;--ink:#0e1621;--ink2:#3d4a59;--muted:#5b6674;--line:rgba(14,22,33,.1);--ai:#1f64b8;--good:#1f9a3a;--bad:#c43333;--warn:#b35a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1016;--panel:#141a22;--ink:#e8edf3;--ink2:#b3bdc9;--muted:#8b96a3;--line:rgba(255,255,255,.1);--ai:#5b9cf0;--good:#4cc24c;--bad:#f07070;--warn:#f0a040}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Atkinson Hyperlegible Next",system-ui,sans-serif;padding:18px 16px 30px}
+.w{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+@media (max-width:980px){.w{grid-template-columns:1fr}}
+h1{margin:0 0 4px;font:800 1.7rem/1.1 "Bricolage Grotesque",sans-serif;grid-column:1/-1}
+.sub{grid-column:1/-1;margin:-8px 0 0;color:var(--ink2)}
+.stage{background:#dfe5eb;border-radius:16px;overflow:hidden}
+@media (prefers-color-scheme:dark){.stage{background:#1a212b}}
+svg{display:block;width:100%;height:auto}
+.side{display:grid;gap:12px;align-content:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.k{font:700 12px "JetBrains Mono",monospace;color:var(--ai);letter-spacing:.06em;margin-bottom:6px}
+.wire{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;margin:10px 0;font-weight:700}
+.wire .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 14px "JetBrains Mono"}
+.wire small{display:block;font-weight:400;color:var(--ink2);font-size:14px}
+.row{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;margin:8px 0;font-weight:700}
+.d{width:14px;height:14px;border-radius:50%;background:#777}
+.v{font:700 13px "JetBrains Mono"}
+.big{font:800 1.4rem/1.2 "Bricolage Grotesque";margin:4px 0 8px}
+ul{margin:6px 0 0;padding-left:18px;color:var(--ink2)} li{margin:4px 0}
+.al{color:var(--warn);font-weight:700;font-size:14px;margin-top:8px}
+.steps{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.steps button{border:1px solid var(--line);background:var(--panel);color:var(--ink2);font:700 14px "Atkinson Hyperlegible Next";padding:9px 14px;border-radius:99px;cursor:pointer}
+.steps button.on{background:var(--ink);color:var(--bg)}
+.stepcard{border:2px solid var(--ai)}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.3s cubic-bezier(.3,.7,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pulse{animation:pulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.7)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.draw{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="w">
+  <h1>Relay test: 3 wires, nothing else</h1>
+  <div class="steps" id="steps"></div>
+  <p class="sub">USB unplugged while you wire. No breadboard, no pump. Match the pin labels printed on your boards.</p>
+  <div class="stage"><svg id="svg" viewBox="0 0 1000 620" role="img" aria-label="ESP32 wired straight to the relay with 3 wires"></svg></div>
+  <div class="side">
+    <div class="card stepcard" id="stepcard"></div>
+    <div class="card">
+      <div class="k">THE 3 WIRES · F-M jumpers</div>
+      <div class="wire"><span class="n" style="background:#d63a31">1</span><span>ESP32 <u>VIN</u> → relay <u>DC+</u><small>VIN = the pin right beside the USB port. It is the 5V power.</small></span></div>
+      <div class="wire"><span class="n" style="background:#222">2</span><span>ESP32 <u>GND</u> → relay <u>DC−</u><small>The GND pin right next to VIN.</small></span></div>
+      <div class="wire"><span class="n" style="background:#1e7fe0">3</span><span>ESP32 <u>D26</u> → relay <u>IN</u><small>The on/off signal. It carries no power.</small></span></div>
+      <p class="al">Hole end on the ESP32 pin. Pin end into the screw: loosen, push in, tighten hard, tug.</p>
+    </div>
+    <div class="card">
+      <div class="k">THEN PLUG IN THE USB. YOU SHOULD SEE</div>
+      <div class="big">PWR light bright + a click every 2 s</div>
+      <ul><li>Bright + clicking → relay is good. The problem was the breadboard or a loose wire.</li>
+        <li>Faint or dark → tighten DC+ / DC−, check wire 1 is on VIN (not 3V3). Still faint → swap in a new relay from the pack.</li></ul>
+    </div>
+    <div class="card" id="live"><div class="k">LIVE · from your ESP32</div><div class="row"><span class="d"></span><span>waiting…</span><span class="v"></span></div></div>
+  </div>
+</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg', svg = document.getElementById('svg');
+const el = (t, a = {}, p = svg) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const txt = (x, y, s, a = {}, p = svg) => { const t = el('text', {x, y, 'font-family': 'Arial', 'font-weight': 700, ...a}, p); t.textContent = s; return t; };
+// ---- ESP32 (30-pin DevKit V1, USB-C at the top, like the photo). Left: 3V3 GND D15 D2 D4 RX2 TX2 D5 D18 D19 D21 RX0 TX0 D22 D23. Right: VIN GND D13 D12 D14 D27 D26 D25 D33 D32 D35 D34 VN VP EN
+const EX = 90, EY = 60, EW = 250, EH = 520;
+const L = ['3V3', 'GND', 'D15', 'D2', 'D4', 'RX2', 'TX2', 'D5', 'D18', 'D19', 'D21', 'RX0', 'TX0', 'D22', 'D23'];
+const R = ['VIN', 'GND', 'D13', 'D12', 'D14', 'D27', 'D26', 'D25', 'D33', 'D32', 'D35', 'D34', 'VN', 'VP', 'EN'];
+const PY = i => EY + 90 + i * 28;
+el('rect', {x: EX, y: EY, width: EW, height: EH, rx: 14, fill: '#17191d', stroke: '#2c3037', 'stroke-width': 2});
+el('rect', {x: EX + 98, y: EY - 16, width: 54, height: 34, rx: 8, fill: '#c7ccd1', stroke: '#8a9096'});
+el('rect', {x: EX + 108, y: EY - 6, width: 34, height: 12, rx: 6, fill: '#2a2d31'});
+txt(EX + 125, EY - 26, 'USB', {'text-anchor': 'middle', fill: 'currentColor', 'font-size': 14, style: 'fill:var(--ink2)'});
+el('rect', {x: EX + 62, y: EY + 330, width: 126, height: 150, rx: 6, fill: '#c9cdd1'});
+txt(EX + 125, EY + 395, 'ESP-32', {'text-anchor': 'middle', fill: '#5c6167', 'font-size': 20});
+el('circle', {cx: EX + 125, cy: EY + 270, r: 7, fill: '#ff3b30'});
+txt(EX + 125, EY + 296, 'power light', {'text-anchor': 'middle', fill: '#aaa', 'font-size': 11});
+const PIN = {};
+L.forEach((n, i) => { const x = EX + 20, y = PY(i); el('circle', {cx: x, cy: y, r: 8, fill: '#d9b35c'}); el('circle', {cx: x, cy: y, r: 3, fill: '#333'});
+  txt(x + 16, y + 5, n, {fill: '#e8e8e4', 'font-size': 14}); PIN['L' + n] = [x, y]; });
+R.forEach((n, i) => { const x = EX + EW - 20, y = PY(i); el('circle', {cx: x, cy: y, r: 8, fill: '#d9b35c'}); el('circle', {cx: x, cy: y, r: 3, fill: '#333'});
+  txt(x - 16, y + 5, n, {'text-anchor': 'end', fill: '#e8e8e4', 'font-size': 14}); PIN['R' + n] = [x, y]; });
+// ---- relay: input screws DC+ DC- IN on the left, PWR light near them
+const RX = 600, RY = 170, RW = 330, RH = 190;
+el('rect', {x: RX, y: RY, width: RW, height: RH, rx: 12, fill: '#c62828', stroke: '#8e1b1b', 'stroke-width': 2});
+el('rect', {x: RX + 120, y: RY + 30, width: 130, height: 130, rx: 8, fill: '#2d5fc4'});
+txt(RX + 185, RY + 90, 'SONGLE', {'text-anchor': 'middle', fill: '#fff', 'font-size': 18});
+txt(RX + 185, RY + 112, 'SRD-05VDC', {'text-anchor': 'middle', fill: '#fff', 'font-size': 12});
+el('rect', {x: RX + 8, y: RY + 30, width: 52, height: 130, rx: 5, fill: '#2f6fd6'});
+el('rect', {x: RX + RW - 60, y: RY + 30, width: 52, height: 130, rx: 5, fill: '#2f6fd6', opacity: .45});
+txt(RX + RW - 34, RY + 178, 'not used', {'text-anchor': 'middle', fill: '#fff', 'font-size': 11});
+const SCR = {'DC+': [RX + 34, RY + 55], 'DC−': [RX + 34, RY + 95], 'IN': [RX + 34, RY + 135]};
+Object.entries(SCR).forEach(([n, [x, y]]) => { el('circle', {cx: x, cy: y, r: 15, fill: '#d7dce0', stroke: '#8a9096'}); el('line', {x1: x - 9, x2: x + 9, y1: y, y2: y, stroke: '#555', 'stroke-width': 4});
+  txt(x + 32, y + 5, n, {fill: '#fff', 'font-size': 16}); });
+const JX = RX + 150, JY = RY + RH - 22;
+el('rect', {x: JX - 30, y: JY - 10, width: 60, height: 20, rx: 3, fill: '#222'});
+[-20, 0, 20].forEach(dx => el('circle', {cx: JX + dx, cy: JY, r: 3.5, fill: '#d9b35c'}));
+txt(JX - 44, JY + 5, 'L', {'text-anchor': 'middle', fill: '#fff', 'font-size': 15}); txt(JX + 44, JY + 5, 'H', {'text-anchor': 'middle', fill: '#fff', 'font-size': 15});
+const cap = el('rect', {y: JY - 12, width: 30, height: 24, rx: 3, fill: '#0b0b0b', stroke: '#ffd23f', 'stroke-width': 3});
+const pwr = el('circle', {cx: RX + 90, cy: RY + 16, r: 7, fill: '#3a1111'}); txt(RX + 102, RY + 21, 'PWR', {fill: '#fff', 'font-size': 12});
+const led1 = el('circle', {cx: RX + 90, cy: RY + 176, r: 7, fill: '#3a1111'}); txt(RX + 102, RY + 181, 'LED1', {fill: '#fff', 'font-size': 12});
+// ---- 3 wires, drawn one after another
+function wire(a, b, c, via, n, delay) {
+  const pts = [a, ...via, b]; let d = `M ${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; d += ` C ${(x0 + x1) / 2} ${y0}, ${(x0 + x1) / 2} ${y1}, ${x1} ${y1}`; }
+  el('path', {d, fill: 'none', stroke: 'rgba(0,0,0,.25)', 'stroke-width': 11, 'stroke-linecap': 'round', transform: 'translate(2 3)'});
+  const p = el('path', {d, fill: 'none', stroke: c, 'stroke-width': 9, 'stroke-linecap': 'round'});
+  p.style.setProperty('--len', p.getTotalLength()); p.style.animationDelay = delay + 's'; p.classList.add('draw');
+  [a, b].forEach(([x, y]) => el('circle', {cx: x, cy: y, r: 13, fill: 'none', stroke: '#ffd23f', 'stroke-width': 4, class: 'pulse'}));
+  el('rect', {x: a[0] + 10, y: a[1] - 9, width: 22, height: 18, rx: 3, fill: '#111'});   // hole end on the pin
+  const [mx, my] = via.length ? via[0] : a; el('circle', {cx: mx, cy: my - 22, r: 15, fill: c}); txt(mx, my - 17, n, {'text-anchor': 'middle', fill: '#fff', 'font-size': 15});
+}
+wire(PIN.RVIN, SCR['DC+'], '#d63a31', [[450, PIN.RVIN[1]], [520, SCR['DC+'][1]]], '1', 0);
+wire(PIN.RGND, SCR['DC−'], '#222', [[470, PIN.RGND[1]], [540, SCR['DC−'][1]]], '2', .6);
+wire(PIN.RD26, SCR.IN, '#1e7fe0', [[490, PIN.RD26[1]], [550, SCR.IN[1]]], '3', 1.2);
+const STEPS = [
+  {t: '1 · Wire it', h: 'Wire the 3 wires', p: 'USB unplugged. Wire 1: VIN → DC+. Wire 2: GND → DC−. Wire 3: D26 → IN. Tighten each screw hard and tug.', cap: 'H'},
+  {t: '2 · Power ✓', h: 'PWR light bright', p: 'Done: your PWR light is bright. The relay has power.', cap: 'H', pwr: true},
+  {t: '3 · Jumper to H', h: 'Move the black cap back to H', p: 'On L your relay stays stuck ON: a 5V relay can’t read the ESP32’s 3.3V as “off” (known issue). On H: 3.3V = ON, 0V = OFF. Pull the cap up, push it onto the middle pin + the H pin.', cap: 'H', pwr: true, moveCap: true},
+  {t: '4 · Listen', h: 'Click every 2 s?', p: 'Leave everything plugged in. The LED1 light should blink and the relay should tick every 2 s. Put your ear right by the blue box.', cap: 'H', pwr: true, blink: true},
+];
+let step = 2; try { const v = localStorage.getItem('relay_step2'); if (v !== null) step = +v; } catch (e) {}
+const stepsEl = document.getElementById('steps');
+STEPS.forEach((x, i) => { const b = document.createElement('button'); b.textContent = x.t; b.onclick = () => { step = i; showStep(); }; stepsEl.appendChild(b); });
+let capAnim = 0;
+function showStep() {
+  try { localStorage.setItem('relay_step2', step); } catch (e) {}
+  const x = STEPS[step];
+  [...stepsEl.children].forEach((b, i) => b.classList.toggle('on', i === step));
+  document.getElementById('stepcard').innerHTML = `<div class="k">STEP ${step + 1} OF ${STEPS.length}</div><div class="big">${x.h}</div><div style="color:var(--ink2)">${x.p}</div>`;
+  pwr.setAttribute('fill', x.pwr ? '#ff3b30' : '#3a1111');
+  const id = ++capAnim, from = JX - 25, to = JX - 5;       // cap over L+mid (x=JX-25) or mid+H (x=JX-5)
+  if (x.moveCap) { const t0 = performance.now(); const a = t => { if (id !== capAnim) return; const k = ((t - t0) / 1600) % 1, e = k < .5 ? 0 : Math.min(1, (k - .5) * 3);
+      cap.setAttribute('x', from + (to - from) * e); cap.setAttribute('y', JY - 12 - Math.sin(Math.PI * Math.min(1, e)) * 18); requestAnimationFrame(a); }; requestAnimationFrame(a); }
+  else { cap.setAttribute('x', x.cap === 'H' ? to : from); cap.setAttribute('y', JY - 12); }
+}
+showStep();
+// ---- live: pin 26 state from the ESP32 via the power page (/data), when served from it
+const live = document.getElementById('live');
+async function tick() {
+  let d; try { d = await (await fetch('/data')).json(); } catch (e) { live.innerHTML = '<div class="k">LIVE</div><div style="color:var(--muted)">Open this at http://127.0.0.1:8097/relay to see it live.</div>'; return; }
+  const p = (d.pts || []).slice(-1)[0];
+  if (!p) { live.innerHTML = '<div class="k">LIVE · from your ESP32</div><div class="row"><span class="d" style="background:var(--bad)"></span><span>No signal from the ESP32. Is the USB in?</span><span class="v"></span></div>'; pwr.setAttribute('fill', '#3a1111'); return; }
+  const on = p.relay_in === 'LOW';
+  live.innerHTML = `<div class="k">LIVE · from your ESP32</div>
+    <div class="row"><span class="d" style="background:var(--good)"></span><span>ESP32 running</span><span class="v">yes</span></div>
+    <div class="row"><span class="d" style="background:${on ? 'var(--good)' : '#777'}"></span><span>Telling relay: ${on ? 'ON' : 'OFF'}</span><span class="v">D26 ${p.relay_in}</span></div>
+    <div style="color:var(--ink2);font-size:14px;margin-top:6px">This flips every 2 s. Each flip = one click you should hear. The ESP32 cannot see the PWR light: your eyes are the check.</div>`;
+  led1.setAttribute('fill', on ? '#ff4a3a' : '#3a1111');
+}
+setInterval(tick, 300); tick();
+</script>
+</body>
+</html>

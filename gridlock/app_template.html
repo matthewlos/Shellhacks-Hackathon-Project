@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GridLock</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#eef1f4; --panel:#fbfcfd; --wash:#f1f4f7; --line:rgba(14,22,33,.1);
+  --ink:#0e1621; --ink-2:#3d4a59; --muted:#5b6674;
+  --desc:#0b6e6b; --gpc:#b4451c;
+  --t1:#8f1d1d; --t2:#c2331f; --t3:#e0762a; --t4:#8a95a3;
+  --good:#0a7a3a; --warn:#8a5a00;
+  --f-d:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-b:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-n:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box} html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--ink);font:15px/1.45 var(--f-b);-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+.num{font-family:var(--f-n);font-variant-numeric:tabular-nums}
+.app{height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr)}
+header{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+header h1{margin:0;font:700 1.45rem/1 var(--f-d);letter-spacing:-.02em}
+header h1 small{display:block;font:500 12.5px var(--f-b);color:var(--muted);letter-spacing:0;margin-top:4px}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin-left:auto}
+.stat b{display:block;font:600 1.3rem/1 var(--f-n)} .stat span{font-size:12px;color:var(--muted)}
+.key{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--ink-2)}
+.key i{display:inline-block;width:18px;height:4px;border-radius:2px;margin-right:6px;vertical-align:middle}
+main{display:grid;grid-template-columns:minmax(0,1fr) 440px;min-height:0}
+#map{height:100%;min-height:360px}
+aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-height:0}
+.filters{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px;border-radius:99px;border:1px solid var(--line);background:var(--panel);font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;user-select:none}
+.chip input{margin:0;accent-color:var(--ink)}
+.chip .dot{width:10px;height:10px;border-radius:50%}
+select{height:30px;border-radius:8px;border:1px solid var(--line);background:var(--panel);padding:0 8px;font-size:13px}
+.list{overflow-y:auto;padding:6px 10px 10px}
+.item{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:10px 8px;border-radius:12px;cursor:pointer;border:1px solid transparent}
+.item:hover{background:var(--wash)} .item.on{background:var(--wash);border-color:var(--ink)}
+.rk{font:600 15px var(--f-n);color:var(--muted);text-align:right;padding-top:1px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:5px}
+.tag{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--wash);color:var(--ink-2)}
+.tag.tier{color:#fff}
+.tag.win{background:rgba(10,122,58,.1);color:var(--good)}
+.tag.low{background:rgba(138,90,0,.1);color:var(--warn)}
+.pair{font-size:13.5px;line-height:1.35}
+.pair .d{color:var(--desc);font-weight:600} .pair .g{color:var(--gpc);font-weight:600}
+.pair .vs{color:var(--muted);font-size:12px}
+.detail{border-top:1px solid var(--line);padding:14px 16px 16px;max-height:52vh;overflow-y:auto;display:grid;gap:12px}
+.detail h2{margin:0;font:700 1.15rem/1.2 var(--f-d)}
+.share{font-size:14px;color:var(--ink-2)}
+.proj{border-left:3px solid;padding:2px 0 2px 10px;display:grid;gap:3px;font-size:13.5px}
+.proj .u{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.proj .n{font-weight:700}
+.proj .m{color:var(--ink-2)} .proj .s{color:var(--muted);font-size:12px}
+.cost{background:var(--wash);border-radius:12px;padding:12px;display:grid;gap:8px;font-size:13.5px}
+.cost .big{font:600 1.5rem/1 var(--f-n);color:var(--good)}
+.cost input[type=range]{width:100%;accent-color:var(--ink)}
+.cost .fine{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;padding:14px 6px}
+.more{font-size:13px;color:var(--ink-2);padding:10px 16px;border-top:1px solid var(--line)}
+.more summary{cursor:pointer;font-weight:600}
+.more li{margin:3px 0;font-size:12.5px}
+.leaflet-popup-content{font:13px/1.4 var(--f-b);margin:10px 12px}
+.leaflet-popup-content b{font-weight:700}
+@media (max-width:980px){main{grid-template-columns:1fr;grid-template-rows:55dvh auto}.app{height:auto}aside{border-left:0;border-top:1px solid var(--line)}.list{max-height:50dvh}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>GridLock<small>Dominion Energy South Carolina × Georgia Power, planned transmission work</small></h1>
+  <div class="key"><span><i style="background:var(--desc)"></i>Dominion SC</span><span><i style="background:var(--gpc)"></i>Georgia Power</span><span><i style="background:var(--ink-2);height:0;border-top:2px dashed var(--ink-2)"></i>place approx.</span></div>
+  <div class="stats" id="stats"></div>
+</header>
+<main>
+  <div id="map" role="application" aria-label="Map of both utilities' planned projects and where they overlap"></div>
+  <aside>
+    <div class="filters">
+      <div class="row" id="tiers"></div>
+      <div class="row">
+        <label class="chip"><input type="checkbox" id="win"> Same build window only</label>
+        <select id="conf" aria-label="Minimum confidence"><option value="2">Any confidence</option><option value="1">Medium or better</option><option value="0">High only</option></select>
+      </div>
+    </div>
+    <div class="list" id="list" aria-label="Ranked coordination opportunities"></div>
+    <div>
+      <div class="detail" id="detail"></div>
+      <details class="more"><summary id="unplacedHead"></summary><ul id="unplaced"></ul></details>
+    </div>
+  </aside>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const DATA = __DATA__;
+const P = DATA.projects, O = DATA.overlaps;
+const CSSV = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL = {DESC: CSSV('--desc'), GPC: CSSV('--gpc')};
+const TIER = {1: ['Touching / crossing', CSSV('--t1')], 2: ['Under 1.6 km', CSSV('--t2')], 3: ['Under 8 km', CSSV('--t3')], 4: ['Under 40 km', CSSV('--t4')]};
+const UNAME = {DESC: 'Dominion Energy SC', GPC: 'Georgia Power'};
+// Assumed share of the Dominion project cost two utilities could save by sharing, per tier. An assumption, not from any filing.
+const DEFAULT_PCT = {1: 10, 2: 8, 3: 5, 4: 2};
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money = v => v == null ? 'not in the public list' : '$' + Math.round(v).toLocaleString();
+const title = s => s ? s.replace(/\b([A-Z])([A-Z]+)\b/g, (m, a, b) => a + b.toLowerCase()).replace(/\bKv\b/g, 'kV').replace(/\bSav\b/g, 'SAV') : '';
+
+// ---- map
+const map = L.map('map', {zoomSnap: .25}).setView([33.05, -81.4], 7.5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 16, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+const ll = c => [c[1], c[0]];
+const shapes = {};
+P.forEach(p => {
+  if (!p.geometry) return;
+  const g = p.geometry, approx = g.precision !== 'substation', c = COL[p.utility];
+  const pop = `<b>${esc(title(p.name))}</b><br>${UNAME[p.utility]} · in service ${p.year ?? '?'}<br><span style="color:#5b6674">Placed at: ${esc(g.matched.join(' → '))}${approx ? ' (approx.)' : ''}</span>`;
+  const shp = g.type === 'LineString'
+    ? L.polyline(g.coords.map(ll), {color: c, weight: 3, opacity: .85, dashArray: approx ? '6 6' : null})
+    : L.circleMarker(ll(g.coords[0]), {radius: 5, color: c, weight: 2, fillColor: approx ? '#fff' : c, fillOpacity: .9});
+  shp.bindPopup(pop).addTo(map); shapes[p.id] = shp;
+});
+const links = {};
+O.forEach(o => {
+  const [n, c] = TIER[o.tier];
+  links[o.rank] = L.polyline(o.link.map(ll), {color: c, weight: o.tier <= 2 ? 5 : o.tier === 3 ? 4 : 2, opacity: o.tier === 4 ? .5 : .95})
+    .bindTooltip(`#${o.rank} · ${o.km} km · ${n}`).on('click', () => select(o.rank)).addTo(map);
+});
+
+// ---- stats
+const placed = P.filter(p => p.geometry);
+const cnt = u => placed.filter(p => p.utility === u).length + '/' + P.filter(p => p.utility === u).length;
+document.getElementById('stats').innerHTML = [
+  [cnt('DESC'), 'Dominion projects mapped'], [cnt('GPC'), 'Georgia Power projects mapped'],
+  [O.length, 'pairs under 40 km'], [O.filter(o => o.tier <= 3).length, 'under 8 km'], [O.filter(o => o.same_window).length, 'same build window']
+].map(([b, s]) => `<div class="stat"><b class="num">${b}</b><span>${s}</span></div>`).join('');
+
+// ---- filters
+const on = {1: true, 2: true, 3: true, 4: false};   // 40 km links are many; off by default so the close ones read
+document.getElementById('tiers').innerHTML = [1, 2, 3, 4].map(t => `<label class="chip"><input type="checkbox" data-t="${t}" ${on[t] ? 'checked' : ''}><span class="dot" style="background:${TIER[t][1]}"></span>${TIER[t][0]} <span class="num" style="color:#5b6674">${O.filter(o => o.tier === t).length}</span></label>`).join('');
+document.querySelectorAll('[data-t]').forEach(c => c.onchange = () => { on[c.dataset.t] = c.checked; render(); });
+document.getElementById('win').onchange = render; document.getElementById('conf').onchange = render;
+const CR = {high: 0, medium: 1, low: 2};
+let sel = null;
+function visible() {
+  const w = document.getElementById('win').checked, cmax = +document.getElementById('conf').value;
+  return O.filter(o => on[o.tier] && (!w || o.same_window) && CR[o.confidence] <= cmax);
+}
+function render() {
+  const V = visible(), show = new Set(V.map(o => o.rank));
+  O.forEach(o => { const l = links[o.rank]; show.has(o.rank) ? l.addTo(map) : l.remove(); });
+  const L_ = document.getElementById('list');
+  if (!V.length) { L_.innerHTML = '<p class="empty">No overlaps match these filters. Turn a tier back on or allow lower confidence.</p>'; return; }
+  L_.innerHTML = V.map(o => {
+    const a = P[o.desc_id], b = P[o.gpc_id];
+    return `<div class="item${sel === o.rank ? ' on' : ''}" data-r="${o.rank}" tabindex="0" role="button" aria-label="Opportunity ${o.rank}">
+      <span class="rk">#${o.rank}</span>
+      <div><div class="tags"><span class="tag tier" style="background:${TIER[o.tier][1]}">${o.km} km</span>
+        ${o.same_window ? `<span class="tag win">Same window ${o.desc_year}${o.gpc_year !== o.desc_year ? '/' + o.gpc_year : ''}</span>` : `<span class="tag">${o.desc_year ?? '?'} vs ${o.gpc_year ?? '?'}</span>`}
+        <span class="tag ${o.confidence === 'low' ? 'low' : ''}">${o.confidence} confidence</span></div>
+      <div class="pair"><span class="d">${esc(title(a.name))}</span> <span class="vs">and</span> <span class="g">${esc(title(b.name))}</span></div></div></div>`;
+  }).join('');
+  L_.querySelectorAll('.item').forEach(el => { el.onclick = () => select(+el.dataset.r); el.onkeydown = e => { if (e.key === 'Enter') select(+el.dataset.r); }; });
+}
+function projCard(p) {
+  const g = p.geometry;
+  return `<div class="proj" style="border-color:${COL[p.utility]}"><span class="u" style="color:${COL[p.utility]}">${UNAME[p.utility]}</span>
+    <span class="n">${esc(title(p.name))}</span>
+    <span class="m">In service ${p.year ?? '?'}${p.cost_total_usd ? ` · ${money(p.cost_total_usd)}` : ''}</span>
+    ${p.description ? `<span class="m">${esc(p.description)}</span>` : ''}
+    ${p.need ? `<span class="s">Why: ${esc(p.need)}</span>` : ''}
+    <span class="s">Placed at ${esc(g.matched.join(' → '))}${g.precision !== 'substation' ? ' (town-level, approx.)' : ''}${g.note ? ' · ' + esc(g.note) : ''}</span>
+    <span class="s">Source: ${esc(p.source)}</span></div>`;
+}
+function select(rank) {
+  sel = rank; const o = O.find(x => x.rank === rank), a = P[o.desc_id], b = P[o.gpc_id];
+  [a, b].forEach(p => shapes[p.id] && shapes[p.id].bringToFront());
+  const grp = L.featureGroup([shapes[a.id], shapes[b.id], links[rank]].filter(Boolean));
+  map.fitBounds(grp.getBounds().pad(.6), {maxZoom: 12});
+  const pct = DEFAULT_PCT[o.tier];
+  document.getElementById('detail').innerHTML = `<h2>#${o.rank} · ${o.km} km apart · ${TIER[o.tier][0]}</h2>
+    <div class="share">${esc(o.share)}. ${o.same_window ? `Both are due around ${o.desc_year}, so the work can overlap in time too.` : `Build years ${o.desc_year ?? '?'} and ${o.gpc_year ?? '?'}: close on the map, ${o.year_gap} year${o.year_gap === 1 ? '' : 's'} apart on the calendar.`}</div>
+    ${projCard(a)}${projCard(b)}
+    <div class="cost"><span>Rough savings if they share (Dominion side)</span>
+      <span class="big num" id="save"></span>
+      <label for="pct">Assumed share of the project saved: <b class="num" id="pctv">${pct}%</b></label>
+      <input type="range" id="pct" min="0" max="20" step="1" value="${pct}">
+      <span class="fine">Uses Dominion's own filed cost (${money(a.cost_total_usd)}). The % is an assumption you can move, not a number from either filing. Georgia Power's list has no costs, so their side's savings are not counted.</span></div>`;
+  const upd = () => { const v = +document.getElementById('pct').value; document.getElementById('pctv').textContent = v + '%';
+    document.getElementById('save').textContent = a.cost_total_usd ? money(a.cost_total_usd * v / 100) : 'Dominion cost not listed'; };
+  document.getElementById('pct').oninput = upd; upd();
+  render();
+}
+const un = P.filter(p => !p.geometry);
+document.getElementById('unplacedHead').textContent = `${un.length} projects we could not place on the map (and why)`;
+document.getElementById('unplaced').innerHTML = un.map(p => `<li>${UNAME[p.utility]}: ${esc(title(p.name))} <span style="color:#5b6674">(${esc(p.unplaced_reason)})</span></li>`).join('');
+render(); if (O.length) select(O[0].rank);
+</script>
+</body>
+</html>

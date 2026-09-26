@@ -1,0 +1,7 @@
+dry: {'ok': True}
+pinch: {'ok': True, 'pinched': True}
+start soil: 36.9 -> {'ok': True}
+     0s  settling  now=36.2  Pulse 1: 8.0 s. Gap 13.8%, learned 1.21 % per second.
+    91s  fault     now=36.1  The pump ran 8.0 s, that should add about 9.7%, but the probe moved -0.1%. Water isn't reaching the soil: check the tube isn't pinched, the pump is under water, and the tube points at the pot.
+RECEIPT: {"phase": "fault", "target": 50.0, "start": 36.2, "now": 36.1, "pulses": [{"s": 8.0, "before": 36.2, "after": 36.1, "rise": -0.1, "wait_s": 91}], "secs": 8.0, "ml": 160, "took_s": 91, "rate": 1.211}
+unpinch: {'ok': True, 'pinched': False}

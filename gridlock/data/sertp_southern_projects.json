@@ -1,0 +1,2610 @@
+[
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "ADAMSVILLE \u2013 BUZZARD ROOST 230 KV TRANSMISSION LINE, REBUILD AND JUMPER UPGRADE",
+  "description": "Rebuild part of the Adamsville \u2013 Buzzard Roost 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace limiting elements at substations along the line.",
+  "need": "The Adamsville \u2013 Buzzard Roost 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "ARKWRIGHT, BUS AND JUMPER REPLACEMENT",
+  "description": "Replace the 115 kV bus at Arkwright with higher rating and replace the jumper on the Arkwright \u2013 Forrest Rd (Macon) 115 kV transmission line with 1590AAC.",
+  "need": "The Arkwright \u2013 Forrest Road (Macon) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "BARTLETTS FERRY, JUMPER REPLACEMENT",
+  "description": "Replace the limiting jumper with a higher rated jumper.",
+  "need": "Jumpers exceed their thermal rating under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "BLANKETS CREEK \u2013 WOODSTOCK 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire Blankets Creek \u2013 Woodstock 115 kV transmission line, approximately 7.1 miles, with 200\u00b0C 795 ACSS conductor.",
+  "need": "The Blankets Creek \u2013 Woodstock 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "BRUNSWICK \u2013 MCMANUS 115 KV LINES, RE-TERMINATION",
+  "description": "Re-terminate either Brunswick \u2013 McManus 115 kV Black or White transmission line to bus 1.",
+  "need": "The Brunswick \u2013 GeorgiaPacific (Black) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "CASS PINE 230/25 KV, NEW SUBSTATION AND AREA IMPROVEMENTS",
+  "description": "Build a new 230/25 kV networked substation named Cass Pine in Bartow County that will interconnect between the new Great Valley and Hill View 230 kV substations.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "DU: EAST DALTON \u2013 OOSTANAULA 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "DU: Rebuild the portion of East Dalton \u2013 Oostanaula and Dalton \u2013 East Dalton 115 kV double circuit transmission lines between East Dalton substation and the Dalton substation frame with 200\u00b0C 795 ACSS conductor.",
+  "need": "The East Dalton \u2013 Oostanaula 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "DU: LOOPERS FARM \u2013 SOUTH DALTON 230 KV, CONSTRUCT",
+  "description": "Build a new 230 kV networked switching station on DU Loopers Farm \u2013 South Dalton 230 kV, radialize South Dalton 230 kV station, and build a new 230 kV line from Loopers Farm to Jobs Creek with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Loopers Farm \u2013 South Dalton 230 kV transmission line overloads under base case conditions.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "EAST POINT 115 KV AND 230 KV, RELAY MODERNIZATION",
+  "description": "Upgrade protection scheme at the East Point substation.",
+  "need": "The project addresses stability issues in the transmission network caused by multiple contingencies. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "EMBLEM RIVERSIDE 230 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "A Fiber ICON ring is being built to help with communication and to better protect of the transmission system in the area.",
+  "need": "This project adds protection to the transmission system in the area to increase coordination.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "FAYETTEVILLE AREA TRANSMISSION NEEDS, CONSTRUCT",
+  "description": "Build a new 500/230 kV substation with two 500/230 kV autotransformers. Two new 230 kV transmission lines will be built from the new 500/230 kV substation to the high side of the customer substations with bundled 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "FENWICK STREET \u2013 SAND BAR FERRY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 2.72 miles of 115 kV transmission line sections of the Fenwick Street \u2013 Sand Bar Ferry 115 kV transmission line with 100\u00b0C 1351 ACSR conductor.",
+  "need": "The Fenwick Street \u2013 Sand Bar Ferry 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "FULLER ROAD \u2013 COLUMBUS FIRST AVE 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 3 miles of Fuller Road \u2013 Columbus First Ave 115 kV transmission line (from Columbus First Ave to Phenix Lumber) from 100\u00b0C 397 ACSR conductor to 200\u00b0C 397 ACSS 26/7 conductor.",
+  "need": "The Fuller Road \u2013 Columbus First Avenue 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GARRETT ROAD 230 KV SWITCHING STATION \u2013 TRAE LANE, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build the new Garrett Road 230 kV switching station splitting the Villa Rica \u2013 West Marietta 230 kV transmission line. Build a new 230 kV transmission line (8.6 miles) from the Trae Lane substation to the Garrett Road switching substation with bundled 100\u00b0C 1351 ACSR conductor.",
+  "need": "The project addresses multiple 115 kV overloads that occur under contingency and supports load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GOAT ROCK \u2013 NORTH OPELIKA 230 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade the approximately 17.2 mile section of transmission line from North Opelika to Goat Rock 230 kV to operate at 100\u00b0 C.",
+  "need": "The Goat Rock \u2013 North Opelika 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GOAT ROCK 230 KV SWITCH, JUMPER, AND LINE TRAP, REPLACEMENT",
+  "description": "Replace limiting elements on the Goat Rock \u2013 North Opelika 230 kV transmission line with higher ratings.",
+  "need": "The Goat Rock \u2013 North Opelika 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GORDON \u2013 N DUBLIN 115 KV (GORDON \u2013 ENGL MCI J) TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 6 miles of the Gordon \u2013 North Dublin 115 kV transmission line with 200\u00b0C ACSS 795 conductor.",
+  "need": "The Gordon \u2013 North Dublin 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GRADY 230/115 KV, RELAY MODERNIZATION",
+  "description": "Upgrade protection scheme, install a breaker, and associated switches at Grady substation.",
+  "need": "The project addresses stability issues in the transmission network caused by multiple contingencies. It also addresses thermal overload on the Grady \u2013 Morrow 115 kV White transmission line under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GRADY \u2013 WEST END 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire 2.6 mile Grady \u2013 West End 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Grady \u2013 West End 115 kV transmission line exceeds its rating under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GRID \u2013 GAINESVILLE #2 EQUIPMENT, REPLACEMENT",
+  "description": "Replace autotransformers at Gainesville #2 with a higher rating.",
+  "need": "The autotransformers at Gainesville #2 overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: CONYERS \u2013 CORNISH MOUNTAIN 115 KV LINE, UPGRADE",
+  "description": "Upgrade 750 jumpers at North Conyers and raise the temp rating of the 636 ACSR conductor on the Conyers \u2013 Cornish MTN 115 kV transmission line from 100\u00b0C to 125C.",
+  "need": "The Conyers \u2013 Cornish Mountain 115 kV transmission line overloads under contingency SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: DRESDEN 500 KV, BUS EXPANSION",
+  "description": "Expand the Dresden 500 kV bus to bring additional 500 kV transmission lines into the station.",
+  "need": "This project will resolve multiple thermal constraints by eliminating a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: GORDON \u2013 SANDERSVILLE #1 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 1.87 miles of the Gordon \u2013 Sandersville #1 115 kV transmission line with 100\u00b0C 795 ACSR conductor.",
+  "need": "The Gordon \u2013 Sandersville #1 115 kV transmission line overloads under base case conditions.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: LAGRANGE \u2013 NORTH OPELIKA 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 230 kV transmission line from Lagrange to North Opelika (APC) with 200\u00b0C ACSS 1351.5 Martin conductor.",
+  "need": "To minimize system impact and to improve system reliability, the project has been proposed as the most cost-effective solution which solves multiple overloads. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: LIZARD LOPE \u2013 WESTOVER 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct two new 115 kV substations, Lizard Lope and Westover, and build a new 115 kV transmission line, approximately 19.8 miles, from Lizard Lope to Gillionville with 100\u00b0C Drake 795 ACSR conductor.",
+  "need": "The Dawson Primary \u2013 Palmyra 115 kV transmisson line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: ROBINS SPRING, BUS REPLACEMENT",
+  "description": "Upgrade limiting element at the substation.",
+  "need": "The Gordon \u2013 Sandersville #1 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GTC: ROBINS SPRING, CAPACITOR BANK INSTALLATION",
+  "description": "Install a 115 kV 2-stage capacitor bank at the substation.",
+  "need": "There are low voltage issues on several buses of the Gordon \u2013 Sandersville #1 115 kV transmission line under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "GULFPORT LANDON RD \u2013 KILN 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 14.3 mile, Gulfport Landon \u2013 Kiln Crossover 115 kV transmission line with 1351 ACSR at 100\u00b0C.",
+  "need": "The Gulfport Landon \u2013 Kiln Crossover 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "HAMMOND \u2013 WEISS DAM 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 11.2 miles of Hammond \u2013 Weiss Dam 115 kV transmission line from Hammond to the APC border with 200\u00b0C 795 ACSS conductor.",
+  "need": "The Hammond \u2013 Weiss Dam 115 kV transmission line overloads under contingency",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "HILLS BRIDGE 500/230 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Build a new 500/230 kV substation looping in the Ohara \u2013 Scherer 500 kV transmission line. Build two 230 kV transmission lines to customer substation with (2) 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "JORDAN DAM \u2013 MARTIN DAM B 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 21 miles of 397 ACSR conductor with 200\u00b0C 795 ACSS conductor on Jordan Dam \u2013 Martin Dam B 115 kV transmission line.",
+  "need": "The Jordan Dam \u2013 Martin Dam 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "KATHLEEN AREA IMPROVEMENTS",
+  "description": "Rebuild the Bonaire Primary \u2013 Kathleen 230 kV transmission line (approximately 6 miles) with 200\u00b0C 1351 ACSS conductor. Upgrade limiting elements at the substation along the Kathleen \u2013 Pitts 230 kV transmission line.",
+  "need": "The Bonaire Primary \u2013 Kathleen 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "KLONDIKE, RELAY MODERNIZATION",
+  "description": "Upgrade protection scheme at the Klondike substation.",
+  "need": "The project addresses stability issues in the transmission network caused by multiple contingencies. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "LAGRANGE \u2013 NORTH OPELIKA TS 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct approximately 16.5 miles of new 230 kV transmission line with 200\u00b0C 1351 54/19 ACSS conductor between North Opelika TS and new metering station, West Point SS 230 kV.",
+  "need": "This project resolves multiple overloads and improves system reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "LAUDERDALE EAST \u2013 VIMVILLE 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor 5.97 miles of the Lauderdale East \u2013 Vimville 230 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "Transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "MEAG: DRESDEN \u2013 LAGRANGE PRIMARY 230 KV, UPGRADE AND JUMPER REPLACEMENT",
+  "description": "Resag the Dresden \u2013 LaGrange Primary 230 kV transmission line to 125\u00b0C and upgrade limiting elements at substations along the line with (2) 1590 AAC jumpers.",
+  "need": "The Dresden \u2013 Lagrange Primary 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "MEAG: RAY PLACE RD \u2013 WASHINGTON 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 17.4 miles of the Ray Place Rd \u2013 Washington 115 kV transmission line using 100\u00b0C 795 ACSR conductor and upgrade limiting elements at substations along the transmission line.",
+  "need": "The Ray Place Rd \u2013 Washington 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "MEAG: RAY PLACE RD \u2013 WASHINGTON (WASHNGTN \u2013 WASHNGTN 3) 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 1.6 miles of the Ray Place Rd \u2013 Washington 115 kV transmission line using 100\u00b0C 1351 ACSR conductor. Upgrade limiting element at substations along the transmission line.",
+  "need": "The Ray Place Rd \u2013 Washington 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "MORROW \u2013 MOUNTAIN VIEW 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a 1.7 mile segment of Morrow \u2013 Mountain View 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Morrow \u2013 Mountain View 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "MORROW 115 KV, RELAY UPGRADE",
+  "description": "Upgrade protection scheme at the Morrow substation.",
+  "need": "A multiple contingency event at Morrow causes stability issues in the transmission network.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "OHARA 115 KV, BREAKER REPLACEMENT",
+  "description": "Replace breaker on the Ohara \u2013 Tara 115 kV transmission line at the Ohara substation.",
+  "need": "This project is needed to increase breaker duty margins at Ohara substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "OHARA LINE, PROTECTIVE RELAYING REPLACEMENT",
+  "description": "At Ohara, on the Ohara \u2013 Wansley 500 kV transmission line, replace protective relaying equipment.",
+  "need": "The Ohara \u2013 Wansley 500 kV transmission line will be split by the new Dresden \u2013 Talbot Co 500 kV transmission line and the relay panels need to be replaced to allow for the new Dresden substation. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "PALMYRA, REACTOR REMOVAL",
+  "description": "Remove the reactor at the Palmyra Substation.",
+  "need": "A permanent solution makes the reactor at Palmyra unnecessary.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "SAV: BIG OGEECHEE 500/230 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Construct a new 500/230 kV substation near Little Ogeechee substation, loop in the nearby 500 kV and 230 kV transmission lines, and construct new 230 kV transmission lines to Little Ogeechee substation with 100\u00b0C 1033.5 ACSR conductor.",
+  "need": "Multiple 500/230 kV West McIntosh autotransformers exceed their ratings under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "SAV: BOULEVARD \u2013 DEPTFORD 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor the Boulevard \u2013 Deptford 115 kV transmission line, approximately 8 miles, with 973.1 C7 ACCS (Everglades) conductor. Upgrade main bus and jumpers at Bolton substation from 90\u00b0C 1590 AAC Coreopsis conductor to 90\u00b0C (2)1590 AAC Coreopsis conductor or higher rated equipment.",
+  "need": "The Boulevard \u2013 Deptford 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "SAW MILL ROAD \u2013 VIDALIA 115 KV, SWITCH REPLACEMENT",
+  "description": "Replace the limiting switch at the Vidalia substation with a higher rating.",
+  "need": "Switch exceeds its thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "SCOTTDALE, RELAY MODERNIZATION",
+  "description": "Upgrade protection scheme at the Scottdale substation.",
+  "need": "The project addresses stability issues in the transmission network caused by multiple contingencies.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "STONEWALL TELL ROAD, CONSTRUCT",
+  "description": "Build a 230 kV line segment using 200\u00b0C 1351 ACSS Martin conductor to loop in the Stonewall Tell Road station into the East Point \u2013 Union City 230 kV White transmission line.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "UNION CITY (WHITE) \u2013 YATES 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire (approximately 23.4 miles) Union City (White) \u2013 Yates 230 kV transmission line with bundled 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Union City \u2013 Yates 230 kV White transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "UNION CITY \u2013 YATES 230 KV (WHITE), SWITCH AND TRAP REPLACEMENT",
+  "description": "Replace the limiting elements along the Union City \u2013 Yates 230 kV (White) transmission line.",
+  "need": "The Union City \u2013 Yates 230 kV (White) transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "WANSLEY LINE, PROTECTIVE RELAYING REPLACEMENT",
+  "description": "At Wansley, on the Ohara \u2013 Wansley 500 kV transmission line, replace protective relaying equipment.",
+  "need": "The Ohara \u2013 Wansley 500 kV transmission line will be split by the new Dresden \u2013 Talbot Co 500 kV transmission line and the relay panels need to be replaced to allow for the new Dresden substation SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2026,
+  "name": "WEST TECH, CAPACITOR BANKS",
+  "description": "Install two new 115 kV, 15 MVAR capacitors at West Tech.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "ATHENA \u2013 EAST WATKINSVILLE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 8.47 miles of the Athena \u2013 East Watkinsville 115 kV transmission line with 100\u00b0C ACSR 1033 conductor.",
+  "need": "The Athena \u2013 East Watkinsville 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "AUTAUGAVILLE \u2013 EAST PELHAM 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct approximately 75 miles of new 230 kV transmission line with bundled 200\u00b0C 795 ACSS conductor from Autaugaville TS 230 kV to East Pelham TS 230 kV.",
+  "need": "The Bessemer \u2013 South Bessemer 230 kV transmission line overloads under contingency. This solution reduces multiple 230 kV transmission line loadings and provides additional operational and maintenance flexibility, which increases reliability. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "BESSEMER \u2013 SOUTH BESSEMER 115 KV TRANSMISSION LINE, RECONDUCTOR (PHASE 1)",
+  "description": "Reconductor approximately 2 miles of South Bessemer TS \u2013 Bessemer TS 115 kV transmission line from 100\u00b0C 397 ACSR conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Bessemer \u2013 South Bessemer 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "BIG SHANTY 500 KV, BREAKER INSTALLATION",
+  "description": "Install a 500 kV breaker at the Big Shanty substation.",
+  "need": "The 500/230 kV transformer at Big Shanty overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "BROADWAY \u2013 ECHECONNEE 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor the Griffin Rd to Echeconnee segment, approximately 4.9 miles, of Broadway \u2013 Echeconnee 115 kV transmission line with 210\u00b0C 636 ACCR conductor. Replace limiting jumper with 1590 AAC conductor.",
+  "need": "The Broadway \u2013 Echeconnee 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "NEW MERIDIAN 230 KV SUBSTATION, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 7.64 mile loop with 200\u00b0C 1351 ACSS conductor in new 230 kV substation.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency and supports load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "DOYLE \u2013 LG&E MONROE 230 KV, JACKS CREEK LOOP-IN",
+  "description": "Loop in and out the new Jack's Creek 230 kV switching station into the Doyle \u2013 LG&E Monroe 230 kV transmission line.",
+  "need": "Contingencies of 230 kV transmission lines in the area causes several 230 kV lines to overload.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "EAST POINT \u2013 UNION CITY, FIBER INSTALLATION",
+  "description": "Install fiber on the East Point \u2013 Union City 230 kV (Black & White) transmission lines.",
+  "need": "This project adds protection to the transmission system in the area to increase coordination. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "ELLENWOOD AREA NETWORK IMPROVEMENTS",
+  "description": "Rebuild the Austin Drive \u2013 Morrow 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor and upgrade limiting elements at the Austin Drive substation.",
+  "need": "The Austin Drive \u2013 Morrow 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "ENTERPRISE TS \u2013 PINCKARD #2 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 7.5 miles of 100\u00b0C 266 ACSR conductor of the Enterprise to Daleville DS transmission line with 100\u00b0 C 795 ACSR 26/7 conductor.",
+  "need": "The Enterprise \u2013 Pinckard #2 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "PS: GASKIN \u2013 SOUTHPORT 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct ~13.0 miles of new 115 kV transmission line from the Gaskin Switching Station to the Southport substation with 795 ACSR/AW at 100\u00b0C.",
+  "need": "Improve the reliability of Gulf Coast Electric's substations by providing a looped service feed. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GRADY 115 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for two 115 kV breakers at Grady will become negative. Replace them with 115 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Grady substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GRID: ARKWRIGHT \u2013 LLOYD SHOALS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Arkwright \u2013 Lloyd Shoals 115 kV transmission line with 100\u00b0C 795 ACSR conductor.",
+  "need": "The Arkwright \u2013 Lloyd Shoals 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: ADAMSVILLE \u2013 BUZZARD ROOST 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild about 5 miles of the Adamsville \u2013 Buzzard Roost 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Adamsville \u2013 Buzzard Roost 230 kV transmission line overloads under a contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: DOUGLASVILLE \u2013 VILLA RICA 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 2.5 miles section of the Villa Rica \u2013 Douglasville 230 kV transmission line with bundled 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Villa Rica \u2013 Douglasville 230 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: DOYLE \u2013 WINDER PRIMARY 230 KV LINE, JUMPER REPLACEMENT",
+  "description": "Replace the limiting AAC 1033 jumper with AAC 1590 at Doyle on the Doyle \u2013 Winder Primary 230 kV transmission line.",
+  "need": "The Doyle \u2013 Winder Primary 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: EAST MOULTRIE \u2013 HIGHWAY 112 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build approximately 27 miles of new 230 kV transmission line between HWY 112 and East Moultrie substations with 160\u00b0C 1351 ACSS conductor.",
+  "need": "This project addresses thermal overloads on the Daisy \u2013 West Valdosta 230 kV transmission line and Mitchell \u2013 Raccoon Creek 230 kV transmission line under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: EAST WALTON 500/230 KV PROJECT",
+  "description": "GTC: \u2013 Construct the East Walton 500/230 kV substation. \u2013 Construct the Bostwick 230 kV switching station. \u2013 Construct the East Walton \u2013 Rockville 500 kV transmission line (3 \u2013 100\u00b0C 1113 ACSR). \u2013 Construct the Bethabara \u2013 East Walton 230 kV transmission line (170\u00b0C 1351.5 ACSS). \u2013 Construct the Bostwick \u2013 East Walton 230 kV transmission line (170\u00b0C 1351.5 ACSS). \u2013 Construct the East Walton \u2013 Jack's Creek 230 kV transmission line (170\u00b0C 1351.5 ACSS). \u2013 At Bethabara, terminate the East Walton 230 kV transmission line. \u2013 Loop the East Social Circle \u2013 East Watkinsville 230 kV transmission line into Bostwick. \u2013 Replace line trap at East Watkinsville on the Bostwick 230 kV transmission line. GPC: \u2013 Construct the Rockville 500 kV switching station. \u2013 Loop the Scherer \u2013 Warthen 500 kV transmission line into Rockville. \u2013 Loop the Doyle \u2013 LG&E Monroe 230 kV transmission line into Jack's Creek. MEAG: Construct the Jack's Creek 230 kV switching station.",
+  "need": "Contingencies of 230 kV transmission lines in Central area cause several 230 kV transmission lines to overload. The project also addresses increasing loads in Northeast Georgia and the increase of South to North flow from Central region into the Northeast due to solar generation located in South GA. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: GARRETT RD \u2013 V. RICA 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor the section from East Villa Rica switching station to Garrett Rd with 160\u00b0C 1351 ACSS on 11.5 miles of the Garrett Road \u2013 Villa Rica 230 kV transmission line. Additionally, the 2.5 mile section from East Villa Rica Switching Station to Villa Rica will be rebuilt with bundled 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Garrett Road \u2013 Villa Rica 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: GLENWOOD SPRINGS \u2013 LICK CREEK 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 7.5 mile section of the Glenwood Springs \u2013 Lick Creek 115 kV transmission line with 100\u00b0C 795 ACSR conductor.",
+  "need": "The Glenwood Springs \u2013 Lick Creek 115 kV transmission line conductor and structures are at the end of life and had recent maintenance issues.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: HICKORY LEVEL \u2013 VILLA RICA 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor 8.6 miles of the Hickory Level \u2013 Villa Rica 230 kV transmission line with 160\u00b0C 1351 ACSS Martin conductor. Replace limiting elements along the transmission line.",
+  "need": "The Hickory Level \u2013 Villa Rica 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: JACKSON 115 KV, BUS AND JUMPER UPGRADES",
+  "description": "Upgrade limiting elements at Jackson substation to be a higher rating.",
+  "need": "Limiting elements exceed their thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: MORNING HORNET, SECOND 230/115 KV AUTOTRANSFORMER, AND STANTON SP 115 KV, CONSTRUCT",
+  "description": "Add a second 230/115 kV autotransformer at Morning Hornet substation. Also, build a new 115 kV transmission line from Morning Hornet to Thumbs Up, approximately 2.4 miles, with 100\u00b0C 1351 ACSR conductor.",
+  "need": "The East Social Circle \u2013 Stanton Springs 115 kV and Morning Hornet \u2013 Thumbs Up 115 kV transmission lines overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: SOUTH HAZLEHURST 230/115 KV, AUTOTRANSFORMERS REPLACEMENT",
+  "description": "Replace 230/115 kV autotransformers at South Hazlehurst with higher rating transformers.",
+  "need": "The 230/115 kV autotransformers at South Hazlehurst overload under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: RIDDLEVILLE 115 KV, BUS REPLACEMENT",
+  "description": "Replace the main 115 kV bus at the substation with higher rating.",
+  "need": "The Sandersville #1 \u2013 Wadley 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: SKC 115 KV, BUS AND JUMPER REPLACEMENT",
+  "description": "Upgrade limiting elements at the SKC substation to a higher rating.",
+  "need": "The Covington #2 \u2013 SKC 115 kV line exceeds its thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GTC: SWITCH WAY \u2013 THORNTON ROAD 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 1.3 mile Switch Way \u2013 Thornton Road 230 kV transmission line with minimum rating of 160\u00b0C 1033 ACSS conductor.",
+  "need": "The Switch Way \u2013 Thornton Road 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "GULLATT ROAD TRANSMISSION IMPROVEMENTS",
+  "description": "Rebuild the Morrow \u2013 Yates Common 115 kV transmission line from Line Creek to the new Gullatt Road substation. Rebuild the Line Creek \u2013 Fairburn #2 115 kV transmission line from Line Creek to the new Gullatt Road substation. Remove the Owens Corning Tap Connection on the Morrow \u2013 Yates Common 115 kV transmission line and rebuild the line from North Coweta to Str 1. Build a new transmission line section from Str 1 to the new Gullatt Road station. All rebuilds will be done with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "Thie project addresses multiple 115 kV overloads.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "HILL VIEW & GRASSY HOLLOW SUBSTATION, CONSTRUCT",
+  "description": "Build two 230 kV switching stations (Hill View and Grassy Hollow) looping into the Cartersville \u2013 McGrau Ford 230 kV transmission line. Build two new 230 kV transmission lines: Cass Pine \u2013 Great Valley and Great Valley \u2013 Grassy Hollow with 200\u00b0C 1351 ACSS Martin.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "JESUP \u2013 OFFERMAN 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 20 miles of the Jesup \u2013 Offerman 115 kV transmission line with 100\u00b0C 795 ACSR Drake conductor.",
+  "need": "The Jesup \u2013 Offerman 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "JONESBORO \u2013 MORROW, RELAY PROTECTION UPGRADE",
+  "description": "Upgrade the Jonesboro \u2013 Morrow 115 kV transmission line relay protection schemes to accelerate clearing time.",
+  "need": "This project will need to be completed by the need date to comply with NERC TPL-001- 05.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "LAWRENCEVILLE \u2013 WINDER PRIMARY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire Lawrenceville \u2013 Winder Primary 230 kV transmission line, approximately 15.4 miles, using 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Lawrenceville \u2013 Winder Primary 230 kV transmission line will overload under certain contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "LINE CREEK 115 KV, BREAKER REPLACEMENTS",
+  "description": "At Line Creek, the breaker duty margin for the two 115 kV breakers will become negative starting on 6/01/2027. Replace them with 115 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Line Creek substation to comply with NERC TPL-001-05, Section 2.3. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "MEAG: FORTSON SUBSTATION MODERNIZATION",
+  "description": "Complete modernization and replacement of obsolete equipment and relays for the 500 kV, 230 kV, and 115 kV yards. Add a redundant relay scheme at Fortson.",
+  "need": "Several 115 kV transmission lines overloads under contingency. Substation modernization needed due to obsolete equipment and relays.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "MEAG: RAY PLACE RD \u2013 WARRENTON PRIMARY 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 10 miles of the Ray Place \u2013 Warrenton Primary 115 kV transmission line with 170\u00b0C ACSS conductor. Upgrade limiting element at substation along the transmission line.",
+  "need": "Ray Place Rd \u2013 Warrenton 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "MERIDIAN HWY 80 SOUTH 230 KV, NEW SWITCHING STATION, CONSTRUCT",
+  "description": "Construct new 230 kV switching station in the Meridian area.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency and supports load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "MERIDIAN NORTHEAST \u2013 LAUDERDALE EAST 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 6.47 mile Meridian Northeast \u2013 Lauderdale East 230 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "Line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "MORROW \u2013 YATES COMMON 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a section (approximately 5.1 miles) of the Morrow \u2013 Yates Common 115 kV transmission line with 200\u00b0C 1351.0 ACSS Martin conductor.",
+  "need": "Line sections on the Morrow \u2013 Yates 115 kV transmission line overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "OLIVER DAM & BULL CREEK 115 KV, PROTECTION RELAY UPGRADE",
+  "description": "At Bull Creek and Oliver Dam 115 kV substations, replace the protection on the Fortson 115 kV transmission line with standard SEL \u2013 421 / 311C1 DCUB panel, capable of providing 7 cycle clearing time or less. Install Line traps and associated carrier equipment.",
+  "need": "This project upgrades relay protections at Bull Creek and Oliver Dam substations to improve reliability in the system. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "POSSUM BRANCH \u2013 YATES COMMON 115 KV TRANSMISSION LINE (YATES TO CLEM), REBUILD",
+  "description": "Rebuild approximately 11 mile section of the Possum Branch \u2013 Yates 115 kV transmission line with 200\u00b0C 1334 T13 ACCR Martin conductor or 200\u00b0C 1351.0 ACSS conductor and replace limiting elements along the line with a higher rating.",
+  "need": "The Possum Branch \u2013 Yates 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "LLOYD SHOALS 115 KV LIMITING ELEMENTS, REMOVAL",
+  "description": "Upgrade limiting elements at Lloyd Shoals substation to be a higher rating.",
+  "need": "Limiting elements exceed their thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "SANDERSVILLE #1 \u2013 WADLEY PRI. 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 24.3 miles of the Sandersville #1 \u2013 Wadley Primary 115 kV transmission line with 100\u00b0C 1351 ACSR Drake conductor. Replace limiting elements in substations along the line.",
+  "need": "The Sandersville # 1 \u2013 Wadley Primary 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "SAV: GOSHEN (SAV) \u2013 KRAFT 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a portion (approximately 3.48 miles) of Goshen \u2013 Kraft 115 kV transmission line from 100\u00b0C 795 ACSR Drake conductor to 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Goshen \u2013 Kraft 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "SHUGART FARMS AREA IMPROVEMENT",
+  "description": "Rebuild the Line Creek 230 kV substation. Reconnect existing 230 kV transmission lines and build two short lines from Line Creek to Shugart Farms (0.3 miles each) with 100\u00b0C 1351 ACSR Martin conductor.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "SOUTH MACON 115 KV, BUSES 1 & 2, REPLACEMENT",
+  "description": "Replace the 115 kV buses 1 and 2 at South Macon with (2) 1590AAC. Replace the limiting elements on the station with a higher rating.",
+  "need": "The 230/115 kV autotransformers at South Macon overload under contingency . SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "STANTON SP \u2013 THUMBS UP 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a portion of Stanton Sp \u2013 Thumbs Up 115 kV transmission line with 100\u00b0C 1351 ASCR conductor.",
+  "need": "The Stanton Sp \u2013 Thumbs Up 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "SUMMER LAKE \u2013 VILLA RICA 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 2.5 miles portion of the Summer Lake \u2013 Villa Rica 230 kV transmission line with bundled 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Summer Lake \u2013 Villa Rica 230 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "THURLOW DAM \u2013 UNION SPRINGS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 31.5 miles of the Thurlow Dam \u2013 Union Springs transmission line from 75\u00b0C 397 ACSR to 200\u00b0C 795 ACSS conductor.",
+  "need": "The Thurlow Dam \u2013 Union Springs 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2027,
+  "name": "TOMOCHICHI 500/230 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Build the new Tomochichi 500/230 kV switching station splitting the Ohara \u2013 Scherer 500 kV transmission line. Build two new 230 kV transmission lines from the new Tomochichi substation to the new Towaliga River 230 kV substation using 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "ACIPCO TS \u2013 BOYLES 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct ~6 miles of new 230 kV transmission line with 1351 54/19 ACSR at 100\u00b0C from ACIPCO TS to Boyles TS.",
+  "need": "The Boyles \u2013 Miller 230 kV transmission line overloads under contingency. Also provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "EAST VILLA RICA SWITCHING STATION, ADVANCED POWER FLOW CONTROLLERS, INSTALLATION",
+  "description": "Install Advanced Power Flow Controllers at the new East Villa Rica Switching Station on the Douglasville \u2013 Villa Rica 230 kV and Summer Lake \u2013 Villa Rica 230 kV transmission lines.",
+  "need": "The project addresses multiple thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "ANNISTON \u2013 HAMMOND 230 KV TRANSMISSION LINE, REACTOR INSTALLATION",
+  "description": "Install a 3% reactor at Hammond along the Anniston \u2013 Hammond 230 kV transmission line.",
+  "need": "The Anniston \u2013 Hammond 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "BARRY \u2013 ELLICOTT 230 KV, SERIES REACTORS INSTALLATION",
+  "description": "Install new series reactors on the Barry \u2013 Ellicott 230 kV transmission line needed to address short circuit constraints and also create short circuit margin. Potential Tap sizes of 0.5% or 1.0% reactors.",
+  "need": "The project addresses short circuit constraints.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "BARTLETTS FERRY \u2013 BACKWATER TAP 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 1.27 miles of the Bartletts Ferry \u2013 Backwater Tap section of the Bartletts Ferry \u2013 West Point (APC) 115 kV transmission line with 200\u00b0C 1351 AAC conductor. Replace switch with higher rated switch.",
+  "need": "A multiple contingency event causes the Bartletts Ferry \u2013 West Point (APC) 115 kV transmission line to overload. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "BARTLETTS FERRY \u2013 WEST POINT 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild ~2.42 miles of 115 kV transmission line from Back Water Tap \u2013 Bartletts Ferry Dam from 100\u00b0C 636 26/7 ACSR conductor to 200\u00b0C 1351 54/19 ACSS conductor.",
+  "need": "The Bartletts Ferry \u2013 West Point Dam 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "BOWEN, SERIES REACTOR INSTALLATION",
+  "description": "Install new series reactors on the low side of the Bowen 500/230 kV autotransformer.",
+  "need": "This project supports new generation interconnection in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "BREMEN \u2013 CROOKED CREEK 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 29.5 miles of transmission line from Crooked Creek TS to Indian Creek Metering Station with 100\u00b0C 397 30/7 ACSR conductor to 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Bremen \u2013 Crooked Creek 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "CARTERSVILLE \u2013 EMERSON 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 5.3 miles of the Cartersville \u2013 Emerson 230 kV transmission line with (2) 200\u00b0C 1351 ACSS Martin conductor and replace limiting line elements.",
+  "need": "The Cartersville \u2013 Emerson 230 kV transmission line overloads under contingency",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "CENTRE \u2013 HAMMOND 115 KVTRANSMISSION LINE, REACTOR INSTALLATION",
+  "description": "Install a 2% reactor at Hammond along the Centre \u2013 Hammond 115 kV transmission line.",
+  "need": "The Centre \u2013 Hammond 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "NEW MERIDIAN 230 KV SUBSTATION, CONSTRUCT",
+  "description": "Construct a new 7.2 mile 230 kV loop in new 230 kV substation with 1351 ACSS at 200\u00b0C.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency and supports load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "LAUDERDALE WEST \u2013 PLANT SWEATT 230KV, CONSTRUCT",
+  "description": "Construct a new 10 mile Lauderdale West \u2013 Plant Sweatt 230 kV transmission line with 1351 ACSS at 200\u00b0C.",
+  "need": "Alleviates loading on the Lauderdale West \u2013 Enterprise 230 kV transmission line.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "CORN CRIB \u2013 LAGRANGE 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor a section of the Corn Crib \u2013 LaGrange 115 kV transmission line with 200\u00b0C 397 ACSS conductor. Replace limiting elements at Corn Crib.",
+  "need": "A multiple contingency event causes a section of the Corn Crib \u2013 LaGrange 115 kV transmission line to overload.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "DEER CREEK 500/230 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Build the new Deer Creek 500/230 kV substation splitting the Bonaire Primary \u2013 Scherer 500 kV transmission line. Install two 500/230 kV autotransformers and build two bundled 200\u00b0C 1351 ACSS Martin 230 kV transmission lines from Deer Creek to Little Deer Creek substations.",
+  "need": "This project provides operational and maintenance flexibility, which increases reliability and supports load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "DYER ROAD \u2013 EAST ROANOKE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 20.7 miles from Dyer Road to Wansley tap on the Dyer Road \u2013 East Roanoke (APC) 115 kV transmission line with advanced Everglades C7 conductor.",
+  "need": "Dyer Road \u2013 East Roanoke (APC) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "EAST VILLA RICA, NEW SWITCHING STATION, CONSTRUCT",
+  "description": "Build a 230 kV substation along the right of way of the (3) 230 kV transmission line switching station east of Villa Rica.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "EUTAW \u2013 GREENE COUNTY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild ~28 miles of 115 kV transmission line from Eutaw TS to Greene County SP from 100\u00b0C 397 ACSR 26/7 conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Eutaw \u2013 Greene County 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "FIRST AVENUE \u2013 NORTH COLUMBUS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 0.9 mile of the North Columbus \u2013 First Avenue 115 kV transmission line with 200\u00b0C 1351 ACSS conductor. The First Ave \u2013 Goat Rock 115 kV transmission line will be reconductored with 200\u00b0C 1351 ACSS conductor due to common structures with North Columbus \u2013 First Avenue 115 kV transmission lines.",
+  "need": "The North Columbus \u2013 First Avenue 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "FITZGERALD \u2013 PITTS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild Pitts to Whittle segment of the Fitzgerald \u2013 Pitts 115 kV transmission line with 200\u00b0C 1351 ACSS conductor and reconductor the Whittle to HWY 233 segment with 100\u00b0C 762 ACSR conductor.",
+  "need": "The Fitzgerald \u2013 Pitts 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GASTON \u2013 BYNUM 230 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 38.5 miles of the Gaston \u2013 Bynum 230 kV transmission line from 100\u00b0C 1033 45/7 ACSR conductor to 125\u00b0C 1033 45/7 ACSR conductor.",
+  "need": "The Bynum \u2013 Gaston 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GORDON 115 KV, OVERSTRESSED BREAKER REPLACEMENT",
+  "description": "The breaker duty margin for the two 115 kV breakers will become negative starting on 5/15/2028. Replace them with 115 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Gordon substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: BARNEYVILLE \u2013 EAST MOULTRIE 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build approximately 20 miles of a new 115 kV transmission line from Barneyville to East Moultrie with 200\u00b0C 1351 ACSS .",
+  "need": "The Barneyville \u2013 Pine Grove Primary 115 kV transmission line and Barneyville \u2013 Douglas 115 kV transmission line overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: BONAIRE PRIMARY 500/230 KV, TRANSFORMER REPLACEMENT AND RELAY MODERNIZATION",
+  "description": "Replace 500/230 kV autotransformer C with a new autotransformer. Replace obsolete relay panels.",
+  "need": "Replacement of obsolete relays and major equipment at Bonaire Primary needed due to ongoing maintenance issues. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: BOSTWICK \u2013 EAST SOCIAL CIRCLE 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 10.8 miles of the East Social Circle \u2013 East Watkinsville 230 kV transmission line from 1033 ACSR Curlew conductor to 200\u00b0C 1033 ACCS conductor.",
+  "need": "The Bostwick \u2013 East Social Circle 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: DYER ROAD \u2013 SOUTH COWETA 115 KV TRANSMISSION LINE, REBUILD (PHASE 1)",
+  "description": "Rebuild the 12.6 miles section of the Dyer Road \u2013 South Coweta 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Dyer Road \u2013 South Coweta 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: MCDONOUGH \u2013 SOUTH GRIFFIN 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the McDonough \u2013 South Griffin 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace limiting switches and jumpers with higher rated equipment.",
+  "need": "The McDonough \u2013 South Griffin 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: NEW HAMPTON 230/115 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Construct a new 230/115 kV substation next to the existing Hampton 115 kV substation. The new substation will serve the Henderson Farms load as well as the existing Hampton 115 kV substation.",
+  "need": "The project will address multiple thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: NORTH DUBLIN 230/115 KV TRANSFORMERS AND BUS-TIE BREAKER, REPLACEMENT",
+  "description": "Replace North Dublin 230/115 kV Banks A & B with two new 230/115 kV auto transformers. Replace North Dublin 230 kV bus-tie breaker with a new breaker. Replace North Dublin 115 kV bus-tie breaker with a new breaker.",
+  "need": "Replacement of major equipment needed due to ongoing maintenance issues.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: SOUTH COWETA BANK A LIMITING ELEMENTS, REMOVAL",
+  "description": "Replace limiting elements associated with the South Coweta 230/115 kV autotransformer with higher rating.",
+  "need": "South Coweta 230/115 kV autotransformer overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "GTC: RUM CREEK 500 KV, NEW SWITCHING STATION, CONSTRUCT",
+  "description": "Construct the Rum Creek 500 kV breaker and a half switching station. Loop in the existing Bonaire Primary \u2013 Scherer and Ohara \u2013 Scherer 500 kV transmission lines. . Construct the new Big Smarr \u2013 Rum Creek 500 kV transmission line using 100\u00b0C (3) 1113 ACSR Bluejay conductor and terminate.",
+  "need": "Bonaire Primary 500/230 kV Bank C and the Bonaire Primary \u2013 Dorsett 230 kV transmission line overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "HAMMOND, REACTORS INSTALLATION",
+  "description": "Install a new 3% reactor at Hammond on the 230 kV bus for the Anniston \u2013 Hammond 230 kV transmission line. Install a 2% reactor at Hammond on the 115 kV bus for the Hammond \u2013 Weiss Dam 115 kV transmission line.",
+  "need": "The Anniston (APC) \u2013 Hammond 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "HAMPTON AREA 115 TO 230 KV, CONVERSION",
+  "description": "Convert Hampton \u2013 Ohara 115 kV and Jonesboro \u2013 Ohara 115 kV to create a new Jonesboro \u2013 Hampton 230 kV transmission line. Convert the Hampton \u2013 South Griffin 115 kV transmission line to 230 kV operation. Loop in the Jonesboro \u2013 Ohara 115 kV transmission line through Bonanza so it is not radial. Install a new 230/115 kV autobank at Jonesboro.",
+  "need": "The project will address multiple thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "LINE CREEK, TERMINAL EQUIPMENT REPLACEMENT",
+  "description": "At Line Creek, upgrade terminal equipment on the Line Creek \u2013 Yates 230 kV, Line Creek \u2013 Union City 230 kV, and Line Creek \u2013 Morrow 230 kV transmission lines with higher rated equipment.",
+  "need": "Multiple lines at Line Creek overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "LLOYD SHOALS \u2013 PORTERDALE PRIMARY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a portion (approximately 15.8 miles) of the Lloyd Shoals \u2013 Porterdale Primary 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Lloyd Shoals \u2013 Porterdale Primary 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MARTIN DAM \u2013 CROOKED CREEK #1 115 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade 16 miles of the Martin Dam \u2013 Crooked Creek #1 115 kV transmission line from Martin Dam to Dadeville to 125\u00b0C 397 30/7 ACSR conductor.",
+  "need": "The Martin Dam \u2013 Crooked Creek (1) 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MARTIN DAM \u2013 CROOKED CREEK #2 115 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade 16 miles of the Martin Dam \u2013 Crooked Creek #2 115 kV transmission line from Martin Dam to Dadeville to 125\u00b0C 397 30/7 ACSR conductor.",
+  "need": "The Martin Dam \u2013 Crooked Creek #2 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MCINTOSH 230 KV, BREAKER CONTROL RELAY UPGRADES",
+  "description": "Replace existing twenty230 kV breaker control relays with twenty high speed breaker control relays at the McIntosh 230 kV breaker and a half bus.",
+  "need": "Protection analysis identified the project modifications are required due to the interconnection of the proposed generating facility.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MEAG: BRUMBLEY CREEK \u2013 SOUTH BAINBRIDGE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 2.1 miles of the South Bainbridge \u2013 Thomasville 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The South Bainbridge \u2013 Thomasville 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MEAG: NEW SOUTH GRIFFIN 230/115 KV, NEW SUBSTATION, CONSTRUCT",
+  "description": "Build a new 230/115 kV substation and relocate all transmission lines except for the South Coweta and Griffin #1 115 kV transmission lines from the existing South Griffin substation. Terminate the newly converted Hampton 230 kV transmission line at South Griffin.",
+  "need": "The project will address multiple thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MEAG: THOMASVILLE 230/115 KV AUTOBANK, REPLACEMENT",
+  "description": "Replace the 230/115 kV autotransformer #4 at Thomasville substation.",
+  "need": "The 230/115 kV autotransformer #4 at Thomasville substation overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MILLER SP 500 KV, BREAKER INSTALLATION",
+  "description": "Install a 500 kV breaker at Miller SP.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency. This project provides additional operational and maintenance flexibility, which increases reliability. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "OHARA 115 KV, TARGETED EQUIPMENT REPLACEMENT",
+  "description": "The breaker duty margin for one 115 kV breaker will become negative starting on 6/01/2030. Replace it with 115 kV higher rated breaker.",
+  "need": "This project is needed to increase breaker duty margins at Ohara substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "PITTMAN ROAD \u2013 WEST POINT DAM (USA) 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor the Pittman Road \u2013 West Point Dam (USA) 115 kV transmission line with 200\u00b0C 336 ACSS conductor. Replace 750 AAC jumper at Pittman Road 115 kV with 1590 AAC conductor.",
+  "need": "The Pittman Road \u2013 West Point Dam (USA) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "PLANT YATES 230 KV BREAKER AND HALF SUBSTATION, REBUILD",
+  "description": "Rebuild the Yates 6 & 7 substation to a breaker and a half configuration.",
+  "need": "Yates 6 & 7 needs to be rebuilt to facilitate new generation. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "RAINBOW DRIVE AREA, CAPACITOR INSTALLATION",
+  "description": "Install a 115 kV capacitor bank at Ellenwood substation.",
+  "need": "The Rainbow Drive area experiences voltage issues under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "MORROW BANK A LIMITING ELEMENTS, REMOVAL",
+  "description": "Upgrade limiting 115 kV switch at Morrow to a higher rating.",
+  "need": "Switch exceeds its thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "SAV: COLEMAN \u2013 DEAN FOREST 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire Coleman \u2013 Dean Forest 115 kV transmission line, approximately 6.7 miles of 100\u00b0C 477 Hawk conductor, with 200\u00b0C 1351 ACSS Martin conductor. At Chatham County, upgrade jumpers and bus. At Dean Forest, remove limiting elements by upgrading jumpers. Rebuild approximately 1.7 miles of the Coleman \u2013 Meldrim transmission line section due to common structures.",
+  "need": "The Coleman \u2013 Dean Forest 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "SAV: GOSHEN (SAV) \u2013 MCINTOSH 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Goshen (Savannah) \u2013 Georgia Pacific (Rincon) section, approximately 6.7 miles, of the Goshen (Sav) \u2013 McIntosh 115 kV transmission line using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Goshen (Sav) \u2013 McIntosh 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "SAV: RICE HOPE, NEW 230/115 KV AUTOTRANSFORMER, INSTALL",
+  "description": "Install a new 230/115 kV autotransformer at Rice Hope and loop in the Crossgate \u2013 McIntosh 230 kV transmission line.",
+  "need": "This project will address multiple thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "THURLOW DAM \u2013 PIN OAKS 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 21 miles of 100\u00b0C 397 ACSR conductor from Thurlow Dam to Pin Oaks to 200\u00b0C 795 ACSS conductor.",
+  "need": "The Thurlow Dam \u2013 Notasulga 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "UNION CITY \u2013 LINE CREEK \u2013 YATES 230 KV TRANSMISSION LINES, REBUILD",
+  "description": "Rebuild the entire Union City \u2013 Line Creek \u2013 Yates 230 kV transmission lines (approximately 23.4 miles) with bundled 200\u00b0C 1351 ACSS Martin conductor. Upgrade limiting elements at substations along the transmission line.",
+  "need": "The Line Creek \u2013 Union City 230 kV and Line Creek \u2013 Yates 230 kV transmission lines overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "PS: UNION SPRINGS 115 KV, NEW SWITCHING STATION, CONSTRUCT",
+  "description": "Construct a new 115 kV switching station to sectionalize an approximately 54 mile transmission path with 5 delivery points.",
+  "need": "Reduce exposure and improve the reliability to the existing area delivery points.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "VILLA RICA SUBSTATION, UPGRADES",
+  "description": "Add a new 500/230 kV autotransformer at Villa Rica, and loop in and out the Bowen \u2013 Union City 500 kV transmission line into Villa Rica. Reconfigure the 230 kV side of the substation.",
+  "need": "The transmission network upgrades increase reliability and support load growth in the area. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2028,
+  "name": "WEST MCINTOSH, 230 KV LOW SIDE BREAKERS, REPLACEMENT",
+  "description": "Replace two 230 kV low side breakers at West Mcintosh with new with higher rated breakers.",
+  "need": "Protection analysis identified the project modifications are required due to the interconnection of the proposed generating facility.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "ANNISTON \u2013 BYNUM 115 KV TRANSMISSION LINE, REACTOR INSTALLATION",
+  "description": "Install a 2%reactor along the Anniston \u2013 Bynum 115 kV transmission line.",
+  "need": "The Anniston \u2013 Bynum 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "ASHLEY PARK 500 KV BREAKERS, INSTALLATION",
+  "description": "At Ashley Park, install three new 500 kV breakers and associated equipment to accommodate for the new Wansley and Villa Rica 500 kV transmission lines.",
+  "need": "This project addresses thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "ASHLEY PARK-WANSLEY 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct an approximately 35 mile 500 kV transmission line from Ashley Park to Wansley with 100\u00b0C (3) 1113 Bluejay ACSR.",
+  "need": "This project addresses thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "ATKINSON \u2013 NORTHWEST 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 1.2 miles of the Atkinson \u2013 Northwest 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Atkinson \u2013 Northwest 115 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "PS: BASSETT CREEK \u2013 TENSAW 230 KV (LOWMAN 230 KV), NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Loop in the existing Bassett Creek \u2013 Tensaw 230 kV transmission line into Lowman 230 kV station as new tie lines between PS and SOCO. Requires the construction of ~7 miles of new 230 kV transmission line.",
+  "need": "Prevents thermal overloading under contingency after addition of new generation at Lowman. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "BASSETT CREEK \u2013 TENSAW 230 KV TRANSMISSION LINE, LOOP-IN",
+  "description": "Loop the existing Bassett Creek \u2013 Tensaw 230 kV transmission line into the PowerSouth Lowman 230 kV substation.",
+  "need": "The Barry \u2013 CAES 115 kV transmission line and the Bucks \u2013 Ellicott 230 kV transmission line overload under contingency. This loop-in alleviates those overloads.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "BOULEVARD \u2013 VIRGINIA AVENUE 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 0.94 miles of the Boulevard \u2013 Virginia Avenue 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace the limiting elements on the transmission line.",
+  "need": "The Boulevard \u2013 Virginia Avenue 230 kV transmission line overloads under a multiple contingency event.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "BUZZARD ROOST \u2013 FACTORY SHOALS 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build 2 miles of new 230 kV transmission line from Buzzard Roost to Factory Shoals with 200\u00b0C 1351 ACSS Martin.",
+  "need": "The Douglasvile \u2013 Groover Lake 115 kV line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "CALVERT \u2013 WEST MCINTOSH 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor 12 miles of the Calvert-West McIntosh 230 kV transmission line from 100\u00b0C 1351 54/19 ACSR conductor to 180\u00b0C Katmai ACCS C7 Advanced Conductor.",
+  "need": "The Calvert \u2013 West McIntosh 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "CENTRE \u2013 HAMMOND 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 15 miles of the Centre \u2013 Hammond 115 kV transmission line from 100\u00b0C 397.5 ACSR 26/7 conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Centre \u2013 Hammond 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "CONYERS \u2013 KLONDIKE 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 7.2 mile transmission line from Conyers to Klondike with 200\u00b0C (2) 1351 ACSS Martin conductor. Build one new 230 kV breaker terminal at Conyers and one new 230 kV terminal at Klondike.",
+  "need": "The Sigman Rd \u2013 Cornish Mountain 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "COUNTY LINE RD TS 230 KV, REACTOR INSTALLATION",
+  "description": "Install a new 2% series reactor on the County Line \u2013 Gaston 230 kV transmission line.",
+  "need": "The County Line \u2013 Gaston 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "DEMOPOLIS \u2013 SELMA 115 KV TRANSMISSION LINE, RECONDUCTOR/UPGRADE",
+  "description": "Reconductor approximately 5 miles of Demopolis \u2013 Selma 115 kV transmission line from Demopolis to Sonat (Gallion). Upgrade 7.3 miles from Sonat (Gallion) to Faunsdale TS.",
+  "need": "The Demopolis \u2013 Selma 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "EAST POINT \u2013 MORROW 115 KV TRANSMISSION LINE LIMITING ELEMENTS, REPLACEMENT",
+  "description": "Remove limiting elements at the substation terminals for the East Point \u2013 Morrow 115 kV transmission lines. This involves upgrading associated switches and jumpers with higher rating equipment.",
+  "need": "The East Point \u2013 Morrow 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "PS: ELISKA SW \u2013 FREEMANVILLE SW. 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct Eliska switching station on the Lowman \u2013 Belleville 115 kV transmission line and construct Freemanville switching station on the Atmore \u2013 Brewton 115 kV transmission line. Construct ~26 miles 115 kV transmission line between these two new stations.",
+  "need": "Improve loading and voltage support in the area under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GADSDEN \u2013 GULF STATES STEEL 115 KV TRANSMISSION LINE, RECONDUCTOR (PHASE 1)",
+  "description": "Reconductor approximately 2.5 miles of 397 26/7 ACSR conductor to 795 ACSR 26/7 conductor from Gulf States Steel to Morgan\u2019s Crossroads.",
+  "need": "Provides additional operational and maintenance flexibility which then increases reliability. In addition, associated with replacing aging equipment at Gulf States Steel DS.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GOAT ROCK 230 KV, REACTORS INSTALLATION",
+  "description": "Install 1% series reactors on the Fortson \u2013 Goat Rock (Black) 230 kV and Fortson \u2013 Goat Rock (White) 230 kV transmission lines.",
+  "need": "The Fortson \u2013 Goat Rock (Black and White) 230 kV transmission lines overload under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GRADY \u2013 MORROW (WHITE) 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild transmission line sections with 200\u00b0C 1351 ACSS Martin conductor and replace other limiting elements.",
+  "need": "The Grady \u2013 Morrow (White) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GREENE COUNTY \u2013 NORTH SELMA 230 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 48 miles of Greene County \u2013 North Selma 230 kV transmission line from 100\u00b0C 1033 45/7 ACSR conductor to 110\u00b0C conductor.",
+  "need": "The Greene County \u2013 North Selma 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GRID: OFFERMAN \u2013 THALMANN (BLACK) 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Offerman \u2013 Thalmann (Black) 230 kV transmission line using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Offerman \u2013 Thalmann (Black) 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GRID: OFFERMAN \u2013 THALMANN (WHITE) 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Offerman \u2013 Thalmann (White) 230 kV transmission line using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Offerman \u2013 Thalmann (White) 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: BARNESVILLE \u2013 SOUTH GRIFFIN 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 19 mile 230 kV transmission line from South Griffin substation to Barnesville Primary substation with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Barnesville \u2013 South Griffin 115 kV line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: BARNESVILLE PRIMARY \u2013 THOMASTON 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 13.24 miles of the Barnesville Primary \u2013 Thomaston 230 kV transmission line with 200\u00b0C 1351 ACSS conductor. Replace line switches and jumpers.",
+  "need": "Barnesville Primary \u2013 Thomaston 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: BAY CREEK, SECOND 230/115 KV AUTOTRANSFORMER, INSTALLATION",
+  "description": "Install a second 230/115 kV autotransformer at the Bay Creek substation.",
+  "need": "The Bay Creek \u2013 Monroe 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: BUZZARD ROOST \u2013 THORNTON ROAD 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Buzzard Roost \u2013 Thornton Road 230 kV transmission line, approximately 1 mile, with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Buzzard Roost \u2013 Thornton Road 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: CLARKSBORO \u2013 WINDER PRIMARY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 14 miles of the Clarksboro \u2013 Winder 230 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Clarksboro \u2013 Winder 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: CLIFTONDALE \u2013 LINE CREEK 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 11.6 mile 230 kV transmission line from Cliftondale to Line Creek with 200\u00b0C 1351 ACSS Martin.",
+  "need": "The line is being built to resolve thermal issues in Metro West and network Metro South.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: DAWSON CROSSING \u2013 NELSON (BLACK) TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 7.5 miles from Nelson to McClain Mountain to Big Canoe on the Dawson Crossing \u2013 Nelson (Black) 115 kV transmission line with 200\u00b0C 795 ACSS conductor or equivalent.",
+  "need": "Dawson Crossing \u2013 Nelson (Black) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: DRESDEN \u2013 TALBOT 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "New 500 kV transmission line will be built from the new Talbot substation to Dresden with 100\u00b0C 1113 ACSR conductor along with a new 500/230 kV substation.",
+  "need": "This strategic project will address multiple thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: DRESDEN 230 KV, BREAKER REPLACEMENTS",
+  "description": "At Dresden, the breaker duty margin for five 230 kV breakers will become negative starting on 6/01/2029. Replace them with 230 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Dresden substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: HEARD COUNTY 500 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for four 500 kV breakers will become negative starting on 10/01/2029. Replace them with 500 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Heard County substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: MCDONOUGH \u2013 SOUTH GRIFFIN 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the McDonough \u2013 South Griffin 115 kV transmission line with 200\u00b0C 1351 ACSS Martin. Replace limiting switches and jumpers with higher rated equipment.",
+  "need": "The McDonough \u2013 South Griffin 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: NEW TENASKA \u2013 WANSLEY 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a 5 miles long 500 kV transmission line between Tenaska and Wansley with (3) 1113 ACSR Bluejay conductor. Make all necessary accommodations at the substations for the line termination.",
+  "need": "This project reduces multiple 500 kV transmission line loadings, and provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: OHARA \u2013 SOUTH GRIFFIN 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor the 23 mile Ohara \u2013 South Griffin 230 kV transmission line section using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Ohara \u2013 South Griffin 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: RUM CREEK \u2013 TOMOCHICHI (BLACK) 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a second 500 kV transmission line from Rum Creek to Tomochichi (Black) which is approximately 30 miles long with 100\u00b0C (3) 1113 ACSR Bluejay conductor. Make the necessary modifications at Rum Creek and Tomochichi to add breakers and terminate the line.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: TALBOT CO #1 230 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for six 230 kV breakers will become negative starting on 6/01/2029. Replace them with 230 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Talbot Co. #1 substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: TALBOT CO #2 230 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for four 230 kV breakers will become negative starting on 6/01/2029. Replace them with 230 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Talbot CO #2 substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "GTC: UNION CITY PRIMARY 230 KV, BREAKER REPLACEMENTS",
+  "description": "At Union City Primary, the breaker duty margin for eleven 230 kV breakers will become negative starting on 4/01/2029. Replace them with 230 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Union City Primary substation to comply with NERC TPL-001-05, Section 2.3. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "HICKORY LEVEL \u2013 POST RD 115 KV TRANSMISSION LINE, REBUILD (PHASE 1)",
+  "description": "Rebuild the 1.15 mile portion from Hickory Level to South Villa Rica J with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Hickory Level \u2013 Post Rd 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "HOLT STREET \u2013 CARTER HILL RD 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor 1.81 miles of 100\u00b0C 397 ACSR 18/1 conductor to 100\u00b0C 795 ACSR 45/7 conductor from Holt Street to Carter Hill Rd.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "JACKSON SHOALS \u2013 LOGAN MARTIN DAM 115 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 18 miles of Jackson Shoals \u2013 Logan Martin Dam 115 kV transmission line from 100\u00b0C 795 ACSR 26/7 conductor to 125\u00b0C 795 ACSR 26/7 conductor.",
+  "need": "The Jackson Shoals \u2013 Logan Martin Dam 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "KETTLE CREEK PRIMARY \u2013 PINE GROVE PRIMARY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 38.04 miles of the Kettle Creek \u2013 Pine Grove Primary 115 kV transmission line using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Kettle Creek \u2013 Pine Grove 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MARTIN DAM \u2013 PEAR TREE 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor 20.5 miles of 115 kV transmission line from Martin Dam \u2013 Pear Tree from 100\u00b0C 397 ACSR 26/7 conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Martin Dam \u2013 Pear Tree 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MCEVER ROAD \u2013 SHOAL CREEK 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 3.05 miles of the McEver Road \u2013 Shoal Creek 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The McEver Road \u2013 Shoal Creek 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MEAG: AULTMAN ROAD \u2013 FORT VALLEY #1 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 8 miles of the Aultman Road \u2013 Fort Valley #1 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Aultman Road \u2013 Fort Valley #1 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MEAG: SLAPPEY DRIVE \u2013 WESTOVER 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 2.92 miles of Slappey Drive \u2013 Westover 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "Slappey Drive \u2013 Westover 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MERIDIAN NORTHEAST \u2013 LAUDERDALE WEST 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 6.11 mile Meridian Northeast \u2013 Lauderdale West 230 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "Line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MORROW 115 KV, BREAKER REPLACEMENTS",
+  "description": "At Morrow, the breaker duty margin for one 115 kV breaker will become negative starting on 6/01/2029. Replace the breaker with a higher rated breaker.",
+  "need": "This project is needed to increase breaker duty margins at Morrow substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "MOSS POINT EAST \u2013 PASCAGOULA BAYOU CASOTTE 115 KV, NEW TRANSMISSION LINE",
+  "description": "Construct approximately 2.7 miles of new 1033.5 ACSR 115 kV transmission line at 100\u00b0C from Moss Point East and connect into the existing BP Amoco to Pascagoula Bayou Cassotte 115 kV transmission line.",
+  "need": "The Moss Point East \u2013 Pascagoula MS Chemical 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "NORCROSS \u2013 NORTH DRUID HILLS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 3.9 miles of the Norcross \u2013 North Druid Hills 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Norcross \u2013 North Druid Hills 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "OPP \u2013 SOUTH ENTERPRISE 230 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 25 miles of the Opp \u2013 South Enterprise 230 kV transmission line from 125\u00b0C 795 ACSR 26/7 conductor to 200\u00b0C 1351.5 ACSS 54/19 conductor.",
+  "need": "The Opp \u2013 South Enterprise 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "HURRICANE CREEK 230/115 KV AUTOBANK, REPLACEMENT",
+  "description": "Replace the Hurricane Creek 230/115 kV auto bank.",
+  "need": "Transformer overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "SAV: BOULEVARD \u2013 MAGNOLIA \u2013 TRUMAN PARKWAY 115 KV TRANSMISSION LINES, REBUILD",
+  "description": "Rebuild 3 miles of the Magnolia \u2013 Truman Parkway 115 kV from 75\u00b0C 927 ACAR to 200\u00b0C 1351 ACSS Martin conductor or higher rated conductor. Upgrade switches at Magnolia substation to a higher rating switches and jumpers at Truman Parkway. Rebuild the entire Boulevard to Magnolia 115 kV transmission line, approx. 4.56 miles of 100\u00b0C 795 ACSR Drake conductor, using 200\u00b0C 1351 ACSS Martin conductor or higher rated conductor. At Magnolia, replace a switch with a higher rating.",
+  "need": "The Magnolia \u2013 Truman Parkway 115 kV and Boulevard \u2013 Magnolia 115 kV transmission lines overload under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "SAV: COLEMAN \u2013 MELDRIM 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Coleman \u2013 Meldrim 115 kV transmission line from Four Lakes \u2013 Structure 76A, approximately 8.1 miles of 477 ACSR Hawk conductor, using 200\u00b0C 1351 ACSS Martin conductor. Upgrade Quacco Rd Switches to a higher rating.",
+  "need": "The Coleman \u2013 Meldrim 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "SAV: DEAN FOREST \u2013 LITTLE OGEECHEE 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire transmission line from Little Ogeechee to Salt Creek and Salt Creek to Dean Forest, approximately 8 miles, using 200\u00b0C 1351 ACSS Martin conductor. Upgrade jumpers at the Little Ogeechee terminal.",
+  "need": "The Dean Forest \u2013 Little Ogeechee 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "SAV: LITTLE OGEECHEE 230/115 KV, BANK REPLACEMENT",
+  "description": "Replace SATX 230/115 kV autotransformer.",
+  "need": "The SATX 230/115 kV autotransformer overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "SOUTH TUSCALOOSA \u2013 31ST AVENUE 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 6.3 miles of S Tuscaloosa \u2013 31st Ave 115 kV transmission line from 795 ACSR conductor with Southwire 180\u00b0C C7 973 ACCS 20/7 conductor.",
+  "need": "The South Tuscaloosa \u2013 31st Avenue 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "TENASKA 500 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for five 500 kV breakers will become negative starting on 10/1/2029. Replace the breakers with 500 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Tenaska substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "THOMASTON 230 KV, NETWORK AREA IMPROVEMENT",
+  "description": "Rebuild the radial Thomaston \u2013 Butler 115 kV transmission line to 230 kV network operation. Build new 230 kV breaker and a half switching station to replace end of life equipment. Make all necessary upgrades and accommodations at the substation along the line.",
+  "need": "Line conversion increases capacity in the Butler area and ability to move increase solar generation from the South to the North. A new 230 kV breaker and a half switching station provides better reliability and replaces end of life equipment. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "VIRGINIA AVENUE \u2013 WABASH AVENUE 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 1.5 miles of the Virginia Avenue \u2013 Wabash Avenue 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace the limiting elements on the line.",
+  "need": "The Virginia Avenue \u2013 Wabash Avenue 230 kV transmission line overloads under a multiple contingency event.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "WANSLEY 500 KV, OVERSTRESSED BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for ten 500 kV breakers will become negative starting on 6/1/2029. Replace them with 500 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Wansley substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "WANSLEY 500 KV, OVERSTRESSED BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for six 500 kV breakers will become negative starting on 6/1/2029. Replace them with 500 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Wansley substation to comply with NERC TPL-001-05, Section 2.3. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2029,
+  "name": "WIGGINS SWITCHING STATION \u2013 HURRICANE CREEK 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 8.75 mile Wiggins Switching Station \u2013 Hurricane Creek 115 kV transmission line with 100\u00b0C 1033 ACSR conductor.",
+  "need": "Line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "ATTALLA \u2013 GULF STATES STEEL 115 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 2.5 miles of the Attalla \u2013 Gulf States Steel 115 kV transmission line.",
+  "need": "The Attalla \u2013 Gulf States Steel 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BAINBRIDGE TRANSMISSION: EAST RIVER ROAD, EAST BAINBRIDGE, NEW SUBSTATION, CONSTRUCT",
+  "description": "This project will construct a new 115 kV breaker and a half substation.",
+  "need": "This project is part of an overall reconfiguration of the Bainbridge area to improve the distribution reliability, transmission security and operational flexibility. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BASSETT CREEK \u2013 SUNNY SOUTH 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 16 miles of Bassett Creek \u2013 Sunny South SS 115 kV transmission line from 100\u00b0C 397 ACSR conductor to 200\u00b0C 795 ACSS conductor.",
+  "need": "The Bassett Creek \u2013 Sunny South 115 kV transmission line overloads under contingency. Also, this project provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BASSETT CREEK \u2013 THOMASVILLE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 1.2 miles of 100\u00b0C 795 ACSR and 10.4 miles of 125\u00b0C 397 ACSR to 200\u00b0C 795 ACSS from Bassett Creek \u2013 Thomasville TS 115 kV transmission line.",
+  "need": "The Bassett Creek \u2013 Thomasville 115 kV transmission line overloads under contingency. Also, this project provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BESSEMER \u2013 SOUTH BESSEMER 115 KV TRANSMISSION LINE, RECONDUCTOR (PHASE 2)",
+  "description": "Reconductor approximately 13 miles of the South Bessemer TS \u2013 Bessemer TS 115 kV transmission line from 100\u00b0C 795 ACSR conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Bessemer \u2013 South Bessemer 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BESSEMER \u2013 SOUTH BESSEMER 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 15 miles of 230 kV transmission line from Bessemer TS to South Bessemer TS from 1033 ACSR 45/7 conductor to 200\u00b0C 1351 54/19 ACSS conductor.",
+  "need": "The Bessemer \u2013 South Bessemer 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BIG TAZEWELL \u2013 FARLEY 500 SS 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 500 kV line from Farley (APC) to Big Tazewell substation. Construct a 5 breaker 500 kV ring bus to loop in the Blacksmith \u2013 Talbot 500 kV line, terminate the new Big Tazewell \u2013 Farley 500 kV and Talbot #2 \u2013 Tazewell 500 kV lines. Install a 500/230 kV autotransformer to connect to the existing 230 kV switchyard.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BOWEN \u2013 JUDY MOUNTAIN 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Bowen \u2013 Judy Mountain 230 kV transmission line with 200\u00b0C (2)1351 ACSS Martin conductor.",
+  "need": "This project is needed for generation interconnection. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BOWEN-BRANDON FARM RD 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 0.05 miles of section with (3) Bundled 100\u00b0C Bluejay ACSR 1113 conductor on the 230 kV Bowen \u2013 Pegamore transmission line and replace limiting elements.",
+  "need": "The Bowen \u2013 Brandon Farm Road 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BROADWAY \u2013 ECHECONNEE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Griffin Rd to Broadway section of the Broadway \u2013 Echeconnee 115 kV transmission line (approximately 11.5 miles) with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Broadway \u2013 Echeconnee 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BROADWAY \u2013 SOUTH MACON 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Broadway to South Macon 115 kV transmission line (approximately 2 miles) with 200\u00b0C 1351 ACSS conductor. Replace limiting elements along the transmission line.",
+  "need": "The Broadway \u2013 South Macon line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "BUZZARD ROOST \u2013 TRIBUTARY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 2.8 miles Tributary \u2013 Thornton Road 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Tributary \u2013 Thornton Road line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "CAVENDER DRIVE \u2013 WANSLEY 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 37 mile 500 kV transmission line from Cavender Drive to Wansley with (3) 100\u00b0C Bluejay 1113 ACSR. Make accommodations at the substations for the line termination.",
+  "need": "The new 500 kV transmission line mitigates multiple thermal overloads due to contingencies in the area",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "CORNELIA \u2013 TALLULAH LODGE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 9.7 miles of the Cornelia \u2013 Tallulah Lodge 115 kV transmission line with 200\u00b0C 795 ACSS conductor.",
+  "need": "The Cornelia \u2013 Tallulah Lodge 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "DU: DAWSON CROSSING \u2013 NELSON (WHITE) 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 15.7 miles of the Dawson Crossing \u2013 Nelson (White) 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Dawson Crossing \u2013 Nelson (White) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "EAST POINT \u2013 TRIBUTARY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 4.2 mile section from Cavender Drive \u2013 Marietta 25 with bundled 200\u00b0C 1351 ACSS conductor on the East Point \u2013 Tributary 230 kV transmission line.",
+  "need": "The East Point \u2013 Tributary 230 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "EAST POINT 230 KV BREAKER REPLACEMENTS",
+  "description": "At East Point, the breaker duty margin for one 230 kV breaker will become negative starting on 06/01/2030. Replace it with 230 kV higher rated breaker.",
+  "need": "This project is needed to increase breaker duty margins at East Point substation to comply with NERC TPL-001-05, Section 2.3. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "EAST POINT 230 KV, SWITCH REPLACEMENT",
+  "description": "Replace the switches and jumpers associated with the East Point \u2013 Tributary 230 kV line with higher rated equipment.",
+  "need": "Terminal equipment exceeds its thermal rating under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "ECHECONNEE \u2013 WELLSTON 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 1.5 miles of the North Warner Robins \u2013 South Warner Robins segment of the Echeconnee \u2013 Wellston 115 kV transmission line with 200\u00b0C 1351 ACSS conductor and the limiting elements along the line with higher ratings. Replace the bus and jumper at North Warner Robins with (2) 1590 AAC conductor.",
+  "need": "The Echeconnee \u2013 Wellston 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GAINESVILLE #2 \u2013 MCEVER ROAD 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 5.3 miles of the Gainesville #2 \u2013 McEver Rd 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Gainesville #2 \u2013 McEver Rd 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GLENWOOD SPRINGS \u2013 LAKE OCONEE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Glenwood Springs \u2013 Putnam Sawmill Jun \u2013 North Eatonton Junction section of the transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Glenwood Springs \u2013 Lake Oconee 115 kV transmission line overloads under base case conditions.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GLENWOOD SPRINGS 115 KV, CAPACITOR BANK INSTALLATION",
+  "description": "Install a 115 kV capacitor bank at Glenwood Springs substation.",
+  "need": "Low bus voltage issues were identified on several 115 kV buses due to a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GOLDENS CREEK \u2013 WARRENTON PRIMARY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 0.34 miles of the Goldens Creek \u2013 Warrenton Primary 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Goldens Creek \u2013 Warrenton Primary 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GORDON \u2013 SANDERSVILLE #1 115 KV TRANSMISSION LINE (DEEPSTEP-SAND #6), REBUILD",
+  "description": "Rebuild 10.49 miles of the Deepstep \u2013 Robins Spring, Robins Spring \u2013 Kaolin J, and Kaolin J \u2013 Sandersville #6 transmission line sections of the Gordon \u2013 Sandersville #1 115 kV transmission line with 100\u00b0C ACSR 795 conductor.",
+  "need": "The Gordon \u2013 Sandersville #1 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GREENE COUNTY \u2013 S. BESSEMER 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct ~63 miles of new 500 kV transmission line from Greene County SP to S. Bessemer. Construct a new 500/230 kV Bank and 500 kV switchyard at or near Greene County SP. Expand S. Bessemer TS 500 kV yard to accommodate the new line terminal.",
+  "need": "The Greene County \u2013 Moundville 230 kV transmission line overloads under contingency. Reduces multiple additional 230 kV and 115 kV line loadings that overload under contingency and provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: BONAIRE PRIMARY \u2013 EASTMAN PRIMARY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 41.08 miles of the Bonaire Primary \u2013 Eastman Primary 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor and upgrade the limiting bus at Roddy substation with a higher rating.",
+  "need": "The Bonaire Primary \u2013 Eastman Primary 115 kV transmission line overloads under multiple contingencies SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: BUZZARD ROOST \u2013 ROCKHOUSE RD 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Buzzard Roost \u2013 Rockhouse Rd 230 kV transmission line circuit 2, approximately 0.81 mile, with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Buzzard Roost \u2013 Rockhouse Rd 230 kV transmission line circuit 2 overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: CAVENDER DRIVE, NEW 500/230 KV AUTOTRANSFORMER, INSTALLATION",
+  "description": "Cavender Drive will become a 500/230 kV station looping in the Villa Rica \u2013 Union City 500 kV transmission line, installing a 500/230 kV autotransformer.",
+  "need": "The project will address multiple thermal overloads that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: DOUGLASVILLE \u2013 EAST VILLA RICA SS 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 8.2 miles of the Douglasville \u2013 East Villa Rica 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Douglasville \u2013 East Villa Rica 230 kV transmission line overloads under a contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: EAST WATKINSVILLE 230 KV, REACTOR INSTALLATION",
+  "description": "Replace series reactors at East Watkinsville on the Russell Dam 230 kV line.",
+  "need": "Equipment on the East Watkinsville \u2013 Russell Dam 230 kV line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: HARTWELL DAM \u2013 HARTWELL ENERGY 230 KV, SERIES REACTORS REPLACEMENT",
+  "description": "Replace the series reactors on the Hartwell Dam \u2013 Hartwell Energy 230 kV line with larger size.",
+  "need": "The reactors on the Hartwell Dam \u2013 Hartwell Energy 230 kV line overload under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: HARTWELL ENERGY \u2013 MIDDLE FORK 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 230 kV transmission line, approx. 35 miles, from Hartwell Energy to Middle Fork, using (2) 200\u00b0C 1351 ACSS conductor. GTC: Expand Hartwell Energy 230 kV and Middle Fork 230 kV substations for the new transmission line termination.",
+  "need": "New 230 kV transmission line addresses multiple constraints that occur under contingency along the eastern interface. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: POND FORK \u2013 MIDWAY 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "GTC: Construct approximately 6 miles of 115 kV transmission line with minimum 170\u00b0C 1351 ACSS conductor utilizing the existing GTC owned portion of the North Jackson \u2013 Lawrence Smith 46 kV ROW. Add a second 230/115 kV autotransformer at Pond Fork substation.",
+  "need": "The future Banks Crossing \u2013 Pond Fork 115 kV transmission line overloads under contingency due to an increase of load in the area.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: ROCKVILLE \u2013 TIGER CREEK -WARTHEN 500 KV, NEW TRANSMISSION LINES, CONSTRUCT",
+  "description": "Build the new 500 kV transmission lines from Rockville to Tiger Creek and Tiger Creek to Warthen, approximately 20 miles and 9 miles long, respectively with 100\u00b0C (3) 1113 ACSR Bluejay conductor. Build a 500 kV yard at Tiger Creek and install a 500/230 kV auto transformer. Make all necessary accommodations at Warthen and Rockville for the new 500 kV breakers.",
+  "need": "This project addresses several thermal constraints that occur under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: TALBOT #2 \u2013 BIG TAZEWELL 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 500 kV line from Big Tazewell to Talbot #2, approximately 20 miles. Make all necessary accommodations at Big Tazewell and Talbot #2 for the new 500 kV breakers and line termination.",
+  "need": "This project addresses multiple thermal overloads that occur under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: THORNTON RD- CAVENDER DRIVE 230 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Build a new 7 mile 230 kV line from Cavender Drive to Buzzard Roost with 200\u00b0C 1351 ACSS Martin.",
+  "need": "The new 230 kV transmission line from Cavender Drive to Buzzard Roost mitigates multiple thermal overloads during a base case scenario.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: UNION CITY, LINE TRAP REPLACEMENT",
+  "description": "Replace limiting line trap at Union City for the Ashley Park 500 kV line with a higher rated equipment.",
+  "need": "The Union City \u2013 Ashley Park 500 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: YATES \u2013 LINE CREEK (GREEN) 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 16.5 miles of the Yates \u2013 Line Creek (Green) 230 kV transmission line using 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Yates \u2013 Line Creek 230 kV transmission line overloads under a contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "GTC: YATES \u2013 LINE CREEK (RED) 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 16.5 miles of the Yates \u2013 Line Creek (Red) 230 kV transmission line using 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Yates \u2013 Line Creek 230 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "LINE CREEK 230 KV, IPO BREAKER UPGRADES",
+  "description": "Replace breakers at Line Creek with IPO (Independent Pole Operated) breakers.",
+  "need": "This project is needed to increase breaker duty margins at Line Creek substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "JEFFERSON ROAD \u2013 WINDER PRIMARY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 11 miles of the Jefferson Road \u2013 Winder Primary 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Jefferson Road \u2013 Winder Primary 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "KIA MOTORS \u2013 PITTMAN RD 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a section of Kia Motors \u2013 Pittman Rd 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "Kia Motors \u2013 Pittman Rd 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "LAWRENCEVILLE \u2013 WINDER PRIMARY 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 1.2 miles of the Lawrenceville \u2013 Winder 115 kV transmission line with 200\u00b0C 795 ACSS conductor.",
+  "need": "The Lawrenceville \u2013 Winder Primary 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "LEEDS TS \u2013 MOODY SS 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 5 miles of the Leeds \u2013 Moody 115 kV transmission line from 100\u00b0C 795 45/7 ACSR conductor with 200\u00b0C 1033.5 45/7 ACSS conductor.",
+  "need": "The Leeds \u2013 Moody 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "MARTIN DAM \u2013 NORTH AUBURN 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 27 miles of the Martin Dam \u2013 North Auburn 115 kV transmission line from 100\u00b0C 397 ACSR 26/7 conductor to 200\u00b0C 795 ACSS 26/7 conductor.",
+  "need": "The Martin Dam \u2013 North Auburn 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "MEAG: ATHENA \u2013 WARRENTON 230 KV TRANSMISSION LINE, CONVERSION",
+  "description": "Convert the Athena \u2013 Union Point \u2013 Ray Place Road \u2013 Warrenton Primary 115 kV transmission lines to 230 kV operation using 200\u00b0C 1351 ACSS conductor. Add 230/115kV transformers at Union Point Primary and Ray Place Road. Replace limiting equipment along the transmission lines.",
+  "need": "The Ray Place Road \u2013 Warrenton 115 kV overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "MEAG: BARNESVILLE PRIMARY 230/115 KV BANK B, REPLACEMENT",
+  "description": "Replace the Barnesville Primary 230/115 kV bank with higher rated auto transformer.",
+  "need": "The Barnesville Primary 230/115 kV autotransformer surpasses its rating under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "MEAG: FORTSON \u2013 TALBOT CO #2 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Fortson \u2013 Talbot County #2 230 kV transmission line with 200\u00b0C 1351 ACSS conductor and replace associated jumpers.",
+  "need": "A multiple contingency event causes the Fortson \u2013 Talbot County #2 230 kV transmission line to overload.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "MEAG: GOSHEN AREA STRATEGIC SOLUTION",
+  "description": "GPC: Construct a 230 kV switching station on the Waynesboro \u2013 Wilson 230 kV transmission line. MEAG: Build a new 230 kV transmission line between the switching station and Goshen, approximately 12.3 miles using 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Augusta Corporate Park \u2013 Vogtle 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "NORTH GEORGIA, NEW 115 KV TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct approximately 7 miles of 115 kV line with minimum 170\u00b0C 1351 ACSS conductor on the North Jackson \u2013 Lawrence Smith 46 kV ROW that is to be retired.",
+  "need": "The future Banks Crossing \u2013 Pond Fork 115 kV line overloads under contingency . SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "SWITCH WAY 230 KV, BREAKER REPLACEMENTS",
+  "description": "The breaker duty margin for two 230 kV breakers at Switch Way will become negative starting on 10/1/2029. Replace them with 230 kV higher rated breakers.",
+  "need": "This project is needed to increase breaker duty margins at Switch Way substation to comply with NERC TPL-001-05, Section 2.3.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "TALLULAH LODGE \u2013 TOCCOA 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the entire, approximately 10.3 miles, Tallulah Lodge \u2013 Toccoa 115 kV transmission line with 100\u00b0C 795 ACSR conductor. Replace limiting elements in substations along the line.",
+  "need": "The Tallulah Lodge \u2013 Toccoa 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2030,
+  "name": "WARTHEN 500 KV SUBSTATION, RECONFIGURATION",
+  "description": "Reconfigure the Warthen 500 kV substation.",
+  "need": "This project resolves multiple thermal overloads that are caused by contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "ANNISTON \u2013 CROOKED CREEK 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 28 miles of 397 30/7 ACSR conductor to 795 26/7 ACSR conductor from Golden Springs DS to Crooked Creek TS.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability. In addition, the line is being reconductored due to the age and condition of the structures and conductor.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "BARNESVILLE AREA 115 KV, NETWORK SOLUTION",
+  "description": "On the Lloyd Shoals \u2013 S. Griffin 115 kV transmission line, replace copper conductor between Forsyth #2 and Stokes Store Rd (8.2 miles),make it normally closed, and add a breaker to network. Also replace copper conductor between Stokes Store Rd and Jackson (8.7 miles). On the Barnesville Primary \u2013 S. Griffin 115 kV transmission line: Replace jumpers and conductors from Barnesville Pri to N. Zebulon to Upper Pike to Griffin #3 (18.2 miles).",
+  "need": "The project will address multiple thermal overloads that occur under multiple contingencies",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "BAY CREEK \u2013 CONYERS 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Rockdale to Bay Creek segment, approximately 15.29 miles, of the Bay Creek \u2013 Conyers 230 kV transmission line using 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Bay Creek \u2013 Conyers 230 kV transmission line will overload under certain contingencies. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "BOWEN #10 500/230 KV, AUTOBANK REPLACEMENT",
+  "description": "Replace the existing Bowen #10 500/230 kV autotransformer with a higher rated 500/230 kV autotransformer. Replace associated bus work and jumpers that are limiting elements to the new autotransformer.",
+  "need": "The Bowen #10 500/230 kV autotransformer overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "ELLICOTT SUBSTATION, EXPANSION PROJECT",
+  "description": "\u2013 Add 6 new 230 kV terminals at Ellicott SS. Ellicott SS to become Ellicott TS. \u2013 Add new 115 kV station with breaker and a half configuration to support (13) 115 kV line terminations, to include a new 230/115 kV autobank. \u2013 Reconfigure the Barry SP substation and replace structures.",
+  "need": "Upgrade existing and construct new transmission facilities to provide additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: ACHORD ROAD \u2013 NORTH DUBLIN 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Achord Road \u2013 North Dublin 115 kV transmission line, approximately 9.84 miles, with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Achord Road to North Dublin 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: AVERY \u2013 HOPEWELL 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor Hopewell to Birmingham transmission line section, approximately 3.3 miles, on Avery \u2013 Hopewell 115 kV transmission line with 100\u00b0C 1033 ACSR conductor. Replace jumper at Birmingham with 1590 AAC jumper.",
+  "need": "The Avery \u2013 Hopewell 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: BONAIRE PRIMARY \u2013 ECHECONNEE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Bonaire Primary \u2013 Echeconnee 115 kV transmission line, approximately 19 miles with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Bonaire Primary \u2013 Echeconnee 115 kV transmission line overloads under multiple contingencies.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: DRESDEN 230 KV, JUMPER REPLACEMENT",
+  "description": "Replace the jumpers at Dresden limiting the Dresden \u2013 Yates 230 kV line with higher rated jumpers.",
+  "need": "The jumpers overload under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: MCDONOUGH \u2013 OLA 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 3.6 miles section from Mcgarity to Ola on the McDonough \u2013 Ola 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Upgrade limiting elements at Ola.",
+  "need": "The McDonough \u2013 Ola 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "GTC: OLA \u2013 PORTERDALE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the Porterdale \u2013 Salem Road 115 kV transmission line segment, approximately 2.76 miles, using 200\u00b0C 1351 ACSS Martin conductor. Replace the limiting elements on the transmission line.",
+  "need": "The Ola \u2013 Porterdale 115 kV transmission line overloads under a contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "HATCH \u2013 WADLEY 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 500 kV transmission line from Hatch \u2013 Wadley Primary with (3) 100\u00b0C 1113 ACSR conductor.",
+  "need": "The construction of the new Hatch \u2013 Wadley Primary 500 kV transmission line aims to address the increasing penetration of renewable generation plants and load growth. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "HICKORY LEVEL \u2013 POST RD 115 KV TRANSMISSION LINE, REBUILD (PHASE 2)",
+  "description": "Rebuild 4.5 miles from Post Road to S Villa Rica junction with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Hickory Level \u2013 Post Rd 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "HOPE HULL AREA SOLUTION",
+  "description": "Reconductor approximately 2.7 miles of 397 ACSR conductor from Hope Hull Tap to Hyundai PT with 200\u00b0C 795 ACSS conductor.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "MEAG: PIO NONO 230/115 KV AREA SOLUTION",
+  "description": "Build a 4-breaker 230 kV ring bus to terminate transmission lines from Dorsett, South Griffin, and Pitts. Install an autotransformer and build a 115 kV yard to terminate a transmission line from Broadway. Make all necessary modifications to accommodate all the 230 kV and 115 kV transmission line terminations.",
+  "need": "This projects addresses 230 kV and 115 kV thermal overloads that occur under contingency in the Central area and increases area capacity to move solar generation from the South into Central and Metro South areas. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "PELL CITY AREA SOLUTION",
+  "description": "Construct a new Pell City SS and new approximately 12 mile 115 kV transmission line from Pell City SS \u2013 Jackson Shoals TS utilizing 795 26/7 ACSR at 100\u00b0C. Convert East Pell City DS and 25th Street DS to 115 kV.",
+  "need": "Low voltage and thermal constraints in the area under contingency. This project provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "PITTMAN RD \u2013 WEST POINT (APC) 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild Pittman Road \u2013 West Point (APC) 115 kV transmission line with 200\u00b0C 1351 ACSS conductor. Replace the bus and associated jumpers at West Point #2 with higher rated buswork and jumpers.",
+  "need": "The Pittman Road \u2013 West Point (APC) 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2031,
+  "name": "SAV: GOSHEN (SAV) \u2013 KRAFT 115 KV TRANSMISSION LINE TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 3.04 miles of Goshen \u2013 Kraft 115 kV transmission line from Goshen to Rice Hope from 100\u00b0C 795 ACSR Drake conductor to 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Goshen \u2013 Kraft 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "ADAMSVILLE \u2013 EAST POINT 230 KV TRANSMISSION LINE, RESAG AND LIMITING ELEMENTS REPLACEMENT",
+  "description": "Resag the Adamsville \u2013 East Point 230 kV transmission line to 100\u00b0C operation. Remove limiting elements at East Point by replacing vendor rated adaptor and switches with higher rated equipment.",
+  "need": "The Adamsville \u2013 East Point 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "ALBERTA CITY \u2013 HOLT 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 4 miles of the Alberta City \u2013 Holt 115 kV transmission line from 100\u00b0C 795 ACSR conductor to 200\u00b0C 795 ACSS conductor.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "ATKINSON \u2013 NORTHSIDE DRIVE 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a portion of the Atkinson \u2013 Northside 115 kV transmission line, approximately 3.2 miles, from Atkinson to Chattahoochee with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Atkinson \u2013 Northside 115 kV transmission line overloads under a contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "FLOMATON, NEW 230/115 KV AUTOTRANSFORMER INSTALLATION",
+  "description": "Install a new Flomaton 230/115 kV autotransformer.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "GTC: DYER ROAD \u2013 SOUTH COWETA 115 KV TRANSMISSION LINE, REBUILD (PHASE 2)",
+  "description": "Rebuild the 3.2 mile section of the Dyer Road \u2013 South Coweta 115 kV transmission line from South Coweta to Mcintosh Trail with 200\u00b0C 1351 ACSS Martin conductor and replace limiting elements at South Coweta and Mcintosh Trail.",
+  "need": "The Dyer Road \u2013 South Coweta 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2032,
+  "name": "JUDY MOUNTAIN \u2013 ROME 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 4.9 mile Judy Mountain \u2013 Rome 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace limiting elements along the line.",
+  "need": "The Judy Mountain \u2013 Rome 115 kV transmission line overloads under contingency SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "BAY CREEK \u2013 CONYERS 230 KV, LIMITING ELEMENT REPLACEMENT",
+  "description": "Replace equipment such as jumpers, switches, and traps at the Bay Creek, Rockdale, and Conyers substations with higher rating equipment.",
+  "need": "Beginning in 2033, the Rockdale \u2013 Bay Creek section of the Bay Creek \u2013 Conyers 230 kV transmission line will overload under certain contingencies.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "EAST POINT \u2013 MOUNTAIN VIEW 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a portion of the East Point \u2013 Mountain View 115 kV transmission line, approximately 2.4 miles of 100\u00b0C 397.5 ACSR conductor between East Point to College Park # 3 Junction, with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The East Point \u2013 Mountain View 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "GTC: CENTER PRIMARY \u2013 CLARKSBORO 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "GTC to rebuild the Center Primary \u2013 Clarksbro Primary 230 kV transmission line, approximately 8.3 miles, with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The Center Primary \u2013 Clarksboro 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "GTC: EAST SOCIAL CIRCLE \u2013 SNELLVILLE 230 KV, LIMINTING ELEMENT REPLACEMENT",
+  "description": "Replace limiting elements on the East Social Circle \u2013 Snellville 230 kV line with higher rating equipment.",
+  "need": "Equipment on the East Social Circle \u2013 Snellville 230 kV line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "GTC: EAST WALTON \u2013 MIDDLE FORK 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 500 kV transmission line from East Walton to Middle Fork, approximately 45 miles long with (3) 100\u00b0C 1113 ACSR conductor. Make all necessary accommodations for new 500 kV breakers at East Walton and Middle Fork substations.",
+  "need": "This project addresses thermal overloads in Central and Northeast areas of GA, adds additional capacity, and improves voltage profile.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "GTC: SHOAL CREEK \u2013 SOUTH HALL 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 7.9 miles of the Shoal Creek \u2013 South Hall 230 kV transmission line. Upgrade limiting elements on the line.",
+  "need": "The Shoal Creek \u2013 South Hall 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "MCEVER ROAD \u2013 SHOAL CREEK 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 2.9 miles of the McEver Road \u2013 Shoal Creek 115 kV transmission line with 200\u00b0C 1351 ACSS conductor.",
+  "need": "The McEver Road \u2013 Shoal Creek 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "MCGRAU FORD \u2013 MIDDLE FORK 500 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 500 kV transmission line from McGrau Ford to Middle Fork with (3) 100\u00b0C 1113 ACSR conductor.",
+  "need": "This is a strategic project to address multiple area compliance constraints, support the load growth in north Georgia, and to transport the expected generation additions in Northeast Georgia.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "PINE GROVE PRIMARY \u2013 WEST VALDOSTA 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 3.7 miles of the Pine Grove Primary \u2013 West Valdosta 115 kV transmission line with 200\u00b0C 795 ACSS Drake conductor.",
+  "need": "The Pine Grove \u2013 West Valdosta 115 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "SAV: MELDRIM 230/115 KV, BANK D REPLACEMENT",
+  "description": "Replace Meldrim 230/115 kV autotransformer",
+  "need": "The Meldrim 230/115 kV autotransformer overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2033,
+  "name": "WINDER PRIMARY 230 KV, BREAKER INSTALLATION",
+  "description": "Install a 230 kV breaker at the Winder Primary substation.",
+  "need": "The Bay Creek \u2013 LGE Monroe 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "ALEX CITY AREA SOLUTION",
+  "description": "Construct new West Alex City SS. Construct new West Dadeville TS networking Alex City, Crooked Creek \u2013 Martin Dam No. 2, and Thweatt. Reconductor approximately 4.52 miles from new West Alex City SS to City of Alex City #3 with 795 45/7 ACSR at 100\u00b0C.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "ALICEVILLE \u2013 STANSEL 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new approximately 17 mile 115 kV transmission line from Aliceville TS to Stansel TS with 795 ACSR 26/7 ACSR at 100\u00b0C.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "BELLAMY \u2013 EPES 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild ~21 miles of 4/0 ACSR conductor and 100\u00b0C 397 ACSR conductor from Bellamy SS \u2013 Epes SS 115 kV transmission line to 200\u00b0C 795 ACSS.",
+  "need": "The Bellamy \u2013 Epes 115 kV transmission line overloads under contingency. Also provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "BESSEMER \u2013 EAST PELHAM 230 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 14.9 miles of 1033 45/7 ACSR from 75\u00b0C to 100\u00b0C from Bessemer TS to East Pelham TS.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "BULL SLUICE \u2013 POWERS FERRY 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 1.65 miles of Bull Sluice \u2013 Powers Ferry 230 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor. Replace jumpers and OHGW.",
+  "need": "The Bull Sluice \u2013 Powers Ferry 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "DEMOPOLIS TS \u2013 CEMEX 115 KV, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct ~1 mile of 115 kV transmission line from Demopolis to Cemex Tap using 795 ACSR 100\u00b0C.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "GORGAS \u2013 MILLER 230 KV TRANSMISSION LINE, UPGRADE",
+  "description": "Upgrade approximately 16 miles of 1351 54/19 ACSR at 100\u00b0 to 125\u00b0C from Gorgas SP to Miller SP.",
+  "need": "The Miller \u2013 Gorgas 230 kV transmission line overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "GTC: CUMMING \u2013 DAWSON CROSSING 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild approximately 12.7 miles of the Cumming \u2013 Dawson Crossing 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Cumming \u2013 Dawson Crossing 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "HOLLY SPRINGS PRIMARY \u2013 NELSON 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild 8.1 miles of the Holly Springs \u2013 Nelson 115 kV transmission line with 200\u00b0C 1351.0 ACSS Martin conductor.",
+  "need": "The Holly Springs Primary \u2013 Nelson 115 kV transmission line overloads under contingency",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "MOBILE AREA NETWORKING \u2013 3RD PATH, CONSTRUCT",
+  "description": "Construct new Dawes SS at Dawes Tap on the Big Creek \u2013 N. Theodore 115 kV transmission line.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "MOUNDVILLE, NEW TRANSMISSION LINE, CONSTRUCT",
+  "description": "Construct a new 6-mile, 115 kV transmission line, 795, 26/7 ACSS at 200\u00b0C from Moundville TS to a new 3-way switch near structure 7 between Colonial Pipe (Moundville) and Westervelt Co, new terminal at Moundville TS, install 1-way switch near Structure 41.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2034,
+  "name": "NORTH THEODORE AREA SOLUTION",
+  "description": "\u2013 Reconductor ~0.9 miles of the Hollinger\u2019s Island \u2013 Holcim 115 kV transmission line to 795 ACSR at 100\u00b0C. \u2013 Construct New SS near Multistate Environmental Response Trust (Formerly Known as Tronox LLC) and Switch 19985. \u2013 Construct ~5.3 miles of 795 ACSR at 100\u00b0C 115 kV transmission line from N. Theodore \u2013 Praxair Tap. \u2013 Install new 115 kV terminal at N. Theodore TS.",
+  "need": "Provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "DECATUR \u2013 SCOTTDALE 115 KV TRANSMISSION LINE, JUMPER REPLACEMENT",
+  "description": "Replace the limiting jumper along the Decatur \u2013 Scottdale 115 kV transmission line with 1590.0 AAC Coreopsis jumper.",
+  "need": "The Decatur \u2013 Scottdale 115 kV transmission line overloads under a contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "EAST POINT \u2013 MORROW 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a 3 mile section from East Point to College Point Tap and Morrow to Forrest Park with 200\u00b0C 1351 ACSS Martin conductor on the East Point \u2013 Morrow 115 kV transmission line. Rebuild portions of shared structures with the East Point \u2013 Mountain View and Mountain View \u2013 Morrow transmission lines. Also replace limiting elements on the transmission line.",
+  "need": "The East Point \u2013 Morrow 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "EAST POINT \u2013 UNION CITY (WHITE) 230 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild a section of the East Point \u2013 Union City 230 kV transmission line with 200\u00b0C 1351 ACSS conductor. Replace limiting elements along the transmission line.",
+  "need": "The East Point \u2013 Union City 230 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "GADSDEN \u2013 GULF STATES STEEL 115 KV TRANSMISSION LINE, RECONDUCTOR (PHASE 2)",
+  "description": "Replace Gulf States Steel DS with a new 5-terminal, 4-breaker 115 kV ring bus (West Gadsden SS) across the street from the existing substation. Modify Linde Gadsden CU due to retirement of Gulf States Steel DS.",
+  "need": "Provides additional operational and maintenance flexibility which then increases reliability. In addition, associated with replacing aging equipment at Gulf States Steel DS. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "GTC: AVERY \u2013 HOLLY SPRINGS 115 KV TRANSMISSION LINE, REBUILD",
+  "description": "Rebuild the 2.43 miles from Holly Springs to Newlight Church section of the Avery \u2013 Holly Springs 115 kV transmission line with 200\u00b0C 1351 ACSS Martin conductor.",
+  "need": "The Avery \u2013 Holly Springs 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "MADISON PARK \u2013 MOUNT MEIGS DS 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Reconductor approximately 0.5 miles of 115 kV transmission line from Auburn University (Montgomery) to McLemore DS from 100\u00b0C 795 26/7 ACSR conductor to 100\u00b0C 1351 54/19 ACSR conductor.",
+  "need": "This project provides additional operational and maintenance flexibility, which increases reliability.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "SAV: MELDRIM, NEW 230/115 KV, AUTOTRANSFORMER INSTALLATION",
+  "description": "Install a second 230/115 kV autotransformer at Meldrim with associated station equipment.",
+  "need": "The Meldrim 230/115 kV autotransformer overloads under contingency. SERTP TRANSMISSION PROJECTS SSOERUTPT THRSEAENRRSTNMP ITBSRSaAIONlNaS MnPRcISOiSnJIEOgCNT A SP (RuCOEtJIhEI)C oTSr i(tCyEI IA) rea Balancing Authority",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ },
+ {
+  "utility": "SOUTHERN",
+  "in_service_year": 2035,
+  "name": "UNION SPRINGS \u2013 PINCKARD 115 KV TRANSMISSION LINE, RECONDUCTOR",
+  "description": "Rebuild approximately 10.6 miles of Pinckard \u2013 Ewell SS 115 kV transmission line from 49\u00b0C 397 ACSR conductor to 200\u00b0C 795 ACSS conductor. Reconductor approximately 50 miles of Union Springs \u2013 Ewell 115 kV transmission line from 49\u00b0C 397 ACSR conductor to 200\u00b0C 795 ACSS conductor.",
+  "need": "The Union Springs \u2013 Pinckard 115 kV transmission line overloads under contingency.",
+  "source": "SERTP 2025 Regional Transmission Plan, Southern BA section, pages 61-170 (southeasternrtp.com)"
+ }
+]

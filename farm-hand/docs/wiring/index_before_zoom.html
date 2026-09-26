@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand Wiring</title>
+<meta name="description" content="Step-by-step animated wiring for Farm Hand: ESP32, soil probe, relay, pump, temperature probe.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf1;--panel:#fbfcfd;--ink:#0e1621;--ink2:#3d4a59;--muted:#5b6674;--line:rgba(14,22,33,.1);--ai:#1f64b8;--warn:#b35a00;--bad:#c43333;--good:#0a8a0a;--desk:#d9dfe5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1016;--panel:#141a22;--ink:#e8edf3;--ink2:#b3bdc9;--muted:#8b96a3;--line:rgba(255,255,255,.1);--ai:#5b9cf0;--warn:#f0a040;--bad:#f07070;--good:#4cc24c;--desk:#1a212b}}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 "Atkinson Hyperlegible Next",system-ui,sans-serif;display:grid;grid-template-rows:auto 1fr auto;min-height:100dvh}
+header{display:flex;gap:14px;align-items:center;padding:14px 18px 8px;flex-wrap:wrap}
+header h1{margin:0;font:800 1.35rem/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em;margin-right:auto}
+.tabs{display:flex;gap:6px}
+.tabs button{border:1px solid var(--line);background:var(--panel);color:var(--ink2);font:700 13px "Atkinson Hyperlegible Next";padding:7px 12px;border-radius:99px;cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--bg)}
+.dots{display:flex;gap:5px;align-items:center}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line);cursor:pointer}
+.dots i.done{background:var(--good)}.dots i.on{background:var(--ai);transform:scale(1.35)}
+main{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;padding:0 18px;min-height:0}
+.stage{position:relative;background:var(--desk);border-radius:16px;overflow:hidden;min-height:420px}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+.side{display:grid;align-content:start;gap:12px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.step .k{font:700 12px "JetBrains Mono",monospace;color:var(--ai);letter-spacing:.06em}
+.step h2{margin:4px 0 6px;font:800 1.55rem/1.1 "Bricolage Grotesque",sans-serif;letter-spacing:-.02em}
+.step p{margin:0;color:var(--ink2)}
+.step .al{margin-top:8px;color:var(--warn);font-weight:700;font-size:14px}
+.photo{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px}
+.photo .lbl{font:700 12px "JetBrains Mono",monospace;color:var(--muted);margin:0 0 6px}
+.crop{width:100%;aspect-ratio:4/3;border-radius:9px;background-repeat:no-repeat;background-color:#111}
+.serial{background:#0b0f14;color:#7ee787;font:600 13px/1.55 "JetBrains Mono",monospace;border-radius:12px;padding:10px 12px;min-height:88px;white-space:pre;overflow:hidden}
+.serial .h{color:#8b96a3}
+footer{display:flex;gap:10px;justify-content:space-between;align-items:center;padding:12px 18px 16px}
+footer button{font:700 16px "Atkinson Hyperlegible Next";padding:12px 22px;border-radius:12px;border:0;cursor:pointer}
+#back{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+#next{background:var(--ai);color:#fff;min-width:160px}
+footer .note{color:var(--muted);font-size:13px;text-align:center}
+@media (max-width:900px){main{grid-template-columns:1fr}.stage{min-height:58vw}}
+/* svg */
+.part{transition:opacity .5s}
+.dim{opacity:.22}
+.hl{filter:drop-shadow(0 0 6px #ffd23f) drop-shadow(0 0 2px #ffd23f)}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.4s cubic-bezier(.3,.7,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pulse{animation:pulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.9)}}
+.fadein{opacity:0;animation:fade .5s .9s forwards}@keyframes fade{to{opacity:1}}
+.spin{animation:spin 1.2s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes spin{to{transform:rotate(360deg)}}
+.slide{animation:slide 1.6s ease-in-out infinite alternate}
+.callout rect{fill:#0e1621}.callout text{fill:#fff;font:700 15px "JetBrains Mono",monospace}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Farm Hand wiring</h1>
+  <div class="tabs" id="tabs"></div>
+  <div class="dots" id="dots"></div>
+</header>
+<main>
+  <div class="stage"><svg id="svg" viewBox="0 0 1600 900" role="img" aria-label="Wiring diagram"></svg></div>
+  <div class="side">
+    <div class="step"><div class="k" id="k"></div><h2 id="t"></h2><p id="p"></p><p id="use" style="margin-top:8px;font-weight:700;color:var(--ink)"></p><div class="al" id="al"></div></div>
+    <div class="photo" id="photoBox"><div class="lbl" id="photoLbl">YOUR PART</div><div class="crop" id="crop" title="tap to open full size" style="cursor:zoom-in"></div></div>
+    <div class="serial" id="serial" hidden></div>
+  </div>
+</main>
+<footer>
+  <button id="back">← Back</button>
+  <div class="note">Drawn to match your 30-pin ESP32 (USB-C) and ELEGOO 830 breadboard. Always go by the <b>label printed on your board</b>.</div>
+  <button id="next">Next →</button>
+</footer>
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('svg');
+const el = (tag, attrs = {}, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+const g = (id, parent = svg) => el('g', {id, class: 'part'}, parent);
+
+// ---------------- ESP32 38-pin DevKit ----------------
+const EX = 560, EY = 90, EW = 220, EH = 590;
+// Dechante's board: 30-pin ESP32 DevKit V1 (USB-C). Read off his photo 2026-09-23. USB at the bottom:
+const LP = ['EN','VP','VN','D34','D35','D32','D33','D25','D26','D27','D14','D12','D13','GND','VIN'];
+const RP = ['D23','D22','TX0','RX0','D21','D19','D18','D5','TX2','RX2','D4','D2','D15','GND','3V3'];
+const PY = i => EY + 196 + i * 22;
+const pinL = n => { const i = LP.indexOf(n); return [EX + 14, PY(i)]; };
+const pinR = (n, k = 0) => { const idx = RP.map((v, i) => v === n ? i : -1).filter(i => i >= 0)[k]; return [EX + EW - 14, PY(idx)]; };
+function drawESP() {
+  const G = g('esp');
+  el('rect', {x: EX, y: EY, width: EW, height: EH, rx: 12, fill: '#16181c', stroke: '#2b2f36', 'stroke-width': 2}, G);
+  el('rect', {x: EX + 38, y: EY - 4, width: 144, height: 180, rx: 4, fill: '#1c2430'}, G);
+  let d = `M ${EX + 50} ${EY + 30}`; for (let i = 0; i < 9; i++) d += ` v ${i % 2 ? 20 : -20} h 14`;
+  el('path', {d, fill: 'none', stroke: '#d9b35c', 'stroke-width': 3}, G);
+  el('rect', {x: EX + 48, y: EY + 52, width: 124, height: 116, rx: 5, fill: '#c9cdd1', stroke: '#9aa0a6'}, G);
+  for (let i = 0; i < 18; i++) el('line', {x1: EX + 50, x2: EX + 170, y1: EY + 56 + i * 6, y2: EY + 56 + i * 6, stroke: '#bfc4c8', 'stroke-width': 1}, G);
+  el('text', {x: EX + 110, y: EY + 90, 'text-anchor': 'middle', fill: '#5c6167', 'font-size': 16, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = 'ESP-32';
+  el('text', {x: EX + 110, y: EY + 112, 'text-anchor': 'middle', fill: '#5c6167', 'font-size': 11, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = 'WiFi+BT SoC inside';
+  el('rect', {x: EX + 70, y: EY + 128, width: 80, height: 28, fill: 'none', stroke: '#8a9096'}, G);
+  el('rect', {x: EX + 88, y: EY + 420, width: 44, height: 44, rx: 3, fill: '#0c0d0f'}, G);
+  el('rect', {x: EX + 60, y: EY + 360, width: 34, height: 18, rx: 2, fill: '#0c0d0f'}, G);
+  el('circle', {cx: EX + 150, cy: EY + 372, r: 5, fill: '#ff3b30'}, G);
+  for (const [bx, lab] of [[EX + 44, 'EN'], [EX + 156, 'BOOT']]) {
+    el('rect', {x: bx, y: EY + 524, width: 26, height: 20, rx: 3, fill: '#b9bec3'}, G); el('rect', {x: bx + 8, y: EY + 529, width: 10, height: 10, rx: 2, fill: '#222'}, G);
+    el('text', {x: bx + 13, y: EY + 556, 'text-anchor': 'middle', fill: '#e8e8e4', 'font-size': 10, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = lab;
+  }
+  el('rect', {x: EX + 88, y: EY + EH - 20, width: 44, height: 26, rx: 8, fill: '#c7ccd1', stroke: '#8a9096'}, G);
+  el('rect', {x: EX + 96, y: EY + EH - 12, width: 28, height: 10, rx: 5, fill: '#2a2d31'}, G);
+  LP.forEach((n, i) => { el('circle', {cx: EX + 14, cy: PY(i), r: 6, fill: '#d9b35c'}, G); el('circle', {cx: EX + 14, cy: PY(i), r: 2.5, fill: '#333'}, G);
+    el('text', {x: EX + 26, y: PY(i) + 4, fill: '#e8e8e4', 'font-size': 11, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = n; });
+  RP.forEach((n, i) => { el('circle', {cx: EX + EW - 14, cy: PY(i), r: 6, fill: '#d9b35c'}, G); el('circle', {cx: EX + EW - 14, cy: PY(i), r: 2.5, fill: '#333'}, G);
+    el('text', {x: EX + EW - 26, y: PY(i) + 4, 'text-anchor': 'end', fill: '#e8e8e4', 'font-size': 11, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = n; });
+  el('text', {x: EX + 110, y: EY + 320, 'text-anchor': 'middle', fill: '#e8e8e4', 'font-size': 18, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = 'ESP32';
+}
+
+// ---------------- soil probe + its cable ----------------
+const SX = 120, SY = 380;
+const CABLE_END = [330, 300];                 // black female 3-hole end
+const HOLE = {GND: [CABLE_END[0] - 16, CABLE_END[1]], VCC: [CABLE_END[0], CABLE_END[1]], AOUT: [CABLE_END[0] + 16, CABLE_END[1]]};
+function drawProbe() {
+  const G = g('probe');
+  const d = `M ${SX} ${SY} h 80 v 300 l -28 34 h -24 l -28 -34 z`;
+  el('path', {d, fill: '#141416', stroke: '#2a2a2e', 'stroke-width': 2}, G);
+  el('rect', {x: SX + 10, y: SY + 150, width: 60, height: 170, rx: 10, fill: '#1c1c20'}, G);
+  el('line', {x1: SX + 4, x2: SX + 76, y1: SY + 118, y2: SY + 118, stroke: '#e8e8e4', 'stroke-width': 3}, G);
+  el('rect', {x: SX + 14, y: SY + 40, width: 26, height: 20, fill: '#0c0c0e', stroke: '#e8e8e4', 'stroke-width': 1}, G);
+  el('rect', {x: SX + 48, y: SY + 42, width: 16, height: 10, fill: '#0c0c0e', stroke: '#e8e8e4', 'stroke-width': 1}, G);
+  for (let i = 0; i < 3; i++) el('rect', {x: SX + 14 + i * 20, y: SY + 76, width: 12, height: 6, fill: '#b8946a'}, G);
+  const t = el('text', {x: SX + 64, y: SY + 290, fill: '#e8e8e4', 'font-size': 12, 'font-family': 'Arial', 'font-weight': 700, transform: `rotate(-90 ${SX + 64} ${SY + 290})`}, G);
+  t.textContent = 'Capacitive Soil Moisture Sensor v1.2';
+  ['GND', 'VCC', 'AOUT'].forEach((n, i) => el('text', {x: SX + 18 + i * 22, y: SY + 30, 'text-anchor': 'middle', fill: '#e8e8e4', 'font-size': 8, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = n);
+  el('text', {x: SX + 40, y: SY + 136, 'text-anchor': 'middle', fill: '#e8e8e4', 'font-size': 9, 'font-family': 'Arial'}, G).textContent = 'dirt stops here';
+  // socket
+  el('rect', {x: SX + 18, y: SY - 22, width: 44, height: 24, rx: 3, fill: '#f2f2ee', stroke: '#bbb'}, G);
+}
+function drawCable() {
+  const G = g('cable');
+  const top = [SX + 40, SY - 34];
+  [['#1d1d1f', -10, 'GND'], ['#d32f2f', 0, 'VCC'], ['#f2c12e', 10, 'AOUT']].forEach(([c, dx, n]) => {
+    const h = HOLE[n];
+    el('path', {d: `M ${top[0] + dx} ${top[1]} C ${top[0] + dx} ${top[1] - 90}, ${h[0] - 60} ${h[1] + 40}, ${h[0]} ${h[1] + 14}`, fill: 'none', stroke: c, 'stroke-width': 6, 'stroke-linecap': 'round'}, G);
+  });
+  el('rect', {id: 'plug', x: top[0] - 22, y: top[1] - 4, width: 44, height: 20, rx: 3, fill: '#f5f5f1', stroke: '#9a9a9a'}, G);
+  el('rect', {x: CABLE_END[0] - 26, y: CABLE_END[1] - 12, width: 52, height: 26, rx: 3, fill: '#161616', stroke: '#444'}, G);
+  Object.entries(HOLE).forEach(([n, [x, y]]) => { el('rect', {x: x - 4, y: y - 5, width: 8, height: 10, fill: '#000', stroke: '#666'}, G);
+    el('text', {x, y: y - 16, 'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 10, 'font-family': 'JetBrains Mono', 'font-weight': 700}, G).textContent = n; });
+}
+
+// ---------------- relay module (input terminal on the left, output on the right) ----------------
+const RX = 930, RY = 150;
+const RT = {'DC+': [RX + 26, RY + 38], 'DC-': [RX + 26, RY + 72], 'IN': [RX + 26, RY + 106], 'NO': [RX + 254, RY + 38], 'COM': [RX + 254, RY + 72], 'NC': [RX + 254, RY + 106]};
+function drawRelay() {
+  const G = g('relay');
+  el('rect', {x: RX, y: RY, width: 280, height: 144, rx: 10, fill: '#c62828', stroke: '#8e1b1b', 'stroke-width': 2}, G);
+  el('rect', {x: RX + 90, y: RY + 22, width: 110, height: 100, rx: 6, fill: '#2d5fc4', stroke: '#1f4696'}, G);
+  ['SONGLE', 'SRD-05VDC-SL-C', '10A 250VAC'].forEach((s, i) => el('text', {x: RX + 145, y: RY + 56 + i * 18, 'text-anchor': 'middle', fill: '#fff', 'font-size': i ? 10 : 14, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = s);
+  for (const [side, keys] of [[RX + 6, ['DC+', 'DC-', 'IN']], [RX + 234, ['NO', 'COM', 'NC']]]) {
+    el('rect', {x: side, y: RY + 18, width: 40, height: 108, rx: 4, fill: '#2f6fd6', stroke: '#1d4fa6'}, G);
+    keys.forEach(k => { const [x, y] = RT[k]; el('circle', {cx: x, cy: y, r: 11, fill: '#d7dce0', stroke: '#8a9096'}, G);
+      el('line', {x1: x - 7, x2: x + 7, y1: y, y2: y, stroke: '#555', 'stroke-width': 3}, G);
+      el('text', {x: side === RX + 6 ? x + 22 : x - 22, y: y + 4, 'text-anchor': side === RX + 6 ? 'start' : 'end', fill: '#fff', 'font-size': 11, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = k; });
+  }
+  el('rect', {id: 'jumper', x: RX + 214, y: RY + 6, width: 14, height: 30, rx: 2, fill: '#111'}, G);
+  el('text', {x: RX + 206, y: RY + 12, 'text-anchor': 'end', fill: '#fff', 'font-size': 9, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = 'LOW/HIGH';
+  el('circle', {id: 'rled', cx: RX + 68, cy: RY + 130, r: 5, fill: '#551111'}, G);
+}
+
+// ---------------- breadboard + power module ----------------
+const BX = 830, BY = 540, BW = 740, BH = 250;
+// ELEGOO 830: seen from above, landscape. Top edge: blue − rail, red + rail. Then rows j i h g f, the middle
+// channel, rows e d c b a, then blue − rail, red + rail. 63 numbered columns; holes a-e in one column are joined.
+const RAIL = {'GNDt': BY + 16, '3V3': BY + 30, 'GNDb': BY + BH - 30, '5V': BY + BH - 16};
+const PITCH = 9.6, C0 = BX + 130;
+const COL = i => C0 + i * PITCH;                         // i = 0..62  ->  column i+1
+const HALF = {j: 0, i: 1, h: 2, g: 3, f: 4, e: 6, d: 7, c: 8, b: 9, a: 10};
+const ROWL = r => BY + 58 + HALF[r] * 14.5;
+const ROWY = k => ROWL(['e', 'd', 'c', 'b', 'a'][k]); // bottom half, e first
+function drawBoard() {
+  const G = g('board');
+  el('rect', {x: BX, y: BY, width: BW, height: BH, rx: 8, fill: '#f3f2ec', stroke: '#c8c8c0'}, G);
+  el('rect', {x: C0 - 14, y: ROWL('f') + 8, width: 63 * PITCH + 18, height: 13, rx: 2, fill: '#e2e1da'}, G);   // middle channel
+  [[RAIL.GNDt, '#1e5bd6', '−'], [RAIL['3V3'], '#d32f2f', '+'], [RAIL.GNDb, '#1e5bd6', '−'], [RAIL['5V'], '#d32f2f', '+']].forEach(([y, c, lab], k) => {
+    const off = k % 2 ? 7 : -7;
+    el('line', {x1: C0 - 10, x2: COL(62) + 8, y1: y + off, y2: y + off, stroke: c, 'stroke-width': 1.6}, G);
+    for (let i = 0; i < 63; i++) if (i % 6 !== 5) el('rect', {x: COL(i) - 2, y: y - 2, width: 4, height: 4, fill: '#3a3a3a'}, G);   // rails: groups of 5
+    el('text', {x: COL(62) + 16, y: y + 4, fill: c, 'font-size': 13, 'font-weight': 800, 'font-family': 'Arial'}, G).textContent = lab;
+  });
+  for (const r of 'jihgfedcba') {
+    for (let i = 0; i < 63; i++) el('rect', {x: COL(i) - 2, y: ROWL(r) - 2, width: 4, height: 4, fill: '#3a3a3a'}, G);
+    el('text', {x: C0 - 20, y: ROWL(r) + 3.5, 'text-anchor': 'middle', fill: '#777', 'font-size': 9, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = r;
+  }
+  for (const n of [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]) {
+    el('text', {x: COL(n - 1), y: ROWL('j') - 9, 'text-anchor': 'middle', fill: '#777', 'font-size': 8, 'font-family': 'Arial'}, G).textContent = n;
+    el('text', {x: COL(n - 1), y: ROWL('a') + 15, 'text-anchor': 'middle', fill: '#777', 'font-size': 8, 'font-family': 'Arial'}, G).textContent = n;
+  }
+  // MB102 power module: sits on the LEFT end, its pins in both rail pairs
+  el('rect', {x: BX + 6, y: BY - 12, width: 116, height: BH + 24, rx: 6, fill: '#1b1d20', stroke: '#000'}, G);
+  el('rect', {x: BX + 14, y: BY + 100, width: 34, height: 26, rx: 3, fill: '#c7ccd1'}, G);
+  el('text', {x: BX + 31, y: BY + 142, 'text-anchor': 'middle', fill: '#ddd', 'font-size': 9, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = 'USB IN';
+  el('rect', {x: BX + 62, y: BY + 102, width: 30, height: 24, rx: 4, fill: '#222', stroke: '#666'}, G);
+  el('text', {x: BX + 77, y: BY + 142, 'text-anchor': 'middle', fill: '#ddd', 'font-size': 9, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = 'ON/OFF';
+  [[BY + 10, '3.3V'], [BY + BH - 30, '5V']].forEach(([y, v], k) => {
+    el('rect', {id: 'mj' + k, x: BX + 96, y, width: 20, height: 20, rx: 2, fill: '#f2c12e'}, G);
+    el('text', {x: BX + 92, y: y + 14, 'text-anchor': 'end', fill: '#f2c12e', 'font-size': 10, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = v;
+  });
+  el('circle', {id: 'mled', cx: BX + 60, cy: BY + 175, r: 5, fill: '#113311'}, G);
+}
+
+// ---------------- pump in a cup ----------------
+const CX = 1480, CY = 330;
+function drawPump() {
+  const G = g('pump');
+  el('path', {d: `M ${CX - 60} ${CY} L ${CX - 50} ${CY + 170} H ${CX + 50} L ${CX + 60} ${CY} Z`, fill: 'rgba(210,230,245,.35)', stroke: '#9fb7c9', 'stroke-width': 2}, G);
+  el('path', {d: `M ${CX - 56} ${CY + 45} L ${CX - 50} ${CY + 170} H ${CX + 50} L ${CX + 56} ${CY + 45} Z`, fill: 'rgba(80,160,230,.35)'}, G);
+  el('rect', {x: CX - 22, y: CY + 100, width: 44, height: 62, rx: 10, fill: '#222'}, G);
+  el('rect', {x: CX + 6, y: CY + 80, width: 10, height: 24, fill: '#222'}, G);
+  el('path', {d: `M ${CX + 11} ${CY + 80} C ${CX + 11} ${CY - 60}, ${CX - 40} ${CY - 90}, ${CX - 90} ${CY - 70}`, fill: 'none', stroke: 'rgba(230,240,248,.9)', 'stroke-width': 9, 'stroke-linecap': 'round'}, G);
+  el('text', {x: CX - 96, y: CY - 80, 'text-anchor': 'end', fill: 'var(--ink2)', 'font-size': 12, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = 'tube → soil box';
+  el('g', {id: 'drops'}, G);
+}
+const PUMP_RED = [CX - 10, CY + 100], PUMP_BLK = [CX - 2, CY + 100];
+
+// ---------------- temp probe + adapter ----------------
+const TX = 170, TY = 100;
+const TT = {GND: [TX + 22, TY + 18], VCC: [TX + 52, TY + 18], DAT: [TX + 82, TY + 18]};      // screw terminal
+const TPIN = {GND: [TX + 32, TY + 92], VCC: [TX + 52, TY + 92], DAT: [TX + 72, TY + 92]};    // male pins
+function drawTemp() {
+  const G = g('temp');
+  el('rect', {x: TX, y: TY, width: 104, height: 84, rx: 6, fill: '#15171a', stroke: '#333'}, G);
+  el('rect', {x: TX + 6, y: TY + 4, width: 92, height: 30, rx: 3, fill: '#2f8a4a'}, G);
+  Object.entries(TT).forEach(([n, [x, y]]) => { el('circle', {cx: x, cy: y, r: 9, fill: '#d7dce0', stroke: '#888'}, G); el('line', {x1: x - 6, x2: x + 6, y1: y, y2: y, stroke: '#555', 'stroke-width': 3}, G);
+    el('text', {x, y: y + 30, 'text-anchor': 'middle', fill: '#fff', 'font-size': 9, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = n; });
+  Object.entries(TPIN).forEach(([n, [x, y]]) => el('rect', {x: x - 2, y: y - 12, width: 4, height: 20, fill: '#d9b35c'}, G));
+  // the waterproof probe: bare wires to the left, cable, steel tip
+  el('path', {d: `M ${TX - 150} ${TY + 260} C ${TX - 170} ${TY + 120}, ${TX - 80} ${TY + 10}, ${TX - 40} ${TY + 18}`, fill: 'none', stroke: '#111', 'stroke-width': 9, 'stroke-linecap': 'round'}, G);
+  el('rect', {x: TX - 160, y: TY + 256, width: 20, height: 70, rx: 9, fill: '#c9ccd0', stroke: '#8a9096'}, G);
+  el('text', {x: TX - 130, y: TY + 346, 'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 11, 'font-family': 'Arial', 'font-weight': 700}, G).textContent = 'steel tip → soil';
+}
+const TW = {red: [TX - 40, TY + 8], black: [TX - 40, TY + 18], yellow: [TX - 40, TY + 28]};
+
+// ---------------- USB cable + laptop, charger ----------------
+function drawUSB() {
+  const G = g('usb');
+  el('path', {d: `M ${EX + 110} ${EY + EH + 30} C ${EX + 110} ${EY + EH + 110}, 560 800, 520 830`, fill: 'none', stroke: '#2a2d31', 'stroke-width': 10, 'stroke-linecap': 'round'}, G);
+  el('rect', {id: 'usbPlug', x: EX + 96, y: EY + EH + 6, width: 28, height: 34, rx: 6, fill: '#3a3d41'}, G);
+  el('rect', {x: 360, y: 790, width: 170, height: 90, rx: 8, fill: '#3b4250'}, G); el('rect', {x: 372, y: 800, width: 146, height: 70, rx: 4, fill: '#9ec5f0'}, G);
+  el('text', {x: 445, y: 840, 'text-anchor': 'middle', fill: '#0e1621', 'font-size': 13, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = 'laptop';
+}
+function drawCharger() {
+  const G = g('charger');
+  el('path', {d: `M ${BX + 18} ${BY + 83} C ${BX - 60} ${BY + 83}, ${BX - 80} ${BY + 260}, ${BX - 120} ${BY + 280}`, fill: 'none', stroke: '#2a2d31', 'stroke-width': 8, 'stroke-linecap': 'round'}, G);
+  el('rect', {x: BX - 190, y: BY + 262, width: 70, height: 50, rx: 8, fill: '#f4f4f4', stroke: '#aaa'}, G);
+  el('text', {x: BX - 155, y: BY + 292, 'text-anchor': 'middle', fill: '#333', 'font-size': 11, 'font-weight': 700, 'font-family': 'Arial'}, G).textContent = '5V charger';
+}
+
+// ---------------- wires ----------------
+function smooth(pts) {
+  let d = `M ${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    d += ` C ${p1[0] + (p2[0] - p0[0]) / 6} ${p1[1] + (p2[1] - p0[1]) / 6}, ${p2[0] - (p3[0] - p1[0]) / 6} ${p2[1] - (p3[1] - p1[1]) / 6}, ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+const C = {black: '#1d1d1f', red: '#e53935', yellow: '#f2c12e', blue: '#1e88e5', green: '#2e9d4f', orange: '#fb8c00', white: '#f5f5f5', purple: '#8e44ad'};
+// kind: fm = F-M jumper (female end = 'fem' side), mm = male-male, bare = the part's own wire
+const W = {
+  p_gnd:  {pts: [HOLE.GND, [HOLE.GND[0] + 40, 520], [470, 520], pinL('GND')], c: 'black', fem: 'end', lab: 'GND'},
+  p_vcc:  {pts: [HOLE.VCC, [HOLE.VCC[0] + 60, 700], [EX + EW + 60, 700], [EX + EW + 50, PY(14) + 10], pinR('3V3')], c: 'red', fem: 'end', lab: '3V3'},
+  p_aout: {pts: [HOLE.AOUT, [HOLE.AOUT[0] + 90, 330], [480, PY(5)], pinL('D32')], c: 'yellow', fem: 'end', lab: 'D32'},
+  r_vcc:  {pts: [pinL('VIN'), [470, PY(14) + 30], [500, 780], [860, 790], [880, 360], [RX - 60, RT['DC+'][1]], RT['DC+']], c: 'red', fem: 'start', lab: 'VIN (5V)'},
+  r_gnd:  {pts: [[COL(5), RAIL.GNDt], [COL(5), RAIL.GNDt - 70], [890, 420], [RX - 50, RT['DC-'][1]], RT['DC-']], c: 'black', fem: null, lab: 'DC−'},
+  r_in:   {pts: [pinL('D26'), [460, PY(8)], [430, 60], [880, 60], [880, RT.IN[1]], RT.IN], c: 'blue', fem: 'start', lab: 'D26'},
+  com:    {pts: [[COL(58), RAIL['5V']], [COL(58), RAIL['5V'] + 22], [BX + BW + 18, RAIL['5V'] - 20], [BX + BW + 18, 440], [RX + 330, 420], [RX + 300, RT.COM[1]], RT.COM], c: 'orange', fem: null, lab: '5V rail'},
+  pumpR:  {pts: [PUMP_RED, [CX - 40, CY + 60], [CX - 150, 260], [RX + 300, RT.NO[1]], RT.NO], c: 'red', fem: null, bare: true, lab: 'NO'},
+  pumpB:  {pts: [PUMP_BLK, [CX - 20, CY + 200], [COL(62) + 20, RAIL.GNDb - 30], [COL(62), RAIL.GNDb]], c: 'black', fem: null, bare: true, lab: 'GND rail'},
+  e_gnd:  {pts: [pinR('GND'), [860, PY(13)], [870, 520], [COL(2), RAIL.GNDt - 40], [COL(2), RAIL.GNDt]], c: 'black', fem: 'start', lab: 'GND rail'},
+  t_red:  {pts: [TW.red, TT.VCC], c: 'red', bare: true, lab: 'VCC'},
+  t_blk:  {pts: [TW.black, [TX - 10, TY + 44], TT.GND], c: 'black', bare: true, lab: 'GND'},
+  t_yel:  {pts: [TW.yellow, [TX - 20, TY + 64], [TX + 110, TY + 60], TT.DAT], c: 'yellow', bare: true, lab: 'DAT'},
+  t_vcc:  {pts: [TPIN.VCC, [TX + 60, 330], [700, 740], [COL(8), RAIL['3V3'] - 50], [COL(8), RAIL['3V3']]], c: 'red', fem: 'start', lab: '3.3V rail'},
+  t_gnd:  {pts: [TPIN.GND, [TX + 20, 360], [690, 760], [COL(10), RAIL.GNDt - 44], [COL(10), RAIL.GNDt]], c: 'black', fem: 'start', lab: 'GND rail'},
+  t_dat:  {pts: [TPIN.DAT, [TX + 110, 300], [700, 760], [COL(14), ROWY(1) - 60], [COL(14), ROWY(1)]], c: 'green', fem: 'start', lab: 'row 16'},
+  e_d4:   {pts: [pinR('D4'), [860, PY(10)], [880, 500], [COL(14) + 30, ROWY(2) - 40], [COL(14), ROWY(2)]], c: 'purple', fem: 'start', lab: 'D4'},
+};
+const wireLayer = el('g', {id: 'wires'});
+function drawWire(id, animate) {
+  const w = W[id], G = el('g', {class: 'wire', 'data-id': id}, wireLayer);
+  const d = smooth(w.pts);
+  el('path', {d, fill: 'none', stroke: 'rgba(0,0,0,.25)', 'stroke-width': w.bare ? 6 : 8, 'stroke-linecap': 'round', transform: 'translate(2 3)'}, G);
+  const p = el('path', {d, fill: 'none', stroke: C[w.c], 'stroke-width': w.bare ? 5 : 7, 'stroke-linecap': 'round'}, G);
+  if (animate) { const L = p.getTotalLength(); p.style.setProperty('--len', L); p.classList.add('draw'); }
+  const ends = [w.pts[0], w.pts[w.pts.length - 1]];
+  ends.forEach((pt, k) => {
+    const isFem = (w.fem === 'start' && k === 0) || (w.fem === 'end' && k === 1);
+    const cap = el('g', {class: animate && k === 1 ? 'fadein' : ''}, G);
+    if (w.bare) { el('circle', {cx: pt[0], cy: pt[1], r: 4, fill: '#d0d4d8'}, cap); return; }
+    if (isFem) el('rect', {x: pt[0] - 8, y: pt[1] - 8, width: 16, height: 16, rx: 2, fill: '#0f0f10', stroke: '#555'}, cap);
+    else { el('rect', {x: pt[0] - 6, y: pt[1] - 18, width: 12, height: 14, rx: 2, fill: '#0f0f10'}, cap); el('rect', {x: pt[0] - 1.5, y: pt[1] - 5, width: 3, height: 8, fill: '#c0c4c8'}, cap); }
+  });
+  return G;
+}
+
+// ---------------- scene ----------------
+drawBoard(); drawPump(); drawRelay(); drawTemp(); drawProbe(); drawCable(); drawESP(); drawUSB(); drawCharger();
+svg.appendChild(wireLayer);
+const fx = el('g', {id: 'fx'});
+
+// photo crops (boxes measured on your photos)
+const PH = {
+  probe: ['../parts/table.jpg', 62.3, 37.3, 10.3, 31.3], plug: ['../parts/table.jpg', 44.6, 36.2, 3, 4.3], end: ['../parts/table.jpg', 43, 30, 20, 36],
+  relay: ['../parts/table.jpg', 72, 40, 7.4, 16], adapter: ['../parts/table.jpg', 82.8, 45.7, 7, 10], tprobe: ['../parts/table.jpg', 3, 34, 26, 22],
+  fm: ['../parts/wires.jpg', 3, 40, 94, 50], usb: ['../parts/wires.jpg', 0, 44, 12, 20], mm: ['../parts/wires.jpg', 29.5, 26.7, 68.5, 30.7], bb: ['../parts/breadboard_module.jpg', 10, 10, 88, 88],
+};
+function crop(key) {
+  const [src, x, y, w, h] = PH[key]; const c = document.getElementById('crop'); c.onclick = () => window.open(src, '_blank');
+  c.style.backgroundImage = `url(${src})`;
+  c.style.backgroundSize = `${100 / w * 100}% ${100 / h * 100}%`;
+  c.style.backgroundPosition = `${w >= 100 ? 0 : x / (100 - w) * 100}% ${h >= 100 ? 0 : y / (100 - h) * 100}%`;
+}
+
+const PARTS = ['esp', 'probe', 'cable', 'relay', 'board', 'pump', 'temp', 'usb', 'charger'];
+const S = [
+  // ---- part 1
+  {part: 1, t: 'Unplug the USB', p: 'Power off before any wire. Always.', focus: ['esp', 'usb'], fx: 'unplug', photo: 'usb'},
+  {part: 1, t: 'Click in the white plug', p: 'Into the white socket on top of the probe. One way only.', focus: ['probe', 'cable'], fx: 'plug', photo: 'plug'},
+  {part: 1, t: 'Peel off 3 wires', p: 'Pull black, red and yellow off the rainbow ribbon. They unzip.', focus: ['cable'], fx: 'peel', photo: 'fm'},
+  {part: 1, t: 'Black → GND', use: '1 black F-M wire (from the rainbow ribbon)', p: 'Pin end into the cable\'s GND hole. Hole end onto GND: left side, 2nd pin from the USB.', focus: ['cable', 'esp'], wires: ['p_gnd'], pins: [pinL('GND')], photo: 'end'},
+  {part: 1, t: 'Red → 3V3', use: '1 red F-M wire', p: 'Pin end into VCC. Hole end onto 3V3: right side, the pin right next to the USB.', focus: ['cable', 'esp'], wires: ['p_vcc'], pins: [pinR('3V3')], al: 'NOT 5V. 3V3 only.', photo: 'end'},
+  {part: 1, t: 'Yellow → D32', use: '1 yellow F-M wire', p: 'Pin end into AOUT. Hole end onto D32: left side, 6th pin from the top.', focus: ['cable', 'esp'], wires: ['p_aout'], pins: [pinL('D32')], photo: 'end'},
+  {part: 1, t: 'Plug in + test', p: 'USB back in. I read the numbers. Dip the tip in water: the number drops.', focus: ['esp', 'usb', 'probe'], fx: 'dip', serial: ['soil raw: 3012   ← in air', 'soil raw: 3008', 'soil raw: 1896   ← dipping', 'soil raw: 1311   ← in water'], photo: 'probe'},
+  // ---- part 2
+  {part: 2, t: 'Unplug again', p: 'New wires = power off.', focus: ['esp', 'usb'], fx: 'unplug', photo: 'usb'},
+  {part: 2, t: 'Relay: check the jumper', p: 'Leave the black LOW/HIGH jumper where it is for now.', focus: ['relay'], fx: 'jumper', al: 'If the pump never stops later: move it to HIGH. I\'ll tell you.', photo: 'relay'},
+  {part: 2, t: 'Power module on the board', use: 'No wire: the black power module itself', p: 'LEFT end of the breadboard (column 1 side). Its pins go into the 4 long rail rows, top and bottom. Match its + / − to the red + / blue − lines, then press down hard. Yellow jumpers: top side 3.3V, bottom side 5V. Nothing in its USB yet.', focus: ['board'], fx: 'module', photo: 'bb'},
+  {part: 2, t: 'ESP32 GND → board', use: '1 black F-M wire: hole end on the ESP32, pin end into the rail', p: 'Hole end on GND: right side, 2nd pin from the USB. Pin end into the TOP blue (−) rail (the very top row of holes).', focus: ['esp', 'board'], wires: ['e_gnd'], pins: [pinR('GND'), [COL(2), RAIL.GNDt]], al: 'Your board has only 2 GND pins, so the rest of the grounds meet on this rail.', photo: 'fm'},
+  {part: 2, t: 'VIN (5V) → DC+', use: '1 F-M wire, any color: hole end on the ESP32, pin end into the relay', p: 'Hole end on VIN: left side, the pin right next to the USB. That is your 5V. Pin end into DC+: loosen screw, push in, tighten.', focus: ['esp', 'relay'], wires: ['r_vcc'], pins: [pinL('VIN'), RT['DC+']], fx: 'screw', fxAt: RT['DC+'], photo: 'relay'},
+  {part: 2, t: 'GND rail → DC−', use: '1 male-male wire (the loose bundle)', p: 'One end into the TOP blue (−) rail, other end screwed into DC−.', focus: ['board', 'relay'], wires: ['r_gnd'], pins: [[COL(5), RAIL.GNDt], RT['DC-']], fx: 'screw', fxAt: RT['DC-'], photo: 'mm'},
+  {part: 2, t: 'D26 → IN', use: '1 F-M wire, any color', p: 'Hole end on D26: left side, 9th pin from the top. Pin end screwed into IN.', focus: ['esp', 'relay'], wires: ['r_in'], pins: [pinL('D26'), RT.IN], fx: 'screw', fxAt: RT.IN, photo: 'relay'},
+  {part: 2, t: '5V rail → COM', use: '1 male-male wire (the loose bundle), pins on both ends', p: 'One end in the BOTTOM red (+) rail (the very bottom row), other end screwed into COM.', focus: ['board', 'relay'], wires: ['com'], pins: [RT.COM], fx: 'screw', fxAt: RT.COM, photo: 'mm'},
+  {part: 2, t: 'Pump wires', use: 'No jumper: the pump’s own red + black wires', p: 'Pump red → NO (screw it in). Pump black → BOTTOM blue (−) rail.', focus: ['pump', 'relay', 'board'], wires: ['pumpR', 'pumpB'], pins: [RT.NO, [COL(62), RAIL.GNDb]], fx: 'screw', fxAt: RT.NO},
+  {part: 2, t: 'Charger + test', p: 'Charger into the module, pump in water, USB in. I send "run 2 s": click, pump, click off.', focus: ['charger', 'board', 'relay', 'pump', 'usb'], fx: 'pump', serial: ['> P A 2000', '{"type":"pour_start","pot":"A","ms":2000}', '{"type":"pour_done","pot":"A","ran_ms":2000}'], al: 'Must click OFF after 2 s. If not: jumper to HIGH.'},
+  // ---- part 3
+  {part: 3, t: 'Unplug', p: 'Power off. Last part.', focus: ['esp', 'usb'], fx: 'unplug', photo: 'usb'},
+  {part: 3, t: 'Screw in the temp probe', use: 'No jumper: the probe’s own 3 bare wires', p: 'Its bare wires into the green terminal: red → VCC, black → GND, yellow → DAT.', focus: ['temp'], wires: ['t_red', 't_blk', 't_yel'], pins: [TT.VCC, TT.GND, TT.DAT], fx: 'screw', fxAt: TT.DAT, photo: 'adapter'},
+  {part: 3, t: 'Power the adapter', use: '2 F-M wires (red + black): hole ends on the adapter pins', p: 'VCC pin → top 3.3V rail. GND pin → top GND rail. Hole ends on the adapter pins.', focus: ['temp', 'board'], wires: ['t_vcc', 't_gnd'], pins: [[COL(8), RAIL['3V3']], [COL(10), RAIL.GNDt]], photo: 'adapter'},
+  {part: 3, t: 'Data to pin 4', use: '2 F-M wires: hole ends on the pins, pin ends into the SAME breadboard row', p: 'DAT wire → column 15, hole d. ESP32 D4 wire → column 15, hole c. Holes a to e in one column are joined inside, so they connect.', focus: ['temp', 'board', 'esp'], wires: ['t_dat', 'e_d4'], pins: [[COL(14), ROWY(1)], [COL(14), ROWY(2)], pinR('4')], photo: 'fm'},
+  {part: 3, t: 'Plug in: done', p: 'USB + charger in. The board says it found 1 temp probe. Everything is wired.', focus: PARTS, fx: 'boot', serial: ['{"type":"boot","fw":"farm-hand-1","probes":1}', '{"type":"reading","a_raw":2140,"temp_c":"25.8"}'], photo: 'tprobe'},
+];
+let cur = 0;
+try { cur = Math.min(S.length - 1, +localStorage.getItem('fh_step') || 0); } catch (e) {}
+
+function stepWiresBefore(i) { const out = []; for (let k = 0; k < i; k++) (S[k].wires || []).forEach(w => out.push(w)); return out; }
+function callout(x, y, text) {
+  const G = el('g', {class: 'callout fadein'}, fx);
+  const w = text.length * 10 + 18, dx = x < 800 ? -w - 26 : 26;
+  el('line', {x1: x, y1: y, x2: x + (dx < 0 ? -26 : 26), y2: y, stroke: '#0e1621', 'stroke-width': 2}, G);
+  el('rect', {x: x + dx, y: y - 15, width: w, height: 30, rx: 8}, G);
+  el('text', {x: x + dx + w / 2, y: y + 5, 'text-anchor': 'middle'}, G).textContent = text;
+}
+function render() {
+  const s = S[cur];
+  try { localStorage.setItem('fh_step', cur); } catch (e) {}
+  document.getElementById('k').textContent = `PART ${s.part} · STEP ${cur + 1} OF ${S.length}`;
+  document.getElementById('t').textContent = s.t;
+  document.getElementById('p').textContent = s.p;
+  document.getElementById('use').textContent = s.use ? '🔌 Wire: ' + s.use : '';
+  document.getElementById('al').textContent = s.al ? '⚠ ' + s.al : '';
+  document.getElementById('photoBox').hidden = !s.photo; if (s.photo) crop(s.photo);
+  const ser = document.getElementById('serial'); ser.hidden = !s.serial; ser.innerHTML = '';
+  if (s.serial) { const lines = ['<span class="h">what you should see:</span>', ...s.serial]; lines.forEach((l, i) => setTimeout(() => ser.innerHTML += (i ? '\n' : '') + l, 400 + i * 700)); }
+  PARTS.forEach(id => { const n = document.getElementById(id); n.classList.toggle('dim', !s.focus.includes(id)); n.classList.toggle('hl', s.focus.includes(id) && s.focus.length <= 3); });
+  wireLayer.innerHTML = ''; fx.innerHTML = '';
+  stepWiresBefore(cur).forEach(id => { const g = drawWire(id, false); g.style.opacity = .45; });
+  (s.wires || []).forEach(id => drawWire(id, true));
+  (s.pins || []).forEach(([x, y]) => el('circle', {cx: x, cy: y, r: 10, fill: 'none', stroke: '#ffd23f', 'stroke-width': 4, class: 'pulse'}, fx));
+  (s.wires || []).forEach(id => { const w = W[id], pt = w.pts[w.pts.length - 1]; if (w.lab) callout(pt[0], pt[1], w.lab); });
+  // effects
+  const plug = document.getElementById('usbPlug'); plug.style.transition = 'transform .9s'; plug.style.transform = '';
+  const wp = document.getElementById('plug'); wp.style.transition = 'transform 1s'; wp.style.transform = '';
+  document.getElementById('rled').setAttribute('fill', '#551111'); document.getElementById('mled').setAttribute('fill', '#113311');
+  document.getElementById('probe').style.transition = 'transform 1.4s'; document.getElementById('probe').style.transform = '';
+  document.getElementById('drops').innerHTML = '';
+  if (s.fx === 'unplug') { requestAnimationFrame(() => plug.style.transform = 'translate(0px,60px)'); callout(EX + 110, EY + EH + 40, 'pull it out'); }
+  if (s.fx === 'plug') { wp.style.transform = 'translate(0px,-40px)'; requestAnimationFrame(() => requestAnimationFrame(() => wp.style.transform = 'translate(0px,0px)')); callout(SX + 40, SY - 30, 'click'); }
+  if (s.fx === 'peel') ['black', 'red', 'yellow'].forEach((c, i) => {
+    const y = 560 + i * 26; const p = el('path', {d: `M 250 ${y} C 330 ${y}, 380 ${y + 40 + i * 20}, 470 ${y + 60 + i * 30}`, fill: 'none', stroke: C[c], 'stroke-width': 7, 'stroke-linecap': 'round'}, fx);
+    const L = p.getTotalLength(); p.style.setProperty('--len', L); p.classList.add('draw');
+    el('rect', {x: 236, y: y - 7, width: 16, height: 14, rx: 2, fill: '#111'}, fx); });
+  if (s.fx === 'dip') { el('path', {d: `M 60 720 L 70 860 H 290 L 300 720 Z`, fill: 'rgba(80,160,230,.35)', stroke: '#9fb7c9', 'stroke-width': 2}, fx);
+    el('text', {x: 180, y: 885, 'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 13, 'font-weight': 700, 'font-family': 'Arial'}, fx).textContent = 'cup of water';
+    setTimeout(() => document.getElementById('probe').style.transform = 'translate(0px,90px)', 1500); }
+  if (s.fx === 'jumper') callout(RX + 221, RY + 20, 'LOW/HIGH');
+  if (s.fx === 'screw' && s.fxAt) { const [x, y] = s.fxAt; const sd = el('g', {class: 'spin'}, fx); el('circle', {cx: x, cy: y, r: 16, fill: 'none', stroke: '#ffd23f', 'stroke-width': 3, 'stroke-dasharray': '10 6'}, sd); }
+  if (s.fx === 'module') { ['mj0', 'mj1'].forEach(id => { const r = document.getElementById(id); el('rect', {x: +r.getAttribute('x') - 4, y: +r.getAttribute('y') - 4, width: 30, height: 28, fill: 'none', stroke: '#ffd23f', 'stroke-width': 3, class: 'pulse'}, fx); }); callout(BX + 115, BY + 18, '3.3V'); callout(BX + 115, BY + BH - 20, '5V'); }
+  if (s.fx === 'pump') { setTimeout(() => { document.getElementById('rled').setAttribute('fill', '#ff3b30'); document.getElementById('mled').setAttribute('fill', '#39ff5a'); callout(RX + 140, RY - 10, 'click'); for (let i = 0; i < 8; i++) el('circle', {cx: CX - 95 - (i % 3) * 6, cy: CY - 60 + i * 12, r: 4, fill: '#2a78d6', class: 'fadein'}, document.getElementById('drops')); }, 1500);
+    setTimeout(() => document.getElementById('rled').setAttribute('fill', '#551111'), 4200); }
+  if (s.fx === 'boot') document.getElementById('mled').setAttribute('fill', '#39ff5a');
+  // header
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', +b.dataset.p === s.part));
+  document.querySelectorAll('#dots i').forEach((d, i) => { d.className = i < cur ? 'done' : i === cur ? 'on' : ''; });
+  document.getElementById('back').disabled = cur === 0;
+  document.getElementById('next').textContent = cur === S.length - 1 ? 'Done ✓' : 'Next →';
+}
+const tabs = document.getElementById('tabs');
+[['1', 'Soil probe'], ['2', 'Relay + pump'], ['3', 'Temp probe']].forEach(([n, lab]) => { const b = document.createElement('button'); b.dataset.p = n; b.textContent = `${n} · ${lab}`;
+  b.onclick = () => { cur = S.findIndex(s => s.part === +n); render(); }; tabs.appendChild(b); });
+const dots = document.getElementById('dots'); S.forEach((_, i) => { const d = document.createElement('i'); d.onclick = () => { cur = i; render(); }; dots.appendChild(d); });
+document.getElementById('next').onclick = () => { if (cur < S.length - 1) { cur++; render(); } };
+document.getElementById('back').onclick = () => { if (cur > 0) { cur--; render(); } };
+addEventListener('keydown', e => { if (e.key === 'ArrowRight') document.getElementById('next').click(); if (e.key === 'ArrowLeft') document.getElementById('back').click(); });
+const q = new URLSearchParams(location.search).get('step'); if (q) cur = Math.max(0, Math.min(S.length - 1, +q - 1));
+render();
+</script>
+</body>
+</html>

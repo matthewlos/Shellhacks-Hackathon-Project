@@ -1,0 +1,101 @@
+<title>GridLock Explained</title>
+<style>
+:root{--ground:#F7F8FC;--band:#E7EAF6;--fill:#DDE2F2;--ink:#111111;--muted:#5F6272;--red:#C42A1C;--card:#ffffff;--gp:#111111}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--ground:#14161c;--band:#20243a;--fill:#2a2f48;--ink:#eef0f6;--muted:#a3a8bb;--red:#ff6a5a;--card:#1b1e27;--gp:#eef0f6}}
+:root[data-theme="dark"]{color-scheme:dark;--ground:#14161c;--band:#20243a;--fill:#2a2f48;--ink:#eef0f6;--muted:#a3a8bb;--red:#ff6a5a;--card:#1b1e27;--gp:#eef0f6}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:16px/1.5 Helvetica,Arial,sans-serif;padding-inline:16px;padding-block:0 40px}
+.hero{background:var(--band);border-bottom:1.5px solid var(--ink);margin-inline:-16px;padding:32px 16px 26px}
+.hero h1,.panel h2{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+.hero h1{max-width:680px;margin:0 auto;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;text-wrap:balance}
+.strip{max-width:680px;margin:28px auto 0;display:grid;gap:22px}
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:4px;padding:18px 20px 16px;display:grid;gap:10px}
+.step{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:700}
+.panel h2{margin:0;font-size:1.35rem;line-height:1.25;text-wrap:balance}
+.panel svg{width:100%;height:auto;display:block}
+.cap{margin:0;color:var(--muted);font-size:14.5px}
+.lab{font:12px Helvetica,Arial,sans-serif;fill:var(--muted)}
+</style>
+
+<header class="hero"><h1>How GridLock finds where two power companies' plans collide</h1></header>
+
+<main class="strip">
+  <section class="panel">
+    <span class="step">Step 1</span>
+    <h2>Two neighbors each plan their own construction.</h2>
+    <svg viewBox="0 0 400 110" role="img" aria-label="South Carolina and Georgia on either side of a river, each with planned projects">
+      <path d="M200 0 C 185 30, 215 60, 195 110" fill="none" stroke="#5a8fc8" stroke-width="6"/>
+      <text x="60" y="20" class="lab">Georgia Power</text>
+      <text x="255" y="20" class="lab">Dominion SC</text>
+      <circle cx="90" cy="60" r="7" fill="var(--gp)"/><path d="M40 90 L150 80" stroke="var(--gp)" stroke-width="3"/>
+      <rect x="283" y="50" width="12" height="12" fill="var(--red)"/><rect x="330" y="80" width="12" height="12" fill="var(--red)"/>
+    </svg>
+    <p class="cap">Georgia Power and Dominion Energy South Carolina sit across the Savannah River. Neither sees the other's list.</p>
+  </section>
+
+  <section class="panel">
+    <span class="step">Step 2</span>
+    <h2>Put both lists on one map.</h2>
+    <svg viewBox="0 0 400 110" role="img" aria-label="Both utilities' projects on one map in two colors">
+      <path d="M200 0 C 185 30, 215 60, 195 110" fill="none" stroke="#5a8fc8" stroke-width="6" opacity=".5"/>
+      <circle cx="170" cy="45" r="7" fill="var(--gp)"/><path d="M60 95 L185 70" stroke="var(--gp)" stroke-width="3"/>
+      <rect x="218" y="40" width="12" height="12" fill="var(--red)"/><rect x="330" y="80" width="12" height="12" fill="var(--red)"/>
+    </svg>
+    <p class="cap">Substations become dots, new power lines become lines. One color per company.</p>
+  </section>
+
+  <section class="panel">
+    <span class="step">Step 3</span>
+    <h2>Measure the closest gap between every pair.</h2>
+    <svg viewBox="0 0 400 110" role="img" aria-label="A dashed line measures edge to edge from a power line to a substation">
+      <path d="M40 95 L240 55" stroke="var(--gp)" stroke-width="3"/>
+      <rect x="276" y="22" width="14" height="14" fill="var(--red)"/>
+      <path d="M232 57 L276 34" stroke="var(--red)" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="238" y="80" class="lab">5 km edge to edge</text>
+    </svg>
+    <p class="cap">Edge to edge, not center to center. A long line can pass right by the other company's substation.</p>
+  </section>
+
+  <section class="panel">
+    <span class="step">Step 4</span>
+    <h2>Anything under 40 km gets flagged, and closer ranks higher.</h2>
+    <svg viewBox="0 0 400 120" role="img" aria-label="Four rings: touching, under 1.6 km, under 8 km, under 40 km">
+      <circle cx="80" cy="60" r="52" fill="var(--fill)" stroke="var(--ink)" stroke-width="1.5"/>
+      <circle cx="80" cy="60" r="34" fill="var(--band)" stroke="var(--ink)" stroke-width="1.5"/>
+      <circle cx="80" cy="60" r="18" fill="var(--card)" stroke="var(--ink)" stroke-width="1.5"/>
+      <circle cx="80" cy="60" r="5" fill="var(--red)"/>
+      <text x="160" y="28" class="lab">Touching: must coordinate</text>
+      <text x="160" y="50" class="lab">Under 1.6 km: share the land</text>
+      <text x="160" y="72" class="lab">Under 8 km: share yards and deliveries</text>
+      <text x="160" y="94" class="lab">Under 40 km: share crews and cranes</text>
+    </svg>
+    <p class="cap">40 km is about how far a crew drives from one staging yard in a morning.</p>
+  </section>
+
+  <section class="panel">
+    <span class="step">Step 5</span>
+    <h2>Same years break the tie.</h2>
+    <svg viewBox="0 0 400 90" role="img" aria-label="Two timeline bars overlapping in the same years">
+      <line x1="20" x2="380" y1="70" y2="70" stroke="var(--muted)" stroke-width="1.5"/>
+      <text x="20" y="86" class="lab">2026</text><text x="190" y="86" class="lab">2030</text><text x="350" y="86" class="lab">2035</text>
+      <rect x="90" y="22" width="150" height="14" fill="var(--gp)"/>
+      <rect x="170" y="42" width="120" height="14" fill="var(--red)"/>
+      <rect x="170" y="18" width="70" height="42" fill="none" stroke="var(--red)" stroke-width="2" stroke-dasharray="4 3"/>
+    </svg>
+    <p class="cap">Close on the map is the main signal. Close on the calendar pushes it up the list.</p>
+  </section>
+
+  <section class="panel">
+    <span class="step">Step 6</span>
+    <h2>Hand in a clickable map and a ranked list.</h2>
+    <svg viewBox="0 0 400 100" role="img" aria-label="A map with a highlighted overlap next to a ranked list">
+      <rect x="20" y="10" width="170" height="80" fill="var(--band)" stroke="var(--ink)" stroke-width="1.5"/>
+      <circle cx="105" cy="50" r="16" fill="none" stroke="var(--red)" stroke-width="3"/>
+      <rect x="210" y="14" width="170" height="16" fill="var(--card)" stroke="var(--ink)" stroke-width="1.5"/>
+      <rect x="210" y="40" width="170" height="16" fill="var(--card)" stroke="var(--ink)" stroke-width="1.5"/>
+      <rect x="210" y="66" width="170" height="16" fill="var(--card)" stroke="var(--ink)" stroke-width="1.5"/>
+      <text x="216" y="26" class="lab">1. Savannah area</text><text x="216" y="52" class="lab">2. Augusta area</text><text x="216" y="78" class="lab">3. ...</text>
+    </svg>
+    <p class="cap">Bonus points for a rough dollars or land-saved estimate on one of them. Most pairs won't overlap, and that's expected.</p>
+  </section>
+</main>

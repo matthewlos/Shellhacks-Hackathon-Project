@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand Parts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f4;--panel:#fbfcfd;--ink:#0e1621;--ink2:#3d4a59;--muted:#5b6674;--line:rgba(14,22,33,.1);--ai:#1f64b8;--warn:#9a6a00;--bad:#c43333;--good:#0a8a0a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--panel:#151b23;--ink:#e8edf3;--ink2:#b3bdc9;--muted:#8b96a3;--line:rgba(255,255,255,.1);--ai:#5b9cf0;--warn:#e0b23c;--bad:#f07070;--good:#4cc24c}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Atkinson Hyperlegible Next",system-ui,sans-serif;padding:24px 16px 48px}
+.wrap{max-width:1280px;margin:0 auto}
+h1{font:700 2rem/1.1 "Bricolage Grotesque",sans-serif;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--ink2);margin:0 0 18px}
+.photo{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(14,22,33,.18)}
+.photo img{display:block;width:100%;height:auto}
+.box{position:absolute;border:3px solid #ffd23f;border-radius:10px;box-shadow:0 0 0 2px rgba(0,0,0,.55),inset 0 0 0 1px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
+.box.warn{border-color:#ff8a3d}.box.unk{border-color:#b9c2cc;border-style:dashed}
+.box .n{position:absolute;top:-16px;left:-16px;width:30px;height:30px;border-radius:50%;background:#ffd23f;color:#111;font:700 15px/30px "JetBrains Mono",monospace;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.box.warn .n{background:#ff8a3d}.box.unk .n{background:#b9c2cc}
+.box .t{position:absolute;left:18px;top:-15px;white-space:nowrap;background:rgba(10,12,16,.86);color:#fff;font:600 13px/1 "Atkinson Hyperlegible Next",sans-serif;padding:7px 9px;border-radius:7px}
+.box.on{transform:scale(1.04)}
+.box.below .t{top:auto;bottom:-34px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;margin-top:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card h3{margin:0 0 6px;font:700 1.05rem/1.2 "Bricolage Grotesque",sans-serif;display:flex;gap:10px;align-items:center}
+.card h3 b{flex:none;width:26px;height:26px;border-radius:50%;background:#ffd23f;color:#111;font:700 13px/26px "JetBrains Mono",monospace;text-align:center}
+.card.warn h3 b{background:#ff8a3d}.card.unk h3 b{background:#b9c2cc}
+.card p{margin:4px 0;color:var(--ink2);font-size:14.5px}
+.card .go{color:var(--ink);font-weight:600}
+.card .al{color:var(--warn);font-weight:600}
+.card.on{outline:2px solid var(--ai)}
+@media (max-width:640px){.box .t{display:none}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>What's on your table</h1>
+  <p class="sub">Your photo, every part boxed. Tap a box or a card to match them.</p>
+  <div class="photo" id="photo"><img src="table.jpg" alt="Farm Hand parts on the desk"></div>
+  <div class="list" id="list"></div>
+  <h1 style="margin-top:34px">Your wires</h1>
+  <p class="sub">Which wire goes where.</p>
+  <div class="photo" id="photo2"><img src="wires.jpg" alt="Jumper wires"></div>
+  <div class="list" id="list2"></div>
+</div>
+<script>
+// boxes in % of the photo (measured on the 2576 x 1932 photo)
+const P = [
+ {n:1, x:19.3, y:48.7, w:8.9, h:4.6, t:"Temp probe (DS18B20)", h3:"Waterproof temperature probe (DS18B20)",
+  what:"The steel tip reads soil temperature. The long black cable ends in 3 bare wires (top left).",
+  go:"Push the steel tip into the soil. Its 3 wires go into the green screw terminal on #8."},
+ {n:2, below:true, x:4.4, y:36.5, w:4.3, h:5.2, t:"Bare wire ends", h3:"Temp probe wire ends",
+  what:"Red = power, black = ground, yellow = data.",
+  go:"Screw them into #8: red → VCC, black → GND, yellow → DAT."},
+ {n:3, x:33, y:38.7, w:11.5, h:25.3, t:"2 resistors", h3:"2 resistors (came with the temp probe)",
+  what:"Blue-body resistors, most likely the 4.7k pull-ups for the temp probe.",
+  go:"You probably don't need them: the #8 adapter board usually has one built in.", al:"Not verified: I can't read the color bands from the photo."},
+ {n:4, x:44.6, y:36.2, w:3, h:4.3, t:"White plug", h3:"Soil probe cable: white plug end",
+  what:"3-pin JST plug that clicks into the top of the soil probe (#5).",
+  go:"Plug it into the white socket on top of #5."},
+ {n:5, x:62.3, y:37.3, w:10.3, h:31.3, t:"Soil moisture probe", h3:"Capacitive soil moisture probe v1.2",
+  what:"The main sensor: how wet the soil is. No metal touches the soil, so it doesn't rust.",
+  go:"Push it into the soil only up to the white line. The top part with the chips stays dry.", al:"Check the small chip: TLC555 runs on 3.3 V, NE555 needs 5 V."},
+ {n:6, x:51.3, y:57.9, w:3, h:4.5, t:"Black end", h3:"Soil probe cable: black female end",
+  what:"The other end of the probe cable: 3 holes (black GND, red VCC, yellow AOUT).",
+  go:"Push an F-M jumper into each hole, then the male ends go to the ESP32: red → 3V3, black → GND, yellow → pin 32."},
+ {n:7, x:72, y:40, w:7.4, h:16, t:"Relay (pump switch)", h3:"1-channel relay module",
+  what:"An electric switch the ESP32 flips to turn the pump on. Blue screw terminals, no header pins.",
+  go:"Bottom terminal: DC+ → 5V, DC- → GND, IN → ESP32 pin 26. Top terminal: COM ← 5V from the power module, NO → pump red wire.",
+  al:"It has a Low/High trigger jumper (the small black cap). That's our fix if it won't switch off at 3.3 V: move it to High.", warn:true},
+ {n:8, below:true, x:82.8, y:45.7, w:7, h:10, t:"Temp probe adapter", h3:"Temp probe adapter board",
+  what:"Green screw terminal for the probe's bare wires, and 3 pins (DAT VCC GND) to plug jumpers onto. Usually has the pull-up resistor built in.",
+  go:"DAT → ESP32 pin 4, VCC → 3V3, GND → GND."},
+ {n:9, x:81.3, y:30.7, w:14, h:15, t:"Adapter cable", h3:"3-wire cable (female ends)",
+  what:"Fits onto the adapter's 3 pins (#8).",
+  go:"Plug it onto #8's pins; its other end needs male jumpers to reach the breadboard."},
+ {n:10, x:1.4, y:3, w:7, h:26, t:"? bag", h3:"Bag, top left: can't tell",
+  what:"Only half of it is in the photo.", go:"Take a close photo and I'll ID it.", unk:true},
+];
+const W = [
+ {n:11, x:29.5, y:26.7, w:68.5, h:30.7, t:"Male-male jumpers", h3:"Male-male jumper wires (65)",
+  what:"Metal pins on BOTH ends. For breadboard-to-breadboard hops only.",
+  go:"Use these once the ESP32 sits on the breadboard, e.g. breadboard rail to breadboard row."},
+ {n:12, below:true, x:5, y:66, w:10.5, h:18, t:"F-M: hole end", h3:"F-M ribbon (20): the HOLE end",
+  what:"Black plastic end with a hole (female). Slides ONTO a metal pin.",
+  go:"This end goes onto the ESP32's pins and the relay/adapter pins."},
+ {n:13, below:true, x:77.5, y:56, w:11.5, h:17, t:"F-M: pin end", h3:"F-M ribbon (20): the PIN end",
+  what:"End with a metal pin (male). Pokes INTO a hole.",
+  go:"This end goes into the soil probe cable's black end (#6) or the breadboard."},
+ {n:14, x:0.6, y:48, w:5, h:14, t:"USB-C", h3:"USB-C cable",
+  what:"Connects the ESP32 to the laptop.", go:"Plug it in only after the wiring is checked.",
+  al:"It must be a DATA cable. A charge-only cable powers the board but the laptop won't see it."},
+];
+function render(photo, list, parts) {
+parts.forEach(p => {
+  const b = document.createElement('div'); b.className = 'box' + (p.warn ? ' warn' : '') + (p.unk ? ' unk' : '') + (p.below ? ' below' : '');
+  Object.assign(b.style, {left: p.x + '%', top: p.y + '%', width: p.w + '%', height: p.h + '%'});
+  b.innerHTML = `<span class="n">${p.n}</span><span class="t">${p.t}</span>`; photo.appendChild(b);
+  const c = document.createElement('div'); c.className = 'card' + (p.warn ? ' warn' : '') + (p.unk ? ' unk' : '');
+  c.innerHTML = `<h3><b>${p.n}</b>${p.h3}</h3><p>${p.what}</p><p class="go">→ ${p.go}</p>${p.al ? `<p class="al">⚠ ${p.al}</p>` : ''}`; list.appendChild(c);
+  const on = v => { b.classList.toggle('on', v); c.classList.toggle('on', v); };
+  [b, c].forEach(el => { el.addEventListener('mouseenter', () => on(true)); el.addEventListener('mouseleave', () => on(false));
+    el.addEventListener('click', () => (el === b ? c : b).scrollIntoView({behavior: 'smooth', block: 'center'})); });
+});
+}
+render(document.getElementById('photo'), document.getElementById('list'), P);
+render(document.getElementById('photo2'), document.getElementById('list2'), W);
+</script>
+</body>
+</html>

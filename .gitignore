@@ -1,0 +1,27 @@
+# never upload
+.venv/
+__pycache__/
+*.pyc
+.env
+*.env
+node_modules/
+# browser profile (cookies)
+wokwi/chrome-cdp-*/
+# binaries / other people's code
+tools/arduino-cli/
+winners-2025/
+# 615 MB model: it lives on Hugging Face (chinchop/farmhand-laya, private)
+farm-hand/laya/model/
+# local databases
+*.db
+*.db-journal
+tools/*.tgz
+# big files live on the GitHub Release (videos-and-audio.zip, design-frames.zip, test-captures.zip)
+*.mp4
+*.webm
+*.m4a
+*.mov
+farm-hand/design/frames/
+farm-hand/design/frames_v1/
+farm-hand/laptop/data/rec/*.png
+farm-hand/laptop/data/rec/*.jpg

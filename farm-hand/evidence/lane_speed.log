@@ -1,0 +1,12 @@
+Root node t was cancelled.
+gemini-3.8-flash: FAIL after 90.0 s TimeoutError()
+gemini-3.7-flash: 71.1 s -> 'The soil moisture level for pot A is 37%.'
+gemini-3-flash-preview: 17.5 s -> 'The soil moisture for pot A is 37%.'
+gemini-3.6-flash: 7.0 s -> 'The soil moisture for pot A is 37%.'
+gemini-3.6-flash: FAIL after 90.0 s TimeoutError()
+gemini-3.6-flash: 64.4 s -> 'The soil moisture level for pot A is 37%.'
+
+plain chat call, no tools, gemini-3.6-flash, curl total time (s), 2026-09-22 21:12:10:
+9.092090
+1.062400
+3.521723

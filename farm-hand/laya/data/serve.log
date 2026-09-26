@@ -1,0 +1,2 @@
+C:\Users\User\AppData\Local\Programs\Python\Python311\Lib\site-packages\triton\windows_utils.py:440: UserWarning: Failed to find CUDA.
+  warnings.warn("Failed to find CUDA.")

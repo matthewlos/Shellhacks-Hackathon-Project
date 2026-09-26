@@ -1,0 +1,32 @@
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+Fetching 7 files:  86%|████████▌ | 6/7 [00:00<00:00, 26.16it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 27.52it/s]
+28457 training items (after wait_rain x4), 1000 held out for calibration
+  epoch 1/3 step 200 loss 0.5138 reward 0.147 (38 s)
+  epoch 1/3 step 400 loss 0.7129 reward -0.002 (74 s)
+  epoch 1/3 step 600 loss 0.1060 reward 0.259 (110 s)
+  epoch 1/3 step 800 loss -0.0568 reward 0.371 (146 s)
+  epoch 1/3 step 1000 loss 0.2913 reward 0.270 (182 s)
+  epoch 1/3 step 1200 loss 0.2070 reward 0.400 (219 s)
+  epoch 1/3 step 1400 loss 0.5525 reward 0.052 (255 s)
+  epoch 1/3 step 1600 loss 0.2967 reward 0.194 (291 s)
+=== epoch 1/3 done, avg loss 0.3852, 324 s
+  epoch 2/3 step 200 loss -0.1772 reward 0.522 (360 s)
+  epoch 2/3 step 400 loss 0.3061 reward 0.397 (396 s)
+  epoch 2/3 step 600 loss -0.0033 reward 0.266 (432 s)
+  epoch 2/3 step 800 loss 0.0270 reward 0.377 (469 s)
+  epoch 2/3 step 1000 loss 0.4207 reward 0.277 (505 s)
+  epoch 2/3 step 1200 loss 0.2867 reward 0.314 (541 s)
+  epoch 2/3 step 1400 loss -0.0017 reward 0.506 (578 s)
+  epoch 2/3 step 1600 loss 0.4224 reward 0.399 (614 s)
+=== epoch 2/3 done, avg loss 0.2691, 646 s
+  epoch 3/3 step 200 loss 0.3465 reward 0.286 (682 s)
+  epoch 3/3 step 400 loss 0.6372 reward 0.212 (719 s)
+  epoch 3/3 step 600 loss 0.2549 reward 0.500 (755 s)
+  epoch 3/3 step 800 loss 0.1548 reward 0.546 (791 s)
+  epoch 3/3 step 1000 loss 0.3636 reward 0.232 (827 s)
+  epoch 3/3 step 1200 loss 0.2162 reward 0.563 (863 s)
+  epoch 3/3 step 1400 loss 0.2504 reward 0.342 (899 s)
+  epoch 3/3 step 1600 loss 0.3931 reward 0.452 (935 s)
+=== epoch 3/3 done, avg loss 0.2584, 968 s
+calibration slice: accuracy 0.941, temperature 1.257
+saved C:\Users\User\Documents\code\shellhacks2025\farm-hand\laya\model\farmhand-laya total 972 s

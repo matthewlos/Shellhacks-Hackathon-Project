@@ -1,0 +1,186 @@
+<title>Farm Hand Hardware</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#eef1f4; --panel:#fbfcfd; --wash:#e4e9ee; --line:rgba(14,22,33,.1);
+  --ink:#0e1621; --ink-2:#3d4a59; --muted:#5b6674;
+  --ai:#1f64b8; --ai-wash:rgba(31,100,184,.1); --warn:#8a5a00; --warn-wash:rgba(154,106,0,.1);
+  --dot-ring:#ffffff;
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark; --ground:#12161b; --panel:#1a2027; --wash:#222a33; --line:rgba(255,255,255,.1);
+  --ink:#eef2f6; --ink-2:#b8c2cd; --muted:#8e99a6; --ai:#6fa6ea; --ai-wash:rgba(111,166,234,.14);
+  --warn:#e2b04a; --warn-wash:rgba(226,176,74,.12); --dot-ring:#12161b;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --ground:#12161b; --panel:#1a2027; --wash:#222a33; --line:rgba(255,255,255,.1);
+  --ink:#eef2f6; --ink-2:#b8c2cd; --muted:#8e99a6; --ai:#6fa6ea; --ai-wash:rgba(111,166,234,.14);
+  --warn:#e2b04a; --warn-wash:rgba(226,176,74,.12); --dot-ring:#12161b;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;padding-inline:clamp(16px,4vw,40px);padding-block:28px 48px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:28px}
+header{display:grid;gap:6px}
+h1{margin:0;font:700 clamp(1.8rem,4vw,2.6rem)/1.05 var(--f-display);letter-spacing:-.025em;text-wrap:balance}
+.lede{margin:0;color:var(--ink-2);max-width:62ch}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+figure{margin:0;position:relative;border-radius:20px;overflow:hidden;background:#eef1f4;border:1px solid var(--line)}
+figure img{display:block;width:100%;height:auto}
+figcaption{position:absolute;left:14px;bottom:12px;font-size:12.5px;color:#3d4a59;background:rgba(251,252,253,.88);padding:3px 9px;border-radius:99px}
+.spot{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center;border-radius:50%}
+.spot i{width:22px;height:22px;border-radius:50%;background:var(--ai);border:3px solid #fff;box-shadow:0 2px 8px rgba(14,22,33,.3);transition:transform .2s cubic-bezier(.2,0,0,1)}
+.spot::before{content:"";position:absolute;inset:6px;border-radius:50%;border:2px solid var(--ai);opacity:.0}
+.spot:hover i{transform:scale(1.15)}
+.spot[aria-pressed="true"] i{background:#0e1621;transform:scale(1.2)}
+.spot:focus-visible{outline:3px solid var(--ai);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.spot[aria-pressed="false"]::before{animation:ping 2.4s cubic-bezier(.2,0,0,1) infinite}}
+@keyframes ping{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;display:grid;gap:16px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+.card .kind{font-size:13px;font-weight:700;color:var(--ai)}
+.card h2{margin:0;font:700 1.75rem/1.1 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.card p{margin:0;color:var(--ink-2)}
+.facts{display:grid;gap:12px;margin:0}
+.facts div{display:grid;gap:2px}
+.facts dt{font-size:13px;font-weight:700;color:var(--muted)}
+.facts dd{margin:0}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:.94em}
+.proof{background:var(--ai-wash);border-radius:12px;padding:12px 14px;font-size:15px}
+.proof b{display:block;font-size:13px;color:var(--ai);margin-bottom:2px}
+.watch{background:var(--warn-wash);border-radius:12px;padding:12px 14px;font-size:15px;color:var(--ink)}
+.watch b{display:block;font-size:13px;color:var(--warn);margin-bottom:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font:600 14px var(--f-body);color:var(--ink-2);background:var(--panel);border:1px solid var(--line);border-radius:99px;height:40px;padding:0 16px;cursor:pointer}
+.chips button:hover{color:var(--ink);border-color:var(--ai)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.chips button:focus-visible{outline:3px solid var(--ai);outline-offset:2px}
+.extra{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.extra section{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;display:grid;gap:6px}
+.extra h3{margin:0;font:700 1.1rem var(--f-display)}
+.extra p{margin:0;color:var(--ink-2);font-size:15px}
+.tag{justify-self:start;font-size:12px;font-weight:700;color:var(--muted);background:var(--wash);border-radius:6px;padding:2px 8px}
+footer{color:var(--muted);font-size:14px}
+@media (max-width:860px){.stage{grid-template-columns:1fr}.card{position:static}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Farm Hand hardware, part by part</h1>
+    <p class="lede">The real build, shown on its 3D model. Tap a dot or a name to see what the part does, where it plugs in, and what it did in testing on Sep 23.</p>
+  </header>
+
+  <div class="stage">
+    <figure id="fig">
+      <img src="__IMG__" alt="3D model of the Farm Hand build: a clear bin of soil with a moisture probe and a steel temperature probe, a pump in a cup, an ESP32 on a breadboard, and a relay" width="1460" height="800">
+      <figcaption>3D model, every part at its real size</figcaption>
+    </figure>
+    <article class="card" id="card" aria-live="polite"></article>
+  </div>
+
+  <div class="chips" id="chips" aria-label="All parts"></div>
+
+  <div class="extra">
+    <section>
+      <span class="tag">Not in the 3D model</span>
+      <h3>Transistor + 1K resistor</h3>
+      <p>A PN2222 on the breadboard. It lets the ESP32's weak 3.3 V pin click the 5 V relay. Without it the relay stuck on and never clicked.</p>
+    </section>
+    <section>
+      <span class="tag">Not in the 3D model</span>
+      <h3>Temp probe adapter</h3>
+      <p>Small board the temp probe screws into. It has the pull-up resistor built in, so no extra 4.7k is needed. The 3D model still shows that old 4.7k resistor.</p>
+    </section>
+    <section>
+      <span class="tag">Whole build</span>
+      <h3><span class="num">$72.94</span> in parts</h3>
+      <p>ESP32 3-pack, 5 moisture probes, 5 temp probes, 4 pumps, 4 relays and a starter kit, all from Amazon. Most of it is spares.</p>
+    </section>
+  </div>
+
+  <footer>Numbers are from the Sep 23 bring-up on the real board (PLAN.md sections 2 and 3). The pump's 20 ml a second is an estimate until it's measured with a cup.</footer>
+</div>
+
+<script>
+const PARTS = [
+  {id:"esp32", name:"ESP32 board", kind:"The brain", x:62.1, y:81.3,
+   what:"A small computer that reads both probes once a second and turns the pump on when the laptop says so.",
+   wired:"USB-C cable to the laptop, which powers it and carries the data.",
+   proof:"Real firmware read soil 44% and temp 26.1 °C, and ran a 10 s pour with no restart (uptime 14.0 s to 35.1 s).",
+   watch:"Use a data USB-C cable. A charge-only cable shows up as board not found."},
+  {id:"soil", name:"Soil moisture probe", kind:"Sensor", x:56.0, y:46.5,
+   what:"Measures how wet the soil is. It's capacitive, so no bare metal touches the soil and it doesn't rust.",
+   wired:"Signal to pin D32. Power from the 3.3 V line, never VIN.",
+   proof:"About 3400 raw in dry air and 1507 raw in water. A 10 s pour took the soil from 44% to 52%.",
+   watch:"Push it in only up to the line. The electronics on top have to stay dry."},
+  {id:"temp", name:"Soil temperature probe", kind:"Sensor", x:62.9, y:53.1,
+   what:"A waterproof steel rod (DS18B20) that reads the soil temperature.",
+   wired:"Screws into the adapter board, data to pin D4, power from 3.3 V.",
+   proof:"Read 24.88 °C at room temperature on its own, then 26.1 °C in the soil with the full firmware.",
+   watch:null},
+  {id:"relay", name:"Relay", kind:"Switch", x:82.2, y:81.3,
+   what:"An electric switch. The ESP32 flips it, and it turns the pump on and off.",
+   wired:"IN from the transistor. DC+ from VIN, DC- to ground, pump red on NO. Jumper set to L.",
+   proof:"Clicked every 2 s in the test, and the pump got water on every click.",
+   watch:"It needs the transistor. Wired straight to the 3.3 V pin it stuck ON."},
+  {id:"pump", name:"Mini pump in a cup", kind:"Water", x:9.2, y:38.6,
+   what:"A small submersible pump sitting in a cup of water. It pushes about 20 ml a second.",
+   wired:"Its own red wire to the relay's NO screw, black to the relay's DC- screw.",
+   proof:"The command P A 10000 ran for 10000 ms exactly. The chip caps any pour at 30 s.",
+   watch:"20 ml a second is an estimate. Time a pour into a measuring cup to get the real number."},
+  {id:"tube", name:"Tube", kind:"Water", x:30.0, y:20.9,
+   what:"Carries water from the pump over the rim to the soil.",
+   wired:"Clipped to the rim near the front, so the wet spot shows through the clear plastic.",
+   proof:null,
+   watch:"If the tube is pinched, the pump runs but the soil doesn't rise. Farm Hand catches that and stops."},
+  {id:"box", name:"Soil box", kind:"The pot", x:35.8, y:51.8,
+   what:"A clear Mainstays storage box filled about 9.5 cm deep with potting mix, standing in for a field.",
+   wired:"The probes sit against the front wall so judges can see them through the plastic.",
+   proof:null,
+   watch:"The box size in the 3D model (27 × 18 × 11 cm) is an estimate until it's measured."},
+  {id:"breadboard", name:"Breadboard", kind:"Wiring", x:37.9, y:81.3,
+   what:"Holds the small parts and joins wires without soldering.",
+   wired:"One row is the shared ground for 4 things: the ESP32, the transistor, the temp probe and the soil probe.",
+   proof:null,
+   watch:"One pin per hole. Two wires in one hole come loose."},
+  {id:"usb", name:"USB cable", kind:"Power", x:64.6, y:96.4,
+   what:"Runs the whole build off the laptop. No batteries and no wall adapter.",
+   wired:"ESP32 USB-C port to the laptop.",
+   proof:"Laptop USB held a full 10 s pour with the pump running, no brownout.",
+   watch:null},
+];
+
+const fig = document.getElementById('fig'), card = document.getElementById('card'), chips = document.getElementById('chips');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const numify = s => esc(s).replace(/(?<![A-Za-z\d.])(\d[\d.,]*\d|\d)(?![A-Za-z\d])/g, '<span class="num">$1</span>');
+
+PARTS.forEach(p => {
+  const b = document.createElement('button');
+  b.className = 'spot'; b.type = 'button'; b.dataset.id = p.id;
+  b.style.left = p.x + '%'; b.style.top = p.y + '%';
+  b.setAttribute('aria-label', p.name); b.setAttribute('aria-pressed', 'false');
+  b.innerHTML = '<i></i>';
+  b.onclick = () => pick(p.id);
+  fig.appendChild(b);
+  const c = document.createElement('button');
+  c.type = 'button'; c.dataset.id = p.id; c.textContent = p.name; c.setAttribute('aria-pressed', 'false');
+  c.onclick = () => pick(p.id);
+  chips.appendChild(c);
+});
+
+function pick(id) {
+  const p = PARTS.find(x => x.id === id);
+  document.querySelectorAll('[data-id]').forEach(el => el.setAttribute('aria-pressed', el.dataset.id === id ? 'true' : 'false'));
+  card.innerHTML = `<span class="kind">${esc(p.kind)}</span><h2>${esc(p.name)}</h2><p>${numify(p.what)}</p>
+    <dl class="facts"><div><dt>Plugged into</dt><dd>${numify(p.wired)}</dd></div></dl>
+    ${p.proof ? `<div class="proof"><b>Tested Sep 23</b>${numify(p.proof)}</div>` : ''}
+    ${p.watch ? `<div class="watch"><b>Watch out</b>${numify(p.watch)}</div>` : ''}`;
+  try { localStorage.setItem('fh-part', id); } catch (e) {}
+}
+let start = 'esp32';
+try { const s = localStorage.getItem('fh-part'); if (s && PARTS.some(p => p.id === s)) start = s; } catch (e) {}
+pick(start);
+</script>

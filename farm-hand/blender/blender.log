@@ -1,0 +1,264 @@
+Server thread started
+BlenderMCP server started on localhost:9876
+BlenderMCP addon registered
+Error accepting connection: [WinError 10038] An operation was attempted on something that is not a socket
+Server thread stopped
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+Server thread started
+BlenderMCP server started on localhost:9876
+BlenderMCP addon registered
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 501, in execute_code
+    exec(code, namespace)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "<string>", line 9, in <module>
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 228, in makedirs
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 329, in _execute_command_internal
+    result = handler(**params)
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 506, in execute_code
+    raise Exception(f"Code execution error: {str(e)}")
+Exception: Code execution error: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 501, in execute_code
+    exec(code, namespace)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "<string>", line 9, in <module>
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 218, in makedirs
+  File "<frozen os>", line 228, in makedirs
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 329, in _execute_command_internal
+    result = handler(**params)
+  File "C:\Users\User\AppData\Roaming\Blender Foundation\Blender\5.2\scripts\addons\blender_mcp_addon.py", line 506, in execute_code
+    raise Exception(f"Code execution error: {str(e)}")
+Exception: Code execution error: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+08:07.375  render           | Saved: 'C:\Users\User\Documents\code\shellhacks2025\farm-hand\blender\preview.png'
+15:15.485  render           | Saved: 'C:\Users\User\Documents\code\shellhacks2025\farm-hand\blender\preview.png'
+22:09.781  render           | Saved: 'C:\Users\User\Documents\code\shellhacks2025\farm-hand\blender\preview.png'
+17:37:07.860  blend            | Saved session recovery to "C:\Users\User\AppData\Local\Temp\quit.blend"
+Server is already running
+[farmhand] Blender MCP server started on 9876
+Connected to client: ('127.0.0.1', 60510)
+Client handler started
+Executing handler for execute_code
+Error in handler: Code execution error: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 54682)
+Client handler started
+Executing handler for execute_code
+Error in handler: Code execution error: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\Users\\User\\Documents\\code\\shellhacks2025\x0carm-hand'
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 64833)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 59338)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 58485)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 59506)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 57604)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 60096)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 58933)
+Client handler started
+Executing handler for execute_code
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 55153)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 52471)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 50351)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 54599)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 63093)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 63690)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 56250)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 52553)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 57306)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 55322)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 62596)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 51530)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 60412)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 59851)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 58375)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 52719)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 60476)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 61630)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 59168)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 63997)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 52501)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 50753)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 54916)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 56368)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Connected to client: ('127.0.0.1', 62640)
+Client handler started
+Executing handler for get_telemetry_consent
+Handler execution complete
+Client disconnected
+Client handler stopped
+Error accepting connection: [WinError 10038] An operation was attempted on something that is not a socket
+Server thread stopped
+BlenderMCP server stopped
+BlenderMCP addon unregistered
+
+Blender quit

@@ -1,0 +1,159 @@
+[15:44] Speaker 0: Are you gonna okay. Already removed your slides. So It's okay. I'm gonna start right now. So wait.
+
+[16:03] Speaker 0: So she's talking or not talking? No. No. Just for the I wasn't sure if we had to do the slider. It's that's a scary are we gonna be on the same Alright.
+
+[19:49] Speaker 1: Your support helps create opportunities for students to
+
+[19:52] Speaker 2: experiment, collaborate, and turn ideas into something real.
+
+[19:56] Speaker 1: I also want to recognize the people who have worked hard to make ShellHacks what it is today. They have helped build this hackathon, but beyond that, they've helped build a community, one that brings students together from across disciplines, universities, and countries. Can we please give another round of applause
+
+[20:26] Speaker 2: to our organization on campus? There's a lot of energy in here. That's good.
+
+[20:39] Speaker 1: The Shell Hacks has grown exponentially over the years,
+
+[20:42] Speaker 2: and tonight you're part of that evolution. For the next thirty six hours, you have an opportunity to do something that is at the heart of engineering and computing. You're gonna take an idea and make it real. You're gonna write code, you're gonna build applications, you're probably gonna drink some coffee, you'll design and solve problems, you're probably gonna have energy drinks, you'll probably be unsuccessful on the first try. Maybe the second try, maybe the third try,
+
+[21:40] Speaker 1: DDEs were sold everywhere. AI was rarely ever discussed. Now think from what the next ten years could have liked. We're gonna see new advanced manufacturing methods, IIT's Superion two fifty six platform. Think about that for a the moment, what that's going
+
+[23:11] Speaker 2: to mean for our students and our faculty and researchers at this institution. It's not just about having a powerful new computer on campus, it's going to be giving those faculty, researchers, and students direct access
+
+[24:23] Speaker 1: Arun Sarwath, he's the chair of the electrical and computer engineering department. He's also the chair of FIU's Quantum Committee. He's an expert on intelligent energy systems and smart grids, and he's already exploring how the quantum machine learning could improve energy forecasting, grid monitoring, anomaly detection, and decision making in an increasingly complex power system. Is working on approaches for training, recovering, and optimizing quantum AI models. Direct access to quantum hardware gave researchers a platform to test and refine those approaches, helping lay the groundwork for more reliable and scalable quantum computing applications.
+
+[25:22] Speaker 1: And that's where AI and quantum computing can intersect. And at that intersection is where we're going to create opportunities where we'll just begin to understand. Why events like this matter so much. The future doesn't arrive fully formed. Someone has to build it.
+
+[26:05] Speaker 1: Someone has to ask questions, perhaps questions that nobody has asked before. Someone has to write that personal code to build a prototype. Someone has to look at a problem and say, is there a letter waiting? That person could be sitting right next to you tonight, to your left, to your right. That person could be you.
+
+[26:25] Speaker 1: So, for the next thirty six hours, I want you to experiment, be ambitious, build something you don't yet know how to build, find someone from another you have discipline to work with, build out a new network, talk to people, talk to those you don't presently know, learn something new, don't be afraid to fail, and the most important thing might not be the project that you submitted. It might be the confidence to know that you could build something that didn't exist before, and the friendships and comradery that you develop with these new people. FIU and our college, we want to give you the tools and the environment to succeed. Our partnership with IMQ is but one example, but advanced technology is one part of the story. You are the other part.
+
+[27:17] Speaker 1: The ideas you have, the questions you ask, the problems you work on and solve, the technologies you choose to create, that's what will determine what comes next. So shall I ask, this is your moment. In the next thirty six hours, you have the talent, the skills, and the technology, and about 1,200 people around you to all do the same types of work that you wanna do. Let's build something new. Be bold, be curious, be creative, build something that matters.
+
+[27:47] Speaker 1: And maybe, maybe, the idea that you start tonight will become one of those new technologies that we're talking about ten years from now. Thank you for giving me this opportunity to welcome you to this spectacular event. I'm incredibly excited to see what you fulfilled. Welcome to Shell Hacks and get happy.
+
+[28:13] Speaker 2: Thank you so much.
+
+[28:16] Speaker 3: Would you mind giving a selfie just for me?
+
+[28:18] Speaker 1: Actually, if you don't mind taking a picture. While I'm up here, I gotta get a shot. Yeah. Oh, shoot. Give me a moment.
+
+[28:32] Speaker 1: Hey. You better spin that around because I think it's looking at me. Have a great night. Thank you. Congratulations.
+
+[28:52] Speaker 1: Thank you.
+
+[28:54] Speaker 0: You. Thank you so much for your words. Next we also have Doctor. Ines Trier, which is the faculty sponsor for Ines Trier. Alright.
+
+[32:28] Speaker 3: How many of you are excited to be here? You guys can do better. How excited are you to be here?
+
+[32:38] Speaker 0: That's what I like to hear.
+
+[32:44] Speaker 3: Alright, everyone. Ten years of ShellHacks. No one in here should have been there from the first year unless you're an alum. And at most, four years of shell hacks for anyone who's been here running that long. And this is your first shell hacks.
+
+[33:02] Speaker 3: There's only three more to come if you're a freshman as well. So, ten years ago, which is a weird thing to think about and say, I myself and many of
+
+[33:15] Speaker 0: the folks here at the mall
+
+[33:17] Speaker 3: started the first ShellHacks. And we were just a small club. Right? We only knew how to put on Friday events. We were going every week to present new technologies like HTML and JavaScript and CSS.
+
+[33:34] Speaker 3: Because many students really didn't understand those really early fundamental things. And after my first year at FIU, I decided to go to many different hacker files. I went to Hack GT. I went to Swamp Hacks. I even went to one of them in Chicago, called Incom Hacks.
+
+[33:54] Speaker 3: And through all of that, it made me realize that there needed to be something like that here at FIU. Something here to serve the community. The people that I know left and right, they're always looking to learn, looking to build, looking to do something greater, but felt like they had nowhere to go, nowhere to ask to, no one to look at or look up at, because they had no idea where that community was. Where those people they wanted to be were from their local community. And through ShellHacks, through these past ten years, we've built a massive community.
+
+[34:35] Speaker 3: And through that, we have spawned in it. And in it is everything that ShellHacks is, was, and will be from that community perspective, but scale at more than just thirty six hours, more than just thirty six days, more than just thirty six months. The idea of in it is you start, you finish, you continue, but you are always a part of in it. And to explain more about this, I'd like you to pass it on.
+
+[37:11] Speaker 0: Awesome. Thank you, In It National. Alright. Let's get down in the weeds. I just gotta go through some logistical things for this event so that we can make sure it runs smoothly.
+
+[37:24] Speaker 0: First things first, this event is So to be able to communicate with all of you guys and keep you guys updated on announcements, whether it's food, whether your wave of food is ready to go, even for events like this, where you can keep up with us is through our ShellHacks Discord. If you haven't logged in to the Discord already, please make sure to scan the QR code. If it initially does not let you in, make sure to refresh status and that should work. Refresh status is important. Alright.
+
+[38:36] Speaker 0: This is important as well. WiFi is eduroam, and you log in with your university credentials. You need to pull it out, right? We're good? Alright.
+
+[38:47] Speaker 0: Eduroam university credentials. Oh, FIU students, you already know. You can log in It's a pretty it's a pretty loaded document. Okay? And it has everything that you guys need.
+
+[39:27] Speaker 0: Okay. So what's with the QR code? So this QR code in the hacker dashboard is basically how we will check you into all the events. So make sure let's say you're going to a workshop. Make sure to have your QR code ready and your badge ready.
+
+[39:42] Speaker 0: Okay? So that's how we keep track of all of you and make sure we're all connected. And just another heads up for questions. If you have a question or you're not sure what to do, hacker guide first, then schedule. And then if you're still not sure, please go through the chat first.
+
+[39:56] Speaker 0: Odds are somebody probably already answered your question. Awesome. Okay. As you guys know, hacking is going to begin tonight at 11PM, and Just letting you know. Okay.
+
+[40:37] Speaker 0: So so coming up right after the right after the ceremony, we'll have the sponsor fair. I know this is an event all of you guys are really excited about. So just a shout out to our title sponsor. It's our Student Government Association. Alright.
+
+[41:15] Speaker 0: Speaking of sponsors, let's have our first sponsor come on and speak with today. Let's welcome all Assurant to the stage. Thank you so much to Assurance. Alright. We have some more sponsors for you guys.
+
+[43:04] Speaker 0: Next up, we're going to have a talk from Waymo. Can Waymo come on? Thank you. Alright. Next, we're gonna have Sperry Tech coming up to the stage.
+
+[47:28] Speaker 0: Welcome. Thank you so much so much to Sperry Tech. Alright. And then next up, we have AWS coming on. Ready.
+
+[53:23] Speaker 0: Well, they're gonna have they had their workshop earlier, which I heard was packed. Alright, let's move on. Next we're gonna have Emily H coming up and out of the stage. Go, warm up, ladies and gentlemen.
+
+[53:45] Speaker 2: Alright. Alright. Hello, everyone. How are we doing? Alright.
+
+[53:50] Speaker 2: Alright. You're hyped. I'll take that. I'll take that. Alright.
+
+[53:54] Speaker 2: Let me go ahead and go to the next slide. We're reading off this a little bit. So alright. Major League hacking, home of the next billion software creators. So let me start off by introducing myself.
+
+[54:04] Speaker 2: Hello. My name is Ira Escobar. I'm gonna be one of your three representatives for Major League hacking this weekend. I'm super excited to be here, as well as the other two that are here. And this is my first time in Miami.
+
+[54:14] Speaker 2: I'm from Texas, so this is my first impression. So are we hype? Are we good? Miami? Alright.
+
+[54:21] Speaker 2: Alright. I heard Miami was known for their nightlife, so I'm assuming while y'all are hacking, there's gonna be party going on the same time, like you're having a bunch of fun while you're building. Good to see. Good to see. Some fun facts about me is I'm in my third year computer science at UT Dallas, and my team is South of Minona Joe, and I've attended hackathons in 15 plus states, and my favorite AI tool is VODCO.
+
+[54:42] Speaker 2: If you disagree I I like the moves. Like the moves. If you disagree with me, come talk to me. You're wrong. Alright.
+
+[54:48] Speaker 2: And now I'll introduce the other coaches. We're gonna have Christine here as well. They are a hackathon community manager, so a full timer MLH. Fantastic person. And some fun facts about them is they've studied linguistics and film in undergrad.
+
+[54:59] Speaker 2: They've been going to hackathons for over five plus years, and if you wanna come come chat AI news with them, please do so. Alright. Last but not least, we have Alberto, nicknamed Alfredo, but he's gonna be our third representative for the coach of Major League Hacking. And another thing is he's coming from Mexico. So if you are fluent in Spanish, he is fluent as well.
+
+[55:20] Speaker 2: So if you feel more comfortable talking to him in Spanish, please come talk to him for that if you ever need any help or advice. Some fun facts about him is he is a plant lover, photography enthusiast, passionate about coffee, and he was a mom with TV. You might be using it this weekend. Hey. I like it.
+
+[55:34] Speaker 2: It fits mom. Alright. That's good. And I'll try to keep it short because I know y'all are just waiting to talk to the sponsors. It's right after this.
+
+[55:42] Speaker 2: So everything you're gonna need this weekend is gonna be right here on this link. I recommend taking on your phone and taking a picture. We have a lot of prizes, a lot of partnerships coming, so a lot of opportunity. So this link is gonna have a lot of information for you. Anything you need this weekend, I'll give it a couple seconds.
+
+[55:56] Speaker 2: I see a lot of phones sitting. Alright. That's good. Moving on, we're just gonna give a quote here where we can say, you can't learn the skills to become a software creator in the classroom. And speaking from personal experience, since I'm also a computer science major, the way that the classes work, and I'm assuming it's the same for a lot of people, is it's very individualistic, where you're by yourself focusing on theory, mathematics, and just overall the stuff that if anyone's on an internship or worked in software, that's not how it is.
+
+[56:29] Speaker 2: You work on teams and it's a community. And I feel through Major League hacking, that is the experience you can get now to make it possible to feel that. And as you can see here, we have some things that Emily's taught me skills that set me apart from my peers. Everybody And being here at this fantastic event, you are now part of the Hackathon community. So congratulations.
+
+[56:50] Speaker 2: Well, that's good. And then a little fun fact now for the world's largest developer community, nearly 15% of all software engineers got their start through our community and through hackathons, internship, and content and more. Emilage helps you learn the skills and technologies you need for your career. So I'm very glad for everybody to be here. Now what are we actually doing this weekend?
+
+[57:09] Speaker 2: Here's gonna be another general sports that you can take a picture of. It's that gonna be hackathon at rooce dot com we provide to help you work on your projects. Give it a couple more seconds. Alright. Alright.
+
+[57:24] Speaker 2: And now I'm gonna go ahead and talk about our partnership soon. But first, we're going to have an event tomorrow. If you think you can beat me, it's gonna be MLH cup stacking tomorrow, nine to 11PM, located in the Panther Pit. Panther Pit. And also, we're going to have the Emily's hard hardware lab.
+
+[57:41] Speaker 2: It's gonna be so we're gonna have this available for the weekend right after opening ceremony up until 09:30. We're gonna have it open. So please feel free to come talk to us, and you can check out some hardware. We'll also be available tomorrow in the morning and through Discord. You can ping us if you need it.
+
+[57:56] Speaker 2: And we'll show up tomorrow bright and early to make sure if you want hardware, you can come check it out. Now another workshop that we're gonna be have is hacking with GitHub Copilot. Here's gonna be some resources that you can see. And it's gonna be at 9AM to 10AM tomorrow on Saturday in Room 355. And it's gonna be over MCBs.
+
+[58:14] Speaker 2: It's a huge thing. I did one of my internships in it, so I highly recommend coming. There's gonna be a QR code. Feel free to take a picture. And the second workshop that I'm really just gonna be doing is the intro to Google AI studio, where we're able to talk about the resources that are there, as well as the tools that you can use through Gemini to help power your project.
+
+[58:31] Speaker 2: It's gonna be at one to 2PM on Saturday in Room 243. Couple seconds for the QR code for any pictures. Alright. And another incentive to come to the workshops is we are going to be having the 2027 season mascot suits and the limited edition. So if you want a chance to win a shirt, make sure to pop out.
+
+[58:52] Speaker 2: And then again, just one more time for anybody who didn't get it, hacked up moh.com for all the resources you need and to be able to see all the amazing prizes we're gonna have. Couple more seconds. And now to go ahead and talk about our partnerships that we're gonna have here. Every single one of these is gonna have a prize, which you'll be able to see on the screen. And for these partnerships, there's a total of eight of them for ShellHacks this year.
+
+[59:14] Speaker 2: You can choose to do all of them, none of them, or a couple of them, whatever you prefer. They're all opt in. So the first one is gonna be Google Cloud. So unlocking your AI superpowers with Google Gemini using their API key, using Eleven Labs to add voice to your AI chats. It's gonna be the best use of DigitalOcean, so build and grow in the cloud.
+
+[59:32] Speaker 2: The best use of Tiger Data to supercharge your hackathon project. Best use Solana to use Web three and blockchain. Best use of Snowflake API to turn big data into big ideas. And then the best domain from GoDaddy registry, and you can we have cards that were handed out at beginning of the event. If you didn't get one, let me know, and it gives you a free domain for a year.
+
+[59:55] Speaker 2: And then the best use of MongoDB Atlas as well. And then, I know I went through those pretty quickly, but if you need to see those again, it's gonna be right here at moh.link/shellacs. Alright. Now I wanna do a quick demo real quick. So I'm gonna let this video play.
+
+[60:13] Speaker 2: I'm just gonna take a step back and let it work its magic. So it's gonna be a sped up video. The real time around is about five minutes to let it work its magic, but I'm just gonna give some description for it. So this is gonna be a Python project. We have a markup here that's basically giving instructions to use Flask, a Gemini API key, and then n rocks deploy.
+
+[60:30] Speaker 2: So we have a virtual environment that is spinning up, and through the terminal, we're able to see that we all we did through the client chat, which is a hard assert for a API key, we're using Gemini for this example, is we told it to follow the instructions that we gave it in the markdown. And what it's doing is it's filling up the code, creating the Python files, creating the CSS to make it look good, JavaScript and building in the template, pulling from the EMV for the API key to make requests, and then setting up a chatbot for us. And the goal of this presentation is not to show like, wow, this is the pinnacle of what you can do, but to show how easy and how quickly you're able to set up a project just from one prompt. So running this here, we're gonna be able to see that very quickly as we go. You're checking a couple more things through the terminal commands running.
+
+[61:12] Speaker 2: It's also running on the client harness, so we're able to see exactly what's happening. It's deploying to n broc. And then if you wait a couple more seconds, I might skip ahead just for time. We'll see here that this actual website oopsies. I like it back.
+
+[61:30] Speaker 2: Let me do slideshow. No worries. This is actually deployable. And I really wanted to show this page for a little longer is because this mla.link/shellhacks dash demo is going to be a deployed chatbot that you can use to to see how it works and and it's implemented. It's it's on the web.
+
+[61:48] Speaker 2: It's deployed to the cloud. And the project itself took five minutes. So at a hackathon where you have over thirty six hours, I know you're gonna build amazing things. Yeah. Yeah.
+
+[61:59] Speaker 2: Alright. And now on a serious note, I'm super excited to be here as well as the other representatives, but MLH is a safe space, and we want this hackathon to also be a safe space. So what that means is you being here, you automatically admit to accepting the MLH code of conduct. We want everyone to have as much fun as possible, and to do that, we want it be a safe space. So please make sure that you just it's the common logic, common sense.
+
+[62:24] Speaker 2: Keep them to yourself, making sure to be kind to everybody. And if there's ever any issue or something that comes up, please feel free to come talk to me or any of the representatives from MLH here. And if you're not comfortable with that either, we have an email here for incidents at MLH io or a phone number that you can call for help. Nonetheless, I'm not really stressed about it. So many amazing amazing people here that I've already met.
+
+[62:44] Speaker 2: And I'm just super excited to talk to hopefully everybody here. If you you'd memorize my face. I hope you come talk to me. And yeah, that's the Major League hacking. Enjoy your hackathon.
+
+[63:00] Speaker 0: The Major League is amazing. Please be sure to check them out. Alright. And we also just wanna take this moment to say thank you to all the community partners. It's not just about the sponsors, but there's a lot of people in the local community who have helped spread the word about ShellHacks.
+
+[63:16] Speaker 0: So I just wanna give a moment to give them a big thank you. Okay. I kinda mentioned this before, but if you have any questions, feel free to reach out to the organizing team. You can ask in the q and a chat of the Discord or create a private ticket in Hashtag support in the Discord. Gonna be choosing one lucky winner.
+
+[64:06] Speaker 0: So here's our social media. We have our Instagram on LinkedIn. So feel free to follow it along the weekend so you can keep up with it and and kind of see what the event looks like for some of the other hours. Alright. Let's get into Verizon's.
+
+[64:22] Speaker 0: So you have been active in four. You can get that just by registering. One lucky winner and the iPad from the social media. For the best

@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "author": "Dechante",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "soilA",
+      "top": 260,
+      "left": -260,
+      "attrs": {},
+      "rotate": 90
+    }
+  ],
+  "connections": [
+    [
+      "soilA:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "h-30",
+        "*",
+        "h-20"
+      ]
+    ],
+    [
+      "soilA:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "h-50",
+        "*",
+        "h-35"
+      ]
+    ],
+    [
+      "soilA:SIG",
+      "esp:32",
+      "gold",
+      [
+        "h-40",
+        "*",
+        "h-10"
+      ]
+    ]
+  ],
+  "dependencies": {}
+}

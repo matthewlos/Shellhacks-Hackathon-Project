@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Grass · Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<style>
+:root{
+  color-scheme: dark;
+  --ground:#0a0e13; --surface:#131a22; --surface-2:#19222c; --ink:#edf2f7; --ink-2:#b3bec9; --muted:#8c98a5;
+  --grid:#222b35; --axis:#38434f; --hair:rgba(237,242,247,.11);
+  --bt:#3987e5; --live:#d95926; --bt-wash:rgba(57,135,229,.15); --live-wash:rgba(217,89,38,.16);
+  --good:#0ca30c; --bad:#d03b3b; --warn:#fab219;
+  --good-wash:rgba(12,163,12,.20); --bad-wash:rgba(208,59,59,.22); --warn-wash:rgba(250,178,25,.16);
+  --col-wash:rgba(237,242,247,.07);
+  --glass:rgba(13,19,26,.72);
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body)}
+.mono{font-family:var(--f-mono)}
+.eyebrow{font:500 .66rem/1.2 var(--f-mono);text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+svg.i{width:18px;height:18px;flex:none}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--axis);flex:none;display:inline-block}
+.dot.good{background:var(--good)} .dot.bad{background:var(--bad)} .dot.warn{background:var(--warn)} .dot.bt{background:var(--bt)}
+.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(12,163,12,.6)}50%{box-shadow:0 0 0 7px rgba(12,163,12,0)}}
+
+.stage{position:relative;height:100vh;min-height:720px;overflow:hidden;background:radial-gradient(90% 70% at 50% 35%,#16212c 0%,#0a0e13 70%)}
+.stage canvas{position:absolute;inset:0;display:block}
+.glass{background:var(--glass);border:1px solid var(--hair);border-radius:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ov{position:absolute;z-index:2}
+
+.top{top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+.top > *{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:10px 14px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--bt-wash);color:var(--bt);display:grid;place-items:center}
+.brand h1{font:700 1.35rem/1 var(--f-display);margin:0;letter-spacing:-.01em}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;font:500 .74rem/1 var(--f-mono);color:var(--ink-2)}
+.chip svg{width:14px;height:14px}
+
+.banner{top:84px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:10px 16px;max-width:min(640px,90vw)}
+.act{font:700 .78rem/1 var(--f-mono);letter-spacing:.08em;padding:7px 11px;border-radius:999px;text-transform:uppercase}
+.act.water{background:var(--bt);color:#fff} .act.wait{background:var(--warn);color:#241a00} .act.none{background:var(--col-wash);color:var(--muted)}
+.banner .s{font:700 1rem/1.3 var(--f-body)}
+
+.rail{left:16px;top:150px;width:196px;padding:12px;display:grid;gap:6px}
+.ag{display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:center;padding:6px;border-radius:10px;transition:background .25s}
+.ag .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--col-wash);color:var(--ink-2);transition:all .25s}
+.ag .n{font:700 .84rem/1.15 var(--f-body)} .ag .w{font:500 .66rem/1.3 var(--f-mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag.on{background:var(--good-wash)} .ag.on .ic{background:var(--good);color:#fff;box-shadow:0 0 16px rgba(12,163,12,.7)}
+.ag.bad{background:var(--bad-wash)} .ag.bad .ic{background:var(--bad);color:#fff}
+.ag.warn .ic{background:var(--warn);color:#241a00}
+.par{border-left:2px dashed var(--axis);margin-left:22px;padding-left:8px;display:grid;gap:4px}
+.loop{font:600 .62rem/1 var(--f-mono);color:var(--bt);padding:4px 0 0 44px}
+
+.sigs{right:16px;top:150px;width:236px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sg{background:var(--col-wash);border-radius:10px;padding:9px 10px;display:grid;gap:3px;min-width:0}
+.sg .k{display:flex;align-items:center;gap:6px;font:500 .6rem/1 var(--f-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.sg .k svg{width:13px;height:13px}
+.sg .v{font:700 1.2rem/1.1 var(--f-body);white-space:nowrap}
+.sg.wide{grid-column:span 2}
+.shield{display:flex;align-items:center;gap:10px}
+.shield .big{font:700 1.5rem/1 var(--f-mono)}
+.gdots{display:flex;gap:4px;flex-wrap:wrap}
+.gdots .dot{width:10px;height:10px}
+
+.dock{left:16px;right:16px;bottom:16px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto;gap:12px;align-items:stretch}
+.dock > .glass{padding:12px 14px;min-width:0}
+.spark{width:100%;height:74px;display:block}
+.ledger{display:grid;gap:7px}
+.lrow{display:grid;grid-template-columns:18px 1fr 64px;gap:8px;align-items:center}
+.track{height:10px;background:var(--col-wash);border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px;transition:width .8s ease-out}
+.lrow .v{font:600 .8rem/1 var(--f-mono);text-align:right}
+.saved{display:flex;align-items:baseline;gap:8px}
+.saved .n{font:700 1.7rem/1 var(--f-mono);color:var(--good)}
+.btns{display:grid;gap:8px;align-content:center}
+button{font:700 .86rem/1 var(--f-body);border-radius:10px;border:1px solid transparent;padding:11px 14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+button svg{width:15px;height:15px}
+.b1{background:var(--bt);color:#fff} .b2{background:var(--col-wash);color:var(--ink);border-color:var(--hair)} .b3{background:var(--bad-wash);color:#ff8a8a}
+button:focus-visible,input:focus-visible{outline:2px solid var(--bt);outline-offset:2px}
+button:disabled{opacity:.6;cursor:progress}
+
+.tag3d{position:absolute;z-index:1;transform:translate(-50%,-50%);pointer-events:none;text-align:center;white-space:nowrap}
+.pct3d{font:700 2rem/1 var(--f-mono);text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.name3d{font:600 .66rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;margin-top:5px;display:flex;gap:6px;justify-content:center;align-items:center}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+.front3d{font:600 .68rem/1 var(--f-mono);padding:5px 8px;border-radius:999px;background:rgba(57,135,229,.9);color:#fff}
+.legend{left:50%;transform:translateX(-50%);top:138px;display:flex;align-items:center;gap:10px;padding:7px 12px;font:500 .66rem/1 var(--f-mono);color:var(--muted)}
+.grad{width:120px;height:8px;border-radius:999px;background:linear-gradient(90deg,#c9a26b,#6b4a2b,#2e1f12)}
+
+.hood{max-width:1320px;margin:0 auto;padding:28px 16px 56px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:14px;padding:16px;min-width:0}
+.card h2{font:700 1rem/1.2 var(--f-display);margin:2px 0 10px}
+.trace{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
+.trace li{display:grid;grid-template-columns:54px 84px 1fr;gap:8px;padding:6px 2px;border-bottom:1px solid var(--hair);font-size:.8rem}
+.trace .t{font:500 .7rem/1.5 var(--f-mono);color:var(--muted)} .trace .a{font:600 .7rem/1.5 var(--f-mono);color:var(--ink-2)}
+.trace li.good .a{color:var(--good)} .trace li.bad .a{color:#ff8a8a} .trace li.warn .a{color:var(--warn)}
+.gl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.gl li{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:center;background:var(--surface-2);border-radius:9px;padding:8px 10px}
+.gl .r{font-weight:600;font-size:.84rem} .gl .d{font:500 .68rem/1.3 var(--f-mono);color:var(--muted)}
+.chat{display:flex;gap:6px} .chat input{flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--hair);border-radius:9px;color:var(--ink);padding:10px;font:.95rem var(--f-body)}
+.qs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.qs button{font:500 .7rem/1 var(--f-mono);padding:7px 9px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--hair)}
+.answer{margin-top:10px;padding:10px 12px;border-radius:9px;background:var(--surface-2);font-size:.9rem;color:var(--ink-2);min-height:44px}
+table{width:100%;border-collapse:collapse;font:500 .72rem/1.3 var(--f-mono)} td,th{padding:6px;border-bottom:1px solid var(--hair);text-align:left} th{color:var(--muted);font-weight:500;text-transform:uppercase;font-size:.6rem;letter-spacing:.07em}
+.hood .span2{grid-column:span 2}
+footer{max-width:1320px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font:500 .7rem/1.6 var(--f-mono)}
+
+@media (max-width:1100px){.rail{width:64px;padding:8px}.ag{grid-template-columns:34px}.ag > div:not(.ic){display:none}.par{border:0;margin:0;padding:0}.loop,.rail .eyebrow{display:none}
+  .sigs{width:180px}.hood{grid-template-columns:1fr}.hood .span2{grid-column:auto}}
+@media (max-width:700px){
+  .stage{height:auto;min-height:0;display:flex;flex-direction:column;gap:10px;padding:12px}
+  .stage canvas{position:relative;height:430px!important;order:2;border-radius:14px}
+  .ov{position:relative;inset:auto!important;transform:none!important;width:auto!important;max-width:none}
+  .top{order:0;flex-direction:column}.chips{justify-content:flex-start}
+  .banner{order:1}.rail{order:3;display:flex;flex-wrap:wrap;gap:6px}.par{display:contents}
+  .sigs{order:4}.dock{order:5;grid-template-columns:1fr}.legend{order:2;align-self:center;flex-wrap:wrap}
+  .tag3d{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M16 14v6M8 14v6M12 16v6"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></symbol>
+  <symbol id="i-memory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></symbol>
+  <symbol id="i-critic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3M8 11h6"/></symbol>
+  <symbol id="i-pump" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-probe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+</svg>
+
+<section class="stage" id="stage">
+  <div class="ov top">
+    <div class="glass brand">
+      <div class="logo"><svg class="i"><use href="#i-leaf"/></svg></div>
+      <div><div class="eyebrow">ShellHacks · autonomous irrigation</div><h1>Prompt Grass</h1></div>
+    </div>
+    <div class="chips">
+      <span class="chip glass"><span class="dot" id="modeDot"></span><span id="mode">…</span></span>
+      <span class="chip glass"><svg><use href="#i-cpu"/></svg><span id="brainName">–</span></span>
+      <span class="chip glass"><svg><use href="#i-sun"/></svg><span id="droughtChip">–</span></span>
+      <span class="chip glass"><svg><use href="#i-clock"/></svg><span id="nextChip">–</span></span>
+    </div>
+  </div>
+
+  <div class="ov glass banner"><span class="act none" id="act">–</span><span class="s" id="decision">waiting for the first check</span></div>
+
+  <div class="ov glass rail">
+    <div class="eyebrow" style="padding:0 4px 4px">Agent team · Google ADK</div>
+    <div class="ag" data-k="sensors"><div class="ic"><svg class="i"><use href="#i-probe"/></svg></div><div><div class="n">Probes</div><div class="w" id="w-sensors">1 Hz</div></div></div>
+    <div class="ag" data-k="predictor"><div class="ic"><svg class="i"><use href="#i-trend"/></svg></div><div><div class="n">Dry-time model</div><div class="w" id="w-predictor">XGBoost</div></div></div>
+    <div class="par">
+      <div class="ag" data-k="weather_agent"><div class="ic"><svg class="i"><use href="#i-cloud"/></svg></div><div><div class="n">Weather</div><div class="w" id="w-weather_agent">idle</div></div></div>
+      <div class="ag" data-k="soil_agent"><div class="ic"><svg class="i"><use href="#i-sprout"/></svg></div><div><div class="n">Soil</div><div class="w" id="w-soil_agent">idle</div></div></div>
+      <div class="ag" data-k="memory_agent"><div class="ic"><svg class="i"><use href="#i-memory"/></svg></div><div><div class="n">Memory</div><div class="w" id="w-memory_agent">idle</div></div></div>
+    </div>
+    <div class="ag" data-k="planner_agent"><div class="ic"><svg class="i"><use href="#i-plan"/></svg></div><div><div class="n">Planner</div><div class="w" id="w-planner_agent">idle</div></div></div>
+    <div class="ag" data-k="critic_agent"><div class="ic"><svg class="i"><use href="#i-critic"/></svg></div><div><div class="n">Critic</div><div class="w" id="w-critic_agent">idle</div></div></div>
+    <div class="loop">↻ loop · up to 3 rounds</div>
+    <div class="ag" data-k="guards"><div class="ic"><svg class="i"><use href="#i-shield"/></svg></div><div><div class="n">Safety</div><div class="w" id="w-guards">–</div></div></div>
+    <div class="ag" data-k="executor"><div class="ic"><svg class="i"><use href="#i-pump"/></svg></div><div><div class="n">Pump</div><div class="w" id="w-executor">idle</div></div></div>
+    <div class="ag" data-k="soak"><div class="ic"><svg class="i"><use href="#i-drop"/></svg></div><div><div class="n">Pour detector</div><div class="w" id="w-soak">idle</div></div></div>
+  </div>
+
+  <div class="ov glass sigs">
+    <div class="eyebrow" style="grid-column:span 2">What the agents see</div>
+    <div class="sg"><div class="k"><svg><use href="#i-trend"/></svg>dry in</div><div class="v mono" id="hrs">–</div></div>
+    <div class="sg"><div class="k"><svg><use href="#i-drop"/></svg>learned</div><div class="v mono" id="learn">–</div></div>
+    <div class="sg"><div class="k"><svg><use href="#i-rain"/></svg>rain 24h</div><div class="v mono" id="rain">–</div></div>
+    <div class="sg"><div class="k"><svg><use href="#i-sun"/></svg>ET₀ 24h</div><div class="v mono" id="et0">–</div></div>
+    <div class="sg"><div class="k"><svg><use href="#i-temp"/></svg>soil</div><div class="v mono" id="soilT">–</div></div>
+    <div class="sg"><div class="k"><svg><use href="#i-temp"/></svg>air</div><div class="v mono" id="airT">–</div></div>
+    <div class="sg wide"><div class="k"><svg><use href="#i-sun"/></svg>county drought</div><div class="v" id="drought">–</div></div>
+    <div class="sg wide shield"><svg class="i" style="width:28px;height:28px;color:var(--good)" id="shieldIc"><use href="#i-shield"/></svg><div><div class="big" id="gcount">–</div><div class="gdots" id="gdots"></div></div></div>
+  </div>
+
+  <div class="ov glass legend"><span>dry</span><span class="grad"></span><span>wet</span><span style="margin-left:8px">soil depth profile · modeled from probe + pour detector</span></div>
+
+  <div class="ov dock">
+    <div class="glass">
+      <div class="eyebrow" style="display:flex;gap:14px;flex-wrap:wrap"><span>moisture · 6 h</span><span style="color:var(--bt)">■ AI</span><span style="color:var(--live)">■ timer</span><span style="color:var(--good)">▭ healthy band</span></div>
+      <svg class="spark" id="spark" viewBox="0 0 600 74" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="glass ledger">
+      <div class="saved"><span class="n" id="saved">–</span><span class="eyebrow">water saved vs timer</span></div>
+      <div class="lrow"><span class="sw" style="background:var(--bt)"></span><div class="track"><div class="fill" id="barA" style="width:0;background:var(--bt)"></div></div><span class="v" id="mlA">–</span></div>
+      <div class="lrow"><span class="sw" style="background:var(--live)"></span><div class="track"><div class="fill" id="barB" style="width:0;background:var(--live)"></div></div><span class="v" id="mlB">–</span></div>
+    </div>
+    <div class="glass btns">
+      <button class="b1" id="runBtn"><svg><use href="#i-play"/></svg><span>Run agents</span></button>
+      <button class="b2" id="pourBtn"><svg><use href="#i-drop"/></svg>Test pour 5 s</button>
+      <button class="b3" id="stopBtn"><svg><use href="#i-stop"/></svg>Stop</button>
+    </div>
+  </div>
+
+  <div class="tag3d" id="tagA"><div class="pct3d" id="pA">–</div><div class="name3d"><span class="sw" style="background:var(--bt)"></span>Pot A · AI</div></div>
+  <div class="tag3d" id="tagB"><div class="pct3d" id="pB">–</div><div class="name3d"><span class="sw" style="background:var(--live)"></span>Pot B · timer</div></div>
+  <div class="tag3d" id="frontTag" hidden><div class="front3d" id="frontTxt">wetting front</div></div>
+</section>
+
+<section class="hood">
+  <div class="card"><div class="eyebrow">Live reasoning trace</div><h2>Every tool call</h2><ul class="trace" id="trace"><li><span class="t">–</span><span class="a">idle</span><span>run the agents</span></li></ul></div>
+  <div class="card"><div class="eyebrow">Safety interlocks</div><h2>Must all be green to pour</h2><ul class="gl" id="guards"></ul></div>
+  <div class="card"><div class="eyebrow">Ask the farm · Gemini + tools</div><h2>Talk to it</h2>
+    <div class="chat"><input id="q" placeholder="Why did you water pot A?"><button class="b1" id="askBtn" aria-label="Ask"><svg><use href="#i-chat"/></svg></button></div>
+    <div class="qs"><button data-q="Why did you water pot A?">why water?</button><button data-q="How much water has the timer pot used compared to pot A?">AI vs timer</button><button data-q="How bad is the drought here?">drought?</button></div>
+    <div class="answer" id="answer">Answers come from live tools, never guesses.</div></div>
+  <div class="card span2"><div class="eyebrow">Closed-loop pour detection</div><h2>What each pour did underground</h2>
+    <div style="overflow-x:auto"><table><thead><tr><th>time</th><th>pot</th><th>pumped</th><th>before → peak</th><th>rise</th><th>reached probe</th><th></th></tr></thead><tbody id="soaks"><tr><td colspan="7">no pours yet</td></tr></tbody></table></div></div>
+  <div class="card"><div class="eyebrow">Plant health</div><h2>Time in the healthy band</h2>
+    <div class="sg" style="margin-bottom:8px"><div class="k">healthy · A / B</div><div class="v mono" id="healthy">–</div></div>
+    <div class="sg"><div class="k">pours · A / B</div><div class="v mono" id="pours">–</div></div>
+    <div class="eyebrow" style="margin-top:10px" id="ledgerNote">–</div></div>
+</section>
+<footer>ESP32 serial @ 1 Hz · Open-Meteo forecast + ET₀ · US Drought Monitor · Google ADK (ParallelAgent + LoopAgent) · Gemini · XGBoost · <span id="uptime"></span></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const j = async (u, o) => (await fetch(u, o)).json();
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clock = ts => new Date(ts * 1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'}).replace(/\s(?=[AP]M)/, ' ');
+const AG = {weather_agent:'weather', soil_agent:'soil', memory_agent:'memory', planner_agent:'planner', critic_agent:'critic', executor:'pump', guards:'safety', farm_helper:'chat'};
+window.LIVE = {busy:{}, soak:{}};
+
+async function fast() {
+  let L; try { L = await j('/api/live'); } catch (e) { return; }
+  window.LIVE = L;
+  $('pA').textContent = L.a != null ? L.a.toFixed(1) + '%' : '–';
+  $('pB').textContent = L.b != null ? L.b.toFixed(1) + '%' : '–';
+  const s = L.soak || {};
+  document.querySelectorAll('.ag[data-k]').forEach(el => {
+    const k = el.dataset.k, what = (L.busy || {})[k];
+    let on = !!what;
+    if (k === 'executor') on = on || L.pumping !== 'none';
+    if (k === 'soak') on = s.phase === 'soaking';
+    if (k === 'sensors') on = false;
+    el.classList.toggle('on', on);
+    el.classList.toggle('bad', k === 'guards' && /^REFUSED/.test(what || ''));
+    el.classList.toggle('warn', k === 'critic_agent' && /^sent back/.test(what || ''));
+    const w = $('w-' + k); if (!w) return;
+    if (k === 'sensors') w.textContent = L.a != null ? `A ${L.a.toFixed(0)}% · B ${L.b.toFixed(0)}%` : 'no board';
+    else if (k === 'soak') w.textContent = s.phase === 'soaking' ? `${s.before?.toFixed(1)}→${s.now?.toFixed(1)}%` : (s.last ? `last +${s.last.rise_pct}%` : 'waiting');
+    else if (k === 'executor') w.textContent = L.pumping !== 'none' ? `pump ${L.pumping} ON` : (what || 'idle');
+    else if (what) w.textContent = what;
+  });
+}
+
+function spark(rows, cfg) {
+  const svg = $('spark'), W = 600, H = 74;
+  if (!rows.length) { svg.innerHTML = ''; return; }
+  const t0 = rows[0][0], t1 = rows.at(-1)[0] || t0 + 1, X = t => (t - t0) / Math.max(1, t1 - t0) * W, Y = v => H - v / 100 * H;
+  const path = col => rows.map((r, i) => `${i ? 'L' : 'M'}${X(r[0]).toFixed(1)},${Y(r[col] ?? 0).toFixed(1)}`).join('');
+  svg.innerHTML = `<rect x="0" y="${Y(cfg.wet)}" width="${W}" height="${Y(cfg.dry) - Y(cfg.wet)}" fill="rgba(12,163,12,.14)"/>` +
+    `<line x1="0" x2="${W}" y1="${Y(cfg.dry)}" y2="${Y(cfg.dry)}" stroke="#0ca30c" stroke-dasharray="4 4" stroke-width="1" vector-effect="non-scaling-stroke"/>` +
+    `<path d="${path(2)}" fill="none" stroke="#d95926" stroke-width="2" vector-effect="non-scaling-stroke"/>` +
+    `<path d="${path(1)}" fill="none" stroke="#3987e5" stroke-width="2.4" vector-effect="non-scaling-stroke"/>`;
+}
+
+async function slow() {
+  let s; try { s = await j('/api/state'); } catch (e) { $('mode').textContent = 'server offline'; return; }
+  $('mode').textContent = s.fake ? 'FAKE DATA' : (s.online ? 'LIVE BOARD' : 'OFFLINE');
+  $('modeDot').className = 'dot ' + (s.fake ? 'warn' : s.online ? 'good pulse' : 'bad');
+  $('brainName').textContent = s.brain;
+  $('nextChip').textContent = `next check ${Math.max(0, s.next_check_s)}s`;
+  const d = s.drought || {}, f = s.forecast || {}, L = s.latest || {}, p = s.prediction || {};
+  $('droughtChip').textContent = d.level ? `${(d.county || '').replace(' County', '')} ${d.level}` : '–';
+  $('drought').textContent = d.level ? `${d.level} ${d.level_name} · ${d.pct_in_D1_or_worse}%` : '–';
+  $('rain').textContent = f.rain_mm_next_24h != null ? `${f.rain_mm_next_24h}mm` : '–';
+  $('et0').textContent = f.et0_mm_next_24h != null ? `${f.et0_mm_next_24h}mm` : '–';
+  $('soilT').textContent = L.temp_c != null ? `${L.temp_c.toFixed(1)}°` : '–';
+  $('airT').textContent = f.temp_c_now != null ? `${f.temp_c_now}°` : '–';
+  $('learn').textContent = s.learned_pct_per_s != null ? `${s.learned_pct_per_s}%/s` : '–';
+  $('hrs').textContent = p.settling ? 'settling' : p.hours_until_dry != null ? `${p.hours_until_dry.toFixed(1)}h` : '–';
+  $('w-predictor').textContent = p.settling ? 're-measuring' : p.hours_until_dry != null ? `${p.hours_until_dry.toFixed(1)} h · ${p.method}` : 'XGBoost';
+  const g = s.guards || [], okN = g.filter(x => x.ok).length;
+  $('gcount').textContent = `${okN}/${g.length}`;
+  $('gdots').innerHTML = g.map(x => `<span class="dot ${x.ok ? 'good' : 'bad'}" title="${esc(x.rule)}"></span>`).join('');
+  $('shieldIc').style.color = okN === g.length ? 'var(--good)' : 'var(--bad)';
+  $('w-guards').textContent = okN === g.length ? `${okN}/${g.length} clear` : `${g.length - okN} blocking`;
+  $('guards').innerHTML = g.map(x => `<li><span class="dot ${x.ok ? 'good' : 'bad'}"></span><div><div class="r">${esc(x.rule)}</div><div class="d">${esc(x.detail)}</div></div></li>`).join('');
+  $('uptime').textContent = `uptime ${Math.floor(s.uptime_s / 60)} min`;
+
+  const r = await j('/api/report');
+  const max = Math.max(1, r.ai_pot_ml, r.timer_pot_ml);
+  $('barA').style.width = (100 * r.ai_pot_ml / max) + '%'; $('barB').style.width = (100 * r.timer_pot_ml / max) + '%';
+  $('mlA').textContent = r.ai_pot_ml + ' ml'; $('mlB').textContent = r.timer_pot_ml + ' ml';
+  $('saved').textContent = r.water_saved_pct != null ? r.water_saved_pct + '%' : '–';
+  $('healthy').textContent = `${r.ai_pot_time_healthy_pct ?? '–'}% / ${r.timer_pot_time_healthy_pct ?? '–'}%`;
+  $('pours').textContent = `${r.ai_pours} / ${r.timer_pours}`;
+  $('ledgerNote').textContent = `${r.hours_logged} h logged · band ${r.healthy_band}${r.includes_fake_data ? ' · FAKE, not for slides' : ''}`;
+
+  const dec = await j('/api/decisions');
+  if (dec.length && !$('runBtn').disabled) { $('decision').textContent = dec[0].sentence.replace(/^(WATER|WAIT):\s*/, ''); $('act').textContent = dec[0].action; $('act').className = 'act ' + dec[0].action; }
+
+  const soaks = await j('/api/soaks');
+  if (soaks.length) $('soaks').innerHTML = soaks.slice(0, 6).map(x => `<tr><td>${clock(x.ts)}</td><td>${x.pot}</td><td>${x.poured_s}s</td><td>${x.before_pct}→${x.peak_pct}%</td><td>+${x.rise_pct}%</td><td>${x.first_rise_s != null ? x.first_rise_s + 's' : '–'}</td><td><span class="dot ${x.ok ? 'good' : 'bad'}"></span></td></tr>`).join('');
+
+  const act = await j('/api/activity');
+  if (act.length) $('trace').innerHTML = act.slice(0, 40).map(a => {
+    const w = a.what || '', c = /^REFUSED|failed/i.test(w) ? 'bad' : /^approved|pump A/.test(w) ? 'good' : /^sent back/.test(w) ? 'warn' : '';
+    return `<li class="${c}"><span class="t">${clock(a.ts).replace(/ ?[AP]M/, '')}</span><span class="a">${esc(AG[a.agent] || a.agent)}</span><span>${esc(w)}</span></li>`;
+  }).join('');
+
+  const h = await j('/api/history?hours=6');
+  const step = Math.max(1, Math.ceil(h.readings.length / 300));
+  spark(h.readings.filter((_, i) => i % step === 0), s.config);
+}
+
+$('runBtn').onclick = async () => {
+  const b = $('runBtn'); b.disabled = true; b.lastChild.textContent = 'Agents working…';
+  $('act').textContent = 'thinking'; $('act').className = 'act none'; $('decision').textContent = 'agent team is running';
+  try { await j('/api/check-now', {method: 'POST'}); } finally { b.disabled = false; b.lastChild.textContent = 'Run agents'; slow(); }
+};
+$('pourBtn').onclick = async () => { const r = await j('/api/pour', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({seconds: 5})});
+  if (!r.watered) { $('act').textContent = 'refused'; $('act').className = 'act wait'; $('decision').textContent = 'safety rules: ' + r.refused_because; } slow(); };
+$('stopBtn').onclick = () => fetch('/api/stop', {method: 'POST'});
+async function ask(q) { if (!q) return; $('answer').textContent = 'Gemini is calling its tools…';
+  const r = await j('/api/ask', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({q})}); $('answer').textContent = r.answer; }
+$('askBtn').onclick = () => ask($('q').value);
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') ask($('q').value); });
+document.querySelectorAll('.qs button').forEach(b => b.onclick = () => { $('q').value = b.dataset.q; ask(b.dataset.q); });
+fast(); slow(); setInterval(fast, 400); setInterval(slow, 3000);
+</script>
+
+<script type="module">
+// Two pots cut in half so you can see INTO the soil. The cut face is a live texture: moisture by depth
+// (modeled from the probe % and the pour detector), roots, the probe and its sensing zone, a depth ruler,
+// and a wetting front that sinks while a pour soaks in. Agent orbs glow and beam at the soil while they work.
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.domElement.style.width = '100%'; renderer.domElement.style.height = '100%';
+stage.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x0a0e13, 16, 30);
+const cam = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+cam.position.set(0, 3.1, 11.2);
+const controls = new OrbitControls(cam, renderer.domElement);
+controls.target.set(0, 1.25, 0); controls.enablePan = false; controls.minDistance = 6; controls.maxDistance = 16;
+controls.minAzimuthAngle = -0.75; controls.maxAzimuthAngle = 0.75; controls.minPolarAngle = 0.9; controls.maxPolarAngle = 1.62;
+controls.enableDamping = true;
+
+scene.add(new THREE.HemisphereLight(0xdfeaff, 0x20140a, 0.9));
+const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(3, 8, 7); scene.add(key);
+const rim = new THREE.DirectionalLight(0x3987e5, 1.0); rim.position.set(-7, 4, -6); scene.add(rim);
+
+const BT = 0x3987e5, LIVE = 0xd95926, GOOD = 0x0ca30c, BAD = 0xd03b3b;
+const slab = new THREE.Mesh(new THREE.BoxGeometry(13, .5, 7), new THREE.MeshStandardMaterial({ color: 0x2a1d12, roughness: 1 }));
+slab.position.set(0, -.25, -2.2); scene.add(slab);
+const grid = new THREE.GridHelper(13, 26, 0x3987e5, 0x1d2a36); grid.position.set(0, .002, -2.2); grid.material.opacity = .25; grid.material.transparent = true; scene.add(grid);
+
+const R_TOP = 1.2, R_BOT = .95, H = 1.9, DEPTH_CM = 20, PROBE_BOT = 11, SENSE = [4, 10];
+const DRY = [222, 184, 124], MID = [128, 88, 50], WET = [38, 24, 14];
+const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+const soilColor = m => { const t = Math.max(0, Math.min(1, m / 80)); return t < .5 ? mix(DRY, MID, t * 2) : mix(MID, WET, (t - .5) * 2); };
+
+function trapezoid(wTop, wBot, h) {
+  const g = new THREE.BufferGeometry();
+  const v = new Float32Array([-wBot/2,0,0, wBot/2,0,0, wTop/2,h,0, -wTop/2,h,0]);
+  const k = (1 - wBot / wTop) / 2;
+  const uv = new Float32Array([k,0, 1-k,0, 1,1, 0,1]);
+  g.setAttribute('position', new THREE.BufferAttribute(v, 3)); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  g.setIndex([0,1,2, 0,2,3]); g.computeVertexNormals(); return g;
+}
+
+function makePot(x, tint, seed) {
+  const g = new THREE.Group(); g.position.x = x; scene.add(g);
+  const t0 = Math.PI / 2, tl = Math.PI;                    // back half only: the cut faces the camera
+  const wall = new THREE.Mesh(new THREE.CylinderGeometry(R_TOP + .06, R_BOT + .05, H + .1, 64, 1, true, t0, tl),
+    new THREE.MeshStandardMaterial({ color: 0x9c4a31, roughness: .6, side: THREE.DoubleSide }));
+  wall.position.y = H / 2; g.add(wall);
+  const rimRing = new THREE.Mesh(new THREE.TorusGeometry(R_TOP + .06, .05, 10, 64, Math.PI), new THREE.MeshStandardMaterial({ color: tint, emissive: tint, emissiveIntensity: .8 }));
+  rimRing.rotation.x = Math.PI / 2; rimRing.position.y = H + .05; g.add(rimRing);
+  const soilMat = new THREE.MeshStandardMaterial({ color: 0x6b4a2b, roughness: 1 });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(R_TOP, R_BOT, H, 64, 1, false, t0, tl), soilMat);
+  body.position.y = H / 2; g.add(body);
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 512;
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  const face = new THREE.Mesh(trapezoid(R_TOP * 2, R_BOT * 2, H), new THREE.MeshStandardMaterial({ map: tex, roughness: .95, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: .22 }));
+  face.position.z = .002; g.add(face);
+  const blades = [];
+  for (let i = 0; i < 70; i++) {
+    const b = new THREE.Mesh(new THREE.ConeGeometry(.03, .55 + Math.random() * .45, 4), new THREE.MeshStandardMaterial({ color: 0x4caf50 }));
+    const r = Math.sqrt(Math.random()) * (R_TOP - .1), a = Math.PI / 2 + Math.random() * Math.PI;
+    b.position.set(Math.sin(a) * r, H + .25, Math.cos(a) * r); b.userData.lean = (Math.random() - .5) * .35; g.add(b); blades.push(b);
+  }
+  const head = new THREE.Mesh(new THREE.BoxGeometry(.34, .32, .05), new THREE.MeshStandardMaterial({ color: 0x14202c, metalness: .3 }));
+  head.position.set(R_TOP * 2 * .22, H + .2, .03); g.add(head);
+  const led = new THREE.Mesh(new THREE.SphereGeometry(.05), new THREE.MeshBasicMaterial({ color: GOOD }));
+  led.position.set(R_TOP * 2 * .22 + .07, H + .28, .07); g.add(led);
+  const drops = [];
+  for (let i = 0; i < 90; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(.04), new THREE.MeshBasicMaterial({ color: 0x8fd0ff })); d.visible = false; d.userData.v = Math.random(); g.add(d); drops.push(d); }
+  const tube = new THREE.Mesh(new THREE.TorusGeometry(.5, .045, 8, 24, Math.PI / 1.6), new THREE.MeshStandardMaterial({ color: 0xd8e2ea, transparent: true, opacity: .8 }));
+  tube.position.set(-.35, H + .95, -.4); tube.rotation.z = Math.PI * .1; g.add(tube);
+  let rs = seed; const rnd = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
+  const roots = []; for (let i = 0; i < 26; i++) { const x0 = .1 + rnd() * .8; const pts = [[x0, 0]]; let px = x0, py = 0; const len = .25 + rnd() * .5;
+    while (py < len) { px += (rnd() - .5) * .06; py += .03 + rnd() * .03; pts.push([px, py]); } roots.push({ pts, w: 1 + rnd() * 2.5 }); }
+  const grain = []; for (let i = 0; i < 1800; i++) grain.push([rnd(), rnd(), rnd() * 2 + .5, rnd()]);
+  return { g, ctx: cv.getContext('2d'), tex, soilMat, blades, drops, led, roots, grain, shown: 50, frontCm: null, x };
+}
+const pots = { A: makePot(-2.3, BT, 12345), B: makePot(2.3, LIVE, 67890) };
+
+// Depth profile (a visual model): the probe's reading sits at its sensing centre (~7 cm), the surface dries first,
+// deeper soil holds more water. During a soak, the top wets first and the front sinks over the watch window.
+function profile(pct, soak, now) {
+  const base = d => pct + (d - 7) * 0.9;
+  let front = null, add = 0;
+  if (soak && soak.phase === 'soaking') {
+    const prog = Math.min(1, (now - soak.t0) / Math.max(15, soak.watch_s * .5));
+    front = 1 + prog * (DEPTH_CM - 2);
+    add = Math.max(6, (soak.now - soak.before) * 1.6 + 8) * (1 - prog * .4);
+  }
+  return { at: d => Math.max(0, Math.min(100, base(d) + (front != null && d < front ? add * (1 - d / (front + 4)) + 4 : 0))), front };
+}
+
+function paint(p, pct, soak, cfg, now) {
+  const c = p.ctx, W = 512, Hh = 512, pr = profile(pct, soak, now);
+  for (let y = 0; y < Hh; y += 4) { const col = soilColor(pr.at(y / Hh * DEPTH_CM)); c.fillStyle = `rgb(${col})`; c.fillRect(0, y, W, 4); }
+  for (const [gx, gy, gs, ga] of p.grain) { c.fillStyle = ga > .5 ? 'rgba(255,240,220,.07)' : 'rgba(0,0,0,.18)'; c.fillRect(gx * W, gy * Hh, gs, gs); }
+  const health = Math.max(.35, Math.min(1, (pct - cfg.dry + 20) / 40));
+  c.lineCap = 'round';
+  for (const r of p.roots) { c.strokeStyle = `rgba(232,208,160,${.35 + .4 * health})`; c.lineWidth = r.w; c.beginPath();
+    r.pts.forEach(([x, y], i) => { const yy = y * health * Hh * 1.1; i ? c.lineTo(x * W, yy) : c.moveTo(x * W, yy); }); c.stroke(); }
+  if (pr.front != null) {
+    const fy = pr.front / DEPTH_CM * Hh;
+    const grd = c.createLinearGradient(0, fy - 60, 0, fy + 8); grd.addColorStop(0, 'rgba(57,135,229,0)'); grd.addColorStop(1, 'rgba(90,170,255,.55)');
+    c.fillStyle = grd; c.fillRect(0, fy - 60, W, 68);
+    c.fillStyle = 'rgba(160,210,255,.95)'; c.fillRect(0, fy - 2, W, 4);
+    for (let i = 0; i < 70; i++) { const x = (i * 97 + now * 60) % W, y = (i * 53 + now * 90) % Math.max(10, fy); c.fillStyle = 'rgba(170,215,255,.8)'; c.beginPath(); c.arc(x, y, 2.2, 0, 7); c.fill(); }
+  }
+  const px = W * .72, bot = PROBE_BOT / DEPTH_CM * Hh;
+  c.fillStyle = 'rgba(12,20,28,.92)'; c.fillRect(px - 14, 0, 28, bot);
+  c.fillStyle = 'rgba(12,163,12,.9)'; c.fillRect(px - 5, 8, 10, bot - 20);
+  const s0 = SENSE[0] / DEPTH_CM * Hh, s1 = SENSE[1] / DEPTH_CM * Hh;
+  c.strokeStyle = 'rgba(255,255,255,.75)'; c.setLineDash([8, 6]); c.lineWidth = 2; c.strokeRect(px - 48, s0, 96, s1 - s0); c.setLineDash([]);
+  c.font = '600 20px "JetBrains Mono", monospace'; c.fillStyle = 'rgba(255,255,255,.92)'; c.textAlign = 'left';
+  c.fillText(`${pct.toFixed(1)}%`, Math.min(px + 54, W - 90), (s0 + s1) / 2 + 7);
+  c.fillStyle = 'rgba(0,0,0,.4)'; c.fillRect(60, 0, 70, Hh);
+  c.font = '500 17px "JetBrains Mono", monospace'; c.fillStyle = 'rgba(237,242,247,.85)';
+  for (let d = 0; d <= DEPTH_CM; d += 5) { const y = d / DEPTH_CM * Hh; c.fillRect(116, Math.min(y, Hh - 2), 14, 2); c.fillText(d + 'cm', 66, Math.max(18, Math.min(Hh - 6, y + 6))); }
+  p.tex.needsUpdate = true;
+  p.frontCm = pr.front;
+}
+
+const ORBS = [['weather_agent', 0x8fd0ff], ['soil_agent', 0x6fdc8c], ['memory_agent', 0xc79bff], ['planner_agent', 0x3987e5], ['critic_agent', 0xfab219], ['guards', 0x0ca30c], ['executor', 0x8fd0ff]];
+const orbs = {};
+ORBS.forEach(([k, col], i) => {
+  const a = Math.PI * (.1 + .8 * i / (ORBS.length - 1));
+  const m = new THREE.Mesh(new THREE.IcosahedronGeometry(.17, 2), new THREE.MeshStandardMaterial({ color: 0x2a3a4a, emissive: col, emissiveIntensity: .22, metalness: .2, roughness: .25, transparent: true, opacity: .92 }));
+  m.position.set(-2.3 - Math.cos(a) * 2.1, 3.35 + Math.sin(a) * .7, -1.1);
+  scene.add(m);
+  const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([m.position, new THREE.Vector3(-2.3, H + .1, -.4)]),
+    new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0 }));
+  scene.add(line);
+  orbs[k] = { m, line, glow: 0, col };
+});
+
+const tagA = document.getElementById('tagA'), tagB = document.getElementById('tagB'), frontTag = document.getElementById('frontTag'), frontTxt = document.getElementById('frontTxt');
+const v3 = new THREE.Vector3();
+function place(el, x, y, z) { v3.set(x, y, z).project(cam); const r = renderer.domElement.getBoundingClientRect(), s = stage.getBoundingClientRect();
+  el.style.left = (r.left - s.left + (v3.x + 1) / 2 * r.width) + 'px'; el.style.top = (r.top - s.top + (1 - v3.y) / 2 * r.height) + 'px'; }
+
+function resize() { const c = renderer.domElement, w = c.clientWidth, h = c.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(stage); resize();
+
+let last = performance.now(), lastPaint = 0, touched = false;
+renderer.domElement.addEventListener('pointerdown', () => { touched = true; });
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(nowMs) {
+  const dt = Math.min(.05, (nowMs - last) / 1000); last = nowMs;
+  const now = Date.now() / 1000, L = window.LIVE || {}, cfg = L.cfg || { dry: 35, wet: 70 };
+  for (const k of ['A', 'B']) {
+    const p = pots[k], target = k === 'A' ? L.a : L.b;
+    if (target != null) p.shown += (target - p.shown) * Math.min(1, dt * 2.5);
+    const col = soilColor(p.shown); p.soilMat.color.setRGB(col[0] / 255, col[1] / 255, col[2] / 255, THREE.SRGBColorSpace);
+    p.led.material.color.setHex(p.shown < cfg.dry ? BAD : p.shown > cfg.wet ? BT : GOOD);
+    const droop = Math.max(0, (cfg.dry + 10 - p.shown) / 25);
+    p.blades.forEach(b => { b.rotation.z = b.userData.lean + droop * 1.1 + Math.sin(nowMs / 900 + b.id) * .03; b.material.color.setHSL(.3 - droop * .2, .55, .38 - droop * .08); });
+    const pumping = L.pumping === k;
+    p.drops.forEach(d => { d.visible = pumping || d.userData.fall; if (!d.visible) return; d.userData.v += dt * 1.5;
+      if (d.userData.v > 1) { d.userData.v = 0; d.userData.fall = pumping; }
+      const v = d.userData.v; d.position.set(-.05 + Math.sin(v * 9 + d.id) * .07, H + .75 - v * .8, -.4 + Math.cos(v * 7 + d.id) * .07); });
+  }
+  if (nowMs - lastPaint > 90) { lastPaint = nowMs; const s = L.soak || {};
+    for (const k of ['A', 'B']) paint(pots[k], pots[k].shown, s.pot === k ? s : null, cfg, now); }
+  for (const [k] of ORBS) { const o = orbs[k], what = (L.busy || {})[k], on = !!what || (k === 'executor' && L.pumping === 'A');
+    o.glow += ((on ? 1 : 0) - o.glow) * Math.min(1, dt * 6);
+    const bad = k === 'guards' && /^REFUSED/.test(what || '');
+    o.m.material.emissive.setHex(bad ? BAD : o.col); o.m.material.emissiveIntensity = .22 + o.glow * (1.3 + .5 * Math.sin(nowMs / 110));
+    o.m.scale.setScalar(1 + o.glow * .35); o.m.rotation.y += dt * (.4 + o.glow * 3);
+    o.line.material.color.setHex(bad ? BAD : o.col); o.line.material.opacity = o.glow * .9; }
+  if (!reduce && !touched) { const t = nowMs / 1000; cam.position.x = Math.sin(t * .12) * 1.6; }
+  controls.update(); renderer.render(scene, cam);
+  place(tagA, pots.A.x, -.3, .6); place(tagB, pots.B.x, -.3, .6);
+  const fp = pots.A.frontCm != null ? pots.A : pots.B.frontCm != null ? pots.B : null;
+  if (fp) { frontTag.hidden = false; frontTxt.textContent = `wetting front · ${fp.frontCm.toFixed(1)} cm down`;
+    place(frontTag, fp.x + (fp === pots.A ? 1 : -1) * (R_TOP + 1.05), H - fp.frontCm / DEPTH_CM * H, 0); } else frontTag.hidden = true;
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

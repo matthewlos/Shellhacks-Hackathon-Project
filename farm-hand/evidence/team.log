@@ -1,0 +1,35 @@
+brain: gemini via right.codes (gemini-3.6-flash) | AI_TIMEOUT_S: 120 | db: promptgrass_fake.db
+
+=== WET POT, expect WAIT: pot A 61.7% | took 120.0 s
+decision: {'ts': 1790124405.4105003, 'action': 'wait', 'seconds': 0, 'brain': 'rules (AI failed)', 'sentence': "WAIT: soil is 62%, about 48 hours of water left. Water only when it's low, then a real drink."}
+    weather_agent | calls get_forecast
+    weather_agent | calls get_drought
+    weather_agent | calls get_watering_rule
+    weather_agent | reported
+    memory_agent | calls get_memory
+    memory_agent | reported
+    soil_agent | calls get_soil
+    soil_agent | calls get_soil
+    executor | AI failed -> rules
+    weather_agent | (rules) gathering
+    soil_agent | (rules) gathering
+    memory_agent | (rules) gathering
+    planner_agent | (rules) deciding
+
+=== DRY POT, expect WATER: pot A 37.7% | took 120.0 s
+decision: {'ts': 1790124533.427867, 'action': 'water', 'seconds': 14.416666666666664, 'brain': 'rules (AI failed)', 'sentence': 'WATER: soil is 38% and no rain is coming. Watering 14 s.'}
+    weather_agent | calls get_forecast
+    weather_agent | calls get_drought
+    weather_agent | calls get_watering_rule
+    weather_agent | reported
+    executor | AI failed -> rules
+    weather_agent | (rules) gathering
+    soil_agent | (rules) gathering
+    memory_agent | (rules) gathering
+    planner_agent | (rules) deciding
+    executor | pump A 14s
+
+waiting for the pour detector (180 s)...
+soaks table: [(1790124713.7098174, 'A', 14.416, 37.2, 55.1, 17.9, 1.5, 1.242, 1, 'water reached the probe')]
+
+ASK: Chat failed: TimeoutError()

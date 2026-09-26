@@ -1,0 +1,1710 @@
+{
+ "2023": [
+  {
+   "name": "Chess 10",
+   "url": "https://devpost.com/software/chess-10",
+   "winner": true,
+   "built_with": [
+    "blender",
+    "react",
+    "three.js",
+    "typescript",
+    "vanta"
+   ],
+   "hw": []
+  },
+  {
+   "name": "IntelliSchedule",
+   "url": "https://devpost.com/software/intellischedule",
+   "winner": true,
+   "built_with": [
+    "beautiful-soup",
+    "css",
+    "html",
+    "javascript",
+    "python",
+    "vscode"
+   ],
+   "hw": []
+  },
+  {
+   "name": "MedVoyage",
+   "url": "https://devpost.com/software/medvoyage",
+   "winner": true,
+   "built_with": [
+    "css3",
+    "html5",
+    "javascript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Melorize",
+   "url": "https://devpost.com/software/melorize",
+   "winner": true,
+   "built_with": [
+    "jukebox",
+    "openai",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Find Your Paradise",
+   "url": "https://devpost.com/software/find-your-paradise-tp7noz",
+   "winner": true,
+   "built_with": [
+    "daisy",
+    "ecl",
+    "express.js",
+    "javascript",
+    "react",
+    "tailwind",
+    "ui",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Nearus: Connect Beyond the Classroom",
+   "url": "https://devpost.com/software/nearus-connect-beyond-the-classroom",
+   "winner": true,
+   "built_with": [
+    "css3",
+    "docker",
+    "flask",
+    "github",
+    "google-cloud-build",
+    "google-cloud-run",
+    "google-cloud-sql",
+    "html5",
+    "javascript",
+    "postgis",
+    "postgresql",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "ClearPath",
+   "url": "https://devpost.com/software/clearpath",
+   "winner": true,
+   "built_with": [
+    "figma",
+    "google",
+    "google-slides",
+    "javascript",
+    "react",
+    "superbase"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Quackademy VR",
+   "url": "https://devpost.com/software/quackademy-vr",
+   "winner": true,
+   "built_with": [
+    "c#",
+    "github",
+    "json",
+    "unity",
+    "vr"
+   ],
+   "hw": [
+    "vr"
+   ]
+  },
+  {
+   "name": "CareerGPT",
+   "url": "https://devpost.com/software/careergpt",
+   "winner": true,
+   "built_with": [
+    "css3",
+    "django",
+    "html5",
+    "openai",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Applicity",
+   "url": "https://devpost.com/software/applicity",
+   "winner": true,
+   "built_with": [
+    "clerk",
+    "express.js",
+    "javascript",
+    "mysql",
+    "node.js",
+    "oauth",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "HandyDollar",
+   "url": "https://devpost.com/software/handydollar",
+   "winner": true,
+   "built_with": [
+    "azure",
+    "gpt3.5",
+    "nextjs",
+    "node.js",
+    "plaid",
+    "postgresql",
+    "supabase",
+    "tailwindcss",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "AthleteAI",
+   "url": "https://devpost.com/software/athleteai-s5fcub",
+   "winner": true,
+   "built_with": [
+    "ai",
+    "azure",
+    "chakraui",
+    "cloud",
+    "flask",
+    "matplotlib",
+    "nextjs",
+    "numpy",
+    "opencv",
+    "python",
+    "scipy",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FactFarm",
+   "url": "https://devpost.com/software/factfarm",
+   "winner": true,
+   "built_with": [
+    "swift",
+    "xcode"
+   ],
+   "hw": []
+  },
+  {
+   "name": "StateFarm Finn Auto Quoter",
+   "url": "https://devpost.com/software/statefarm-finn-auto-quoter",
+   "winner": true,
+   "built_with": [
+    "chatgpt3.5-api",
+    "react",
+    "tailwindcss",
+    "vindecoder-api",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "NaviGuardian",
+   "url": "https://devpost.com/software/naviguardian",
+   "winner": true,
+   "built_with": [
+    "core-location",
+    "firebase",
+    "flask",
+    "python",
+    "swift"
+   ],
+   "hw": []
+  },
+  {
+   "name": "BitLearn",
+   "url": "https://devpost.com/software/bitlearn-rglm0a",
+   "winner": true,
+   "built_with": [
+    "chrome",
+    "coingecko",
+    "css",
+    "html",
+    "javascript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Spotify Web3 DApp",
+   "url": "https://devpost.com/software/spotify-web3-dapp",
+   "winner": true,
+   "built_with": [
+    "ether.js",
+    "hardhat",
+    "javascript",
+    "metamask",
+    "react.js",
+    "solidity"
+   ],
+   "hw": []
+  },
+  {
+   "name": "TrustWave",
+   "url": "https://devpost.com/software/trustwave",
+   "winner": true,
+   "built_with": [
+    "css",
+    "etherium",
+    "ethers",
+    "hardhat",
+    "html",
+    "javascript",
+    "metamask",
+    "react",
+    "solidity",
+    "typescript",
+    "web3"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Locode-motion: Programming Explained With Trains",
+   "url": "https://devpost.com/software/locode-motion-programming-explained-with-trains",
+   "winner": true,
+   "built_with": [
+    "c#",
+    "c++",
+    "unity",
+    "visual-studio"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Cosmo-Projectiles",
+   "url": "https://devpost.com/software/thrusters",
+   "winner": true,
+   "built_with": [
+    "augmented-reality",
+    "c#",
+    "microsoft-hololens",
+    "mrtk3",
+    "unity"
+   ],
+   "hw": []
+  },
+  {
+   "name": "DDAI",
+   "url": "https://devpost.com/software/ddai-h64cka",
+   "winner": true,
+   "built_with": [
+    "ai",
+    "flask",
+    "linear-algebra",
+    "machine-learning",
+    "mongodb",
+    "python",
+    "react",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "SurgeSOS",
+   "url": "https://devpost.com/software/surgesos",
+   "winner": true,
+   "built_with": [
+    "flutter",
+    "llm's",
+    "python",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "GPTeach",
+   "url": "https://devpost.com/software/gpteach",
+   "winner": true,
+   "built_with": [
+    "ffmpeg",
+    "gpt-4",
+    "javascript",
+    "langchain",
+    "manim",
+    "python",
+    "react",
+    "wolfram-technologies"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Generating Objects Through Density and Time",
+   "url": "https://devpost.com/software/generating-objects-through-desnity-and-time",
+   "winner": true,
+   "built_with": [
+    "figma",
+    "pandas",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Sundered Starlight",
+   "url": "https://devpost.com/software/sundered-starlight",
+   "winner": true,
+   "built_with": [
+    "asperite",
+    "chatgpt",
+    "javascript",
+    "pixi.js",
+    "texturepacker"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Capital Safe",
+   "url": "https://devpost.com/software/capital-safe",
+   "winner": true,
+   "built_with": [
+    "css",
+    "google-safe-browsing",
+    "html",
+    "html5",
+    "javascript",
+    "lookup",
+    "whois"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FinanShell",
+   "url": "https://devpost.com/software/finanshell",
+   "winner": true,
+   "built_with": [
+    "clark",
+    "daisyui",
+    "nextjs",
+    "node.js",
+    "plaid",
+    "prisma",
+    "shadcnui",
+    "tailwind",
+    "trpc",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Financial Advisor AI for College Students and Young Adults",
+   "url": "https://devpost.com/software/financial-advisor-ai-for-college-students-and-young-adults",
+   "winner": true,
+   "built_with": [
+    "css",
+    "fastapi",
+    "javascript",
+    "openai",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "ZipCost",
+   "url": "https://devpost.com/software/zipcost",
+   "winner": true,
+   "built_with": [
+    "css",
+    "firebase",
+    "javascript",
+    "react",
+    "vsc"
+   ],
+   "hw": []
+  },
+  {
+   "name": "StockStainable",
+   "url": "https://devpost.com/software/stockstainable",
+   "winner": true,
+   "built_with": [
+    "css",
+    "flask",
+    "html",
+    "matplotlib",
+    "next.js",
+    "python",
+    "tailwind"
+   ],
+   "hw": []
+  },
+  {
+   "name": "YT Highlight Extractor",
+   "url": "https://devpost.com/software/yt-highlight-extractor",
+   "winner": true,
+   "built_with": [
+    "moviepy",
+    "python",
+    "pytube",
+    "regex",
+    "requests",
+    "shutil",
+    "sphinx",
+    "tkinter",
+    "youtube"
+   ],
+   "hw": [
+    "quest"
+   ]
+  },
+  {
+   "name": "GitConnected",
+   "url": "https://devpost.com/software/gitconnected",
+   "winner": true,
+   "built_with": [
+    "firebase",
+    "flask",
+    "githubapi",
+    "openai",
+    "react.js",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Quadrocket",
+   "url": "https://devpost.com/software/quadrocket",
+   "winner": true,
+   "built_with": [
+    "node.js",
+    "rust",
+    "soroban",
+    "stellar"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Themis",
+   "url": "https://devpost.com/software/best-overall",
+   "winner": true,
+   "built_with": [
+    "css",
+    "github",
+    "google-cloud",
+    "html",
+    "javascript",
+    "php",
+    "python",
+    "xamp",
+    "zyla"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Cosmic Cumpleanos",
+   "url": "https://devpost.com/software/cosmic-cumpleanos",
+   "winner": true,
+   "built_with": [
+    "nasa-api",
+    "taipy"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Freenancial",
+   "url": "https://devpost.com/software/freenancial",
+   "winner": true,
+   "built_with": [
+    "api",
+    "git",
+    "hmtl",
+    "javascript",
+    "node.js",
+    "npm",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "PyroGuard",
+   "url": "https://devpost.com/software/pyroguard",
+   "winner": true,
+   "built_with": [
+    "hederaconsensusservices",
+    "javascript",
+    "python",
+    "taipy"
+   ],
+   "hw": []
+  },
+  {
+   "name": "RideStork - The Carpool Orchestrator",
+   "url": "https://devpost.com/software/ridestork-the-carpool-orchestrator",
+   "winner": true,
+   "built_with": [
+    "amazon-web-services",
+    "auth0",
+    "bun.sh",
+    "express.js",
+    "flask",
+    "github",
+    "google-maps",
+    "next.js",
+    "postgresql",
+    "prismaorm",
+    "python",
+    "react",
+    "react-query",
+    "supabase",
+    "tailwindcss",
+    "typescript",
+    "vercel"
+   ],
+   "hw": []
+  }
+ ],
+ "2024": [
+  {
+   "name": "Epileptic Seizure Prevention and Early Response (ESPER)",
+   "url": "https://devpost.com/software/esper-fy6xeh",
+   "winner": true,
+   "built_with": [
+    "chrome",
+    "digitalocean",
+    "java",
+    "javascript",
+    "snowflake",
+    "snowpark",
+    "streamlit",
+    "vert.x",
+    "youtube"
+   ],
+   "hw": []
+  },
+  {
+   "name": "ARSL - Augmented Reality Sign Language",
+   "url": "https://devpost.com/software/arsl-vr-asl-learning",
+   "winner": true,
+   "built_with": [
+    "c",
+    "c-sharp",
+    "embedded",
+    "hardware",
+    "metaxr",
+    "ngrok",
+    "opencv",
+    "python",
+    "pytorch",
+    "tcp",
+    "unity"
+   ],
+   "hw": [
+    "hardware"
+   ]
+  },
+  {
+   "name": "Diffusion Earth",
+   "url": "https://devpost.com/software/diffusion-earth",
+   "winner": true,
+   "built_with": [
+    "nextjs",
+    "open3d",
+    "python",
+    "stablediffusion",
+    "tailwind"
+   ],
+   "hw": [
+    "led"
+   ]
+  },
+  {
+   "name": "Commander Coco's Stellar Domination",
+   "url": "https://devpost.com/software/commander-coco-s-stellar-domination",
+   "winner": true,
+   "built_with": [
+    "c#",
+    "unity"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Med-Memory",
+   "url": "https://devpost.com/software/med-memory",
+   "winner": true,
+   "built_with": [
+    "express.js",
+    "firebase",
+    "next",
+    "node.js",
+    "ollama",
+    "react",
+    "streamlit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "PantherPlates",
+   "url": "https://devpost.com/software/pantherplates",
+   "winner": true,
+   "built_with": [
+    "beautiful-soup",
+    "figma",
+    "flask",
+    "mongodb",
+    "openai",
+    "python",
+    "react",
+    "selenium",
+    "tailwind"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Around the World in 70 Frames",
+   "url": "https://devpost.com/software/around-the-world-in-70-frames",
+   "winner": true,
+   "built_with": [
+    ".net",
+    "apis",
+    "c#",
+    "meta",
+    "unity"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Lotion AI/AR",
+   "url": "https://devpost.com/software/lotion-ai-ar",
+   "winner": true,
+   "built_with": [
+    "axios",
+    "chatgpt",
+    "computer-vision",
+    "expo.io",
+    "firebase",
+    "flask",
+    "google-vision",
+    "huggingface",
+    "javascript",
+    "mongodb",
+    "python",
+    "react-native",
+    "tailwind",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "LocalPulse",
+   "url": "https://devpost.com/software/localpulse-uwr83x",
+   "winner": true,
+   "built_with": [
+    "api",
+    "claude",
+    "computer-vision",
+    "deep-translator",
+    "docker",
+    "gemini",
+    "gis",
+    "google",
+    "google-cloud",
+    "google-generativeai",
+    "google-maps",
+    "google-sql",
+    "langchain",
+    "langchainn",
+    "lucidchart",
+    "matplotlib",
+    "natural-language-processing",
+    "numpy",
+    "openai",
+    "pandas",
+    "plotly",
+    "postgresql",
+    "pydantic",
+    "pytorch",
+    "scikit-learn",
+    "smarthub",
+    "streamlit",
+    "systems-design",
+    "textblob"
+   ],
+   "hw": []
+  },
+  {
+   "name": "EmergencyAct",
+   "url": "https://devpost.com/software/emergencyact",
+   "winner": true,
+   "built_with": [
+    "aiohttp",
+    "base64",
+    "collections",
+    "cv2",
+    "datetime",
+    "fastapi",
+    "gridfs",
+    "joblib",
+    "json",
+    "mongodb",
+    "numpy",
+    "openai",
+    "os",
+    "pandas",
+    "pickle",
+    "pil",
+    "pymongo",
+    "requests",
+    "shutil",
+    "sklearn",
+    "streamlit",
+    "torch",
+    "ultralytics",
+    "urllib"
+   ],
+   "hw": [
+    "quest"
+   ]
+  },
+  {
+   "name": "hurrycane",
+   "url": "https://devpost.com/software/evac-for-all",
+   "winner": true,
+   "built_with": [
+    "docker",
+    "firebase",
+    "go",
+    "maps",
+    "mongodb",
+    "swift",
+    "swiftui",
+    "uikit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "DrowsyDriver",
+   "url": "https://devpost.com/software/drowsydriver-e31tn6",
+   "winner": true,
+   "built_with": [
+    "azure",
+    "dlib",
+    "flask",
+    "opencv",
+    "python",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Voiceboard",
+   "url": "https://devpost.com/software/voiceboard-83vn1e",
+   "winner": true,
+   "built_with": [
+    "gemini",
+    "google",
+    "next",
+    "react",
+    "tailwind",
+    "trpc",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Medicine Dispensary",
+   "url": "https://devpost.com/software/bigback",
+   "winner": true,
+   "built_with": [
+    "flask",
+    "micropython",
+    "python",
+    "raspberry-pi"
+   ],
+   "hw": [
+    "raspberry"
+   ]
+  },
+  {
+   "name": "LevelUp",
+   "url": "https://devpost.com/software/levelup-m95ou8",
+   "winner": true,
+   "built_with": [
+    "hardat",
+    "ipfs",
+    "metamaskapi",
+    "nextjs",
+    "react",
+    "scaffoldeth",
+    "speedruneth",
+    "sqlite",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "BlockchainAIED",
+   "url": "https://devpost.com/software/blockchainaied",
+   "winner": true,
+   "built_with": [
+    "css",
+    "ganache",
+    "google-cloud",
+    "javascript",
+    "python",
+    "scaffold",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FiveHacks",
+   "url": "https://devpost.com/software/fivehacks",
+   "winner": true,
+   "built_with": [
+    "css",
+    "html"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Treasure Keepers",
+   "url": "https://devpost.com/software/treasure-keepers",
+   "winner": true,
+   "built_with": [
+    "css",
+    "html",
+    "openai",
+    "python",
+    "streamlit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "financio",
+   "url": "https://devpost.com/software/financio-xg15bp",
+   "winner": true,
+   "built_with": [
+    "cloud-computing",
+    "database-management",
+    "git",
+    "json",
+    "microsoft-copilot-studio",
+    "mysql",
+    "next.js",
+    "power-platform",
+    "react",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Clarifina",
+   "url": "https://devpost.com/software/clarifina",
+   "winner": true,
+   "built_with": [
+    "amazon-web-services",
+    "axios",
+    "cloudwatch",
+    "express.js",
+    "figma",
+    "firebase",
+    "javasc",
+    "node.js",
+    "openai",
+    "s3",
+    "textract",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Prospera",
+   "url": "https://devpost.com/software/prospera-1bpnya",
+   "winner": true,
+   "built_with": [
+    "figma",
+    "javascript",
+    "openai",
+    "react",
+    "tailwind",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Jet Setter",
+   "url": "https://devpost.com/software/jet-setter",
+   "winner": true,
+   "built_with": [
+    "amazon-web-services",
+    "java",
+    "terraform"
+   ],
+   "hw": []
+  },
+  {
+   "name": "SmartCards",
+   "url": "https://devpost.com/software/smartcards-qxdusb",
+   "winner": true,
+   "built_with": [
+    "express.js",
+    "flask",
+    "kaggle",
+    "node.js",
+    "openai",
+    "react",
+    "tailwindcss",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Lease Saving Plan",
+   "url": "https://devpost.com/software/lease-saving-plan",
+   "winner": true,
+   "built_with": [
+    "customtkinter",
+    "matplotlib",
+    "python",
+    "sqlite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Pellet Panic",
+   "url": "https://devpost.com/software/pellet-panic",
+   "winner": true,
+   "built_with": [
+    "javascript",
+    "lens-studio",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Snapchat AR Tower Defense",
+   "url": "https://devpost.com/software/snapchat-ar-tower-defense",
+   "winner": true,
+   "built_with": [
+    "ar",
+    "genai",
+    "github",
+    "javascript",
+    "lens-studio",
+    "snapchat",
+    "snapchat-spectacles",
+    "typescript",
+    "visual-studio"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Shuttle Run",
+   "url": "https://devpost.com/software/shuttle-run",
+   "winner": true,
+   "built_with": [
+    "javascript",
+    "lensstudio",
+    "snapchat",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Cloud Vault",
+   "url": "https://devpost.com/software/cloud-vault",
+   "winner": true,
+   "built_with": [
+    "chainguard",
+    "css3",
+    "docker",
+    "flask",
+    "html5",
+    "javascript",
+    "pip",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Lootcode 10",
+   "url": "https://devpost.com/software/lootcode-10",
+   "winner": true,
+   "built_with": [
+    "chainguard",
+    "svelte",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "AI Image Recognition",
+   "url": "https://devpost.com/software/ai-image-recognition",
+   "winner": true,
+   "built_with": [
+    "docker",
+    "github",
+    "numpy",
+    "pillow",
+    "python",
+    "streamlit",
+    "streamlit-drawable-canvas",
+    "torch",
+    "torchvision"
+   ],
+   "hw": []
+  },
+  {
+   "name": "TasteLatino",
+   "url": "https://devpost.com/software/tastelatino",
+   "winner": true,
+   "built_with": [
+    "coreml",
+    "openai",
+    "swift",
+    "xcode"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Mercado",
+   "url": "https://devpost.com/software/mercado",
+   "winner": true,
+   "built_with": [
+    "ai",
+    "firebase",
+    "python",
+    "streamlit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Latinnect",
+   "url": "https://devpost.com/software/latinconnect",
+   "winner": true,
+   "built_with": [
+    "supabase",
+    "swift",
+    "swiftui"
+   ],
+   "hw": []
+  },
+  {
+   "name": "ShellHacked",
+   "url": "https://devpost.com/software/shellhacked",
+   "winner": true,
+   "built_with": [
+    "charm.sh",
+    "go",
+    "ngrok",
+    "sqlite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FraudGuard",
+   "url": "https://devpost.com/software/fraudguard-3gxd0w",
+   "winner": true,
+   "built_with": [
+    "eda",
+    "github",
+    "google-colab",
+    "machine-learning",
+    "python",
+    "streamlit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "H2A Bank",
+   "url": "https://devpost.com/software/h2a-bank",
+   "winner": true,
+   "built_with": [
+    "css",
+    "flask",
+    "html",
+    "javascript",
+    "openai",
+    "python",
+    "sql"
+   ],
+   "hw": []
+  },
+  {
+   "name": "WatchDog",
+   "url": "https://devpost.com/software/watchdog-vz03q8",
+   "winner": true,
+   "built_with": [
+    "cv2",
+    "firebase",
+    "flutter",
+    "gemini",
+    "promptengineering",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FairShare",
+   "url": "https://devpost.com/software/fair-share-nt0qx7",
+   "winner": true,
+   "built_with": [
+    "css",
+    "javascript",
+    "react-native"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FIU Financial Education - Scholarship Plug",
+   "url": "https://devpost.com/software/financial-education-for-women-at-fiu",
+   "winner": true,
+   "built_with": [
+    "auth0",
+    "bash",
+    "css",
+    "defang",
+    "flask",
+    "gemini",
+    "html",
+    "javascript",
+    "machine-learning",
+    "python",
+    "sqlite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FlowCast: Real-Time Water Monitoring and Prediction",
+   "url": "https://devpost.com/software/water-quality-predictor-with-ml-and-data-visualizatio",
+   "winner": true,
+   "built_with": [
+    "noaa-climate-data-online",
+    "pycharm",
+    "python",
+    "streamlit"
+   ],
+   "hw": []
+  },
+  {
+   "name": "DinoJourney",
+   "url": "https://devpost.com/software/dinojourney",
+   "winner": true,
+   "built_with": [
+    "figma",
+    "gemini",
+    "python",
+    "react-native",
+    "replicate"
+   ],
+   "hw": []
+  }
+ ],
+ "2025": [
+  {
+   "name": "EcoSort",
+   "url": "https://devpost.com/software/ecosort-ofyuie",
+   "winner": true,
+   "built_with": [
+    "base44",
+    "css",
+    "github",
+    "javascript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "FloodGuard",
+   "url": "https://devpost.com/software/floodguard-okgzty",
+   "winner": true,
+   "built_with": [
+    "a2a",
+    "adk",
+    "gemini",
+    "github",
+    "google-cloud",
+    "neon",
+    "node.js",
+    "postgresql",
+    "postman",
+    "prisma",
+    "react",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Lumi Lens",
+   "url": "https://devpost.com/software/magical-girl-os",
+   "winner": true,
+   "built_with": [
+    "deepface",
+    "google-gemini",
+    "python",
+    "raspberry-pi",
+    "swift",
+    "xcode"
+   ],
+   "hw": [
+    "raspberry"
+   ]
+  },
+  {
+   "name": "Happy Head",
+   "url": "https://devpost.com/software/happy-head",
+   "winner": true,
+   "built_with": [
+    "accelerometer",
+    "c",
+    "camera",
+    "gyroscope",
+    "i2c",
+    "lcd",
+    "led",
+    "mediapipe",
+    "microcontroller",
+    "next.js",
+    "opencv",
+    "postgresql",
+    "prisma",
+    "python",
+    "react",
+    "spi",
+    "sql",
+    "supabase",
+    "ti-launchpad",
+    "typescript",
+    "uart"
+   ],
+   "hw": [
+    "led",
+    "microcontroller"
+   ]
+  },
+  {
+   "name": "A11y Tools",
+   "url": "https://devpost.com/software/a11y-b8xg5i",
+   "winner": true,
+   "built_with": [
+    "agent-based",
+    "css",
+    "fastapi",
+    "gemini",
+    "google-cloud-ai",
+    "googleadk",
+    "html",
+    "javascript",
+    "python",
+    "restapi"
+   ],
+   "hw": []
+  },
+  {
+   "name": "iMPOSTURE",
+   "url": "https://devpost.com/software/straightup-hvet3r",
+   "winner": true,
+   "built_with": [
+    "google-adk",
+    "google-cloud",
+    "mediapipe",
+    "python",
+    "supabase",
+    "uv",
+    "yolov11"
+   ],
+   "hw": []
+  },
+  {
+   "name": "BrainSafe",
+   "url": "https://devpost.com/software/brainsafe-browser",
+   "winner": true,
+   "built_with": [
+    "adk",
+    "django",
+    "gcp",
+    "gemini",
+    "javascript",
+    "multimodalaiagents",
+    "openai",
+    "promptengineering",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "BirdsEye",
+   "url": "https://devpost.com/software/birdseye-ck0j12",
+   "winner": true,
+   "built_with": [
+    "css",
+    "ec2",
+    "ffmpeg",
+    "flask",
+    "git",
+    "github",
+    "html",
+    "javascript",
+    "json",
+    "opencv",
+    "python",
+    "react",
+    "react-native",
+    "typescript",
+    "yolo"
+   ],
+   "hw": []
+  },
+  {
+   "name": "OpenPotholeMap",
+   "url": "https://devpost.com/software/openpotholemap",
+   "winner": true,
+   "built_with": [
+    "ai",
+    "express.js",
+    "gcp",
+    "github-actions",
+    "google",
+    "google-maps",
+    "mongodb",
+    "node.js",
+    "react",
+    "roboflow",
+    "shadcn",
+    "tailwindcss",
+    "typescript",
+    "vite",
+    "yolov8"
+   ],
+   "hw": []
+  },
+  {
+   "name": "VL-ADK",
+   "url": "https://devpost.com/software/vl-adk",
+   "winner": true,
+   "built_with": [
+    "gemini",
+    "google-adk",
+    "jetson-orin",
+    "python",
+    "react",
+    "typescript",
+    "yolo"
+   ],
+   "hw": [
+    "jetson"
+   ]
+  },
+  {
+   "name": "ClariTA",
+   "url": "https://devpost.com/software/clarita",
+   "winner": true,
+   "built_with": [
+    "drizzle",
+    "express.js",
+    "javascript",
+    "node.js",
+    "postgresql",
+    "react",
+    "supabase",
+    "typescript",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "PrepBear",
+   "url": "https://devpost.com/software/prep-bear",
+   "winner": true,
+   "built_with": [
+    "gemini",
+    "javascript",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "TyodorAI",
+   "url": "https://devpost.com/software/tyodor",
+   "winner": true,
+   "built_with": [
+    "css",
+    "flask",
+    "googleai",
+    "html",
+    "javascript",
+    "openai",
+    "python"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Beacon",
+   "url": "https://devpost.com/software/beacon-fc3qis",
+   "winner": true,
+   "built_with": [
+    "expo-go",
+    "expo.io",
+    "express.js",
+    "figma",
+    "firebase",
+    "firestore",
+    "google-cloud",
+    "google-directions",
+    "google-maps",
+    "javascript",
+    "json",
+    "nativewind",
+    "node.js",
+    "postman",
+    "reactnative",
+    "realtime-database",
+    "typescript.jsx"
+   ],
+   "hw": []
+  },
+  {
+   "name": "EzSpeak",
+   "url": "https://devpost.com/software/ezspeak-30hy1w",
+   "winner": true,
+   "built_with": [
+    "azure",
+    "azurecognitiveservices",
+    "chrome",
+    "chromeextensionapi",
+    "css",
+    "html",
+    "javascript",
+    "webaudioapi"
+   ],
+   "hw": []
+  },
+  {
+   "name": "The Rat Race",
+   "url": "https://devpost.com/software/the-rat-race",
+   "winner": true,
+   "built_with": [
+    "adobe",
+    "next.js",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Next Step",
+   "url": "https://devpost.com/software/next-step-cme06a",
+   "winner": true,
+   "built_with": [
+    "flask",
+    "nextjs",
+    "python",
+    "react",
+    "tailwind-css",
+    "typescript",
+    "vapi"
+   ],
+   "hw": []
+  },
+  {
+   "name": "GreenLight",
+   "url": "https://devpost.com/software/greenlight-idnv6o",
+   "winner": true,
+   "built_with": [
+    "adk",
+    "firebase",
+    "gemini",
+    "google",
+    "python",
+    "react",
+    "shadcn",
+    "tailwind",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Quests and Conflicts VR",
+   "url": "https://devpost.com/software/quests-and-conflicts-vr",
+   "winner": true,
+   "built_with": [
+    "c#",
+    "oculus-gear-vr",
+    "quest3",
+    "unity",
+    "vr"
+   ],
+   "hw": [
+    "oculus",
+    "quest",
+    "vr"
+   ]
+  },
+  {
+   "name": "Ctrl-ARM",
+   "url": "https://devpost.com/software/ctrl-arm",
+   "winner": true,
+   "built_with": [
+    "css3",
+    "electron",
+    "gemini",
+    "google-a2a",
+    "google-adk",
+    "html5",
+    "matplotlib",
+    "myoware-2.0",
+    "numpy",
+    "pandas",
+    "python",
+    "react",
+    "scikit-learn",
+    "tensorflow",
+    "typescript",
+    "vite",
+    "whisper",
+    "xiao-sense"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Agent Zero",
+   "url": "https://devpost.com/software/agentzero-tnh9p3",
+   "winner": true,
+   "built_with": [
+    "bigquery",
+    "express.js",
+    "fastapi",
+    "gemini",
+    "node.js",
+    "pyarrow",
+    "react",
+    "tensorflow",
+    "typescript",
+    "yolov11"
+   ],
+   "hw": []
+  },
+  {
+   "name": "MoneySensei",
+   "url": "https://devpost.com/software/moneysensei",
+   "winner": true,
+   "built_with": [
+    "base44",
+    "javascript",
+    "react"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Aviation Workflow Management (AWF)",
+   "url": "https://devpost.com/software/devpost-weu7vz",
+   "winner": true,
+   "built_with": [
+    "base44",
+    "cloudskyapi",
+    "oauth",
+    "react",
+    "tailwind",
+    "typescript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "GitFlow",
+   "url": "https://devpost.com/software/gitflow-bzwcov",
+   "winner": true,
+   "built_with": [
+    "docker",
+    "elevenlabs",
+    "express.js",
+    "fastapi",
+    "gemini",
+    "githubapi",
+    "godaddy",
+    "javascript",
+    "openai",
+    "python",
+    "react",
+    "reactflow",
+    "vercel",
+    "voice-delivery-system"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Intelligent Poker League",
+   "url": "https://devpost.com/software/intelligent-poker-league",
+   "winner": true,
+   "built_with": [
+    "django",
+    "git",
+    "github",
+    "postgresql",
+    "python",
+    "react",
+    "tailwindcss",
+    "wolfram-technologies"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Wolframination",
+   "url": "https://devpost.com/software/wolframination",
+   "winner": true,
+   "built_with": [
+    "manim",
+    "numpy",
+    "python",
+    "wolfram-technologies",
+    "wolframscript"
+   ],
+   "hw": []
+  },
+  {
+   "name": "SightSpeech",
+   "url": "https://devpost.com/software/sightspeech",
+   "winner": true,
+   "built_with": [
+    "ai",
+    "easyocr",
+    "flask",
+    "gemini-api",
+    "git",
+    "github",
+    "html",
+    "javascript",
+    "mediapipe",
+    "next.js",
+    "python",
+    "react",
+    "tailwind-css",
+    "text-to-speech-api"
+   ],
+   "hw": []
+  },
+  {
+   "name": "Sylly",
+   "url": "https://devpost.com/software/sylly",
+   "winner": true,
+   "built_with": [
+    "auth0",
+    "node.js",
+    "prisma",
+    "react",
+    "vite"
+   ],
+   "hw": []
+  },
+  {
+   "name": "memoray",
+   "url": "https://devpost.com/software/memoray",
+   "winner": true,
+   "built_with": [
+    "api",
+    "expo.io",
+    "express.js",
+    "fastapi",
+    "firebase",
+    "googlea2a",
+    "googleadk",
+    "metaglasses",
+    "ollamaai",
+    "python",
+    "reactnative",
+    "typescript",
+    "websockets"
+   ],
+   "hw": [
+    "glasses"
+   ]
+  }
+ ]
+}
