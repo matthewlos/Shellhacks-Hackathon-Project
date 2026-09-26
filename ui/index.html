@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>Farm Hand</h1>
+    <span class="badge">Simulated board</span>
+    <p class="sub">A virtual copy of the real rig, running the same rules as <span class="mono">farm-hand/</span>. Every number here comes from a model, not the probe.</p>
+  </div>
+  <div class="clockbar">
+    <span class="clock mono" id="clock">Day 1 · 8:00:00 AM</span>
+    <div class="seg" id="speed" role="group" aria-label="Simulation speed">
+      <button data-speed="1" class="on">Real time</button>
+      <button data-speed="60">1 min/s</button>
+      <button data-speed="600">10 min/s</button>
+      <button data-speed="3600">1 h/s</button>
+    </div>
+    <button class="ghost" id="pause">Pause</button>
+    <button class="ghost" id="skip">Skip 6 h</button>
+  </div>
+</header>
+
+<main class="grid">
+ <div class="left">
+
+  <section class="card stage" aria-label="The rig">
+    <div class="banner" id="banner" hidden><span id="bannerText"></span><button class="x" id="bannerClose" aria-label="Close">×</button></div>
+
+    <div class="readout" id="readout" hidden>
+      <div class="ro-top"><span class="ro-now mono" id="roNow">0.0%</span><span class="ro-tgt">target <b class="mono" id="roTgt">55%</b></span></div>
+      <div class="ro-bar"><div class="ro-fill" id="roFill"></div><div class="ro-mark" id="roMark"></div></div>
+      <div class="ro-state" id="roState">Pulsing…</div>
+    </div>
+
+    <svg id="rig" viewBox="0 0 800 430" role="img" aria-label="Side view of the box of soil, the soil and temperature probes, the pump in its cup, the relay and the ESP32">
+      <defs>
+        <clipPath id="soilClip"><path d="M229 172 L631 172 L616 381 L244 381 Z"/></clipPath>
+        <clipPath id="cupClip"><path d="M66 262 L162 262 L156 382 L72 382 Z"/></clipPath>
+        <pattern id="speck" width="14" height="14" patternUnits="userSpaceOnUse">
+          <circle cx="3" cy="4" r="1.3" fill="rgba(0,0,0,.14)"/>
+          <circle cx="10" cy="10" r="1" fill="rgba(255,255,255,.14)"/>
+          <circle cx="11" cy="3" r=".8" fill="rgba(0,0,0,.1)"/>
+        </pattern>
+        <linearGradient id="wetGrad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#241810" stop-opacity=".75"/>
+          <stop offset=".75" stop-color="#241810" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#241810" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="steel" x1="0" x2="1">
+          <stop offset="0" stop-color="#9aa3ad"/><stop offset=".5" stop-color="#eef1f4"/><stop offset="1" stop-color="#8c96a1"/>
+        </linearGradient>
+      </defs>
+
+      <!-- table -->
+      <rect x="0" y="384" width="800" height="46" fill="var(--table)"/>
+      <line x1="0" y1="384" x2="800" y2="384" stroke="var(--table-edge)" stroke-width="2"/>
+
+      <!-- wires that run behind the box -->
+      <path d="M106 338 C 96 230, 210 104, 430 104 S 730 150, 736 204" fill="none" stroke="#d33a2c" stroke-width="2.5"/>
+      <path d="M112 338 C 104 238, 214 112, 430 112 S 740 158, 746 204" fill="none" stroke="#222" stroke-width="2.5"/>
+      <path d="M512 118 C 512 50, 640 50, 668 300" fill="none" stroke="#4a4f57" stroke-width="3"/>
+      <path d="M570 132 C 574 70, 650 90, 676 300" fill="none" stroke="#1f2328" stroke-width="3"/>
+
+      <!-- the box of soil (Mainstays deep rectangle) -->
+      <g clip-path="url(#soilClip)">
+        <rect id="soil" x="220" y="224" width="420" height="170" fill="#9c8468"/>
+        <rect id="wetBand" x="220" y="224" width="420" height="0" fill="url(#wetGrad)"/>
+        <rect x="220" y="224" width="420" height="170" fill="url(#speck)"/>
+        <ellipse id="puddle" cx="306" cy="225" rx="0" ry="4" fill="#5d8fc4" opacity=".7"/>
+        <text x="252" y="370" class="svg-note">wet band: modeled from one probe</text>
+      </g>
+
+      <!-- soil probe (capacitive v1.2) -->
+      <g>
+        <rect x="500" y="118" width="24" height="72" rx="3" fill="#1d1f24"/>
+        <rect x="505" y="150" width="14" height="10" rx="1" fill="#34373e"/>
+        <path d="M503 190 L521 190 L521 316 L512 328 L503 316 Z" fill="#23262c"/>
+        <line x1="503" y1="222" x2="521" y2="222" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <circle id="probeLed" cx="512" cy="132" r="4" fill="#2fbf6a"/>
+        <text x="486" y="100" class="svg-label" text-anchor="end">Soil probe · D32</text>
+        <text id="probeText" x="486" y="84" class="svg-val" text-anchor="end">44.0%</text>
+      </g>
+
+      <!-- temp probe (DS18B20) -->
+      <g>
+        <rect x="566" y="140" width="8" height="198" rx="4" fill="url(#steel)"/>
+        <rect x="564" y="132" width="12" height="12" rx="3" fill="#1f2328"/>
+        <text x="584" y="212" class="svg-label">DS18B20 · D4</text>
+        <text id="tempText" x="584" y="196" class="svg-val temp">26.1°C</text>
+      </g>
+
+      <!-- clear plastic walls, drawn over the soil -->
+      <path d="M226 172 L634 172 L618 384 L242 384 Z" fill="rgba(226,236,244,.16)" stroke="#aebccb" stroke-width="2"/>
+      <rect x="220" y="164" width="420" height="9" rx="4" fill="#e8eef3" stroke="#aebccb" stroke-width="1.5"/>
+      <line x1="238" y1="190" x2="250" y2="360" stroke="#fff" stroke-width="3" opacity=".5"/>
+
+      <!-- cup of water + pump -->
+      <g clip-path="url(#cupClip)">
+        <rect id="cupWater" x="60" y="272" width="110" height="112" fill="#8fc1ea" opacity=".6"/>
+      </g>
+      <rect id="pumpBody" x="96" y="336" width="40" height="42" rx="8" fill="#2b2f36"/>
+      <rect x="110" y="326" width="10" height="12" rx="2" fill="#2b2f36"/>
+      <path d="M64 262 L164 262 L158 384 L70 384 Z" fill="rgba(226,236,244,.2)" stroke="#aebccb" stroke-width="2"/>
+      <text x="114" y="404" class="svg-label" text-anchor="middle">Pump A · 20 ml/s</text>
+      <text id="cupText" x="114" y="420" class="svg-label dim" text-anchor="middle">1500 ml in cup</text>
+
+      <!-- tube to the soil -->
+      <path id="tube" d="M115 330 C 115 200, 175 150, 255 150 L 296 150 Q 306 150 306 160 L 306 204" fill="none" stroke="#d5dee6" stroke-width="7" stroke-linecap="round"/>
+      <path id="tubeWater" d="M115 330 C 115 200, 175 150, 255 150 L 296 150 Q 306 150 306 160 L 306 204" fill="none" stroke="#4f95d8" stroke-width="3" stroke-linecap="round"/>
+      <g id="drops">
+        <circle class="drop" cx="306" cy="208" r="3" fill="#4f95d8"/>
+        <circle class="drop" cx="306" cy="208" r="2.5" fill="#4f95d8"/>
+        <circle class="drop" cx="306" cy="208" r="3" fill="#4f95d8"/>
+      </g>
+      <g id="clamp" transform="translate(155 191) rotate(-38)">
+        <rect x="-16" y="-9" width="32" height="6" rx="2" fill="#d6452f"/>
+        <rect x="-16" y="3" width="32" height="6" rx="2" fill="#d6452f"/>
+        <rect x="12" y="-9" width="6" height="18" rx="2" fill="#a8321f"/>
+      </g>
+
+      <!-- relay module -->
+      <g transform="translate(672 198)">
+        <rect width="86" height="52" rx="4" fill="#1f5fbf"/>
+        <rect x="8" y="7" width="38" height="38" rx="2" fill="#2a74e0" stroke="#174a95"/>
+        <rect x="56" y="9" width="24" height="34" rx="2" fill="#1e8a4a"/>
+        <circle cx="62" cy="17" r="2.5" fill="#c9d1d9"/><circle cx="62" cy="26" r="2.5" fill="#c9d1d9"/><circle cx="62" cy="35" r="2.5" fill="#c9d1d9"/>
+        <circle id="relayLed" cx="50" cy="46" r="3" fill="#3a2222"/>
+        <text x="124" y="66" class="svg-label" text-anchor="end">Relay · D26 via PN2222</text>
+      </g>
+
+      <!-- ESP32 -->
+      <path d="M690 292 L690 250" stroke="#8a8f98" stroke-width="2.5"/>
+      <path d="M706 292 L706 250" stroke="#f1f1f1" stroke-width="2.5"/>
+      <path d="M722 292 L722 250" stroke="#d33a2c" stroke-width="2.5"/>
+      <g transform="translate(664 292)">
+        <rect width="120" height="76" rx="4" fill="#1a1c20"/>
+        <rect x="58" y="10" width="54" height="56" rx="2" fill="#c9cdd2"/>
+        <text x="85" y="42" class="svg-chip" text-anchor="middle">ESP32</text>
+        <rect x="-10" y="30" width="14" height="16" rx="2" fill="#9aa3ad"/>
+        <circle id="espLed" cx="18" cy="14" r="3" fill="#2f6fd6"/>
+        <g fill="#c7a64a">
+          <circle cx="12" cy="70" r="1.6"/><circle cx="22" cy="70" r="1.6"/><circle cx="32" cy="70" r="1.6"/><circle cx="42" cy="70" r="1.6"/>
+          <circle cx="52" cy="70" r="1.6"/><circle cx="62" cy="70" r="1.6"/><circle cx="72" cy="70" r="1.6"/><circle cx="82" cy="70" r="1.6"/>
+          <circle cx="92" cy="70" r="1.6"/><circle cx="102" cy="70" r="1.6"/><circle cx="112" cy="70" r="1.6"/>
+        </g>
+      </g>
+      <path d="M654 330 C 640 330, 640 400, 620 420" fill="none" stroke="#2c3036" stroke-width="4"/>
+      <text x="724" y="388" class="svg-label" text-anchor="middle">USB to laptop</text>
+    </svg>
+
+    <div class="stage-foot">
+      <div class="legend">
+        <span>dry</span><span class="ramp" aria-hidden="true"></span><span>wet</span>
+        <span class="dim">color from the probe %, depth band modeled</span>
+      </div>
+      <div class="scenario">
+        <button class="chip" id="pinch" aria-pressed="false">Pinch the tube</button>
+        <button class="chip" id="hand">Pour a cup in by hand</button>
+        <button class="chip" id="dry">Dry the soil out</button>
+        <button class="chip" id="refill">Refill the cup</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card chartcard" aria-label="Soil over time">
+    <div class="chead">
+      <h3>Soil over time</h3>
+      <div class="seg" id="win" role="group" aria-label="Chart window">
+        <button data-win="1" class="on">1 h</button>
+        <button data-win="6">6 h</button>
+        <button data-win="24">24 h</button>
+        <button data-win="all">All</button>
+      </div>
+    </div>
+    <div class="cbody">
+      <div class="cwrap">
+        <div class="keys">
+          <span><i class="k-ai"></i>Moisture</span>
+          <span><i class="k-timer"></i>If a timer watered <em>estimated</em></span>
+          <span><i class="k-temp"></i>Soil temp</span>
+          <span><i class="k-dot ai"></i>AI pour</span>
+          <span><i class="k-dot demo"></i>test / target</span>
+          <span><i class="k-dot timer"></i>timer pour</span>
+        </div>
+        <div class="canvas-box">
+          <canvas id="chart"></canvas>
+          <div class="tip mono" id="tip" hidden></div>
+        </div>
+      </div>
+      <div class="saved">
+        <small id="svLabel">Water saved vs a timer</small>
+        <b class="mono" id="svBig">–</b>
+        <p class="mono" id="svSub"></p>
+        <span class="tag">Timer is estimated</span>
+        <p class="dim tiny" id="svHow">timer = 5 s every 6 h, 100 ml a pour</p>
+      </div>
+    </div>
+  </section>
+ </div>
+
+  <aside class="side">
+    <section class="card call">
+      <div class="brainrow">
+        <span class="dim">Brain</span>
+        <div class="seg" id="brain" role="group" aria-label="Which brain decides">
+          <button data-brain="gemini" class="on">Gemini team</button>
+          <button data-brain="laya">Laya</button>
+          <button data-brain="rules">Rules</button>
+        </div>
+      </div>
+      <h2 id="callTitle">Starting up</h2>
+      <p id="callWhy" class="why">Waiting for the first readings.</p>
+      <p id="callMeta" class="meta"></p>
+      <div class="strip">
+        <div class="srow">
+          <span class="icon" aria-hidden="true">⚡</span>
+          <div><b id="layaLine">Laya: –</b><small id="layaSure">fast decision model</small></div>
+          <div class="num"><b class="mono" id="layaMs">–</b><small>ms to decide</small></div>
+        </div>
+        <div class="srow">
+          <span class="icon" aria-hidden="true">✦</span>
+          <div><b id="teamLine">Gemini team</b><small id="teamSub">explains the call, checked by the critic</small></div>
+          <div class="num"><b class="mono" id="teamS">–</b><small>s to explain</small></div>
+        </div>
+      </div>
+      <button class="primary" id="runAgents">▷ Run agents</button>
+      <div class="row">
+        <button class="link" id="testPour">💧 Test pour 5 s</button>
+        <button class="link danger" id="stop">■ Stop pump</button>
+      </div>
+      <p class="msg" id="actionMsg" role="status"></p>
+    </section>
+
+    <section class="card target">
+      <div class="trow">
+        <span>Hit a target</span>
+        <div class="stepper">
+          <button id="tMinus" aria-label="Lower target">−</button>
+          <b class="mono" id="tVal">55%</b>
+          <button id="tPlus" aria-label="Raise target">+</button>
+        </div>
+        <button class="dark" id="tGo">◎ Go</button>
+      </div>
+      <div class="pulses" id="pulses"></div>
+      <p class="receipt" id="receipt"></p>
+    </section>
+
+    <section class="card nums">
+      <div class="big2">
+        <div>
+          <small>Soil moisture</small>
+          <b class="mono big" id="nMoist">44.0%</b>
+          <div class="band"><div class="band-ok"></div><div class="band-pin" id="nPin"></div></div>
+          <small class="dim">healthy 35–70%</small>
+        </div>
+        <div>
+          <small>Soil temperature</small>
+          <b class="mono big temp" id="nTemp">26.1°C</b>
+          <small class="dim" id="nAir">outside air 27.3°C</small>
+        </div>
+      </div>
+      <dl class="list">
+        <div><dt>Dries out in <em>trend estimate</em></dt><dd class="mono" id="nDry">–</dd></div>
+        <div><dt>Water, last 24 h <em>cap 1,500 ml</em></dt><dd class="mono" id="nUsed">0 ml</dd></div>
+        <div><dt>Learned soak rate <em>median of the last 5 good pours</em></dt><dd class="mono" id="nRate">1.20 %/s</dd></div>
+        <div><dt>Time in the healthy band</dt><dd class="mono" id="nHealthy">–</dd></div>
+        <div><dt>Rain, next 24 h <em>pot is indoors, rain ignored</em></dt><dd class="mono">–</dd></div>
+        <div><dt>County in drought <em>Miami-Dade, week of Sep 15</em></dt><dd class="mono">100%</dd></div>
+      </dl>
+    </section>
+
+    <section class="card tabs">
+      <div class="tabbar" role="tablist">
+        <button role="tab" data-tab="team" class="on">Agent team</button>
+        <button role="tab" data-tab="pours">Pours</button>
+        <button role="tab" data-tab="serial">Serial</button>
+      </div>
+      <div class="tab" id="tab-team">
+        <ul class="agents" id="agents">
+          <li data-node="laya"><span class="dot"></span>Laya <small>fast call, about 20 ms</small></li>
+          <li class="group">Gemini team · gather, in parallel</li>
+          <li data-node="weather_agent" class="sub"><span class="dot"></span>weather_agent <small>forecast, drought</small></li>
+          <li data-node="soil_agent" class="sub"><span class="dot"></span>soil_agent <small>moisture, dry time</small></li>
+          <li data-node="memory_agent" class="sub"><span class="dot"></span>memory_agent <small>last 24 h of pours</small></li>
+          <li class="group">Gemini team · decide, up to 3 rounds</li>
+          <li data-node="planner_agent" class="sub"><span class="dot"></span>planner_agent <small>proposes</small></li>
+          <li data-node="critic_agent" class="sub"><span class="dot"></span>critic_agent <small>can send it back</small></li>
+          <li class="group">Code, not AI</li>
+          <li data-node="guards"><span class="dot"></span>Safety rules <small>guards()</small></li>
+          <li data-node="executor"><span class="dot"></span>executor <small>pump A on D26</small></li>
+          <li data-node="soak"><span class="dot"></span>Pour detector <small>soak.py, learns %/s</small></li>
+          <li data-node="target_agent"><span class="dot"></span>target_agent <small>Hit the Target</small></li>
+        </ul>
+        <ul class="guardlist" id="guardList"></ul>
+        <ol class="steps" id="steps"></ol>
+        <p class="dim tiny">Agent timings and Laya's picks are simulated. The real team runs on Gemini through Google ADK (brain.py); Laya is the fine-tuned model in laya/.</p>
+      </div>
+      <div class="tab" id="tab-pours" hidden>
+        <table class="pours">
+          <thead><tr><th>When</th><th>By</th><th>Pump</th><th>Soil</th><th>Rise</th><th>%/s</th></tr></thead>
+          <tbody id="pourRows"><tr><td colspan="6" class="dim">No pours yet.</td></tr></tbody>
+        </table>
+      </div>
+      <div class="tab" id="tab-serial" hidden>
+        <pre class="serial mono" id="serial"></pre>
+      </div>
+    </section>
+  </aside>
+
+
+
+</main>
+
+<script src="sim.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
