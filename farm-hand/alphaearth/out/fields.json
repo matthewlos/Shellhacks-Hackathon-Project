@@ -1,0 +1,42 @@
+{
+  "built": "2026-09-26 14:37",
+  "box_wsen": [
+    -80.6,
+    25.43,
+    -80.4,
+    25.62
+  ],
+  "pixel_m": 40,
+  "grid": [
+    504,
+    528
+  ],
+  "fiu": [
+    25.7566,
+    -80.374
+  ],
+  "classifier": {
+    "trained_on": "AlphaEarth 2024 fingerprints, labels from USDA CDL 2024 (farmland vs not)",
+    "held_out_accuracy": 0.87,
+    "held_out_f1": 0.723,
+    "train_pixels": 154727,
+    "test_pixels": 66312
+  },
+  "farmland_2025_acres": 17825,
+  "usda_2024_farmland_acres": 22121,
+  "fields_2025": 690,
+  "changed_most_acres": 2674,
+  "changed_threshold": 0.0685,
+  "stations_one_per_field": 690,
+  "stations_one_per_10_acres": 1783,
+  "attribution": [
+    "The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind. CC-BY 4.0.",
+    "USDA NASS Cropland Data Layer 2024."
+  ],
+  "honesty": [
+    "Farmland 2025 is predicted from AlphaEarth fingerprints by a classifier trained on USDA's 2024 map; accuracy above is on 2024 pixels it never saw.",
+    "'Changed most' = the 15% of farm pixels whose fingerprint moved most from 2024 to 2025. Change has many causes (drought, harvest timing, replanting); it is not proof of drought damage.",
+    "Field count = connected farm patches of 3+ pixels at 40 m; neighbouring fields can merge. An estimate.",
+    "Station counts are a sizing estimate, not a quote."
+  ]
+}

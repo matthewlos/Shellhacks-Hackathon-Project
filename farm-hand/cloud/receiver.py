@@ -34,6 +34,7 @@ TARGET = float(os.environ.get("FARMHAND_TARGET", 60))            # a drink aims 
 PUMP_S_MAX = 8                                                   # longest drink the server will ever ask for
 LAT, LON = 25.7566, -80.3740                                     # FIU, for the forecast Laya reads
 LAYA_DIR = Path(os.environ.get("LAYA_DIR", HERE / "model" / "farmhand-laya"))
+FIELDS_DIR = (HERE / "fields").resolve()      # AlphaEarth map (alphaearth/fields.html + out/*.png, fields.json)
 SITE_DIR = Path(os.environ.get("SITE_DIR", Path.home() / "farmhand-site" / "current")).resolve()   # built by deploy.sh
 TYPES = {".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json",
          ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".woff2": "font/woff2", ".ico": "image/x-icon",
@@ -183,6 +184,21 @@ class Handler(BaseHTTPRequestHandler):
             if self.path.split("?")[0] not in ("/data", "/health", "/reading"):
                 return self._site()
         p = self._path()
+        if p == "/fields":
+            self.send_response(301); self.send_header("Location", "/farmhand/fields/"); self.end_headers(); return
+        if p.startswith("/fields/"):
+            rel = urllib.parse.unquote(p[len("/fields/"):]) or "fields.html"
+            f = (FIELDS_DIR / rel).resolve()
+            if FIELDS_DIR not in f.parents or not f.is_file():
+                return self._send(404, '{"error":"not found"}')
+            body = f.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", TYPES.get(f.suffix, "application/octet-stream"))
+            self.send_header("Cache-Control", "public, max-age=300")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if p in ("", "/"):
             return self._send(200, PAGE, "text/html; charset=utf-8")
         if p == "/data":

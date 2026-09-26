@@ -626,6 +626,46 @@ Skills: `design-skills/` (README says which to use for what). Prompts that work 
 - Box B's pump flow needs measuring (`flow_ml_per_s.B` in `calibration.json`, default 20.0 is a guess).
 - Two-box mode (`ONE_POT=0`) has only run in the Wokwi simulator so far. Run both boxes overnight before the event.
 
+## 5f. Where Farm Hand fits: the AlphaEarth farm map (2026-09-26)
+
+**Live:** https://farmhand.dmchang.xyz/farmhand/fields/ (served by the Mac mini). Code: `farm-hand/alphaearth/`.
+
+The scale story as a real map, not an illustration: Miami-Dade's farm belt (Redland / Homestead, just south of FIU), found from space with Google DeepMind's **AlphaEarth Foundations** Satellite Embedding dataset. Strong for the Google Cloud and AI for Social Good tracks (a DeepMind model on Google's data).
+
+### What AlphaEarth is (one line for judges)
+A DeepMind model that turns every 10 m square of land into 64 numbers (a "fingerprint") each year, from optical, radar, elevation and climate data, through clouds. Free, CC-BY 4.0, read straight from Google's public bucket (no account needed).
+
+### What the page shows (numbers from `alphaearth/out/fields.json`)
+| | |
+|---|---|
+| Farmland in 2025, found by AlphaEarth | **17,825 acres** (USDA's 2024 map: 22,121; ours is conservative) |
+| Farm fields | **690** (connected patches of 1.2+ acres; an estimate) |
+| Changed most, 2024 → 2025 | **2,674 acres** (top 15% fingerprint change on farmland) |
+| Farm Hand stations to cover it | **690** (one per field) to **1,783** (one per 10 acres) |
+| How good the farmland map is | **87% right** on 66,312 squares it never trained on |
+
+Layers (toggle): farmland 2025 (green), changed most (orange), USDA 2024 farmland (the answer key, blue), AlphaEarth's own view (64 numbers squeezed to 3 colors). Satellite basemap: Esri World Imagery. A pin marks the Farm Hand box at FIU.
+
+### How it's built (`alphaearth/build_fields.py`, about 1 minute)
+1. Reads the AlphaEarth 2024 + 2025 images for the box (25.43–25.62°N, 80.60–80.40°W) at 40 m, only that window (range requests on the COG). Tiles are stored **south-up**; the script flips them.
+2. Trains a gradient-boosting classifier: AlphaEarth 2024 fingerprint → farmland or not, with **USDA's Cropland Data Layer 2024** as the answer key (crops + fallow = farmland; pasture, developed, forest, wetland, water = not). 70/30 split; 87% held-out accuracy (F1 0.72; logistic regression got 81%).
+3. Predicts 2025 farmland from the 2025 fingerprints (USDA hasn't published 2025).
+4. Change = 1 − cosine similarity of each farm pixel's 2024 vs 2025 fingerprint; top 15% = "changed most".
+5. Fields = connected farm patches ≥ 3 pixels. Writes PNG layers + `fields.json` to `alphaearth/out/`.
+Rerun: `python farm-hand/alphaearth/build_fields.py`, then copy `fields.html`, `out/fields.json`, `out/*.png` to `~/farmhand-server/fields/` on the Mac mini.
+
+### Honesty rules (say these, they're also on the page)
+- "Farmland 2025" is a **prediction** from AlphaEarth, checked against USDA's 2024 map (87%). Not a survey.
+- "Changed most" is **not proof of drought damage.** Harvest timing and replanting change fingerprints too. Say "changed most in the drought year", never "died in the drought".
+- Field and station counts are **estimates** for sizing, not a quote.
+- AlphaEarth is **yearly**. It can't see today's soil. That's the pitch line: *"Satellites see a field once a year. Farm Hand feels the soil every second."*
+- Attribution (required, CC-BY 4.0): "The AlphaEarth Foundations Satellite Embedding dataset is produced by Google and Google DeepMind." + USDA NASS Cropland Data Layer 2024.
+
+### For Matthew (UI)
+- Put it on the **Simulation page** as the "outside, at scale" section (replaces the illustrated "A whole field" view from 5b). Either embed `/farmhand/fields/` in an iframe, or rebuild it in `ui-mui` with the same layers: the PNGs + `fields.json` are the data (bounds = `box_wsen`).
+- Demo order: live box → control box → season replay → **this map** ("and here's every farm in Miami-Dade that needs one").
+- Nice next step (not built): click a field → "a Farm Hand station here would cost / save …", or AlphaEarth similarity search ("fields most like this one").
+
 ## 6. Hackathon plan
 
 ⚠️ **Rules check first.** MLH-style hackathons want the project built at the event. This folder is practice + a proven design. At the event:

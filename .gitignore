@@ -26,3 +26,5 @@ farm-hand/design/frames_v1/
 farm-hand/laptop/data/rec/*.png
 farm-hand/laptop/data/rec/*.jpg
 .venv-mac/
+farm-hand/alphaearth/out/*.npz
+farm-hand/alphaearth/out/*.tif

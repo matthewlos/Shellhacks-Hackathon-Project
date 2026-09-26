@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Farm Hand fits</title>
+<meta name="description" content="Miami-Dade's farm belt found from space with Google DeepMind's AlphaEarth Foundations: farmland, fields, and what changed in the 2025 drought.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+/* House tokens: blue = Farm Hand, orange = change, green = farmland */
+:root{--ground:#eef1f4;--panel:#fbfcfd;--wash:#f2f5f8;--line:rgba(14,22,33,.09);--ink:#0e1621;--ink-2:#3d4a59;--muted:#5b6674;
+--ai:#1f64b8;--farm:#22a05a;--change:#e07028;--usda:#3c6ec8;--r-ctl:6px;--r-panel:12px;
+--f-display:"Bricolage Grotesque",system-ui,sans-serif;--f-body:"Atkinson Hyperlegible Next",system-ui,sans-serif;--f-num:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body)}
+.shell{display:grid;grid-template-columns:minmax(0,1fr) 380px;height:100dvh}
+@media(max-width:900px){.shell{grid-template-columns:1fr;height:auto}#map{height:62dvh}}
+#map{height:100%;min-height:360px;background:#dfe5ea}
+aside{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding:22px 22px 28px;display:grid;gap:18px;align-content:start}
+h1{margin:0;font:700 1.7rem/1.05 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.lede{margin:6px 0 0;color:var(--ink-2);font-size:14.5px}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden}
+.nums div{background:var(--panel);padding:12px 14px;display:grid;gap:2px}
+.nums b{font:600 1.5rem/1.1 var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.nums span{font-size:12.5px;color:var(--muted)}
+.nums .farm b{color:var(--farm)}.nums .chg b{color:var(--change)}.nums .st b{color:var(--ai)}
+.layers{display:grid;gap:6px}
+.layers label{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-ctl);cursor:pointer;font-size:14px}
+.layers label:hover{background:var(--wash)}
+.layers input{accent-color:var(--ai);width:16px;height:16px}
+.sw{width:14px;height:14px;border-radius:3px;flex:none}
+.layers small{margin-left:auto;color:var(--muted);font:500 12px var(--f-num)}
+.line{font-size:14px;color:var(--ink-2);margin:0}
+.line b{color:var(--ink)}
+.fine{font-size:12.5px;color:var(--muted);display:grid;gap:6px;margin:0;padding-left:16px}
+h2{margin:0;font:700 1rem/1.2 var(--f-display)}
+a{color:var(--ai)}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.leaflet-container{font-family:var(--f-body)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div id="map" role="region" aria-label="Map of Miami-Dade's farm belt"></div>
+  <aside>
+    <div>
+      <h1>Where Farm Hand fits</h1>
+      <p class="lede">Miami-Dade's farm belt (Redland and Homestead), found from space with Google DeepMind's <b>AlphaEarth Foundations</b>. Satellites see a field once a year. Farm Hand feels the soil every second.</p>
+    </div>
+    <div class="nums" id="nums">
+      <div class="farm"><b id="nAcres">–</b><span>acres of farmland, 2025</span></div>
+      <div class="farm"><b id="nFields">–</b><span>farm fields</span></div>
+      <div class="chg"><b id="nChg">–</b><span>acres changed most, 2024 → 2025</span></div>
+      <div class="st"><b id="nSt">–</b><span>Farm Hand stations (one per field)</span></div>
+    </div>
+    <div>
+      <h2>Layers</h2>
+      <div class="layers" style="margin-top:8px">
+        <label><input type="checkbox" id="lFarm" checked><span class="sw" style="background:var(--farm)"></span>Farmland 2025 (AlphaEarth)</label>
+        <label><input type="checkbox" id="lChg" checked><span class="sw" style="background:var(--change)"></span>Changed most, 2024 → 2025</label>
+        <label><input type="checkbox" id="lUsda"><span class="sw" style="background:var(--usda)"></span>USDA farmland 2024 (the answer key)</label>
+        <label><input type="checkbox" id="lAe"><span class="sw" style="background:linear-gradient(135deg,#27d6c2,#5b3fd6,#f08aa6)"></span>AlphaEarth's view (64 numbers → 3 colors)</label>
+      </div>
+    </div>
+    <p class="line" id="acc">–</p>
+    <p class="line">One Farm Hand board reads several probes. At one station per field that's <b id="nSt2">–</b> stations; at one per 10 acres, <b id="nSt10">–</b>.</p>
+    <div>
+      <h2>How to read this</h2>
+      <ul class="fine" id="honest"></ul>
+    </div>
+    <ul class="fine" id="attr"></ul>
+    <p class="fine" style="padding:0"><a href="/farmhand/">Live box data</a> · built <span id="built">–</span></p>
+  </aside>
+</div>
+<script>
+const $=id=>document.getElementById(id);const fmt=n=>Number(n).toLocaleString('en-US');
+fetch('fields.json').then(r=>r.json()).then(d=>{
+  const [W,S,E,N]=d.box_wsen, b=[[S,W],[N,E]];
+  const map=L.map('map',{zoomSnap:.25}).fitBounds(b,{padding:[20,20]});
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {maxZoom:18,attribution:'Imagery © Esri, Maxar, Earthstar Geographics'}).addTo(map);
+  const lay={
+    ae:L.imageOverlay('alphaearth_2025.png',b,{opacity:.85}),
+    usda:L.imageOverlay('usda_cdl_2024_farmland.png',b,{opacity:.9}),
+    farm:L.imageOverlay('farmland_2025.png',b,{opacity:.95}),
+    chg:L.imageOverlay('changed_2024_2025.png',b,{opacity:1})};
+  const sync=()=>{[['lAe','ae'],['lUsda','usda'],['lFarm','farm'],['lChg','chg']].forEach(([id,k])=>$(id).checked?lay[k].addTo(map):lay[k].remove())};
+  ['lAe','lUsda','lFarm','lChg'].forEach(id=>$(id).onchange=sync);sync();
+  L.rectangle(b,{color:'#ffffff',weight:1.5,fill:false,dashArray:'4 4'}).addTo(map);
+  L.circleMarker(d.fiu,{radius:7,color:'#fff',weight:2,fillColor:'#1f64b8',fillOpacity:1}).addTo(map)
+   .bindTooltip('Farm Hand box (FIU)',{permanent:true,direction:'right',offset:[8,0]});
+  $('nAcres').textContent=fmt(d.farmland_2025_acres);$('nFields').textContent=fmt(d.fields_2025);
+  $('nChg').textContent=fmt(d.changed_most_acres);$('nSt').textContent=fmt(d.stations_one_per_field);
+  $('nSt2').textContent=fmt(d.stations_one_per_field);$('nSt10').textContent=fmt(d.stations_one_per_10_acres);
+  const c=d.classifier;$('acc').innerHTML=`The farmland map is AlphaEarth's: a model read each 40 m square's fingerprint and was right <b>${(c.held_out_accuracy*100).toFixed(0)}%</b> of the time on ${fmt(c.test_pixels)} squares it never trained on (USDA's 2024 map as the answer key; USDA counts ${fmt(d.usda_2024_farmland_acres)} acres).`;
+  $('honest').innerHTML=d.honesty.map(h=>`<li>${h}</li>`).join('');
+  $('attr').innerHTML=d.attribution.map(h=>`<li>${h}</li>`).join('');$('built').textContent=d.built;
+});
+</script>
+</body>
+</html>
