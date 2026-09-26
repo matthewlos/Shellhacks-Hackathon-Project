@@ -1,26 +1,33 @@
 # Farm Hand virtual rig (UI)
 
-A web page that acts out the real Farm Hand build from `PLAN.md`: one box of soil, the soil and temp probes, the pump in its cup, the relay and the ESP32, plus the laptop logic around them. No build step, no dependencies.
+A web page that acts out the real Farm Hand build: one box of soil, the soil and temp probes, the pump in its cup, the relay and the ESP32, plus the laptop logic around them. It runs the same rules as the real code in `farm-hand/` on `main`, in the browser, with a modeled box of soil instead of the real one. No build step, no dependencies.
 
 **Run it:** open `ui/index.html` in a browser (double-click works). Or `python -m http.server` in `ui/` and go to http://localhost:8000.
 
-## What's on the page
-- **The rig**: the soil darkens as moisture rises, water runs down the tube and drips while the pump runs, the relay LED lights, the probe LED goes green / red (dry) / blue (pumping), the cup drains.
-- **The call**: "Watering 16 s" / "Holding off" with the reason. The check runs every 15 min, or press **Run agents**. Laya (fast call) + the Gemini team (explains) are simulated.
-- **Safety rules**: board online, not already wet (70%), 30 min between AI pours, 1,500 ml a day, last pour done soaking, 30 s max.
-- **Hit a target**: pick 36–68%, press Go. It pulses (70% of the gap, max 8 s), waits for each pulse to soak in, learns the soak rate, and stops within 1% below the target.
-- **Pinch the tube**: the pump runs but no water arrives, and it stops and says so. **Pour a cup in by hand**: the "someone added water" banner. **Refill the cup**: the pump cup runs dry after about 1.5 L.
-- **Soil over time**: moisture, a simulated timer pot (5 s every 6 h), soil temp, pour dots, and the water saved vs the timer (only full 6 h timer intervals count).
-- **Tabs**: agent team, every pour (what it did to the soil), and the raw serial lines the chip prints.
-- **Speed**: real time, 1 min/s, 10 min/s, 1 h/s, and Skip 6 h.
+## What matches the real code
+| Sim (`sim.js`) | Real file (`farm-hand/…`) |
+|---|---|
+| `SimBoard`: `P A <ms>`, `T <every_s> <ms>`, `S`, `X`; `boot` / `reading` / `pour_start` / `pour_done` / `refused` (busy, gap) / `timer` / `error` JSON lines; 30 s cap, 5 s gap between pours, 1 reading a second | `firmware/farm_hand/farm_hand.ino` |
+| Pour tags `laptop` (AI) / `manual` (test pour) / `target`; `T 0` sent at start (one-pot mode) | `laptop/board.py` |
+| `guards()` and the guard report: board online, not wet (70%), no target run, 30 min since the last pot A pour (test pours too), daily cap since midnight, last pour finished soaking | `laptop/brain.py` |
+| Decisions: water only at or below 40% (dry line + 5), seconds = (55 − soil) / learned %/s; 2 failed pours → wait; Laya first, then the Gemini team, or Laya only, or rules | `laptop/brain.py` |
+| Pour detector: watch 180 s, rise = peak − before, ok at +1.5%; learned rate = median of the last 5 good pours (1.2 %/s until then). Hand pour: +4% vs 45–120 s ago, pump quiet 4 min | `laptop/soak.py` |
+| Hit the Target: 35–68%, up to 6 pulses of 70% of the gap (1–8 s), settle 12–90 s, stop 1% below, ±2% band, fault if a 3%+ pulse moves under 30% of what it should | `laptop/target.py` |
+| Water saved: virtual timer (5 s every 6 h, full intervals only) vs every pot A pour, test pours and demos included; the orange "if a timer watered" line | `laptop/report.py`, `laptop/static/views.js` |
+
+## What is simulated (not from the real code)
+- **The soil**: 0.04% per ml (the real box took 200 ml → +8% on 2026-09-23), water seeps to the probe at 0.4 %/s, drying 0.8 %/h at 26 °C (faster when hot or wet), probe noise ±0.25%, temperature 27 ± 5 °C over the day like the FakeBoard. The drying rate is a guess.
+- **Laya**: the real one is a fine-tuned model (`laya/`). Here it picks water at or below 40%, else "wait, soil has water", in 12–32 ms.
+- **The Gemini team**: the timings (20–50 s) and the critic sending a plan back about 1 time in 4 are made up. The plan follows the planner's rules of thumb.
+- The forecast and drought feeds: the pot is indoors, so rain is ignored; the county drought number is the saved Sep 15 value.
+
+## Buttons
+Run agents, Test pour 5 s, Stop pump, Hit a target and the brain picker work like the real dashboard. Pinch the tube, Pour a cup in by hand, Dry the soil out and Refill the cup act on the modeled box (the real server's `/api/demo/*`). Speed: real time, 1 min/s, 10 min/s, 1 h/s, and Skip 6 h. `window.farmHand` is the live sim in the console.
 
 ## Files
-- `sim.js`: the model. `Soil` (soak-in and drying), `SimBoard` (the chip: `P A <ms>`, `X`, 30 s cap, JSON reading lines), `FarmHand` (call, guards, pour detector, hand-pour detector, Hit the Target, virtual timer). No DOM.
-- `app.js`: draws the model and wires the buttons. `window.farmHand` is the live sim in the console.
+- `sim.js`: `World` (the modeled soil), `SimBoard` (the chip), `FarmHand` (board.py + brain.py + soak.py + target.py + report.py). No DOM.
+- `app.js`: draws it and wires the buttons.
 - `index.html`, `style.css`: layout and the house style (blue = AI, orange = timer, purple = temp).
 
-## Model numbers (all in `CFG` at the top of `sim.js`)
-Pump 20 ml/s. 0.04% soil per ml (the real 10 s pour took 44% → 52%). Water reaches the probe in about 6 s. Drying 0.8%/h at 26 °C, faster when warm and wet. Probe noise ±0.25%.
-
 ## Going live later
-The page only talks to `FarmHand`, and `FarmHand` sends the board `P A <ms>` / `X` through `command()` and reads the moisture it gets back. To show the real rig, replace `SimBoard` and `Soil` with a feed of the real serial JSON (for example over a WebSocket from `server.py`). The buttons that fake the world (pinch, hand pour, refill) then become things a person does to the real box.
+`FarmHand` exposes the same things `server.py` serves (`latest`, `live`, `hand`, `run`, `guardReport()`, `report()`, `activity`, `decisions`, `soaks`), so `app.js` could read `/api/live`, `/api/state` and `/api/series` from the real server instead.

@@ -111,6 +111,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .readout.failed .ro-fill { background: var(--bad); }
 
 /* the call */
+.brainrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+.brainrow .seg button { padding: 4px 9px; font-size: 12px; }
 .call h2 { font: 700 30px/1.1 var(--display); margin: 0 0 6px; letter-spacing: -.01em; }
 .call h2.water { color: var(--ai); }
 .call h2.blocked { color: var(--bad); }
@@ -187,6 +189,7 @@ li.blocked .dot { background: var(--bad); box-shadow: 0 0 0 4px var(--bad-soft);
 .guardlist li.skip::before { content: '– '; color: var(--muted); }
 .guardlist li.no { color: var(--bad); }
 .guardlist li.no::before { content: '✕ '; }
+.guardlist li span { color: var(--muted); float: right; font-family: var(--mono); font-size: 11px; }
 .steps { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; max-height: 190px; overflow: auto; }
 .steps li { font-size: 13px; padding: 2px 0; }
 .steps li time { font-family: var(--mono); color: var(--muted); font-size: 11px; margin-right: 6px; }
@@ -209,7 +212,7 @@ li.blocked .dot { background: var(--bad); box-shadow: 0 0 0 4px var(--bad-soft);
 .k-timer { border-color: var(--timer) !important; border-top-style: dashed !important; }
 .k-temp { border-color: var(--temp) !important; }
 .keys i.k-dot { width: 8px; height: 8px; border: 0; border-radius: 50%; }
-.k-dot.ai { background: var(--ai); } .k-dot.timer { background: var(--timer); }
+.k-dot.ai { background: var(--ai); } .keys i.k-dot.demo { background: #fff; border: 2px solid var(--muted); width: 9px; height: 9px; } .k-dot.timer { background: var(--timer); }
 .canvas-box { position: relative; }
 #chart { display: block; width: 100%; height: 240px; }
 .tip { position: absolute; top: 0; pointer-events: none; background: var(--ink); color: #fff; font-size: 12px; padding: 6px 8px; border-radius: 8px; white-space: nowrap; }
@@ -217,6 +220,8 @@ li.blocked .dot { background: var(--bad); box-shadow: 0 0 0 4px var(--bad-soft);
 .saved small { font-size: 13px; color: var(--muted); }
 .saved b { font-size: 38px; font-weight: 600; color: var(--ai); line-height: 1.1; }
 .saved b.bad { color: var(--bad); }
+.saved b.good { color: var(--ok); }
+.saved b.early { color: var(--muted); font-size: 26px; }
 .saved p { margin: 0; font-size: 12px; }
 .tag { align-self: flex-start; font: 600 10px var(--mono); text-transform: uppercase; letter-spacing: .06em; background: var(--timer-soft); color: var(--timer); padding: 3px 7px; border-radius: 6px; margin-top: 4px; }
 

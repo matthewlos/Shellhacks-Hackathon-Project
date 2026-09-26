@@ -1,38 +1,34 @@
 /* Farm Hand virtual rig.
-   Models the real build in PLAN.md (one pot, ESP32, soil + temp probe, relay + mini pump)
-   and the laptop logic around it (watering call, safety guards, pour detector, Hit the Target,
-   virtual timer). No DOM in here: app.js draws it. Every number is modeled, not measured.
-   To go live later, replace SimBoard with something that speaks the same serial lines. */
+   A browser copy of the real code in farm-hand/ (main branch):
+     SimBoard   = firmware/farm_hand/farm_hand.ino  (same commands, same JSON lines, 30 s cap, 5 s gap)
+     FarmHand   = laptop/board.py + brain.py (guards, Laya / rules / Gemini-team decisions)
+                  + soak.py (pour detector, hand-pour detector) + target.py (Hit the Target) + report.py
+   The soil itself is a model (World). Everything the page shows is simulated, never measured.
+   Time is simulated seconds (this.t), advanced one step per second like the chip's 1 reading a second. */
 (function () {
   'use strict';
 
   const CFG = {
-    FLOW_ML_S: 20,          // mini pump, about 20 ml/s (PLAN §1)
-    PCT_PER_ML: 0.04,       // 200 ml took the real box 44% -> 52% (PLAN §3)
-    SOAK_TAU_S: 6,          // how fast surface water reaches the probe
-    DRY_PCT_H: 0.8,         // moisture lost per hour at 26 °C and 50%
-    FIELD_CAP: 75,          // above this the box drains out the bottom
-    NOISE: 0.25,            // probe noise, %
-    RAW_DRY: 3400, RAW_WET: 1507,  // calibration from bring-up (PLAN §3)
-    POUR_MAX_S: 30,
-    WATER_AT: 40, WET_AT: 70, AIM: 55,
-    HEALTHY: [35, 70],
-    AI_GAP_S: 30 * 60,
-    DAILY_MAX_ML: 1500,
-    CHECK_EVERY_S: 15 * 60,
-    TIMER_EVERY_S: 6 * 3600,
-    TIMER_POUR_S: 5,
-    CUP_ML: 1500,
-    HAND_CUP_ML: 236.6,
-    START_PCT: 44,
-    START_HOUR: 8,
-    RATE0: 0.8,             // first guess, % per pump second (learned from each pour)
+    // laptop/config.py
+    DRY_PCT: 35, WET_PCT: 70, TARGET_PCT: 55, LOW_MARGIN: 5,
+    POUR_CAP_S: 30, AI_MIN_GAP_MIN: 30, DAILY_MAX_ML: 1500, CHECK_EVERY_MIN: 15,
+    TIMER_EVERY_S: 6 * 3600, TIMER_POUR_MS: 5000, FLOW_ML_S: 20,
+    // firmware/farm_hand/farm_hand.ino
+    RAW_AIR: 3400, RAW_WATER: 1507, PUMP_CAP_MS: 30000, PUMP_GAP_MS: 5000,
+    // laptop/soak.py
+    WATCH_S: 180, RISE_SEEN: 1.0, MIN_OK_RISE: 1.5, HAND_RISE: 4.0, PUMP_QUIET_S: 240, RATE_DEFAULT: 1.2,
+    // laptop/target.py
+    BAND: 2.0, LOCK: 1.0, MAX_PULSES: 6, PULSE_MAX_S: 8, PULSE_MIN_S: 1, CREEP: 0.7,
+    MIN_SETTLE_S: 12, MAX_SETTLE_S: 90, FLAT: 0.4, MISS_RISE: 0.8, MISS_SHARE: 0.3, CHECKABLE: 3.0,
+    // the world (a model): the real box took 200 ml -> +8% (44% -> 52%) on 2026-09-23
+    PCT_PER_ML: 0.04, SEEP_PCT_S: 0.4, DRY_PCT_H: 0.8, NOISE: 0.25,
+    START_PCT: 44, START_HOUR: 8, CUP_ML: 236.6, PUMP_CUP_ML: 1500,
   };
 
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
   const r1 = (x) => Math.round(x * 10) / 10;
-  const f1 = (x) => r1(x).toFixed(1);
-  const signed = (x) => (x >= 0 ? '+' : '') + f1(x);
+  const r3 = (x) => Math.round(x * 1000) / 1000;
+  const f0 = (x) => Math.round(x).toString();
   function median(a) {
     if (!a.length) return NaN;
     const s = a.slice().sort((x, y) => x - y), n = s.length;
@@ -44,62 +40,103 @@
     while (!v) v = Math.random();
     return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
   }
+  const rawToPct = (raw) => clamp((CFG.RAW_AIR - raw) * 100 / (CFG.RAW_AIR - CFG.RAW_WATER), 0, 100);
 
-  class Soil {
-    constructor(pct) { this.pct = pct; this.surfaceMl = 0; this.wetDepth = 0; }
-    addWater(ml) { this.surfaceMl += ml; }
-    step(dt, tempC) {
-      const inf = this.surfaceMl * (1 - Math.exp(-dt / CFG.SOAK_TAU_S));
-      this.surfaceMl -= inf;
-      if (this.surfaceMl < 0.05) this.surfaceMl = 0;
-      this.pct += inf * CFG.PCT_PER_ML;
-      this.wetDepth = Math.min(1, this.wetDepth + inf / 400);
-      const perHour = CFG.DRY_PCT_H * (1 + 0.07 * (tempC - 26)) * (this.pct / 50);
-      this.pct -= perHour * dt / 3600;
-      if (this.pct > CFG.FIELD_CAP) this.pct -= (this.pct - CFG.FIELD_CAP) * 0.002 * dt;
-      this.pct = clamp(this.pct, 3, 98);
-      this.wetDepth *= Math.exp(-dt / (3 * 3600));
+  // ---------- the physical box (model) ----------
+  class World {
+    constructor() {
+      this.pct = CFG.START_PCT;   // true moisture at the probe
+      this.soaking = 0;           // water poured but not at the probe yet, in %
+      this.wetDepth = 0;          // 0..1, for the drawing only
+      this.cupMl = CFG.PUMP_CUP_ML;
+      this.pinched = false;
+      this.tempC = 27;
     }
-  }
-
-  // The chip: takes "P A <ms>" / "X", runs the pump, caps pours at 30 s, prints JSON lines.
-  class SimBoard {
-    constructor(soil) {
-      this.soil = soil;
-      this.pumpLeft = 0; this.pumpMs = 0;
-      this.pinched = false; this.cupMl = CFG.CUP_ML; this.online = true;
-      this.out = [];
+    step(t) {
+      const hour = (CFG.START_HOUR + t / 3600) % 24;
+      this.tempC = 27 + 5 * Math.sin((hour - 9) / 24 * 2 * Math.PI);     // laptop/board.py FakeBoard
+      const move = Math.min(this.soaking, CFG.SEEP_PCT_S);               // seeps down at ~0.4 %/s (FakeBoard)
+      this.soaking -= move;
+      this.pct += move;
+      this.wetDepth = Math.min(1, this.wetDepth + move / 12);
+      const perHour = CFG.DRY_PCT_H * (1 + 0.07 * (this.tempC - 26)) * (this.pct / 50);
+      this.pct = clamp(this.pct - perHour / 3600, 3, 95);
+      this.wetDepth *= Math.exp(-1 / (3 * 3600));
     }
-    get pumping() { return this.pumpLeft > 0; }
-    command(cmd) {
-      const p = cmd.trim().split(/\s+/);
-      if (p[0] === 'P') {
-        if (this.pumpLeft > 0) return 'refused busy';
-        const ms = clamp(parseInt(p[2], 10) || 0, 0, CFG.POUR_MAX_S * 1000);
-        this.pumpLeft = ms / 1000; this.pumpMs = ms;
-        return `ok P A ${ms}`;
-      }
-      if (p[0] === 'X') {
-        const was = this.pumpLeft > 0;
-        this.pumpLeft = 0;
-        return was ? 'stopped' : 'ok idle';
-      }
-      return 'unknown';
-    }
-    step(dt) {
-      if (this.pumpLeft <= 0) return;
-      const run = Math.min(dt, this.pumpLeft);
-      this.pumpLeft -= run;
-      const out = this.pinched ? 0 : Math.min(run * CFG.FLOW_ML_S, this.cupMl);
+    pump(ml) {                       // what the pump pushes out of the cup
+      if (this.pinched) return 0;
+      const out = Math.min(ml, this.cupMl);
       this.cupMl -= out;
-      this.soil.addWater(out);
-      if (this.pumpLeft <= 1e-9) {
-        this.pumpLeft = 0;
-        this.out.push(`{"type":"done","pot":"A","ms":${this.pumpMs}}`);
-      }
+      this.soaking += out * CFG.PCT_PER_ML;
+      return out;
     }
+    dryPerHour() { return CFG.DRY_PCT_H * (1 + 0.07 * (this.tempC - 26)) * (this.pct / 50); }
   }
 
+  // ---------- the chip (firmware/farm_hand/farm_hand.ino) ----------
+  class SimBoard {
+    constructor(world, emit) {
+      this.world = world; this.emit = emit;
+      this.ms = 0;
+      this.activePot = null; this.pourStart = 0; this.pourMs = 0; this.pourBy = ''; this.lastPourEnd = null;
+      this.timerEveryMs = 6 * 3600 * 1000; this.timerPourMs = 5000;
+    }
+    line(obj) { this.emit(obj); }
+    send(cmd) {
+      cmd = cmd.trim();
+      if (!cmd) return;
+      const c = cmd[0];
+      if (c === 'P') {
+        const pot = cmd[2] === 'B' ? 'B' : 'A';
+        const ms = parseInt(cmd.substring(4), 10) || 0;
+        if (!ms) return this.line({ type: 'error', why: 'usage: P A 3000' });
+        this.startPour(pot, ms, 'laptop');
+      } else if (c === 'T') {
+        const p = cmd.split(/\s+/);
+        const every = parseInt(p[1], 10) || 0;
+        this.timerEveryMs = every * 1000;
+        if (p[2]) this.timerPourMs = parseInt(p[2], 10) || this.timerPourMs;
+        this.line({ type: 'timer', every_s: every, pour_ms: this.timerPourMs });
+      } else if (c === 'S') this.report();
+      else if (c === 'X') this.stopPour('emergency_stop');
+      else this.line({ type: 'error', why: 'unknown command' });
+    }
+    startPour(pot, ms, by) {
+      if (this.activePot) return this.line({ type: 'refused', pot, why: 'busy' });
+      if (this.lastPourEnd !== null && this.ms - this.lastPourEnd < CFG.PUMP_GAP_MS) return this.line({ type: 'refused', pot, why: 'gap' });
+      ms = Math.min(ms, CFG.PUMP_CAP_MS);
+      this.activePot = pot; this.pourStart = this.ms; this.pourMs = ms; this.pourBy = by;
+      this.line({ type: 'pour_start', pot, ms, by });
+    }
+    stopPour(why) {
+      if (!this.activePot) return;
+      const ran = this.ms - this.pourStart;
+      this.line({ type: 'pour_done', pot: this.activePot, ran_ms: ran, by: this.pourBy, why });
+      this.activePot = null; this.lastPourEnd = this.ms;
+    }
+    report() {
+      const w = this.world;
+      const pct = clamp(w.pct + gauss() * CFG.NOISE, 0, 100);
+      const ra = Math.round(CFG.RAW_AIR - pct / 100 * (CFG.RAW_AIR - CFG.RAW_WATER));
+      const rb = Math.round(1200 + Math.random() * 2000);        // pin 33 is empty: it reads junk
+      this.line({ type: 'reading', ms: this.ms, a_raw: ra, b_raw: rb, a_pct: Math.round(rawToPct(ra)), b_pct: Math.round(rawToPct(rb)),
+                  temp_c: r1(w.tempC + gauss() * 0.05), pumping: this.activePot || 'none' });
+    }
+    step() {                          // one second of loop()
+      const t0 = this.ms;
+      this.ms += 1000;
+      if (this.activePot) {
+        const end = this.pourStart + this.pourMs;
+        const runMs = Math.max(0, Math.min(this.ms, end) - Math.max(t0, this.pourStart));
+        this.world.pump(runMs / 1000 * CFG.FLOW_ML_S);
+        if (this.ms >= end) { this.ms = end; this.stopPour('time_up'); this.ms = t0 + 1000; }
+      }
+      this.report();
+    }
+    get pumping() { return !!this.activePot; }
+  }
+
+  // ---------- the laptop (board.py, brain.py, soak.py, target.py, report.py) ----------
   class FarmHand {
     constructor() { this.reset(); }
 
@@ -107,309 +144,425 @@
       const d = new Date(); d.setHours(CFG.START_HOUR, 0, 0, 0);
       this.t0 = d.getTime();
       this.t = 0;
-      this.soil = new Soil(CFG.START_PCT);
-      this.timerSoil = new Soil(CFG.START_PCT);
-      this.board = new SimBoard(this.soil);
-      this.readings = [];
-      this.reading = null;
-      this.history = [];
-      this.pours = [];
-      this.timerPours = [];
-      this.serial = []; this.serialCount = 0;
-      this.events = [];
-      this.rate = CFG.RATE0;
-      this.timerMl = 0;
-      this.lastAiPourT = -Infinity;
-      this.lastPumpEndT = -Infinity;
-      this.lastCheckT = 5 - CFG.CHECK_EVERY_S;   // first check 5 s in
-      this.lastHandT = -Infinity; this.handPending = null;
-      this.soak = null; this.target = null; this.lastTarget = null;
-      this.pumpFault = null;
-      this.call = null;
-      this.setWeather();
+      this.brainMode = this.brainMode || 'gemini';   // 'gemini' | 'laya' | 'rules'
+      this.world = new World();
+      this.board = new SimBoard(this.world, (o) => this.onLine(o));
+      this.latest = null; this.boardEvents = [];
+      this.tagNext = null; this.curTag = 'laptop';
+      // store.py tables
+      this.readings = []; this.history = []; this.pours = []; this.soaks = []; this.decisions = [];
+      this.activity = []; this.serial = []; this.serialCount = 0;
+      // soak.py
+      this.hist = []; this.long = []; this.lastPump = -1e9; this.watch = null;
+      this.live = { phase: 'idle' }; this.hand = { phase: 'idle' }; this.PAUSED = false;
+      // brain.py
+      this.LAST = { laya: null, check: null }; this.team = null; this.nextCheck = 20;   // server.py loop sleeps 20 s first
+      // target.py
+      this.run = { phase: 'idle' }; this.tgt = null;
+      this.log('<', JSON.stringify({ type: 'boot', fw: 'farm-hand-1', sim: 1, probes: 1 }));
+      this.send('T 0 5000');         // one-pot mode: the chip's pot-B timer off (board.py open_board)
     }
 
-    setWeather() {
-      const hour = (CFG.START_HOUR + this.t / 3600) % 24;
-      const wave = Math.sin(2 * Math.PI * (hour - 9) / 24);
-      this.tempC = 26.5 + 3 * wave;
-      this.airC = this.tempC + 1.2 + 2 * wave;
-    }
-
-    now() { return r1(median(this.readings.slice(-6))); }
-
+    // ----- plumbing -----
     log(dir, text) {
       this.serial.push({ t: this.t, dir, text });
-      if (this.serial.length > 120) this.serial.shift();
+      if (this.serial.length > 150) this.serial.shift();
       this.serialCount++;
     }
+    logAct(agent, what) {
+      this.activity.push({ ts: this.t, agent, what });
+      if (this.activity.length > 200) this.activity.shift();
+    }
+    send(cmd) { this.log('>', cmd); this.board.send(cmd); }
+    midnight() { return Math.floor((CFG.START_HOUR * 3600 + this.t) / 86400) * 86400 - CFG.START_HOUR * 3600; }
+    nowPct() { const v = this.hist.slice(-6); return v.length ? r1(median(v)) : null; }
 
-    event(type, data) {
-      this.events.push(Object.assign({ type, t: this.t }, data));
-      if (this.events.length > 300) this.events.shift();
+    // board.py _on_line
+    onLine(obj) {
+      obj = Object.assign({}, obj);
+      this.log('<', JSON.stringify(obj));
+      obj.ts = this.t;
+      if (obj.type === 'reading') {
+        obj.a_pct = r1(rawToPct(obj.a_raw));
+        obj.b_pct = r1(rawToPct(obj.b_raw));
+        this.latest = obj;
+        this.readings.push(obj);
+        if (this.readings.length > 400) this.readings.shift();
+      } else {
+        if (obj.type === 'pour_start' && obj.by === 'laptop') { this.curTag = this.tagNext || 'laptop'; this.tagNext = null; obj.by = this.curTag; }
+        else if (obj.type === 'pour_done' && obj.by === 'laptop') obj.by = this.curTag;
+        this.boardEvents.push(obj);
+        if (this.boardEvents.length > 50) this.boardEvents.shift();
+        if (obj.type === 'pour_done') this.pours.push({ ts: this.t, pot: obj.pot, ran_ms: obj.ran_ms, by: obj.by, why: obj.why });
+      }
+      this.soakOnLine(obj);
     }
 
     step() {
-      const t = ++this.t;
-      this.setWeather();
-      const wasPumping = this.board.pumping;
-      this.board.step(1);
-      if (wasPumping && !this.board.pumping) this.lastPumpEndT = t;
-      this.soil.step(1, this.tempC);
-      this.timerSoil.step(1, this.tempC);
-
-      if (t % CFG.TIMER_EVERY_S === 0) {          // the virtual timer pot
-        const ml = CFG.TIMER_POUR_S * CFG.FLOW_ML_S;
-        this.timerSoil.addWater(ml);
-        this.timerMl += ml;
-        this.timerPours.push({ t, ml });
+      this.t++;
+      this.world.step(this.t);
+      this.board.step();
+      this.soakTick();
+      this.targetTick();
+      this.teamTick();
+      if (this.t >= this.nextCheck) {
+        this.checkNow('loop');
+        this.nextCheck = this.t + CFG.CHECK_EVERY_MIN * 60;
       }
-
-      const pct = clamp(this.soil.pct + gauss() * CFG.NOISE, 0, 100);
-      const raw = Math.round(CFG.RAW_DRY - pct / 100 * (CFG.RAW_DRY - CFG.RAW_WET));
-      const temp = this.tempC + gauss() * 0.05;
-      this.readings.push(pct);
-      if (this.readings.length > 400) this.readings.shift();
-      this.reading = { pct, raw, temp, pumping: this.board.pumping };
-      for (const line of this.board.out) this.log('<', line);
-      this.board.out.length = 0;
-      this.log('<', `{"type":"reading","a_raw":${raw},"a_pct":${f1(pct)},"temp_c":${temp.toFixed(2)},"pumping":${this.board.pumping}}`);
-
-      this.soakStep();
-      this.handStep();
-      this.targetStep();
-      if (!this.target && t - this.lastCheckT >= CFG.CHECK_EVERY_S) this.check('auto');
-
-      if (t % 10 === 0) {
-        this.history.push({ t, m: this.now(), timer: this.timerSoil.pct, temp: this.tempC });
+      if (this.t % 10 === 0 && this.latest) {
+        this.history.push({ t: this.t, a: this.nowPct(), temp: this.latest.temp_c });
         if (this.history.length > 80000) this.history.shift();
       }
     }
-
     fastForward(sec) { for (let i = 0; i < sec; i++) this.step(); }
 
-    used24() {
-      let ml = 0;
-      for (let i = this.pours.length - 1; i >= 0 && this.t - this.pours[i].t < 86400; i--) ml += this.pours[i].ml;
-      return ml;
+    // ----- soak.py -----
+    soakOnLine(obj) {
+      if (obj.type === 'reading') {
+        this.hist.push(obj.a_pct);
+        if (this.hist.length > 30) this.hist.shift();
+        if (obj.pumping !== 'none') this.lastPump = this.t;
+        this.checkHand(obj.a_pct);
+      } else if (obj.type === 'pour_start') {
+        this.lastPump = this.t;
+        if (!this.PAUSED && this.hist.length) {
+          const before = median(this.hist.slice(-6));
+          this.watch = { pot: obj.pot, poured_s: obj.ms / 1000, before, t0: this.t, peak: before, first: null, by: obj.by };
+          this.live = { phase: 'soaking', pot: obj.pot, before, now: before, t0: this.t, watch_s: CFG.WATCH_S, poured_s: obj.ms / 1000 };
+        }
+      }
+    }
+    soakTick() {
+      const w = this.watch;
+      if (!w) return;
+      const v = this.hist[this.hist.length - 1];
+      w.peak = Math.max(w.peak, v);
+      this.live.now = v;
+      if (w.first === null && v >= w.before + CFG.RISE_SEEN) w.first = this.t - w.t0;
+      if (this.t - w.t0 < CFG.WATCH_S) return;
+      const rise = r1(w.peak - w.before), ok = rise >= CFG.MIN_OK_RISE;
+      const note = ok ? 'water reached the probe'
+        : "probe barely moved: check the pump is in water, the tube isn't kinked, and the tube points at the pot";
+      const d = { ts: this.t, pot: w.pot, poured_s: w.poured_s, before_pct: r1(w.before), peak_pct: r1(w.peak), rise_pct: rise,
+                  first_rise_s: w.first, pct_per_s: w.poured_s ? r3(rise / w.poured_s) : null, ok, note, by: w.by };
+      this.soaks.push(d);
+      this.watch = null;
+      this.live = { phase: 'done', last: d, t_done: this.t };
+    }
+    checkHand(pct) {
+      const now = this.t;
+      this.long = this.long.filter(([ts]) => now - ts < 180);
+      this.long.push([now, pct]);
+      if (this.hand.phase === 'seen') {
+        if (now - this.hand.ts < 90) {
+          const v = median(this.long.slice(-5).map((x) => x[1]));
+          this.hand.now = r1(v);
+          this.hand.rise = r1(Math.max(this.hand.rise, v - this.hand.before));
+          return;
+        }
+        if (now - this.hand.ts < 180) return;
+        this.hand = { phase: 'idle' };
+      }
+      const base = this.long.filter(([ts]) => now - ts >= 45 && now - ts <= 120).map((x) => x[1]);
+      if (base.length < 10 || this.long.length < 5 || this.PAUSED || now - this.lastPump < CFG.PUMP_QUIET_S) return;
+      const before = median(base), v = median(this.long.slice(-5).map((x) => x[1]));
+      if (v - before >= CFG.HAND_RISE) this.hand = { phase: 'seen', ts: now, before: r1(before), now: r1(v), rise: r1(v - before) };
+    }
+    learnedPctPerS() {
+      const vals = this.soaks.slice(-20).reverse().filter((s) => s.pot === 'A' && s.ok && s.pct_per_s).map((s) => s.pct_per_s);
+      return vals.length ? r3(median(vals.slice(0, 5))) : CFG.RATE_DEFAULT;
     }
 
-    // Code-level safety rules. The AI asks, these decide (PLAN §5).
-    guards(sec, byPerson) {
-      const ml = sec * CFG.FLOW_ML_S, used = this.used24(), m = this.now();
-      const minsAgo = (this.t - this.lastAiPourT) / 60;
+    // ----- brain.py: hard rules -----
+    lastAiPourTs() { const p = this.pours.filter((x) => x.pot === 'A'); return p.length ? p[p.length - 1].ts : null; }
+    mlToday() {
+      const since = this.midnight();
+      return this.pours.filter((p) => p.pot === 'A' && p.ts >= since).reduce((s, p) => s + p.ran_ms / 1000 * CFG.FLOW_ML_S, 0);
+    }
+    guards(seconds, skipGap) {
+      const b = this.latest;
+      if (!b || this.t - b.ts > 120) return [false, 'board offline', 0];
+      if (b.a_pct >= CFG.WET_PCT) return [false, `pot A already wet (${b.a_pct}% >= ${CFG.WET_PCT}%)`, 0];
+      if (this.PAUSED && !skipGap) return [false, 'a Hit-the-Target run is using the pump', 0];
+      const last = this.lastAiPourTs();
+      const gap = last === null ? Infinity : (this.t - last) / 60;
+      if (gap < CFG.AI_MIN_GAP_MIN && !skipGap) return [false, `watered ${f0(gap)} min ago, rule is ${CFG.AI_MIN_GAP_MIN} min`, 0];
+      const ml = this.mlToday();
+      if (ml >= CFG.DAILY_MAX_ML) return [false, `daily cap hit (${f0(ml)} ml)`, 0];
+      if (this.live.phase === 'soaking') return [false, 'last pour is still soaking in', 0];
+      return [true, 'ok', Math.max(1, Math.min(seconds, CFG.POUR_CAP_S))];
+    }
+    guardReport() {
+      const b = this.latest, fresh = !!(b && this.t - b.ts <= 120);
+      const last = this.lastAiPourTs();
+      const gap = last === null ? null : (this.t - last) / 60;
+      const ml = this.mlToday();
       return [
-        { name: 'Board online', ok: this.board.online, why: 'the board is offline' },
-        { name: 'Not already wet', ok: m < CFG.WET_AT, why: `soil is ${f1(m)}%, the wet line is ${CFG.WET_AT}%` },
-        { name: '30 min between AI pours', ok: byPerson || minsAgo >= 30, skipped: byPerson,
-          why: `watered ${Math.round(minsAgo)} min ago, rule is 30 min` },
-        { name: '1,500 ml a day', ok: used + ml <= CFG.DAILY_MAX_ML,
-          why: `${Math.round(used)} ml used in the last 24 h, this pour would pass ${CFG.DAILY_MAX_ML} ml` },
-        { name: 'Last pour done soaking', ok: !this.soak && !this.board.pumping, why: 'the last pour is still soaking in' },
-        { name: '30 s max per pour', ok: sec <= CFG.POUR_MAX_S, why: `${sec} s is over the 30 s cap` },
+        { rule: 'Board online', ok: fresh, detail: 'reading ' + (b ? `${this.t - b.ts} s ago` : 'none yet') },
+        { rule: 'Pot A not already wet', ok: fresh && b.a_pct < CFG.WET_PCT, detail: b ? `${b.a_pct.toFixed(1)}% (limit ${CFG.WET_PCT}%)` : '–' },
+        { rule: 'Gap since last AI pour', ok: gap === null || gap >= CFG.AI_MIN_GAP_MIN, detail: (gap === null ? 'no pours yet' : `${f0(gap)} min`) + ` (min ${CFG.AI_MIN_GAP_MIN})` },
+        { rule: 'Daily water cap', ok: ml < CFG.DAILY_MAX_ML, detail: `${f0(ml)} / ${CFG.DAILY_MAX_ML} ml` },
+        { rule: 'Last pour finished soaking', ok: this.live.phase !== 'soaking', detail: this.live.phase },
+        { rule: 'Pour length cap', ok: true, detail: `${CFG.POUR_CAP_S} s (laptop) + 30 s (chip)` },
       ];
     }
+    waterPot(seconds, reason, tag) {
+      const [ok, why, secs] = this.guards(seconds, false);
+      if (!ok) { this.logAct('guards', 'REFUSED: ' + why); return { watered: false, refused_because: why }; }
+      this.tagNext = tag || null;
+      this.send(`P A ${Math.round(secs * 1000)}`);
+      this.logAct('executor', `pump A ${f0(secs)}s`);
+      return { watered: true, seconds: r1(secs) };
+    }
 
-    // The watering call. Stands in for Laya (fast) + the Gemini team (explains).
-    check(kind) {
-      this.lastCheckT = this.t;
-      const m = this.now(), rate = this.rate;
-      const c = { t: this.t, kind, m, act: 'wait', sec: 0, why: '', guards: null };
-      if (this.pumpFault) {
-        c.why = `${this.pumpFault} I won't water until someone checks the pump.`;
-      } else if (m >= CFG.WET_AT) {
-        c.why = `Soil is at ${f1(m)}%, already wet. More water would just drain out the bottom.`;
-      } else if (m > CFG.WATER_AT) {
-        c.why = `Pot A's soil moisture is ${f1(m)}%, so it doesn't need water yet.`;
-      } else {
-        c.act = 'water';
-        c.sec = r1(clamp((CFG.AIM - m) / rate, 3, CFG.POUR_MAX_S));
-        c.why = `Soil is at ${f1(m)}%, under the ${CFG.WATER_AT}% line. At the learned ${rate.toFixed(2)}% per pump second, ${c.sec} s should bring it near ${CFG.AIM}%.`;
+    // ----- brain.py: the call -----
+    getSoil() {
+      const b = this.latest;
+      if (!b || this.t - b.ts > 120) return { error: 'no fresh reading from the board in the last 2 minutes' };
+      const perH = this.world.dryPerHour();
+      return { moisture_pct: b.a_pct, soil_temp_c: b.temp_c, hours_until_dry: b.a_pct > CFG.DRY_PCT ? (b.a_pct - CFG.DRY_PCT) / perH : 0 };
+    }
+    failedPoursRecently() { return this.soaks.slice(-5).filter((s) => !s.ok).length; }
+
+    // Laya (laya/serve_decider.py): the real one is a fine-tuned model. Here it's a stand-in that
+    // follows the same line the planner uses: water at or below DRY_PCT + LOW_MARGIN. Indoors, no wait_rain.
+    fastDecision() {
+      const soil = this.getSoil();
+      if (soil.error) return { error: soil.error };
+      const pct = soil.moisture_pct, line = CFG.DRY_PCT + CFG.LOW_MARGIN;
+      const pick = pct <= line ? 'water' : 'wait_moist';
+      const sure = r3(0.8 + 0.19 * Math.min(1, Math.abs(pct - line) / 10));
+      const ms = r1(12 + Math.random() * 20);
+      this.logAct('laya', `${pick} ${Math.round(sure * 100)}% (${ms} ms)`);
+      this.LAST.laya = { ts: this.t, pick, sure, ms, soil_pct: pct };
+      return { pick, sure, ms, soil_pct: pct };
+    }
+    layaDecide() {
+      if (this.failedPoursRecently() >= 2) return null;
+      const d = this.fastDecision();
+      if (d.error) return null;
+      const pct = d.soil_pct, sure = `${Math.round(d.sure * 100)}%`;
+      if (d.pick !== 'water') return ['wait', 0, `WAIT: soil is ${f0(pct)}% and the soil still has enough water (Laya, ${sure} sure).`];
+      const secs = Math.max(1, (CFG.TARGET_PCT - pct) / this.learnedPctPerS());
+      const r = this.waterPot(secs, `Laya: water (${sure})`);
+      if (r.watered) return ['water', r.seconds, `WATER: soil is ${f0(pct)}% and no rain will cover it. Watering ${f0(r.seconds)} s (Laya, ${sure} sure).`];
+      return ['wait', 0, `WAIT: Laya said water, but the safety rules said no (${r.refused_because}).`];
+    }
+    ruleDecide() {
+      for (const a of ['weather_agent', 'soil_agent', 'memory_agent']) this.logAct(a, '(rules) gathering');
+      const soil = this.getSoil();
+      if (soil.error) return ['wait', 0, `WAIT: ${soil.error}.`];
+      const pct = soil.moisture_pct;
+      this.logAct('planner_agent', '(rules) deciding');
+      if (this.failedPoursRecently() >= 2) return ['wait', 0, "WAIT: the last pours didn't reach the probe. Check the pump and tube before watering again."];
+      if (pct >= CFG.WET_PCT) return ['wait', 0, `WAIT: soil is ${f0(pct)}%, already wet.`];
+      if (pct > CFG.DRY_PCT + CFG.LOW_MARGIN) return ['wait', 0, `WAIT: soil is ${f0(pct)}%, about ${f0(soil.hours_until_dry)} hours of water left. Water only when it's low, then a real drink.`];
+      const secs = (CFG.TARGET_PCT - pct) / this.learnedPctPerS();
+      const r = this.waterPot(secs, `soil ${f0(pct)}%, no rain coming`);
+      if (r.watered) return ['water', r.seconds, `WATER: soil is ${f0(pct)}% and no rain is coming. Watering ${f0(r.seconds)} s.`];
+      return ['wait', 0, `WAIT: wanted to water but ${r.refused_because}.`];
+    }
+    whichBrain() { return this.brainMode === 'gemini' ? 'gemini (simulated)' : 'rules'; }
+
+    checkNow(kind) {
+      if (this.team) return false;                 // one check at a time (brain._check_lock)
+      const brain = this.whichBrain();
+      this.LAST.check = { t0: this.t, t1: null, brain, kind };
+      if (this.brainMode === 'gemini') {
+        this.fastDecision();                       // Laya's instant call lands first; the team explains after
+        this.startTeam(kind);
+        return true;
       }
-      c.sure = 0.8 + 0.19 * Math.min(1, Math.abs(m - CFG.WATER_AT) / 15);
-      c.layaMs = Math.round(180 + Math.random() * 260);
-      c.teamS = Math.round(18 + Math.random() * 25);
-      if (c.act === 'water') {
-        c.guards = this.guards(c.sec, false);
-        const bad = c.guards.find((g) => !g.ok);
-        if (bad) {
-          c.act = 'blocked';
-          c.why += ` Blocked: ${bad.why}.`;
-        } else {
-          this.pour(c.sec, 'ai');
-          this.lastAiPourT = this.t;
+      let got = this.brainMode === 'laya' ? this.layaDecide() : null, name = 'laya (fast decider)';
+      if (!got) { got = this.ruleDecide(); name = 'rules'; }
+      this.finishCheck(name, got, kind);
+      return true;
+    }
+    finishCheck(brain, got, kind) {
+      const [action, seconds, sentence] = got;
+      this.decisions.push({ ts: this.t, action, seconds, brain, sentence, kind });
+      this.LAST.check = Object.assign({}, this.LAST.check, { t1: this.t, brain, action });
+    }
+
+    // The Gemini team (brain._build_team): gather in parallel, then planner <-> critic, up to 3 rounds.
+    // Its timings are made up (seen on the fake board: about 37 s). Its plan follows the planner's rules of thumb.
+    startTeam(kind) {
+      const total = 20 + Math.random() * 30;
+      const reject = Math.random() < 0.25;
+      const g = total * 0.45, p1 = g + total * 0.2, c1 = p1 + total * (reject ? 0.1 : 0.35);
+      const plan = [
+        { at: 0, agents: ['weather_agent', 'soil_agent', 'memory_agent'], what: ['calls get_forecast', 'calls get_soil', 'calls get_memory'] },
+        { at: g, agents: ['planner_agent'], what: ['calls get_fast_decision'] },
+        { at: p1, agents: ['critic_agent'], what: ['reviewing'] },
+      ];
+      if (reject) {
+        plan.push({ at: c1, agents: ['planner_agent'], what: ['fixing the plan'], reject: true });
+        plan.push({ at: c1 + total * 0.12, agents: ['critic_agent'], what: ['reviewing'] });
+      }
+      this.team = { t0: this.t, end: this.t + Math.round(total), kind, plan, i: 0, reject };
+    }
+    teamTick() {
+      const T = this.team;
+      if (!T) return;
+      while (T.i < T.plan.length && this.t - T.t0 >= T.plan[T.i].at) {
+        const s = T.plan[T.i++];
+        if (s.reject) this.logAct('critic_agent', "sent back: the farmer sentence has a number the tools didn't give");
+        s.agents.forEach((a, k) => this.logAct(a, s.what[k]));
+        if (s.agents[0] === 'planner_agent') {
+          const soil = this.getSoil();
+          const water = !soil.error && soil.moisture_pct <= CFG.DRY_PCT + CFG.LOW_MARGIN && this.failedPoursRecently() < 2;
+          T.water = water;
+          T.secs = water ? Math.min(CFG.POUR_CAP_S, (CFG.TARGET_PCT - soil.moisture_pct) / this.learnedPctPerS()) : 0;
+          this.logAct('planner_agent', `proposed ${water ? 'water' : 'wait'} ${f0(T.secs)}s`);
         }
       }
-      this.call = c;
-      this.event('check', { call: c });
-      return c;
+      if (this.t < T.end) return;
+      this.team = null;
+      this.logAct('critic_agent', 'approved: plan matches the data');
+      const soil = this.getSoil(), pct = soil.moisture_pct;
+      let got;
+      if (soil.error) got = ['wait', 0, `WAIT: ${soil.error}.`];
+      else if (this.failedPoursRecently() >= 2) got = ['wait', 0, "WAIT: the last pours didn't reach the probe, so I'm holding off. Check the pump and the tube."];
+      else if (!T.water) got = ['wait', 0, `WAIT: the soil is at ${f0(pct)}%, which still has enough water. I'll water when it gets down to ${CFG.DRY_PCT + CFG.LOW_MARGIN}%.`];
+      else {
+        const r = this.waterPot(T.secs, `planner: soil ${f0(pct)}%`);
+        got = r.watered ? ['water', r.seconds, `WATER: the soil dropped to ${f0(pct)}% and no rain can reach it indoors, so I'm giving it one real drink of ${f0(r.seconds)} seconds.`]
+          : ['wait', 0, `WAIT: the plan said water, but the safety rules said no (${r.refused_because}).`];
+        if (!r.watered) this.logAct('executor', 'approved plan refused by guards');
+      }
+      if (got[0] === 'wait') this.logAct('executor', 'approved wait');
+      this.finishCheck(this.whichBrain(), got, T.kind);
     }
 
-    pour(sec, who) {
-      const ms = Math.round(sec * 1000);
-      this.log('>', `P A ${ms}`);
-      const reply = this.board.command(`P A ${ms}`);
-      this.log('<', reply);
-      if (!reply.startsWith('ok')) return null;
-      const p = {
-        t: this.t, who, sec: ms / 1000, ml: ms / 1000 * CFG.FLOW_ML_S,
-        before: this.now(), expected: ms / 1000 * this.rate, status: 'pumping',
-      };
-      this.pours.push(p);
-      this.soak = { pour: p, reached: null };
-      this.event('pour', { pour: p });
-      return p;
+    // ----- server.py buttons -----
+    testPour(seconds) {
+      const secs = Math.max(1, Math.min(seconds || 5, CFG.POUR_CAP_S));
+      const r = this.waterPot(secs, 'manual test pour from the dashboard', 'manual');
+      this.logAct('executor', r.watered ? `manual test pour ${f0(secs)}s` : 'manual pour refused');
+      return r;
     }
-
-    testPour() {
-      const bad = this.guards(5, true).find((g) => !g.ok);
-      if (bad) return `Blocked: ${bad.why}.`;
-      return this.pour(5, 'test') ? null : 'The chip refused the pour.';
-    }
-
     stop() {
-      const left = this.board.pumpLeft;
-      this.log('>', 'X');
-      this.log('<', this.board.command('X'));
-      if (left > 0) {
-        const p = this.pours[this.pours.length - 1];
-        p.sec = r1(p.sec - left);
-        p.ml = p.sec * CFG.FLOW_ML_S;
-        p.expected = p.sec * this.rate;
-        this.lastPumpEndT = this.t;
-      }
-      if (this.target) this.endTarget('stopped', 'Stopped by hand.');
+      if (this.tgt) this.endTarget('stopped', 'Stopped.');
+      this.send('X');
     }
+    demoDry() { this.world.pct = CFG.DRY_PCT + 1; this.world.soaking = 0; this.world.wetDepth = 0; }
+    demoHandPour() { this.world.soaking += CFG.CUP_ML * CFG.PCT_PER_ML; }
+    demoPinch() { this.world.pinched = !this.world.pinched; return this.world.pinched; }
+    refill() { this.world.cupMl = CFG.PUMP_CUP_ML; }
 
-    // Pour detector (soak.py): what each pour really did, and learn % per second from it.
-    soakStep() {
-      const s = this.soak;
-      if (!s) return;
-      const p = s.pour;
-      if (s.reached == null && this.now() >= p.before + 1) s.reached = this.t - p.t;
-      if (this.board.pumping) return;
-      const since = this.t - (p.t + Math.ceil(p.sec));
-      if (since < 20) return;
-      const r = this.readings;
-      const a = median(r.slice(-6)), b = median(r.slice(-12, -6));
-      if (Math.abs(a - b) > 0.25 && since < 90) return;
-      p.after = r1(a);
-      p.delta = r1(a - p.before);
-      p.reachS = s.reached;
-      p.failed = p.expected >= 3 && p.delta < 0.3 * p.expected;
-      if (p.failed) {
-        p.status = 'failed';
-        this.pumpFault = `The pump ran ${p.sec.toFixed(1)} s, that should add about ${f1(p.expected)}%, but the probe moved ${signed(p.delta)}%. Water isn't reaching the soil.`;
-        this.event('fault', { msg: this.pumpFault });
-      } else {
-        p.status = 'ok';
-        if (p.delta > 0.5 && p.sec >= 1) {
-          p.learned = p.delta / p.sec;
-          this.rate = clamp(0.5 * this.rate + 0.5 * p.learned, 0.1, 3);
-        }
-        this.pumpFault = null;
-      }
-      p.rateAfter = this.rate;
-      this.soak = null;
-      this.event('soaked', { pour: p });
-      if (this.target && this.target.waiting) {
-        const T = this.target;
-        T.waiting = false;
-        // Small pulses can't be judged one by one, so add them up while they keep missing.
-        T.sumExp = (T.sumExp || 0) + p.expected;
-        T.sumDelta = (T.sumDelta || 0) + p.delta;
-        if (p.delta >= 0.5 * p.expected) { T.sumExp = 0; T.sumDelta = 0; }
-        if (p.failed) this.endTarget('fault', this.pumpFault);
-        else if (T.sumExp >= 3 && T.sumDelta < 0.3 * T.sumExp) {
-          this.pumpFault = `The pump ran ${T.pulses.length} pulses that should add about ${f1(T.sumExp)}%, but the probe moved ${signed(T.sumDelta)}%. Water isn't reaching the soil.`;
-          this.event('fault', { msg: this.pumpFault });
-          this.endTarget('fault', this.pumpFault);
-        }
-      }
+    // ----- target.py -----
+    startTarget(pct) {
+      const lo = CFG.DRY_PCT, hi = CFG.WET_PCT - CFG.BAND;
+      if (!(pct >= lo && pct <= hi)) return { ok: false, why: `pick a target between ${lo}% and ${hi}%` };
+      if (this.tgt) return { ok: false, why: 'a target run is already going' };
+      const start = this.nowPct();
+      const rate = this.learnedPctPerS();
+      this.run = { phase: 'reading', target: pct, band: CFG.BAND, start, now: start, rate, pulses: [], t0: this.t, msg: `Soil is ${start}%. Target ${pct}%.` };
+      this.logAct('target_agent', `target ${pct}%, soil ${start}%`);
+      this.PAUSED = true;
+      this.tgt = { state: 'decide', i: 0, rate };
+      return { ok: true };
     }
-
-    // Someone added water: +4% with the pump quiet for 4 min.
-    handStep() {
-      const r = this.readings;
-      if (this.handPending) {
-        if (this.t - this.handPending.t < 30) return;
-        const m = this.now(), jump = m - this.handPending.before;
-        this.handPending = null;
-        const msg = m > CFG.WATER_AT
-          ? `Someone just added water. ${signed(jump)}%. Soil's at ${f1(m)}% now, so I'm skipping my next watering.`
-          : `Someone just added water. ${signed(jump)}%. Soil's at ${f1(m)}% now, so my next pour will be smaller.`;
-        this.event('hand', { msg });
+    targetTick() {
+      const G = this.tgt;
+      if (!G) return;
+      const run = this.run;
+      if (G.state === 'decide') {
+        const now = this.nowPct(), target = run.target;
+        run.now = now;
+        if (now === null) return this.endTarget('fault', 'No readings from the board.');
+        if (now >= target - CFG.LOCK) {
+          const inBand = now <= target + CFG.BAND;
+          return this.endTarget(inBand ? 'locked' : 'over', inBand ? `Locked at ${now}%, target ${target}%.`
+            : run.pulses.length ? `Overshot: the last pulse took the soil to ${now}%, past the ${target}% target.`
+              : `Soil is ${now}%, already above the ${target}% target. Water can't be taken back out.`);
+        }
+        if (G.i >= CFG.MAX_PULSES) {
+          return this.endTarget(Math.abs(now - target) <= CFG.BAND ? 'locked' : 'short', `Out of pulses at ${now}%, target ${target}%.`);
+        }
+        const gap = target - now;
+        const secs = r1(Math.max(CFG.PULSE_MIN_S, Math.min(CFG.PULSE_MAX_S, gap / G.rate * CFG.CREEP)));
+        const [ok, why] = this.guards(secs, true);
+        if (!ok) return this.endTarget('blocked', `Safety rules stopped it: ${why}.`);
+        run.phase = 'pulsing';
+        run.msg = `Pulse ${G.i + 1}: ${secs} s. Gap ${gap.toFixed(1)}%, learned ${G.rate.toFixed(2)} % per second.`;
+        this.logAct('target_agent', `pulse ${G.i + 1}: ${secs}s for a ${gap.toFixed(1)}% gap`);
+        this.logAct('executor', `pump A ${f0(secs)}s`);
+        const n = this.boardEvents.length;
+        this.tagNext = 'target';
+        this.send(`P A ${Math.round(secs * 1000)}`);
+        const ev = this.boardEvents.slice(n).find((e) => e.pot === 'A' && (e.type === 'pour_start' || e.type === 'refused'));
+        if (!ev || ev.type === 'refused') return this.endTarget('blocked', `The chip didn't start the pump (${(ev && ev.why) || 'no answer'}). No water went in.`);
+        const expect = G.rate * secs;
+        G.pulse = { secs, before: now, expect, need: expect >= CFG.CHECKABLE ? Math.max(CFG.MISS_RISE, CFG.MISS_SHARE * expect) : 0, t1: null };
+        G.state = 'settle';
+        run.phase = 'settling';
         return;
       }
-      if (this.board.pumping || this.soak || r.length < 70) return;
-      if (this.t - this.lastPumpEndT < 240 || this.t - this.lastHandT < 600) return;
-      const before = median(r.slice(-66, -60));
-      if (median(r.slice(-6)) - before >= 4) {
-        this.lastHandT = this.t;
-        this.handPending = { t: this.t, before };
+      if (G.state === 'settle') {
+        const P = G.pulse;
+        run.now = this.nowPct();
+        if (P.t1 === null) { if (!this.board.pumping) P.t1 = this.t; return; }
+        const waited = this.t - P.t1;
+        const v = this.hist.slice(-20);
+        let done = waited >= CFG.MAX_SETTLE_S;
+        if (!done && waited >= CFG.MIN_SETTLE_S && v.length >= 20) {
+          const a = median(v.slice(0, 10)), b = median(v.slice(10));
+          done = Math.abs(b - a) < CFG.FLAT && b - P.before >= P.need;
+        }
+        if (!done) return;
+        const after = this.nowPct(), rise = r1(after - P.before);
+        this.soaks.push({ ts: this.t, pot: 'A', poured_s: P.secs, before_pct: P.before, peak_pct: after, rise_pct: rise, first_rise_s: null,
+                          pct_per_s: r3(rise / P.secs), ok: rise >= Math.max(P.need, CFG.MISS_RISE), note: 'target pulse', by: 'target' });
+        run.pulses.push({ s: P.secs, before: P.before, after, rise, wait_s: waited });
+        G.i++;
+        if (P.need && rise < P.need) {
+          this.logAct('target_agent', `pulse ${G.i} moved the probe only ${rise}%: stopping`);
+          return this.endTarget('fault', `The pump ran ${P.secs} s, that should add about ${(G.rate * P.secs).toFixed(1)}%, but the probe moved ${rise >= 0 ? '+' : ''}${rise.toFixed(1)}%. Water isn't reaching the soil: check the tube isn't pinched, the pump is under water, and the tube points at the pot.`);
+        }
+        if (rise >= CFG.MISS_RISE) G.rate = r3(0.5 * G.rate + 0.5 * rise / P.secs);
+        run.rate = G.rate;
+        this.logAct('target_agent', `pulse ${G.i}: +${rise}%, rate now ${G.rate}`);
+        G.state = 'decide';
       }
     }
-
-    handPour(ml) { this.soil.addWater(ml || CFG.HAND_CUP_ML); }
-    setPinched(on) { this.board.pinched = on; if (!on) this.pumpFault = null; }
-    refill() { this.board.cupMl = CFG.CUP_ML; this.pumpFault = null; }
-
-    // Hit the Target (target.py): pulse up to a picked % and stop on it.
-    startTarget(pct) {
-      if (this.target) return 'A target run is already going.';
-      pct = clamp(Math.round(pct), 36, 68);
-      this.target = { pct, t0: this.t, start: this.now(), pulses: [], waiting: false, state: 'running' };
-      this.event('target', { target: this.target });
-      return null;
+    endTarget(phase, msg) {
+      const run = this.run;
+      Object.assign(run, { phase, msg, now: this.nowPct(), t_end: this.t });
+      this.logAct('target_agent', msg.slice(0, 90));
+      const secs = r1(run.pulses.reduce((s, p) => s + p.s, 0));
+      this.decisions.push({ ts: this.t, action: run.pulses.length ? 'water' : 'wait', seconds: secs, brain: 'target run', sentence: `TARGET: ${msg}`, kind: 'target' });
+      this.PAUSED = false;
+      run.secs = secs;
+      run.ml = Math.round(secs * CFG.FLOW_ML_S);
+      run.took_s = this.t - run.t0;
+      this.tgt = null;
     }
 
-    targetStep() {
-      const T = this.target;
-      if (!T || T.waiting) return;
-      const m = this.now();
-      if (!T.pulses.length && m > T.pct + 1) return this.endTarget('over', `Soil is already at ${f1(m)}%. It can't take water back out.`);
-      if (m >= T.pct - 1) {
-        return m > T.pct + 1
-          ? this.endTarget('over', 'The last pulse overshot.')
-          : this.endTarget('locked', '');
-      }
-      if (T.pulses.length >= 10) return this.endTarget('gave up', 'Ten pulses and still short.');
-      const sec = r1(clamp((T.pct - m) / this.rate * 0.7, 1, 8));
-      const bad = this.guards(sec, true).find((g) => !g.ok);
-      if (bad) {
-        if (bad.name === 'Last pour done soaking') return;   // wait for it
-        return this.endTarget('blocked', `Blocked: ${bad.why}.`);
-      }
-      const p = this.pour(sec, 'target');
-      if (!p) return this.endTarget('refused', 'The chip refused the pour.');
-      T.pulses.push(p);
-      T.waiting = true;
-    }
-
-    endTarget(state, msg) {
-      const T = this.target;
-      T.state = state; T.msg = msg; T.end = this.now(); T.t1 = this.t;
-      T.pumpS = r1(T.pulses.reduce((s, p) => s + p.sec, 0));
-      T.ml = Math.round(T.pulses.reduce((s, p) => s + p.ml, 0));
-      this.target = null;
-      this.lastTarget = T;
-      this.event('target', { target: T });
-    }
-
-    stats() {
-      const m = this.now();
-      const perH = CFG.DRY_PCT_H * (1 + 0.07 * (this.tempC - 26)) * (m / 50);
-      const n = Math.floor(this.t / CFG.TIMER_EVERY_S);
-      const until = n * CFG.TIMER_EVERY_S;
-      let aiMl = 0, aiMlAll = 0;
-      for (const p of this.pours) { aiMlAll += p.ml; if (p.t <= until) aiMl += p.ml; }
+    // ----- report.py -----
+    report() {
+      const flow = CFG.FLOW_ML_S;
+      const a = this.pours.filter((p) => p.pot === 'A');
+      const aiMl = a.reduce((s, p) => s + p.ran_ms / 1000 * flow, 0);
+      const demoMl = a.filter((p) => p.by === 'manual' || p.by === 'target').reduce((s, p) => s + p.ran_ms / 1000 * flow, 0);
+      const span = this.t - 1;
+      const n = Math.floor(span / CFG.TIMER_EVERY_S);
+      const timerMl = n * CFG.TIMER_POUR_MS / 1000 * flow;
+      const vals = this.history.map((h) => h.a);
       return {
-        m, temp: this.tempC, air: this.airC,
-        driesInH: m > CFG.HEALTHY[0] ? (m - CFG.HEALTHY[0]) / perH : 0,
-        fullIntervals: n, aiMl, aiMlAll, timerMl: this.timerMl,
-        saved: n ? this.timerMl - aiMl : null,
-        used24: this.used24(), cupMl: this.board.cupMl, rate: this.rate,
+        hours_logged: r1(span / 3600), ai_pot_ml: Math.round(aiMl), timer_pot_ml: Math.round(timerMl), ai_pot_demo_ml: Math.round(demoMl),
+        ai_pours: a.length, timer_pours: n,
+        water_saved_pct: timerMl ? r1(100 * (timerMl - aiMl) / timerMl) : null,
+        ai_pot_time_healthy_pct: vals.length ? r1(100 * vals.filter((v) => v >= CFG.DRY_PCT && v <= CFG.WET_PCT).length / vals.length) : null,
+        timer_schedule: `${CFG.TIMER_POUR_MS / 1000} s every ${CFG.TIMER_EVERY_S / 3600} h`,
+        timer_ml_per_pour: Math.round(CFG.TIMER_POUR_MS / 1000 * flow),
       };
+    }
+    // server.py /api/series: the timer's schedule, first reading + every TIMER_EVERY_S
+    timerPours() {
+      const out = [];
+      for (let k = 1; 1 + k * CFG.TIMER_EVERY_S <= this.t; k++) out.push({ ts: 1 + k * CFG.TIMER_EVERY_S, s: CFG.TIMER_POUR_MS / 1000 });
+      return out;
     }
   }
 

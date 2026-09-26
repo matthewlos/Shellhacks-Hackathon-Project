@@ -3,7 +3,7 @@
 Florida's 2026 drought is killing crops. When a crop dies, you lose the time it took to grow it.
 Farm Hand watches soil moisture + temperature every second, a small fast AI makes the watering call, a Gemini agent team checks the forecast and explains why, and it shows how much water it saved vs a normal sprinkler timer.
 
-This repo is the plan and the designs, plus `ui/`: a virtual version of the rig you can open in a browser (see `ui/README.md`). The real firmware and laptop code get built at ShellHacks.
+This repo is the plan and the designs, plus `ui/`: a virtual version of the rig you can open in a browser. It runs the same rules as the real code in `farm-hand/` on `main` (see `ui/README.md`).
 
 ## Read in this order
 1. **`PLAN.md`**: the whole plan. Parts, the real wiring (section 2), how the hardware was proven on 2026-09-23 (section 3), the AI agent team (5), the dashboard (5b), Hit the Target demo (5c), hackathon schedule (6), the 2-minute demo (7), judge Q&A (8), sponsor tracks (9), risks (10).

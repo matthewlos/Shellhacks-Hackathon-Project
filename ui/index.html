@@ -15,7 +15,7 @@
   <div class="brand">
     <h1>Farm Hand</h1>
     <span class="badge">Simulated board</span>
-    <p class="sub">A virtual copy of the real rig. Every number on this page comes from a model, not the probe.</p>
+    <p class="sub">A virtual copy of the real rig, running the same rules as <span class="mono">farm-hand/</span>. Every number here comes from a model, not the probe.</p>
   </div>
   <div class="clockbar">
     <span class="clock mono" id="clock">Day 1 · 8:00:00 AM</span>
@@ -135,7 +135,7 @@
         <rect x="56" y="9" width="24" height="34" rx="2" fill="#1e8a4a"/>
         <circle cx="62" cy="17" r="2.5" fill="#c9d1d9"/><circle cx="62" cy="26" r="2.5" fill="#c9d1d9"/><circle cx="62" cy="35" r="2.5" fill="#c9d1d9"/>
         <circle id="relayLed" cx="50" cy="46" r="3" fill="#3a2222"/>
-        <text x="124" y="-8" class="svg-label" text-anchor="end">Relay · D26 via PN2222</text>
+        <text x="124" y="66" class="svg-label" text-anchor="end">Relay · D26 via PN2222</text>
       </g>
 
       <!-- ESP32 -->
@@ -166,6 +166,7 @@
       <div class="scenario">
         <button class="chip" id="pinch" aria-pressed="false">Pinch the tube</button>
         <button class="chip" id="hand">Pour a cup in by hand</button>
+        <button class="chip" id="dry">Dry the soil out</button>
         <button class="chip" id="refill">Refill the cup</button>
       </div>
     </div>
@@ -185,9 +186,10 @@
       <div class="cwrap">
         <div class="keys">
           <span><i class="k-ai"></i>Moisture</span>
-          <span><i class="k-timer"></i>If a timer watered <em>simulated</em></span>
+          <span><i class="k-timer"></i>If a timer watered <em>estimated</em></span>
           <span><i class="k-temp"></i>Soil temp</span>
           <span><i class="k-dot ai"></i>AI pour</span>
+          <span><i class="k-dot demo"></i>test / target</span>
           <span><i class="k-dot timer"></i>timer pour</span>
         </div>
         <div class="canvas-box">
@@ -198,9 +200,9 @@
       <div class="saved">
         <small id="svLabel">Water saved vs a timer</small>
         <b class="mono" id="svBig">–</b>
-        <p class="mono" id="svSub">Not enough data yet: the timer's first 6 h isn't done.</p>
-        <span class="tag">Timer is simulated</span>
-        <p class="dim tiny">timer = 5 s every 6 h, 100 ml a pour. Test pours and target runs count against the AI.</p>
+        <p class="mono" id="svSub"></p>
+        <span class="tag">Timer is estimated</span>
+        <p class="dim tiny" id="svHow">timer = 5 s every 6 h, 100 ml a pour</p>
       </div>
     </div>
   </section>
@@ -208,6 +210,14 @@
 
   <aside class="side">
     <section class="card call">
+      <div class="brainrow">
+        <span class="dim">Brain</span>
+        <div class="seg" id="brain" role="group" aria-label="Which brain decides">
+          <button data-brain="gemini" class="on">Gemini team</button>
+          <button data-brain="laya">Laya</button>
+          <button data-brain="rules">Rules</button>
+        </div>
+      </div>
       <h2 id="callTitle">Starting up</h2>
       <p id="callWhy" class="why">Waiting for the first readings.</p>
       <p id="callMeta" class="meta"></p>
@@ -262,7 +272,8 @@
       <dl class="list">
         <div><dt>Dries out in <em>trend estimate</em></dt><dd class="mono" id="nDry">–</dd></div>
         <div><dt>Water, last 24 h <em>cap 1,500 ml</em></dt><dd class="mono" id="nUsed">0 ml</dd></div>
-        <div><dt>Learned soak rate</dt><dd class="mono" id="nRate">0.80 %/s</dd></div>
+        <div><dt>Learned soak rate <em>median of the last 5 good pours</em></dt><dd class="mono" id="nRate">1.20 %/s</dd></div>
+        <div><dt>Time in the healthy band</dt><dd class="mono" id="nHealthy">–</dd></div>
         <div><dt>Rain, next 24 h <em>pot is indoors, rain ignored</em></dt><dd class="mono">–</dd></div>
         <div><dt>County in drought <em>Miami-Dade, week of Sep 15</em></dt><dd class="mono">100%</dd></div>
       </dl>
@@ -276,26 +287,28 @@
       </div>
       <div class="tab" id="tab-team">
         <ul class="agents" id="agents">
-          <li data-node="laya"><span class="dot"></span>Laya <small>fast call</small></li>
-          <li data-node="guards"><span class="dot"></span>Safety rules <small>code, not a prompt</small></li>
-          <li data-node="pump"><span class="dot"></span>Pump <small>relay on D26</small></li>
-          <li class="group">Gather, in parallel</li>
-          <li data-node="weather" class="sub"><span class="dot"></span>weather_agent <small>forecast, drought</small></li>
-          <li data-node="soil" class="sub"><span class="dot"></span>soil_agent <small>moisture, dry time</small></li>
-          <li data-node="memory" class="sub"><span class="dot"></span>memory_agent <small>last 24 h of pours</small></li>
-          <li data-node="planner"><span class="dot"></span>planner_agent <small>proposes</small></li>
-          <li data-node="critic"><span class="dot"></span>critic_agent <small>can send it back</small></li>
-          <li data-node="soak"><span class="dot"></span>Pour detector <small>learns %/s</small></li>
-          <li data-node="target"><span class="dot"></span>Target controller <small>Hit the Target</small></li>
+          <li data-node="laya"><span class="dot"></span>Laya <small>fast call, about 20 ms</small></li>
+          <li class="group">Gemini team · gather, in parallel</li>
+          <li data-node="weather_agent" class="sub"><span class="dot"></span>weather_agent <small>forecast, drought</small></li>
+          <li data-node="soil_agent" class="sub"><span class="dot"></span>soil_agent <small>moisture, dry time</small></li>
+          <li data-node="memory_agent" class="sub"><span class="dot"></span>memory_agent <small>last 24 h of pours</small></li>
+          <li class="group">Gemini team · decide, up to 3 rounds</li>
+          <li data-node="planner_agent" class="sub"><span class="dot"></span>planner_agent <small>proposes</small></li>
+          <li data-node="critic_agent" class="sub"><span class="dot"></span>critic_agent <small>can send it back</small></li>
+          <li class="group">Code, not AI</li>
+          <li data-node="guards"><span class="dot"></span>Safety rules <small>guards()</small></li>
+          <li data-node="executor"><span class="dot"></span>executor <small>pump A on D26</small></li>
+          <li data-node="soak"><span class="dot"></span>Pour detector <small>soak.py, learns %/s</small></li>
+          <li data-node="target_agent"><span class="dot"></span>target_agent <small>Hit the Target</small></li>
         </ul>
         <ul class="guardlist" id="guardList"></ul>
         <ol class="steps" id="steps"></ol>
-        <p class="dim tiny">Agent timings are simulated. The real team runs on Gemini through Google ADK.</p>
+        <p class="dim tiny">Agent timings and Laya's picks are simulated. The real team runs on Gemini through Google ADK (brain.py); Laya is the fine-tuned model in laya/.</p>
       </div>
       <div class="tab" id="tab-pours" hidden>
         <table class="pours">
-          <thead><tr><th>When</th><th>Who</th><th>Pump</th><th>Soil</th><th>Reached</th></tr></thead>
-          <tbody id="pourRows"><tr><td colspan="5" class="dim">No pours yet.</td></tr></tbody>
+          <thead><tr><th>When</th><th>By</th><th>Pump</th><th>Soil</th><th>Rise</th><th>%/s</th></tr></thead>
+          <tbody id="pourRows"><tr><td colspan="6" class="dim">No pours yet.</td></tr></tbody>
         </table>
       </div>
       <div class="tab" id="tab-serial" hidden>
