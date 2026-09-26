@@ -9,7 +9,7 @@ export const brand = {
   name: 'Farm Hand',
   tagline: 'Two boxes of soil. One is watered by AI, one by a timer.',
   pitch: 'When a crop dies, you lose the time it took to grow it. Farm Hand waters from the soil, not the clock.',
-  credit: 'UI based on Prompt Grass Grow Grass (MIT)',
+  credit: '',   // third-party notice lives in LICENSE-PromptGrassGrowGrass (MIT); nothing shown on the site
 
   /** Inline SVG path for the mark (24x24 viewBox). A drop that is also a seed. */
   logoPath:

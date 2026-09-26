@@ -2,7 +2,7 @@
 
 The Farm Hand dashboard: two storage-tote boxes of soil, live. Box A is watered by Laya (a small fine-tuned model on the Mac mini, with a baseline-rule fallback: keep soil at 45% or more). Box B is the control, watered on a fixed timer.
 
-Based on the [Prompt Grass Grow Grass](LICENSE-PromptGrassGrowGrass) web app (MIT; upstream commit in `UPSTREAM_COMMIT`). Vite, React, TypeScript, raw three.js, zustand.
+Vite, React, TypeScript, raw three.js, zustand. Third-party license notices: `LICENSE-PromptGrassGrowGrass` (MIT).
 
 ## Pages
 

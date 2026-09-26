@@ -67,7 +67,7 @@ export function App() {
       )}
       {page === 'crops' && <CropsPage />}
       {page === 'region' && <RegionPage />}
-      <p className="credit">{brand.credit}.</p>
+      {brand.credit ? <p className="credit">{brand.credit}.</p> : null}
     </div>
   );
 }
