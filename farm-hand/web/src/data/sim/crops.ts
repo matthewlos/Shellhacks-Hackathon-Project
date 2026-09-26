@@ -114,13 +114,33 @@ export const cropById = (id: string): Crop | undefined =>
 export interface ScoreContext {
   drainageClass: DrainageClass | null;
   soilTempC: number | null;
+  /** probe moisture %, on Farm Hand's 20-65 % scale (optional: old callers leave it out = unknown) */
+  soilMoisturePct?: number | null;
   sun: Sun | null;
   ph: number | null;
   frost: FrostDates | null;
   today?: Date;
 }
 
-const WEIGHTS = { drainage: 0.35, soil_temp: 0.25, season: 0.2, sun: 0.12, ph: 0.08 } as const;
+const WEIGHTS = { drainage: 0.3, soil_temp: 0.25, moisture: 0.3, season: 0.15, sun: 0.1, ph: 0.06 } as const;
+
+/**
+ * FAO-56 Table 22 depletion fraction p: how much of the soil's water a crop can use before it is stressed.
+ * The crop's dryness line on Farm Hand's probe scale is 20 + 45 * (1 - p) (wilting 20 %, field capacity 65 %).
+ * `est` marks values that are not in Table 22 (herbs, taro): estimates, and the reason says so.
+ */
+export const DEPLETION: Record<string, { p: number; est?: boolean }> = {
+  strawberry: { p: 0.2 }, lettuce: { p: 0.3 }, spinach: { p: 0.2 }, celery: { p: 0.2 }, onion: { p: 0.3 }, garlic: { p: 0.3 },
+  pepper: { p: 0.3 }, carrot: { p: 0.35 }, potato: { p: 0.35 }, beet: { p: 0.5 }, radish: { p: 0.3 }, pea: { p: 0.35 },
+  bean: { p: 0.45 }, tomato: { p: 0.4 }, cucumber: { p: 0.5 }, squash: { p: 0.5 }, melon: { p: 0.4 }, corn: { p: 0.5 },
+  sweet_potato: { p: 0.65 }, blueberry: { p: 0.5 }, kale: { p: 0.45 }, basil: { p: 0.4, est: true }, mint: { p: 0.4, est: true },
+  rosemary: { p: 0.5, est: true }, taro: { p: 0.3, est: true }, clover: { p: 0.55 },
+};
+/** The moisture % under which this crop starts to feel dry, or null if we have no p for it. */
+export function dryLine(cropId: string): number | null {
+  const d = DEPLETION[cropId];
+  return d ? Math.round((20 + 45 * (1 - d.p)) * 10) / 10 : null;
+}
 const DRAIN_WORDS: Record<DrainageClass, string> = {
   fast: 'fast-draining', moderate: 'well-draining', slow: 'slow-draining', very_slow: 'very slow-draining',
 };
@@ -136,6 +156,19 @@ function drainageFactor(c: Crop, ctx: ScoreContext): FactorScore {
   const note = c.drainageNote[ctx.drainageClass];
   const verdict = score >= 85 ? 'ideal' : score >= 65 ? 'fine' : score >= 40 ? 'a stretch' : 'a poor match';
   return { ...base, score, known: true, reason: `Measured ${DRAIN_WORDS[ctx.drainageClass]} soil is ${verdict} for ${c.name.toLowerCase()}${note ? ': ' + note : ''}.` };
+}
+
+function moistureFactor(c: Crop, ctx: ScoreContext): FactorScore {
+  const base = { key: 'moisture' as const, label: 'Soil moisture', weight: WEIGHTS.moisture };
+  const m = ctx.soilMoisturePct ?? null, line = dryLine(c.id), est = DEPLETION[c.id]?.est ? ' (estimate)' : '';
+  if (m == null) return { ...base, score: null, known: false, reason: 'No soil moisture reading (probe offline).' };
+  if (line == null) return { ...base, score: null, known: false, reason: 'No water-need figure for this crop.' };
+  if (m >= line) {
+    const score = m >= line + 5 ? 100 : 85;
+    return { ...base, score, known: true, reason: `Soil is ${f1(m)}%, above the ${f1(line)}% where it gets thirsty${est}.` };
+  }
+  const score = Math.max(0, Math.round(70 - (line - m) * 6));
+  return { ...base, score, known: true, reason: `Soil is ${f1(m)}%, under the ${f1(line)}% where it gets thirsty${est}: it needs wetter soil.` };
 }
 
 function tempFactor(c: Crop, ctx: ScoreContext): FactorScore {
@@ -199,7 +232,7 @@ function seasonFactor(c: Crop, ctx: ScoreContext, win: PlantingWindow | null): F
 
 export function scoreCrop(c: Crop, ctx: ScoreContext): CropScore {
   const win = ctx.frost ? plantingWindow(c, ctx.frost, ctx.today ?? new Date(), ctx.soilTempC) : null;
-  const factors = [drainageFactor(c, ctx), tempFactor(c, ctx), seasonFactor(c, ctx, win), sunFactor(c, ctx), phFactor(c, ctx)];
+  const factors = [moistureFactor(c, ctx), tempFactor(c, ctx), drainageFactor(c, ctx), seasonFactor(c, ctx, win), sunFactor(c, ctx), phFactor(c, ctx)];
   const known = factors.filter((f) => f.known && f.score != null);
   const wsum = known.reduce((s, f) => s + f.weight, 0);
   let score = wsum ? known.reduce((s, f) => s + f.weight * (f.score as number), 0) / wsum : 0;

@@ -50,10 +50,9 @@ export function History() {
 
   if (!range) {
     return (
-      <section className="history" aria-label="Soil moisture over time">
-        <div className="history-head"><h2>Soil moisture over time</h2></div>
+      <div className="history">
         <p className="history-empty muted">The chart fills in as the boxes report. The ESP32 sends a reading about every 10 seconds.</p>
-      </section>
+      </div>
     );
   }
 
@@ -71,9 +70,8 @@ export function History() {
   const base = y(brand.baselinePct);
 
   return (
-    <section className="history" aria-label="Soil moisture over time">
+    <div className="history">
       <div className="history-head">
-        <h2>Soil moisture over time</h2>
         <ul className="legend">
           <li className="legend-a">Box A, Farm Hand</li>
           <li className="legend-b">Box B, Timer</li>
@@ -109,6 +107,6 @@ export function History() {
         </div>
         <div className="chart-x num" aria-hidden><span>{clock(range.t0)}</span><span>{clock(range.t1)}</span></div>
       </div>
-    </section>
+    </div>
   );
 }

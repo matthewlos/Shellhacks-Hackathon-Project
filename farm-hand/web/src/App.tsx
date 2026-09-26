@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { brand } from './brand';
 import * as backend from './data/backendBoard';
 import { useApp } from './data/store';
 import { FieldCanvas } from './scene/FieldCanvas';
-import { BoxCard } from './ui/Boxes';
-import { CropsPage } from './ui/Crops';
-import { Forecast } from './ui/Forecast';
-import { History } from './ui/History';
-import { LayaCall } from './ui/LayaCall';
-import { RegionPage } from './ui/Region';
-import { TopBar, type Page } from './ui/TopBar';
+import { Dock, Panels, usePanel } from './ui/Dock';
+import { TopBar } from './ui/TopBar';
 
 const BACKEND_URL = (backend as unknown as { BACKEND_URL?: string }).BACKEND_URL ?? 'the Mac mini';
 
@@ -26,48 +21,34 @@ function Waiting() {
   );
 }
 
-const PAGES: Page[] = ['live', 'crops', 'region'];
-const fromHash = (): Page => { const h = location.hash.slice(1) as Page; return PAGES.includes(h) ? h : 'live'; };
-
-/** The page lives in the URL hash (#crops, #region) so a tab can be linked and survives a reload. */
-function usePage(): [Page, (p: Page) => void] {
-  const [page, setPage] = useState<Page>(fromHash);
-  useEffect(() => { const on = () => setPage(fromHash()); window.addEventListener('hashchange', on); return () => window.removeEventListener('hashchange', on); }, []);
-  return [page, (p) => { history.replaceState(null, '', p === 'live' ? location.pathname + location.search : '#' + p); setPage(p); }];
-}
-
+/** The 3D boxes fill the screen; everything else opens from the dock as a panel over them. */
 export function App() {
-  const [page, setPage] = usePage();
   const ready = useApp((s) => s.ready);
   const stage = useApp((s) => s.stage);
   const replaying = useApp((s) => s.replay.active);
+  const [open, setOpen] = usePanel();
+  const close = useCallback(() => setOpen(null), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Farm Hand has no onboarding: the boxes are set up on the bench. Go straight to the live view.
   useEffect(() => { if (ready && stage !== 'live') useApp.setState({ stage: 'live', draft: null }); }, [ready, stage]);
+  // History feeds the chart and the "Saves" numbers, so load it even while its panel is closed.
+  useEffect(() => {
+    if (!ready) return;
+    const load = () => { if (!useApp.getState().replay.active) void useApp.getState().openHistory(36).catch(() => {}); };
+    load();
+    const id = setInterval(load, 60_000);
+    return () => clearInterval(id);
+  }, [ready]);
 
   if (!ready) return <Waiting />;
   return (
-    <div className={`app page-${page} ${replaying ? 'is-replay' : ''}`}>
-      <TopBar page={page} onPage={setPage} />
-      {page === 'live' && (
-        <>
-          <div className="scene" aria-label="The two boxes in 3D">
-            <FieldCanvas />
-          </div>
-          <div className="boxes">
-            <BoxCard id="A" />
-            <BoxCard id="B" />
-          </div>
-          <History />
-          <aside className="side">
-            <LayaCall />
-            <Forecast />
-          </aside>
-        </>
-      )}
-      {page === 'crops' && <CropsPage />}
-      {page === 'region' && <RegionPage />}
-      {brand.credit ? <p className="credit">{brand.credit}.</p> : null}
+    <div className={`app ${replaying ? 'is-replay' : ''} ${open ? 'has-panel' : ''}`}>
+      <div className="scene" aria-label="The two boxes in 3D">
+        <FieldCanvas />
+      </div>
+      <TopBar />
+      <Panels open={open} onClose={close} />
+      <Dock open={open} onToggle={setOpen} />
     </div>
   );
 }

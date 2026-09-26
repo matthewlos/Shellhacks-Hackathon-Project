@@ -6,14 +6,7 @@ import { Logo } from './icons';
 /** A reading older than this means the ESP32 has gone quiet (it posts every ~10 s). */
 const QUIET_MS = 60_000;
 
-export type Page = 'live' | 'crops' | 'region';
-const TABS: { id: Page; label: string }[] = [
-  { id: 'live', label: 'Live' },
-  { id: 'crops', label: 'Crops' },
-  { id: 'region', label: 'Miami-Dade' },
-];
-
-export function TopBar({ page, onPage }: { page: Page; onPage: (p: Page) => void }) {
+export function TopBar() {
   const online = useApp((s) => s.backendOnline);
   const live = useApp((s) => s.live);
   const now = useNow(1000);
@@ -36,11 +29,6 @@ export function TopBar({ page, onPage }: { page: Page; onPage: (p: Page) => void
           <p>{brand.tagline}</p>
         </div>
       </div>
-      <nav className="tabs" aria-label="Pages">
-        {TABS.map((t) => (
-          <button key={t.id} className={page === t.id ? 'is-on' : ''} aria-current={page === t.id ? 'page' : undefined} onClick={() => onPage(t.id)}>{t.label}</button>
-        ))}
-      </nav>
       <span className={`status status-${status.tone}`} role="status" aria-live="polite">
         <i className="dot" />
         <span className="num">{status.text}</span>

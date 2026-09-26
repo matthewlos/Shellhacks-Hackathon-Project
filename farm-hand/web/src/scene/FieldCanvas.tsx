@@ -1,9 +1,7 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
 import type { CSSProperties } from 'react';
 import { BOX_COLOR, FieldScene } from './FieldScene';
-import { RegionHud, regionAnchor } from './RegionOverlay';
 import { BOXES, useBox, type BoxId } from './sceneData';
-import { useApp } from '../data/store';
 
 /**
  * The 3D view: Farm Hand's two boxes (A = Farm Hand, B = Timer). No props; it reads the store itself.
@@ -21,13 +19,11 @@ export function FieldCanvas() {
     try { scene = new FieldScene(canvasRef.current); } catch (e) { console.error('WebGL unavailable', e); return; }
     sceneRef.current = scene;
     scene.onFrame = () => {
-      const far = scene.regionAmount;
       for (const [key, el] of els.current) {
-        const w = scene.anchors.get(key) ?? regionAnchor(scene, key);
+        const w = scene.anchors.get(key);
         if (!w) { el.style.opacity = '0'; continue; }
         const p = scene.project(w);
-        const boxSide = key.startsWith('label:') || key.startsWith('front:');
-        const show = p.visible && (boxSide ? far < 0.35 : far > 0.75) && (!key.startsWith('front:') || scene.modeled[key.slice(6) as BoxId]);
+        const show = p.visible && (!key.startsWith('front:') || scene.modeled[key.slice(6) as BoxId]);
         el.style.transform = `translate3d(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px, 0)`;
         el.style.opacity = show ? '1' : '0';
       }
@@ -35,27 +31,11 @@ export function FieldCanvas() {
     return () => { scene.dispose(); sceneRef.current = null; };
   }, []);
 
-  // zoomed out: hover and tap a field (a drag still orbits; only a tap selects)
-  const down = useRef<{ x: number; y: number } | null>(null);
-  const onMove = (e: React.PointerEvent) => {
-    const sc = sceneRef.current, st = useApp.getState() as unknown as { hoverFarm?: string | null };
-    if (!sc || e.buttons || sc.regionAmount < 0.75) return;
-    const id = sc.pickFarm(e.clientX, e.clientY);
-    if (id !== (st.hoverFarm ?? null)) useApp.setState({ hoverFarm: id } as never);
-  };
-  const onUp = (e: React.PointerEvent) => {
-    const sc = sceneRef.current, d = down.current;
-    down.current = null;
-    if (!sc || !d || sc.regionAmount < 0.75 || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 5) return;
-    (useApp.getState() as unknown as { selectFarm?: (id: string | null) => void }).selectFarm?.(sc.pickFarm(e.clientX, e.clientY));
-  };
-
   return (
     <div className="field">
       <canvas
         ref={canvasRef} className="field-canvas"
-        aria-label="3D view of the two soil boxes: A, Farm Hand, watered by the AI; B, Timer, the control. Zoom out to see the fields around them."
-        onPointerMove={onMove} onPointerDown={(e) => { down.current = { x: e.clientX, y: e.clientY }; }} onPointerUp={onUp}
+        aria-label="3D view of the two soil boxes: A, Farm Hand, watered by the AI; B, Timer, the control"
       />
       <div className="field-overlay">
         {BOXES.map((b) => (
@@ -68,7 +48,6 @@ export function FieldCanvas() {
             <div style={note}>wet front: modeled</div>
           </div>
         ))}
-        <RegionHud reg={reg} />
       </div>
     </div>
   );

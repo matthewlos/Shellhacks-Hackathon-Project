@@ -14,48 +14,42 @@ export function PumpRow({ id }: { id: BoxId }) {
   );
 }
 
-function Missing({ text, warn }: { text: string; warn?: boolean }) {
-  return <b className={`reading-missing ${warn ? 'is-warn' : ''}`}>{text}</b>;
+/** Short text for the dock button: the moisture, or why there is none. */
+export function useBoxGlance(id: BoxId): string {
+  const m = moistureOf(useBox(id));
+  return m.pct != null ? `${one(m.pct)}%` : m.state === 'disconnected' ? 'no probe' : m.state === 'uncalibrated' ? 'not calibrated' : 'no reading';
 }
 
-export function BoxCard({ id }: { id: BoxId }) {
+export function BoxPanel({ id }: { id: BoxId }) {
   const l = useBox(id);
   const box = brand.boxes[id];
   const m = moistureOf(l);
   const raw = rawOf(l);
   const tempOk = !!l?.tempOnline && l.tempC != null;
-  const probe = m.state === 'ok' ? 'probe connected' : m.state === 'uncalibrated' ? 'probe connected, not calibrated' : m.state === 'disconnected' ? 'probe disconnected' : 'no reading yet';
+  const missing = [m.state === 'disconnected' && 'moisture', l && !l.tempOnline && 'temperature'].filter(Boolean) as string[];
 
   return (
-    <section className={`box box-${id}`} aria-label={`Box ${id}: ${box.name}`}>
-      <header className="box-head">
-        <span className="box-id" aria-hidden>{id}</span>
-        <h2>{box.name}</h2>
-        <p>{box.how}</p>
-      </header>
-
+    <div className={`box box-${id}`}>
+      <p className="box-how"><span className="box-id" aria-hidden>{id}</span>{box.how}</p>
       <div className="readings">
         <div className="reading">
-          {m.pct != null
-            ? <b className="reading-value num" key="v">{one(m.pct)}<small>%</small></b>
-            : <Missing text={m.state === 'disconnected' ? 'Probe disconnected' : m.state === 'uncalibrated' ? 'Not calibrated' : 'No reading'} warn={m.state === 'disconnected'} />}
+          <b className={`reading-value num ${m.pct == null ? 'is-empty' : ''}`}>{m.pct != null ? <>{one(m.pct)}<small>%</small></> : 'no reading'}</b>
           <span className="reading-label">Soil moisture</span>
         </div>
         <div className="reading">
-          {tempOk
-            ? <b className="reading-value num">{one(l!.tempC!)}<small>°C</small></b>
-            : <Missing text={l && !l.tempOnline ? 'Probe disconnected' : 'No reading'} warn={!!l && !l.tempOnline} />}
+          <b className={`reading-value num ${!tempOk ? 'is-empty' : ''}`}>{tempOk ? <>{one(l!.tempC!)}<small>°C</small></> : 'no reading'}</b>
           <span className="reading-label">Soil temperature</span>
         </div>
       </div>
-
-      <footer className="box-foot">
+      {missing.length > 0 && <p className="probe-warn">{missing.length === 2 ? 'Both probes are' : `The ${missing[0]} probe is`} not reporting. Check the wiring.</p>}
+      {m.state === 'uncalibrated' && <p className="probe-warn">The moisture probe is connected but not calibrated.</p>}
+      <div className="box-foot">
         <PumpRow id={id} />
         <p className="probe">
-          {id === 'A' && <>Keeps soil at <span className="num">{brand.baselinePct}%</span> or more. </>}
-          Raw <span className="mono num">{raw != null ? Math.round(raw) : 'none'}</span>, {probe}.
+          {id === 'A' && <>Laya keeps it at <span className="num">{brand.baselinePct}%</span> or more. </>}
+          Raw reading <span className="mono num">{raw != null ? Math.round(raw) : 'none'}</span>.
         </p>
-      </footer>
-    </section>
+      </div>
+    </div>
   );
 }

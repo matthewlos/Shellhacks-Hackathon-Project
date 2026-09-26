@@ -1,15 +1,23 @@
 /**
  * BRAND: the one place to change name, logo, colors and product copy.
  *
- * Farm Hand's UI is based on the Prompt Grass Grow Grass web app (MIT, see
- * LICENSE-PromptGrassGrowGrass). CSS reads the tokens below as custom properties and the
+ * CSS reads the tokens below as custom properties and the
  * 3D scene reads `brand.colors` and `brand.scene`: keep every existing key when you edit.
  */
 export const brand = {
   name: 'Farm Hand',
-  tagline: 'Two boxes of soil. One is watered by AI, one by a timer.',
+  tagline: "Watches your crop so you don't have to. Saves time, money, water, and the crop.",
   pitch: 'When a crop dies, you lose the time it took to grow it. Farm Hand waters from the soil, not the clock.',
   credit: '',   // third-party notice lives in LICENSE-PromptGrassGrowGrass (MIT); nothing shown on the site
+  /** "What it saves". Sources: PLAN 5e (season replay, laya/data/eval.md) and PLAN 7 (parts order, CropX retail 2026-09-26). */
+  savings: {
+    partsUsd: '$72.94',
+    sensorUsd: '$1,200-1,512',
+    sensorYearly: '$309',
+    waterLessPct: 56,
+    stressHoursFarmHand: 0,
+    stressHoursTimer: 12,
+  },
 
   /** Inline SVG path for the mark (24x24 viewBox). A drop that is also a seed. */
   logoPath:

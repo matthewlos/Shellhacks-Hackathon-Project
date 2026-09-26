@@ -107,7 +107,7 @@ export interface SoilProfile {
 }
 
 export interface FactorScore {
-  key: 'drainage' | 'soil_temp' | 'sun' | 'ph' | 'season';
+  key: 'drainage' | 'soil_temp' | 'moisture' | 'sun' | 'ph' | 'season';
   label: string;
   score: number | null;
   weight: number;

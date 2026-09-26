@@ -11,7 +11,6 @@
  *   steel probe tint   <- that box's temperature  (18 °C blue .. 34 °C orange; plain steel when unknown)
  *   stream + wet front <- that box's pump state   (front size/depth is MODELED from pump-on time, not measured)
  *   rim glow on A      <- a new AI decision
- *   surrounding fields <- RegionView (AlphaEarth v2 predictions: crop type, similarity); zoom out to see them
  * HTML labels are positioned from the React side through `project()`.
  */
 import * as THREE from 'three';
@@ -19,19 +18,14 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { useApp } from '../data/store';
-import type { RegionView } from '../data/types';
-import { GROUND, RegionLayer } from './RegionLayer';
 import { BOXES, decisionKey, readBox, type BoxId } from './sceneData';
 import { soilMaterial, type SoilUniforms } from './shaders';
 
 const BOX_X: Record<BoxId, number> = { A: -2.1, B: 2.1 };   // 1 unit = 10 cm; box is 27 x 18 cm
 const SOIL_TOP = 0.97, RIM_Y = 1.12;
-const HOME = new THREE.Vector3(-3.1, 5.4, 10.8), HOME_DIST = HOME.length(), HOME_TARGET = new THREE.Vector3(-0.35, 0.45, 0);
-// the zoom-out: the camera pulls back from the boxes to the fields around them (the region's one authored moment)
-const REGION_DIR = new THREE.Vector3(-0.36, 0.74, 0.57).normalize();
-const BENCH_W = 9.4, BENCH_L = 4.4;             // world size of the bench (boxes + cups + controller), kept clear of land
-const ZOOM_OUT_AT = 27, ZOOM_IN_AT = 18, FIELD_DIST = 38;
-const CAM_LAMBDA = 2.2;                          // exponential ease-out; ~1.4 s to settle, retargetable any time
+const HOME = new THREE.Vector3(-3.1, 5.4, 10.8), HOME_TARGET = new THREE.Vector3(-0.5, 0.8, 0);
+// what the opening view must show, around HOME_TARGET: both boxes plus the cups (x) and the boxes seen from 3/4 above (y)
+const BENCH_HALF_W = 4.1, BENCH_HALF_H = 1.9;
 // Modeled wet front (after the earlier Farm Hand scene): its size follows how long the pump has run.
 const FLOW_ML_S = 20, PORE = .3, DEEPER = 1.25, COVER = 4.5, SPREAD_TAU = 7, BOX_AREA_CM2 = 434, TAKES_UP = .15, DEPTH_CM = 9.5;
 const HIDE = /^(Lid|Crumbs|WaterFront|Breadboard|BoardJumpers|ESP32|DupontEnds|Relay|RelayWireEnds|Resistor|ProbeLED|Wires|UsbCable)$/;
@@ -61,8 +55,7 @@ interface Box {
 export class FieldScene {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene = new THREE.Scene();
-  readonly camera = new THREE.PerspectiveCamera(28, 1, 0.1, 600);
-  readonly region = new RegionLayer();
+  readonly camera = new THREE.PerspectiveCamera(28, 1, 0.1, 200);
   readonly controls: OrbitControls;
   onFrame: (() => void) | null = null;
   /** world positions the React overlay anchors to (label above each box, wet-front note) */
@@ -79,9 +72,6 @@ export class FieldScene {
   private readonly canvas: HTMLCanvasElement;
   private decKey: unknown = undefined;
   private decAt = -1e9;
-  private mode: 'home' | 'region' = 'home';
-  private focus: string | null = null;
-  private camGoal: { target: THREE.Vector3; dir: THREE.Vector3; dist: number } | null = null;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -104,24 +94,22 @@ export class FieldScene {
     Object.assign(key.shadow.camera, { left: -6, right: 6, top: 5, bottom: -5 });
     key.shadow.bias = -0.0004; key.shadow.radius = 4;
     this.scene.add(key);
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(BENCH_W, BENCH_L), new THREE.ShadowMaterial({ opacity: 0.12 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(12, 6), new THREE.ShadowMaterial({ opacity: 0.12 }));
     floor.rotation.x = -Math.PI / 2; floor.position.y = -0.002; floor.receiveShadow = true;
     this.scene.add(floor);
-    this.scene.add(this.region.group);
 
     // pleasant 3/4 view of both boxes, from the front-left and above
     const target = HOME_TARGET.clone();
     this.camera.position.copy(HOME).add(target);
     this.controls = new OrbitControls(this.camera, canvas);
     Object.assign(this.controls, {
-      enablePan: false, enableDamping: true, dampingFactor: 0.08, minDistance: 6, maxDistance: 60,
+      enablePan: false, enableDamping: true, dampingFactor: 0.08, minDistance: 6, maxDistance: 30,
       minPolarAngle: 0.45, maxPolarAngle: 1.45, minAzimuthAngle: -1.1, maxAzimuthAngle: 1.1, rotateSpeed: 0.6, zoomSpeed: 0.7,
     });
     this.controls.target.copy(target);
     this.controls.update();
     if (this.reduce) this.controls.enableDamping = false;   // reduced motion: no inertia after a drag
     canvas.addEventListener('wheel', this.onZoom, { passive: true });
-    canvas.addEventListener('pointerdown', this.onGrab);   // the user takes the camera: any running glide stops where it is
 
     for (const b of BOXES) this.anchors.set('label:' + b.id, new THREE.Vector3(BOX_X[b.id], RIM_Y + 0.55, -0.35));
     for (const b of BOXES) this.anchors.set('front:' + b.id, new THREE.Vector3(BOX_X[b.id] - 0.2, 0.55, 1.0));
@@ -135,63 +123,19 @@ export class FieldScene {
 
   private userZoomed = false;
   private onZoom = () => { this.userZoomed = true; };
-  private onGrab = () => { this.camGoal = null; };
 
-  /** 0 = at the boxes, 1 = over the surrounding fields */
-  get regionAmount(): number { return this.region.amount; }
+  /** the scene sits full-screen behind the top bar (~64 px) and the dock (~120 px): frame the boxes in the band between */
+  static readonly INSET = { top: 64, bottom: 120 };
 
-  private homeDist(): number {
-    const hHalf = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
-    return Math.max(HOME_DIST, 4.9 / Math.tan(hHalf));
-  }
-
-  /** the field under a screen point, when the fields are showing */
-  pickFarm(clientX: number, clientY: number): string | null {
-    if (this.region.amount < 0.6) return null;
-    const r = this.canvas.getBoundingClientRect();
-    const ndc = new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
-    const ray = new THREE.Raycaster(); ray.setFromCamera(ndc, this.camera);
-    const hit = ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -(GROUND + 0.4)), new THREE.Vector3());
-    return hit ? this.region.fieldAt(hit.x, hit.z) : null;
-  }
-
-  /** far enough back that the whole region (and the bench, wherever it is) fits the frame */
-  private regionDist(): number {
-    const vHalf = THREE.MathUtils.degToRad(this.camera.fov / 2), hHalf = Math.atan(Math.tan(vHalf) * this.camera.aspect);
-    return (this.region.extent * 0.95) / Math.tan(Math.min(vHalf, hHalf));
-  }
-
-  /** glide (or, with reduced motion, cut) between the boxes, the whole region and one field */
-  private updateCamera(dt: number, st: { regionOn?: boolean; regionData?: RegionView | null; selectedFarm?: string | null; goRegion?: (on: boolean) => void }) {
-    const want: 'home' | 'region' = st.regionOn && this.region.ready ? 'region' : 'home';
-    const focus = want === 'region' ? st.selectedFarm ?? null : null;
-    if (want !== this.mode || focus !== this.focus) {
-      this.mode = want; this.focus = focus;
-      const fp = focus ? this.region.fieldPos(focus) : null;
-      this.camGoal = want === 'home'
-        ? { target: HOME_TARGET.clone(), dir: HOME.clone().normalize(), dist: this.homeDist() }
-        : fp ? { target: fp.clone().setY(GROUND), dir: REGION_DIR.clone(), dist: FIELD_DIST }
-        : { target: this.region.viewCentre(), dir: REGION_DIR.clone(), dist: this.regionDist() };
-    }
-    const c = this.controls, off = this.camera.position.clone().sub(c.target);
-    const regionMax = this.regionDist() * 1.6;
-    if (this.camGoal) {
-      const g = this.camGoal, a = this.reduce ? 1 : 1 - Math.exp(-CAM_LAMBDA * dt);
-      c.target.lerp(g.target, a);
-      const r = Math.exp(THREE.MathUtils.lerp(Math.log(off.length()), Math.log(g.dist), a));
-      const dir = off.normalize().lerp(g.dir, a).normalize();
-      this.camera.position.copy(c.target).addScaledVector(dir, r);
-      c.minDistance = 1; c.maxDistance = 1e4;
-      if (Math.abs(r - g.dist) / g.dist < 0.004 && c.target.distanceTo(g.target) < 0.02 && dir.angleTo(g.dir) < 0.003) this.camGoal = null;
-    } else {
-      const d = off.length();
-      const minD = this.mode === 'region' ? 12 : 6, maxD = this.mode === 'region' ? regionMax : 30;
-      c.minDistance = Math.min(minD, d); c.maxDistance = Math.max(maxD, d);
-      // scrolling is the control too: out past the boxes lifts the camera over the fields, back in brings it home
-      const ready = st.regionData?.status === 'ready' && !!st.regionData.region;
-      if (this.mode === 'home' && ready && d > ZOOM_OUT_AT) st.goRegion?.(true);
-      else if (this.mode === 'region' && d < ZOOM_IN_AT) st.goRegion?.(false);
-    }
+  /** distance at which both boxes (and their cups) fill the visible band, at any aspect */
+  private homeDist(w: number, h: number): number {
+    const { top, bottom } = FieldScene.INSET;
+    const band = Math.max(0.35, (h - top - bottom) / h);          // share of the height the boxes may use
+    const vHalf = THREE.MathUtils.degToRad(this.camera.fov / 2);
+    const hHalf = Math.atan(Math.tan(vHalf) * this.camera.aspect);
+    const byWidth = (BENCH_HALF_W * 1.12) / Math.tan(hHalf);
+    const byHeight = (BENCH_HALF_H * 1.1) / (Math.tan(vHalf) * band);
+    return Math.max(byWidth, byHeight);
   }
 
   private resize() {
@@ -199,14 +143,19 @@ export class FieldScene {
     const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight);
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
-    // narrow screens: pull back so both boxes stay in frame
-    this.camera.fov = w / h < 1.1 ? 36 : 28;
+    this.camera.fov = w / h < 0.8 ? 44 : w / h < 1.1 ? 36 : 28;   // portrait phones: wider lens, so the boxes aren't specks
+    // centre the boxes in the band between the bar and the dock, not in the full canvas
+    const { top, bottom } = FieldScene.INSET;
+    const shift = Math.round((bottom - top) / 2);
+    if (h > top + bottom + 100) this.camera.setViewOffset(w, h, 0, shift, w, h); else this.camera.clearViewOffset();
     this.camera.updateProjectionMatrix();
-    // keep both boxes (and their cups) across the frame at any aspect: pull back along the current view direction
-    const hHalf = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
-    const fit = Math.max(HOME_DIST, 4.9 / Math.tan(hHalf));
-    const off = this.camera.position.clone().sub(this.controls.target);
-    if (!this.userZoomed && this.mode === 'home' && !this.camGoal) this.camera.position.copy(this.controls.target).add(off.setLength(fit));
+    const fit = this.homeDist(w, h);
+    this.controls.maxDistance = Math.max(30, fit * 1.6);
+    if (this.userZoomed) return;
+    // always open on the two boxes: home target, home direction, fitted distance
+    this.controls.target.copy(HOME_TARGET);
+    this.camera.position.copy(HOME_TARGET).addScaledVector(HOME.clone().normalize(), fit);
+    this.controls.update();
   }
 
   private async load() {
@@ -329,10 +278,7 @@ export class FieldScene {
     const realDt = Math.max(0, (ms - this.last) / 1000), dt = Math.min(0.5, realDt);   // smoothing stays time-correct at any frame rate
     this.last = ms;
     const now = ms / 1000;
-    const st = useApp.getState() as unknown as {
-      lens?: string; regionOn?: boolean; regionData?: RegionView | null; selectedFarm?: string | null; hoverFarm?: string | null;
-      config?: { place?: { lat: number; lon: number } | null } | null; goRegion?: (on: boolean) => void;
-    };
+    const st = useApp.getState() as unknown as { lens?: string };
     const lens = st.lens === 'moisture' ? 1 : st.lens === 'temperature' ? 2 : 0;
     const time = this.reduce ? 0 : now;
 
@@ -421,11 +367,6 @@ export class FieldScene {
       b.rim.emissiveIntensity = b.id === 'A' ? decGlow * 0.6 : 0;
     }
 
-    // the surrounding fields (AlphaEarth predictions via RegionView); the land rises only when zoomed out
-    this.region.setRegion(st.regionData?.region ?? null, BENCH_W, BENCH_L, st.config?.place ?? null);
-    this.region.setMatches(st.regionData?.matches ?? []);
-    this.region.update(dt, !!st.regionOn, st.selectedFarm ?? null, st.hoverFarm ?? null, this.reduce);
-    this.updateCamera(dt, st);
 
     // no idle camera motion: nothing moves on its own except in response to data or the user
     this.controls.update();
@@ -438,8 +379,6 @@ export class FieldScene {
     cancelAnimationFrame(this.raf);
     this.ro.disconnect();
     this.canvas.removeEventListener('wheel', this.onZoom);
-    this.canvas.removeEventListener('pointerdown', this.onGrab);
-    this.region.dispose();
     this.controls.dispose();
     this.scene.traverse((o) => {
       const m = o as THREE.Mesh;

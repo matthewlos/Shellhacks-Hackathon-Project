@@ -670,19 +670,23 @@ Rerun: `python farm-hand/alphaearth/build_fields.py`, then copy `fields.html`, `
 
 ## 5g. The UI is Prompt Grass now (2026-09-26)
 
-**What changed.** The team switched the Farm Hand frontend to the Prompt Grass Grow Grass web app: `farm-hand/web/` (Vite + React + three.js, MIT, license in `farm-hand/web/LICENSE-PromptGrassGrowGrass`, upstream commit in `farm-hand/web/UPSTREAM_COMMIT`). It is wired to the Mac mini's `/farmhand/api` (server: `farm-hand/cloud/receiver.py`; the browser code talks to it through `src/data/backendBoard.ts`). The footer credits it: "UI based on Prompt Grass Grow Grass (MIT)".
+**What changed.** The team switched the Farm Hand frontend to the Prompt Grass Grow Grass web app: `farm-hand/web/` (Vite + React + three.js, MIT, license in `farm-hand/web/LICENSE-PromptGrassGrowGrass`, upstream commit in `farm-hand/web/UPSTREAM_COMMIT`). It is wired to the Mac mini's `/farmhand/api` (server: `farm-hand/cloud/receiver.py`; the browser code talks to it through `src/data/backendBoard.ts`). The license file stays in the folder; nothing about it is shown on the site.
 
 - **ui-mui** (Matthew's MUI UI) stays in the repo but is no longer deployed.
 - **The 3D scene** now shows the two real boxes (box A Farm Hand, box B Timer) from `farmhand.glb`, driven by live readings.
 - **Deploy:** the Mac mini builds `farm-hand/web` from `main` every minute. Push to `main` and it is live at https://farmhand.dmchang.xyz/farmhand/ within about a minute.
 
-**Three pages** (tabs in the header, also linkable as `#crops` and `#region`):
+**The screen (redesign, 2026-09-26 evening).** The 3D model of the two boxes fills the whole screen under a slim top bar (name, "Watches your crop so you don't have to. Saves time, money, water, and the crop.", live pill). A dock at the bottom opens one panel at a time over the scene (Esc or a click on the scene closes it; the open panel is in the URL hash, e.g. `#map`):
 
-| Page | What it shows | Data |
-|---|---|---|
-| **Live** | The 3D boxes. Per box: soil moisture % and soil temperature °C (one decimal, readable from 3 m), raw ADC count, probe status ("Probe disconnected" instead of a number when `probeOk` is false), pump row ("Pump A: off, disarmed until wiring is confirmed"). **Laya's call** for box A: the pick in plain words (Water now / Holding off: the soil has water / Waiting for rain), seconds, who decided (Laya or the baseline rule, keep soil at 45% or more), the why sentence, the time. Moisture over time, A (blue) vs B (orange) with the 45% baseline, drag to replay. Rain forecast (Open-Meteo). Online / offline and "last reading N s ago" in the header. | `/farmhand/api` live stream: `sample`, `decision`, `link`; history; forecast |
-| **Crops** | Per box, the 26-crop rules engine (`src/data/sim/crops.ts`), ranked. One focal crop at a time with its score, verdict, summary and planting window; "Why this score" opens the per-factor sentences. Unknown factors say "unknown", never guessed. Growing season card with frost dates, labeled as an estimate (Miami rarely frosts). | `scoreCrops`, `plantingWindow`, `frostDates` |
-| **Miami-Dade** ("Your farm in Miami-Dade") | Map first: every field around the boxes, colored by predicted crop, labeled "Predicted from satellite". Click a field for its card: crop, soil (USDA SSURGO: series, texture, drainage, water it holds), the moisture baseline Farm Hand would hold it at (that crop's FAO-56 stress line), "fields like this one" count, 2017-2025 trend sparkline, sources. The map opening out from the boxes is the page's one authored motion. | `region()` (RegionView), fed by the new **AlphaEarth v2** dataset |
+| Dock button | Panel |
+|---|---|
+| **Box A / Box B** (shows moisture or "no probe") | moisture %, temperature °C, one quiet amber line if a probe isn't reporting, pump row ("off, disarmed until wiring is confirmed"), raw reading |
+| **Laya's call** (shows the pick) | Water now / Holding off / Waiting for rain, seconds, the why, the time. "Decided by Laya" or "Decided by the safety rule: probe A isn't reporting, so Laya doesn't guess." |
+| **Saves** | the four savings: time (soil checks done, from `/farmhand/data` count), money ($72.94 parts vs $1,200-1,512 + $309/yr for one commercial sensor), water (56% less than a timer, simulated field on real weather), crop (0 h stress vs 12 h, same replay; plus box A's live time at or above 45%) |
+| **History** | moisture over time, A vs B, 45% line, drag to replay in 3D |
+| **Forecast** | Open-Meteo rain, next 7 days |
+| **Crops** | per box: "With soil at 38.2% moisture and 26.1 °C, these crops can survive in Box A:" grouped Thrive / Can survive / Would struggle, one short reason each. The engine (`src/data/sim/crops.ts`) now has a moisture factor: FAO-56 depletion fraction p per crop, dryness line = 20 + 45 x (1 - p). No probe: "Plug in the probes to see which crops fit." |
+| **Map** ("Farms near you") | the real 1,100 AlphaEarth v2 fields as polygons over Esri satellite imagery (Leaflet), bright color per predicted crop, a big always-on legend "What grows here (Google satellite data)", "Your boxes (FIU)" pin. Tap a farm: crop, acres, distance, soil in plain words, the moisture Farm Hand would keep it above, similar farms outlined. Sources in "How we know". |
 
 **Removed from Prompt Grass, and why:** the voice assistant (voice orb, `src/voice/`) and the in-browser WebMCP agent (`src/agent/`, agent presence, demo panel): they depend on the Prompt Grass backend and its voice service, and Farm Hand's AI is Laya on the Mac mini. The onboarding flow (draw the plot, place probes, set location, calibrate in the app): the boxes are set up on the bench and calibrated in firmware. The pour test, diagnose and the Network page: Farm Hand has no data for them. Fonts: Fraunces and Inter replaced by Archivo (one family; JetBrains Mono only for raw sensor counts). Theme: light, for a projector in a bright hall (5d).
 
@@ -695,8 +699,8 @@ Rerun: `python farm-hand/alphaearth/build_fields.py`, then copy `fields.html`, `
 - [ ] Unplug a probe: its box says "Probe disconnected" (not a number) within one reading.
 - [ ] Laya's call updates when the server logs a new decision; "Decided by" says Laya or the baseline rule.
 - [ ] Pump rows say "disarmed until wiring is confirmed" until the firmware arms the pumps; then flip `pumpsArmed` in `farm-hand/web/src/brand.ts` (or have the server send it).
-- [ ] Crops tab: both boxes list crops; "Why this score" shows the sentences; nothing says a number where the engine said unknown.
-- [ ] Miami-Dade tab: the map loads from the AlphaEarth v2 data, a field click opens its card, and every predicted value is labeled as predicted.
+- [ ] Crops panel: with probes in, each box lists Thrive / Can survive / Would struggle; with a probe out it says "Plug in the probes".
+- [ ] Map panel: 1,100 farms over satellite imagery, the legend is readable from 3 m, a tap opens the farm card.
 - [ ] Check it at 1440x900 and on a phone (390 px wide).
 - [ ] Don't edit `ui-mui` for the demo; it is not deployed.
 

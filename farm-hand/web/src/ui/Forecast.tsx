@@ -26,8 +26,7 @@ export function Forecast() {
   const days = f?.days?.slice(0, 7) ?? [];
   const top = Math.max(10, ...days.map((d) => d.precipMm));
   return (
-    <section className="forecast" aria-label="Rain forecast">
-      <h2>Rain forecast</h2>
+    <div className="forecast">
       {!f ? (
         <p className="muted">Loading the forecast from Open-Meteo.</p>
       ) : (
@@ -50,6 +49,6 @@ export function Forecast() {
           </p>
         </>
       )}
-    </section>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 import { brand } from '../brand';
-import { ago, clock, toMs, useDecision, useNow, usePumpsArmed, type Decision } from './farmData';
+import { useApp } from '../data/store';
+import { ago, clock, toMs, useDecision, useNow, usePumpsArmed, type BoxLive, type Decision } from './farmData';
 
 /** Laya's pick in plain words. Unknown picks are shown as sent, never guessed. */
 export function pickWords(pick: string): { head: string; sub: string; kind: 'water' | 'hold' | 'rain' | 'other' } {
@@ -11,10 +12,16 @@ export function pickWords(pick: string): { head: string; sub: string; kind: 'wat
   return { head: pick.replace(/_/g, ' '), sub: '', kind: 'other' };
 }
 
-function brainWords(brain: string): { name: string; note: string } {
-  if (/laya/i.test(brain)) return { name: 'Laya', note: 'a small fine-tuned model on the Mac mini' };
-  if (/rule|baseline|fallback|timer/i.test(brain)) return { name: 'the baseline rule', note: `(keep soil at ${brand.baselinePct}% or more), the fallback when Laya is not running` };
-  return { name: brain, note: '' };
+/** Who decided, in one sentence. The safety rule runs when a probe is missing: Laya never guesses a reading. */
+function decidedBy(d: Decision, probeAOk: boolean): { text: string; hideWhy: boolean } {
+  if (/laya/i.test(d.brain)) return { text: 'Decided by Laya, a small fine-tuned model on the Mac mini.', hideWhy: false };
+  if (/rule|baseline|fallback|safety/i.test(d.brain)) {
+    const probeMissing = !probeAOk || /probe|not connected|disconnect|no reading/i.test(d.why ?? '');
+    return probeMissing
+      ? { text: "Decided by the safety rule: probe A isn't reporting, so Laya doesn't guess.", hideWhy: true }
+      : { text: `Decided by the safety rule: keep the soil at ${brand.baselinePct}% or more.`, hideWhy: false };
+  }
+  return { text: `Decided by ${d.brain}.`, hideWhy: false };
 }
 
 const secs = (s: number) => `${Number.isInteger(s) ? s : s.toFixed(1)} s`;
@@ -23,7 +30,8 @@ function Body({ d }: { d: Decision }) {
   const now = useNow(1000);
   const armed = usePumpsArmed();
   const words = pickWords(d.pick);
-  const brain = brainWords(d.brain);
+  const probeAOk = useApp((s) => { const l = s.live.A as BoxLive | undefined; return !!l && (l.probeOk ?? l.moistureOnline); });
+  const by = decidedBy(d, probeAOk);
   const t = toMs(d.t);
   return (
     // keyed on the decision time: a new call swaps in with one short fade (styles.css .call-body)
@@ -33,21 +41,26 @@ function Body({ d }: { d: Decision }) {
         {words.kind === 'water' && d.seconds > 0 && <span className="num">, {secs(d.seconds)}</span>}
       </p>
       {words.sub && <p className="call-sub">{words.sub}</p>}
-      {d.why && <p className="call-why">{d.why}</p>}
+      {d.why && !by.hideWhy && <p className="call-why">{d.why}</p>}
       {words.kind === 'water' && !armed && <p className="call-note">The pump is disarmed, so no water went in.</p>}
       <p className="call-meta">
-        Decided by <b>{brain.name}</b>{brain.note && <>{brain.note.startsWith('(') ? ' ' : ', '}{brain.note}</>}.
+        {by.text}
         {t != null && <> At <span className="num">{clock(t)}</span> (<span className="num">{ago(now - t)}</span>).</>}
       </p>
     </div>
   );
 }
 
+/** Short text for the dock button. */
+export function useCallGlance(): string {
+  const d = useDecision();
+  return d ? pickWords(d.pick).head : 'no call yet';
+}
+
 export function LayaCall() {
   const d = useDecision();
   return (
     <section className="call" aria-live="polite" aria-label="Laya's call for box A">
-      <h2>Laya's call for box A</h2>
       {d ? <Body d={d} /> : (
         <div className="call-body">
           <p className="call-pick call-other">No call yet</p>
