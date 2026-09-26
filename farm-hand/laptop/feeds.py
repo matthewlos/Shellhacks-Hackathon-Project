@@ -45,6 +45,8 @@ def forecast():
             "hours_until_real_rain": first_rain,            # None = no solid rain in 24 h
             "et0_mm_next_24h": round(sum(x or 0 for x in h["et0_fao_evapotranspiration"]), 2),
             "temp_c_now": h["temperature_2m"][0],
+            "hours": [{"t": t[11:16], "p": p_, "mm": round(mm, 1), "c": c}          # the dashboard's 24 h weather strip
+                      for t, p_, mm, c in zip(h["time"], prob, rain_mm, h["temperature_2m"])],
             "source": "open-meteo.com",
         }
     return _cached("forecast", 15 * 60, get)

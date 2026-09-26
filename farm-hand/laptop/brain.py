@@ -217,13 +217,13 @@ def water_pot(seconds, reason, tag=None):
 # Trained on the field scale: wilting 20%, stress line 42.5%, field capacity 65%. The box's healthy band
 # (DRY_PCT..WET_PCT) is mapped onto stress line..field capacity so the model sees the same picture.
 
-def _laya_state():
+def _laya_state(outdoors=None):
     soil = get_soil("A")
     if "error" in soil:
         return None, soil["error"]
     pct = soil["moisture_pct"]
     fc, dr = feeds.forecast(), feeds.drought()
-    outdoors = bool(config.OUTDOORS)
+    outdoors = bool(config.OUTDOORS) if outdoors is None else outdoors
     lt = time.localtime()
     return {
         "soil_moisture_pct": round(42.5 + (pct - config.DRY_PCT) * (65 - 42.5) / (config.WET_PCT - config.DRY_PCT), 1),
@@ -253,6 +253,30 @@ def get_fast_decision() -> dict:
     log_act("laya", f"{r['choice']} {max(r['probabilities'].values()):.0%} ({r['ms']} ms)")
     LAST["laya"] = {"ts": time.time(), "pick": r["choice"], "sure": max(r["probabilities"].values()), "ms": r["ms"], "soil_pct": pct}
     return {"pick": r["choice"], "probabilities": r["probabilities"], "ms": r["ms"], "soil_pct": pct}
+
+
+_FIELD = {"ts": 0, "val": None}
+
+
+def field_call():
+    """What Laya would pick if this box sat in a field: the same live soil reading, with the real forecast switched on.
+    Display only. It never pours, never logs a decision, and never touches LAST (the real call)."""
+    if _FIELD["val"] and time.time() - _FIELD["ts"] < 300:
+        return _FIELD["val"]
+    if not config.USE_LAYA:
+        return {"error": "Laya is switched off"}
+    state, pct = _laya_state(outdoors=True)
+    if state is None:
+        return {"error": pct}
+    try:
+        import requests
+        r = requests.post(config.LAYA_URL + "/decide", json={"state": state}, timeout=3).json()
+    except Exception as e:
+        return {"error": f"Laya not reachable: {type(e).__name__}"}
+    val = {"pick": r["choice"], "sure": max(r["probabilities"].values()), "ms": r["ms"], "soil_pct": pct,
+           "rain_mm": state["rain_forecast_next_24h_mm"], "rain_chance": state["rain_chance_next_24h_pct"], "ts": time.time()}
+    _FIELD.update(ts=time.time(), val=val)
+    return val
 
 
 def laya_decide():

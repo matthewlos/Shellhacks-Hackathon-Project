@@ -432,6 +432,200 @@ Where: a folding table in a bright FIU hall, fluorescent light, judges standing,
 6. Phone alerts (the detectors exist; sending isn't built).
 7. Flow sensor (hardware) so ml, the timer line and cups saved become measured.
 
+## 5e. Three pages, two boxes: the work plan (for Matthew, 2026-09-26)
+
+**Start here, Matthew.** This is the current plan. Where it disagrees with 5b or 5d, this section wins. 5d still holds for the look (type, radii, motion, the "human-made" rules); this section says what goes on which page, what's built, what's not, and in what order to do it.
+
+### What changed and why (read this first)
+
+1. **The box is indoors.** No rain, no sun, no weather reaches it. So indoors, Farm Hand's job is simple: **hold the soil at a moisture level we pick (the baseline).** Laya's weather smarts don't matter inside, and we say so out loud.
+2. **The proof against a timer is now a real second box.** Box A = Farm Hand. Box B = a plain timer (the chip's built-in timer, every 6 h). Same soil, same room, same ESP32. The only difference is the brain. This replaces the "virtual timer" math for the demo (the hardware side is being wired now; see the hardware notes at the bottom).
+3. **The proof that it works outside is a simulation**, on 21 months of real Miami weather Laya never trained on. That's where "wait for the rain" shows.
+4. **So the dashboard becomes three pages:**
+
+| Page | URL | Job | One-line pitch it supports |
+|---|---|---|---|
+| **Live box** | `/` | Box A, live, by itself | "It holds the soil where you tell it to." |
+| **Control** | `/control` | Box A vs Box B (timer), side by side, measured | "Same soil, same room. The timer used more water and still got it wrong." |
+| **Simulation** | `/sim` | Outside: season replay vs a timer + crops at different moisture levels | "Outside, it waits for the rain. 56% less water on real weather." |
+
+Every page has the same 3-tab nav at the top: **Live box · Control · Simulation**. Same tokens, same fonts, same header height.
+
+### Status of every piece (be honest about this on stage too)
+
+| Piece | Where | Status |
+|---|---|---|
+| Live dashboard (3D box, call, target, pinch, hand-pour, agent tabs) | `laptop/static/index.html`, `scene.js`, `views.js` | built, tested on the fake board and the real box A |
+| **Weather card** on the live page (live Open-Meteo, 24 h rain-chance strip, "this box is indoors" note, link to /sim) | `index.html` (`.sky` section, `sky()` in the script) | **built 2026-09-26, not yet seen in a browser**. Backend feed tested live: 24 hourly slots come back. |
+| Hourly forecast in the API | `feeds.forecast()["hours"]` → `/api/state` | built, tested live |
+| **Baseline API**: set the moisture level to keep | `POST /api/baseline {"pct": 45}` in `server.py` | **built, not run yet**. Sets `DRY_PCT` (water at or below this) and `TARGET_PCT` (= baseline + 20, capped 5 under `WET_PCT`), saves to `laptop/data/baseline.json` so it survives a restart. Range 20% to `WET_PCT - 15`. |
+| Laya holds the baseline | `brain.py _laya_state()` | works already: the box's `DRY_PCT..WET_PCT` band is mapped onto the stress line Laya was trained on, so moving the baseline moves when Laya waters. No retraining. |
+| **Laya "in a field right now"** call | `GET /api/field-call` → `brain.field_call()` | **built, not run yet.** Same live soil, real forecast switched on, display only: never pours, never logs a decision, cached 5 min. Shown at the top of `/sim`. |
+| Pot B in the graph API | `/api/series` now returns `[ts, A%, temp, B%]` per point + `pours_b` + `one_pot` | **built, not run yet.** For the control page. |
+| **Simulation page, part 1: season replay timelapse** | `laptop/static/sim.html`, route `/sim` | **built, not seen in a browser, and has no data yet** (see "Make the sim data" below). Two fields side by side (timer orange, Farm Hand blue), soil color = moisture, spray on watering days, rain over both, play / scrub / 1x-3x-8x, counters, cumulative-water chart with rain bars, "held off for rain" moments list (click to jump), money + time calculator. |
+| Sim data builder | `laya/season_replay.py` → `laptop/static/sim_data.json` | **built, not run yet**: needs the Laya weights (see below). |
+| **Control page** | `laptop/static/control.html`, route `/control` | **not built** (spec below) |
+| **Simulation page, part 2: crops at a moisture level** | a second section of `sim.html` | **not built** (spec below) |
+| Baseline slider on the live page | `index.html` | **not built** (API is ready) |
+| 3-page nav | all pages | **not built** |
+| 5d visual fixes (radius tokens, eyebrows, tabular numbers, glow) | `index.html` | **not done** |
+
+### Page 1: Live box (`/`)
+
+The live page shows **box A only**, live. Everything on it should be measured or clearly a control.
+
+Keep:
+- the 3D box (hero) with soil color, water stream, probe LED heartbeat (5d), rim glow
+- **big moisture % and soil temp °C** (tier 1 in 5d, readable from 3 m)
+- pump state + "last reading 0.4 s ago" ticking
+- the call ("Holding off" / "Watering 12 s") + Laya line (pick, % sure, ms)
+- Run agents / Test pour / Stop pump, Hit the Target, pinch + hand-pour test links
+- the **weather card** (built): live temp, rain mm + chance, the 24 h strip, and the line "This box is indoors, so rain can't reach it. Farm Hand won't hold off for rain here." It hides that line when `OUTDOORS=1`.
+- tabs: Agent team, Pours, Ask
+
+Add:
+- **Baseline slider: "Keep the soil at least at __%"**. Range 20 to `wet - 15`, step 1, default = current `S.config.dry`. On release, `POST /api/baseline {"pct": v}`; show the answer ("Keeping it at 45%. Each drink aims for 65%."). Draw the baseline as a line on the moisture band (the band already exists: `#okBand`) and as a faint plane in the 3D box at that height (same idea as the target plane in 5d).
+- the 3-page nav
+
+Move off this page:
+- the **money graph + cups saved** (virtual timer) → the Control page. With a real box B, the estimate isn't needed on the live page, and an estimate next to a measured number invites the wrong question.
+- **"A whole field"** view → the Simulation page (it's about outside and scale).
+
+### Page 2: Control (`/control`): box A vs box B
+
+Run the server with `ONE_POT=0` (two real pots; the chip's pot-B timer runs; the laptop sends `T <TIMER_EVERY_S> <TIMER_POUR_MS>` on every boot (`board.py:191`), default every 6 h for 5 s). Firmware already refuses to run both pumps at once (`PUMP_GAP_MS`, `farm_hand.ino:34`), so no brownout from two pumps.
+
+Layout (desktop, projector first):
+
+```
++----------------------------------+----------------------------------+
+|  FARM HAND (box A)          blue |  TIMER (box B)             orange|
+|  58.3%   27.9 °C                 |  71.2%   27.8 °C                 |
+|  holding at 45%                  |  every 6 h, 5 s, no matter what  |
+|  Water used: 180 ml   2 drinks   |  Water used: 600 ml   6 drinks   |
++----------------------------------+----------------------------------+
+|  MOISTURE OVER TIME: A blue line, B orange line, baseline dashed,   |
+|  wet limit shaded. A pour = a dot on its line.                     |
++---------------------------------------------------------------------+
+|  Box B used 3.3x the water. Box A never went under the baseline.    |
++---------------------------------------------------------------------+
+```
+
+Data:
+- live numbers: `/api/live` already returns `a` and `b` (moisture %), `temp`, `pumping` (which pot is running).
+- history: `/api/series?hours=0` → `points[i] = [ts, A%, temp, B%]`, `pours` (A) and `pours_b` (B), each pour has `ml`.
+- water used = sum of `ml` per box since the run started. ml comes from each pump's measured flow in `laptop/data/calibration.json` (`flow_ml_per_s`), so the hardware side must measure pump B's flow (see the hardware notes).
+
+Rules for this page:
+- only measured numbers. No estimates here. If a number isn't measured, it doesn't go on this page.
+- the headline sentence at the bottom is computed, never typed: water ratio, and whether each box stayed inside the healthy band (time above `WET_PCT` for B = "soggy", time under baseline for A).
+- show the run's start time and length ("running 14 h 32 min"), so judges know how much data it is.
+- when a judge pours into both boxes: box A's banner ("Someone added water, I'm skipping my next drink") shows here too, and box B's next timer pour still happens. That contrast is the moment.
+
+### Page 3: Simulation (`/sim`)
+
+**Part 1, season replay (built, needs data).** What's on it now, top to bottom:
+1. **"Right now, if our box sat in a field at FIU, Laya would ___"**: from `/api/field-call`. Hidden if the server or Laya isn't running.
+2. The two-field timelapse, Timer vs Farm Hand, Jan 2025 → Sep 2026, real hourly Miami weather.
+3. "Saved so far" strip: gallons per acre, pumping $ for your farm size, soil checks done automatically, stressed hours avoided.
+4. Cumulative water chart (timer orange vs Farm Hand blue, rain bars, playhead).
+5. Money + time calculator: acres, diesel $/gal, minutes to walk the field. Pumping cost = $4.42 per acre-inch at $3 diesel, $7.36 at $5, straight line between (LSU AgCenter, Southern Ag Today, July 2026, diesel well pump, fuel only).
+6. "Times it held off for rain": each time Laya picked `wait_rain` and ≥5 mm fell that day or the next.
+7. The honesty line: simulated field (FAO-56 bucket, sandy soil, Kc 1.05) on real weather, not a measured farm.
+
+Expected totals (from `laya/data/eval.md`, run 2026-09-23 on the PC GPU): timer 3,545,691 gal/acre and 12 stressed hours; Laya 1,553,052 gal/acre and 0 stressed hours; **56.2% less water**. `season_replay.py` prints its own totals; the timer must match exactly and Laya within a few mm (GPU math differs a little).
+
+UI to-do on part 1: apply 5d (it already uses one radius scale, tabular numbers, no eyebrows); check it at 1920x1080, 1440 and 390 px; make the fields' soil % tag and the stress color readable from 3 m; move "A whole field" here from the live page.
+
+**Part 2, crops at a moisture level (to build).** The idea: pick the baseline, and see which Florida crops stay healthy at that level and what it costs in water. Different crops tolerate different dryness, so one level can't fit all of them.
+
+How it works (FAO-56, same bucket as part 1):
+- soil % on our scale: wilting point = 20%, field capacity = 65% (same as Laya's scale).
+- each crop's **stress line** = 20 + 45 x (1 - p), where p is the fraction of water the crop can use before it's stressed (FAO-56 Table 22).
+- a baseline **under** a crop's stress line = that crop gets stressed (red, "won't do well here"). A baseline **above** it = healthy, but every point higher costs more water (more drains past the roots).
+
+FAO-56 Table 22 values (checked 2026-09-26 at fao.org/4/x0490e/x0490e0e.htm):
+
+| Crop | p | Stress line on our scale | Max root depth (m) |
+|---|---:|---:|---|
+| Strawberries | 0.20 | 56.0% | 0.2-0.3 |
+| Bell peppers | 0.30 | 51.5% | 0.5-1.0 |
+| Lettuce | 0.30 | 51.5% | 0.3-0.5 |
+| Potato | 0.35 | 49.3% | 0.4-0.6 |
+| Tomato | 0.40 | 47.0% | 0.7-1.5 |
+| Watermelon | 0.40 | 47.0% | 0.8-1.5 |
+| Green beans | 0.45 | 44.8% | 0.5-0.7 |
+| Citrus (70% canopy) | 0.50 | 42.5% | 1.2-1.5 |
+| Berries, bushes (use for blueberries) | 0.50 | 42.5% | 0.6-1.2 |
+| Sugarcane | 0.65 | 35.8% | 1.2-2.0 |
+
+⚠️ **Still needed before the water numbers are real:** each crop's Kc (mid-season crop coefficient, FAO-56 Table 12) for the water-use part. The stress-line part above is ready now. Don't show per-crop gallons until Kc is looked up and cited.
+
+Layout: a slider "Keep the soil at __%" (same control as the live page), then one row per crop: name, its stress line drawn as a tick on a 20-65% bar, the baseline as a line across all rows, and a pill: **healthy** / **stressed**. Optional once Kc is in: run the part-1 bucket for that crop at that baseline in the browser (the weather is already in `sim_data.json` via each day's rain; add daily ET0 to the JSON in `season_replay.py`) and show water used + stressed hours.
+
+What judges should get: "Farm Hand lets you set the level per crop. Strawberries need 56%, sugarcane is fine at 36%. One timer can't do both."
+
+### Make the sim data (needed once, then commit the JSON)
+
+On the PC (has the model in `farm-hand/laya/model/farmhand-laya` and CUDA):
+```
+cd farm-hand
+.venv\Scripts\python laya\season_replay.py
+```
+On a Mac:
+```
+cd farm-hand/laya
+uv venv --python 3.12 .venv-mac && uv pip install --python .venv-mac/bin/python torch "transformers>=4.48.0" "laya>=0.1.6" safetensors huggingface_hub requests
+.venv-mac/bin/hf auth login          # the model repo chinchop/farmhand-laya is private
+.venv-mac/bin/hf download chinchop/farmhand-laya --local-dir model/farmhand-laya
+.venv-mac/bin/python season_replay.py
+```
+It writes `laptop/static/sim_data.json` (small, about 150-250 KB) and prints totals. Check them against `laya/data/eval.md`, then commit the JSON so the page works without the model.
+
+### Shared UI work (all three pages)
+
+From 5d, still to do (the `index.html` scan found these):
+- **one radius scale**: `--r-ctl: 6px` (controls), `--r-panel: 12px` (panels), `999px` chips only. `sim.html` already uses these tokens; move `index.html`'s 28 `border-radius` lines onto them.
+- **no eyebrow labels** above headings (2 in `index.html`)
+- **no zero-offset glow** shadow (1 in `index.html`)
+- **`tabular-nums` on every changing number** (only 2 today)
+- readable from 3 m: tier-1 numbers ~96 px on a 1080p projector
+- one red thing on screen at a time; alerts slide in, never modals
+- UI transitions under 300 ms, `cubic-bezier(0.23, 1, 0.32, 1)`, nothing from `scale(0)`
+- same header + 3-tab nav on every page, the current page marked
+- test at 1920x1080 (projector), 1440x900 (laptop), 390 px (phone), and with `prefers-reduced-motion`
+
+Skills: `design-skills/` (README says which to use for what). Prompts that work are in 5d.
+
+### Order of work
+
+1. Run the server once on the fake board with this branch (`set SERIAL_PORT=fake`) and look at `/` and `/sim`. Fix anything broken in the weather card.
+2. 3-page nav + move the money graph off the live page.
+3. Baseline slider on the live page (API ready).
+4. Control page (`/control` route + `control.html`), first on the fake board, then with the real box B once it's wired.
+5. Make the sim data, look at `/sim` with real data, polish.
+6. Crops section on `/sim` (stress lines first, water numbers after Kc is cited).
+7. 5d visual fixes across all three pages.
+8. Screenshot all three pages at the 3 sizes; fix; done.
+
+### Done checklist
+
+- [ ] `/`, `/control`, `/sim` all load with 0 console errors, on the fake board and the real board
+- [ ] live page shows box A only, and nothing estimated
+- [ ] baseline slider moves the line on the band and in the 3D box, and survives a server restart
+- [ ] control page numbers are all measured; water used per box adds up to the pours list
+- [ ] sim page totals match `eval.md` (timer exact, Laya within a few mm)
+- [ ] every simulated or estimated number is labeled as such where it's shown
+- [ ] crops section shows no water numbers until Kc is cited
+- [ ] 5d checklist passes on all three pages
+
+### Hardware notes (handled by the hardware side, listed here so the software matches)
+
+- Box B: probe on pin 33, relay on pin 27 through its own PN2222 + 1K (same as box A), its own pump. Probe VCC on the 3.3 V line (column 45), GND on the ground line (column 22).
+- Box B's probe needs its own calibration (air and water raw numbers): `farm_hand.ino:30-31` still has box A's numbers copied for both, and `laptop/data/calibration.json` must match.
+- Box B's pump flow needs measuring (`flow_ml_per_s.B` in `calibration.json`, default 20.0 is a guess).
+- Two-box mode (`ONE_POT=0`) has only run in the Wokwi simulator so far. Run both boxes overnight before the event.
+
 ## 6. Hackathon plan
 
 ⚠️ **Rules check first.** MLH-style hackathons want the project built at the event. This folder is practice + a proven design. At the event:

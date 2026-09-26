@@ -6,6 +6,7 @@ Farm Hand watches soil moisture + temperature every second, a small fast AI make
 This repo is the plan and the designs, plus `ui/`: a virtual version of the rig you can open in a browser. It runs the same rules as the real code in `farm-hand/` (see `ui/README.md`). `WORK_HISTORY.md` logs how `ui/` was built.
 
 ## Read in this order
+0. **Matthew: start with `PLAN.md` section 5e.** The current work plan: three pages (Live box, Control, Simulation), the two-box control test, what's built, what's not, and the order to do it.
 1. **`PLAN.md`**: the whole plan. Parts, the real wiring (section 2), how the hardware was proven on 2026-09-23 (section 3), the AI agent team (5), the dashboard (5b), Hit the Target demo (5c), **the dashboard round 2 spec: what data to show, the judge moments, and how to make it look human-made (5d)**, hackathon schedule (6), the 2-minute demo (7), judge Q&A (8), sponsor tracks (9), risks (10).
 2. **`pitch/story_final.md`**: the 30-second opening story and the honesty rules. `pitch/story_draft.md` has every source and quote.
 3. **The trailer** (57 s, real news clips, the San Juan nursery story leads) is in the Release, `videos-and-audio.zip` → `media/farmhand-drought-trailer.mp4`. `media/trailer-plan.json` is its script.
