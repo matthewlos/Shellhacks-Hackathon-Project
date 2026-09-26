@@ -86,6 +86,7 @@ void sys_loop(void)
     }
     PUMP_fallback(&soil, CLOUD_last_ok_ms());
     PUMP_update();
+    PUMP_timer_b();
     OLED_update(&soil, &temp);
 
     /* Wiring check every 10 s, so moving a wire shows up without a reset */

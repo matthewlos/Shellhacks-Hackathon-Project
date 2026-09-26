@@ -67,6 +67,39 @@ void    PUMP_update(void)
     }
 }
 
+/* ---------- box B: the timer (control) ---------- */
+static unsigned long b_last = 0, b_stop = 0, b_day_start = 0;
+static bool b_running = false;
+static float b_day_s = 0;
+
+void    PUMP_timer_b(void)
+{
+    if (b_running && (long)(millis() - b_stop) >= 0)
+    {
+        RELAY_set(1, false);
+        b_running = false;
+        Serial.printf("{\"type\":\"pump\",\"pot\":\"B\",\"ran_s\":%.1f,\"by\":\"timer\",\"today_s\":%.1f}\n", TIMER_B_POUR_S, b_day_s);
+    }
+    if (b_running || running) return;                             /* never both pumps at once */
+    if (b_last && millis() - b_last < TIMER_B_EVERY_MS) return;
+    if (!b_last && millis() < 60000UL) return;                     /* first pour 1 min after boot */
+    if (millis() - b_day_start > 86400000UL) { b_day_start = millis(); b_day_s = 0; }
+    b_last = millis();
+    if (b_day_s + TIMER_B_POUR_S > PUMP_DAILY_MAX_S)
+    {
+        Serial.println("{\"type\":\"pump_refused\",\"pot\":\"B\",\"why\":\"daily water cap reached\"}");
+        return;
+    }
+#if !PUMP_ARMED
+    Serial.printf("{\"type\":\"pump_disarmed\",\"pot\":\"B\",\"would_run_s\":%.1f,\"by\":\"timer\"}\n", TIMER_B_POUR_S);
+    return;
+#endif
+    b_day_s += TIMER_B_POUR_S;
+    b_stop = millis() + (unsigned long)(TIMER_B_POUR_S * 1000);
+    b_running = true;
+    RELAY_set(1, true);
+}
+
 void    PUMP_fallback(const SoilReading_t *soil, unsigned long last_server_ok_ms)
 {
     bool stale = (last_server_ok_ms == 0 && millis() > PUMP_SERVER_STALE_MS) ||
