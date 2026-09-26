@@ -6,7 +6,7 @@ Farm Hand watches soil moisture + temperature every second, a small fast AI make
 This repo is the plan and the designs, plus `ui/`: a virtual version of the rig you can open in a browser. It runs the same rules as the real code in `farm-hand/` (see `ui/README.md`). `WORK_HISTORY.md` logs how `ui/` was built.
 
 ## Read in this order
-1. **`PLAN.md`**: the whole plan. Parts, the real wiring (section 2), how the hardware was proven on 2026-09-23 (section 3), the AI agent team (5), the dashboard (5b), Hit the Target demo (5c), hackathon schedule (6), the 2-minute demo (7), judge Q&A (8), sponsor tracks (9), risks (10).
+1. **`PLAN.md`**: the whole plan. Parts, the real wiring (section 2), how the hardware was proven on 2026-09-23 (section 3), the AI agent team (5), the dashboard (5b), Hit the Target demo (5c), **the dashboard round 2 spec: what data to show, the judge moments, and how to make it look human-made (5d)**, hackathon schedule (6), the 2-minute demo (7), judge Q&A (8), sponsor tracks (9), risks (10).
 2. **`pitch/story_final.md`**: the 30-second opening story and the honesty rules. `pitch/story_draft.md` has every source and quote.
 3. **The trailer** (57 s, real news clips, the San Juan nursery story leads) is in the Release, `videos-and-audio.zip` → `media/farmhand-drought-trailer.mp4`. `media/trailer-plan.json` is its script.
 4. **`design/`**: the look.
@@ -16,6 +16,9 @@ This repo is the plan and the designs, plus `ui/`: a virtual version of the rig 
    - `pitch/DESIGN-HANDOFF.md`: what the dashboard is, what views come next, and the honesty rules for design.
 5. **`wiring/pages/`**: step-by-step animated wiring pages (open `index.html` in a browser). `assemble/` is the whole build in 26 steps; `transistor/`, `pump/`, `temp/`, `soil/` are the parts.
 6. **`research/`**: Florida drought facts with sources, last year's sponsor challenges, and a judges' conference comparing Farm Hand with a HackMIT winner.
+
+## Design skills
+`design-skills/`: the design skills for the dashboard (taste-skill, impeccable, Emil Kowalski, MengTo, Owl-Listener, diagram-design). How to use them on this page: PLAN.md section 5d.
 
 ## The hardware (proven working 2026-09-23)
 ESP32 + capacitive soil probe + DS18B20 temperature probe + 5 V relay (driven through a PN2222 transistor) + mini pump, all on laptop USB.

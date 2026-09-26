@@ -272,6 +272,166 @@ Tested on the fake board (`evidence/target_run.log`, `evidence/target_fault.log`
 ⚠️ The daily water cap is 1500 ml (`DAILY_MAX_ML`). One target run uses about 300 ml, so about 5 demo runs a day before the cap blocks it. That's a lot of water for this box. Either dump water out between demos (tip the box over a sink), or set `DAILY_MAX_ML` higher for demo day.
 ⚠️ Real soil is slower and messier than the fake board. Do 3 practice runs on the real box on Sep 23 and write down the pulse count and time.
 
+## 5d. The dashboard, round 2: make judges say wow, and make it look human-made (for Matthew)
+
+Written 2026-09-26. This builds on 5b (what's built) and 5c (Hit the Target). Read those first. Page: `farm-hand/laptop/static/index.html` + `scene.js` + `views.js`. Design skills to use: `design-skills/` in this repo (see its README).
+
+### The one job of the page
+
+A judge walks up, stands 2-3 m back, and in 10 seconds understands three things:
+1. **It's alive.** Real soil, real numbers, changing right now.
+2. **It's smart.** It decides on its own and says why.
+3. **It saved something.** Water, and the crop.
+
+Everything on screen either proves one of those three or goes behind a tab.
+
+### What data to show, ranked by size
+
+Firmware sends one line a second: `{"type":"reading","a_raw","a_pct","temp_c","pumping"}`. Everything else is computed on the laptop.
+
+| Tier | Data | Source | Measured or estimated | Size on screen |
+|---|---|---|---|---|
+| 1 | **Soil moisture %** with the healthy band around it | `a_pct`, `/api/live` | measured | biggest thing on the page, readable from 3 m (~96 px on a 1080p projector) |
+| 1 | **Soil temperature °C** | `temp_c` | measured | same size as moisture. The owner wants these two equal. |
+| 1 | **Pump state**: WATERING 12 s (counting) or HOLDING OFF | `pumping` | measured | big, next to the numbers |
+| 1 | **"Last reading 0.4 s ago"**, ticking | reading timestamp | measured | small, but always there. It proves the numbers are live, not a screenshot. |
+| 2 | **The call in one sentence**: "Holding off. Soil is 58.3%, inside the healthy band." + "Laya, 94% sure, 115 ms" | `/api/decisions`, Laya | measured (the decision and its timing) | medium, top right |
+| 2 | **Why** (Gemini team's explanation), appears when it finishes | agent team | model output | normal text under the call |
+| 3 | **The money graph**: moisture (blue) vs the timer ghost line (orange, dashed) | `/api/series` | blue measured, orange **estimated** | full width under the 3D box |
+| 3 | **Cups saved** | `report.py` | **estimated** until the flow sensor is in | medium, next to the graph |
+| 3 | **Dries out in** (uses temp: "at 31.4 °C this soil dries in about 6 h") | predictor | estimated (trend) | small |
+| 4 | Rain forecast, evaporation, county drought level | `feeds.py` | from outside data | small, side column or a tab |
+| 4 | Agent team log, pours list, Ask chat | existing tabs | | behind tabs |
+
+**Rule: no more than 6 numbers visible at once** (Owl-Listener `critique-information-density` + `millers-law`). If a 7th number wants in, one of them goes behind a tab.
+
+**Temperature has to earn its place.** A temp number alone is decoration. Tie it to a decision: the "dries out in" line uses it, and the Laya/Gemini explanation should mention it when it matters ("It's 31 °C, so the soil will dry fast. Watering now.").
+
+### Make the 3D box act out the data
+
+The 3D box is the hero. Every effect in it must be driven by a real reading, so if a judge asks "is that real?", the answer is always "yes" or "modeled from the one probe" (honesty rules in 5b).
+
+| Data | What the box does | Status | Part in `farmhand.glb` |
+|---|---|---|---|
+| Moisture % | Soil darkens as it gets wetter | built | `Soil` |
+| Moisture % | A faint **waterline** in the cutaway rises and falls with the %, labeled "modeled from one probe" | new | `WaterFront` (reuse) |
+| Pump on | Water stream from the tube + splash rings | built | `Nozzle` |
+| Pump on | An **ml counter riding the stream** (20 ml/s x seconds, labeled "est." until the flow sensor) | new | HTML label pinned to `Nozzle` |
+| Temperature | Probe tip glows cool blue → warm orange. Pick 2 stops only (e.g. 20 °C and 34 °C) and interpolate. | new | DS18B20 mesh tip |
+| Every reading (1 Hz) | `ProbeLED` pulses once, like a heartbeat | new (LED exists) | `ProbeLED` |
+| Agents thinking | Rim glows blue | built | `Rim` |
+| Target run | A flat **target plane** at the judge's chosen %, the waterline climbs to meet it | new | new plane mesh |
+
+⚠️ The probe tip color and the waterline are the only new "decoration" and both map to data. Don't add particles, sparkles, or ambient motion that doesn't come from a reading.
+
+### The four judge moments (the demo is these, in this order)
+
+Hand the judge control. A judge changing the soil and watching the AI react beats any slide.
+
+| # | The judge does | The screen does | Status | API |
+|---|---|---|---|---|
+| 1 | Picks a target % and presses Go | Target plane appears in the box, pump pulses, the waterline climbs and locks on their number. Receipt: pulses, seconds, ml. | built (plane is new) | `POST /api/target` |
+| 2 | Pinches the tube, presses Go | Stream runs in 3D but the soil doesn't move. Red alert: "The pump ran 8.0 s but the probe moved -0.1%. Water isn't reaching the soil." | built | `POST /api/target`, fake: `/api/demo/pinch` |
+| 3 | Pours a cup of water in by hand | Soil darkens, moisture jumps, banner: "Someone just added water. +9.6%. I'm skipping my next watering." If phone alerts are built, the judge's phone buzzes. | banner built, phone new | `soak.py`, fake: `/api/demo/handpour` |
+| 4 | Clicks "A whole field" | Camera pulls back from the box to a field of probe dots colored by moisture, labeled ILLUSTRATION. Only the ringed dot is live. | built | `views.js` |
+
+End on the **cups saved** number and the locked target. People remember the peak and the end (Owl-Listener `peak-end-rule`), so the last thing on screen should be the win, not a log.
+
+### Layout (1920x1080 projector first, then laptop, then phone)
+
+```
++---------------------------------------------+------------------------------+
+|                                             |  58.3%        27.9 °C        |
+|                                             |  moisture     soil temp      |
+|           3D BOX (the hero)                 |  healthy 45-65                |
+|   soil color, waterline, stream, probe      |                              |
+|   glow, ml counter on the stream            |  HOLDING OFF                 |
+|                                             |  Soil is inside the healthy  |
+|   [This box | A whole field]                |  band. Laya, 94% sure, 115 ms|
+|                                             |  last reading 0.4 s ago      |
+|                                             |                              |
+|                                             |  [ - 55% + ]  [Go]           |
++---------------------------------------------+  [Test pour 5 s] [Stop pump] |
+|  SOIL OVER TIME: blue measured, orange      |------------------------------|
+|  dashed timer (est.), dots = pours          |  Cups saved: 14 (est.)       |
+|  temp strip under it                        |  Dries out in ~6 h           |
++---------------------------------------------+------------------------------+
+                       tabs: Agent team | Pours | Ask
+```
+
+Alerts (hand pour, pinch) slide in over the top of the right column, never as a modal. Only one red thing on screen at a time (Owl-Listener `von-restorff-effect`: the alert only stands out if nothing else is red).
+
+### Make it look human-made, not AI-made
+
+This is how to use the skills in `design-skills/`. Every rule below comes from one of them. The **current page already passes impeccable's detector with 0 findings** (`evidence/design_detector.json`), so this is a round of taste, not a rescue.
+
+**Step 1. Decide the look from where it's used, not from "dashboard" (taste-skill section 0, impeccable `craft-floor`).**
+Where: a folding table in a bright FIU hall, fluorescent light, judges standing, often on a projector. So: **light theme** (the house style already is), high contrast, big numbers. Set taste-skill's dials for this page: `DESIGN_VARIANCE 5 / MOTION_INTENSITY 5 / VISUAL_DENSITY 5`. It's a working instrument, not a landing page.
+
+**Step 2. Fix what the scan of `index.html` found (2026-09-26):**
+
+| Found | Skill rule | Fix |
+|---|---|---|
+| **10 different corner radii** (2, 6, 8, 9, 10, 11, 12, 14, 16, 99 px) | taste-skill 4.4 "Shape consistency lock" | Pick one scale: `6px` controls, `12px` panels, `999px` chips only. Write it in the CSS tokens and replace all 28 `border-radius` lines with the tokens. |
+| 2 uppercase letter-spaced labels | impeccable craft-floor: "A kicker or eyebrow above a heading... is a ban" | Delete the eyebrows. Let the heading or the number carry itself. |
+| 1 zero-offset glow shadow (`box-shadow: 0 0 ...`) | impeccable: "A zero-offset colored halo is decoration"; taste-skill 9.A "no outer glows" | Give it an offset + soft blur tinted to the background, or remove it. The 3D rim glow is fine: it means "agents working". |
+| `backdrop-filter` in use | impeccable: "Glass and blur as decoration" | Keep it only if it sits over the 3D box so text stays readable. Otherwise remove it. |
+| 1 `linear-gradient` | taste-skill 9.A | Fine if it's the soil/sky in the scene. Not on text or buttons. |
+
+**Step 3. The small things that make it look built instead of assembled (impeccable craft-floor, "Browser surfaces"):**
+- `::selection` color from the palette (already there, keep it), plus themed scrollbars, focus rings (`:focus-visible`, 2 px, accent color, offset 2 px), and `caret-color` on the Ask box.
+- `font-variant-numeric: tabular-nums` on **every** changing number, so digits don't jump sideways each second. Only 2 uses today; add it to moisture, temp, seconds, ml, cups, and the graph axis.
+- Real, messy numbers: show one decimal (58.3%, 27.9 °C). Never round to "50%". Real data looks real (taste-skill 9.D).
+
+**Step 4. Words.**
+- Plain product language: "Holding off", "Watering 12 s", "Water isn't reaching the soil". No "AI-powered", "seamless", "smart insights" (taste-skill 9.D filler verbs).
+- No em dashes anywhere on the page (taste-skill 9.F). No `·` chains of 3+ items.
+- Buttons name the action: "Go", "Stop pump", "Test pour 5 s". One label per action (taste-skill 4.5 "no duplicate CTA intent").
+
+**Step 5. Icons.** One real icon set (Phosphor, one weight), or none. No emoji in the UI, no unicode symbols as icons (impeccable craft-floor).
+
+**Step 6. Motion: one authored moment (impeccable craft-floor, emil-design-eng).**
+- The authored moment is **the pour**: stream, soil darkening, waterline rising, number counting up. That's where motion goes.
+- Everything else is quick and quiet. Use Emil's timings: button press 100-160 ms, tooltips 125-200 ms, panels 200-300 ms. Easing `cubic-bezier(0.23, 1, 0.32, 1)` (Emil's strong ease-out). Never `ease-in`, never `transition: all`.
+- Numbers roll to their new value (~250 ms, ease-out), they don't blink.
+- Never animate from `scale(0)` (Emil). Alerts slide in from 8-12 px with opacity.
+- `prefers-reduced-motion`: keep the data changes, drop the movement (already has one rule; check it covers the new pieces).
+- Every click answers in under 400 ms (Owl-Listener `doherty-threshold`). Laya's 115 ms call does that. For the Gemini team, show "thinking, 6 s" counting, never a bare spinner.
+
+**Step 7. Density check (Owl-Listener `critique-information-density`).** Run the critique on a screenshot. Pass means: the primary numbers are the heaviest thing on screen, no more than 6 numbers visible, secondary data behind tabs, labels left-aligned so they scan in a column.
+
+### How Matthew runs the skills (in Claude Code)
+
+1. Install: `cp -R design-skills/taste-skill design-skills/impeccable design-skills/frontend-design ~/.claude/skills/` then restart Claude Code.
+2. Direction: "Use taste-skill. Give me the design read and dials for `farm-hand/laptop/static/index.html`, then apply section 5d of PLAN.md."
+3. Motion: "Read `design-skills/emil-kowalski/skills/emil-design-eng/SKILL.md` in full and review every transition in index.html and views.js against it."
+4. Density: "Read `design-skills/owl-listener-designer-skills/visual-critique/skills/critique-information-density/SKILL.md` and critique this screenshot."
+5. Final pass: `/impeccable critique`, then `/impeccable polish`, then `/impeccable audit`.
+6. Screenshot at 1920x1080 (projector), 1440x900 (laptop), and 390 px wide (phone). Look at them yourself before calling it done.
+
+### Done checklist (all must pass before demo day)
+
+- [ ] Moisture, temp and pump state readable from 3 m on the projector
+- [ ] "Last reading" ticks every second on the real board
+- [ ] Every 3D effect maps to a reading, and modeled parts are labeled
+- [ ] Estimated numbers say "est." (timer line, cups saved, ml on the stream)
+- [ ] One radius scale, no eyebrows, no glow halos, no emoji, no em dashes
+- [ ] Tabular numbers on everything that changes
+- [ ] Only one red thing on screen at a time
+- [ ] UI transitions under 300 ms, ease-out, nothing from scale(0)
+- [ ] All four judge moments rehearsed on the **real** box, not the fake board
+- [ ] Fake board still says it's test data at the top
+
+### Build order
+
+1. Tier 1 numbers at projector size + "last reading" tick (small change, biggest effect).
+2. Radius tokens, eyebrow removal, tabular numbers (Step 2 and 3).
+3. Probe heartbeat + probe tip temperature glow.
+4. Target plane + waterline for Hit the Target.
+5. ml counter on the stream.
+6. Phone alerts (the detectors exist; sending isn't built).
+7. Flow sensor (hardware) so ml, the timer line and cups saved become measured.
+
 ## 6. Hackathon plan
 
 ⚠️ **Rules check first.** MLH-style hackathons want the project built at the event. This folder is practice + a proven design. At the event:
@@ -301,6 +461,7 @@ Rough timeline (36 h):
 5. **Brain (15 s):** "A team of Gemini agents. Weather, soil and memory run in parallel. A planner proposes, a critic checks its math and can send it back. The pump only runs if code-level safety rules agree, and it learns from every pour." Press Run agents in the background during step 3 if the Gemini lane is fast enough.
 6. **Number + cost (10 s):** "Over X hours, the AI used Y% less water than the timer." (from report.py, real run only) "A farm-grade soil probe station runs up to about $4,000, and a farm needs one per zone. Our whole parts order was $72.94: 3 boards, 5 moisture probes, 5 temp probes, 4 pumps."
    - Price sources: SoilSense 2026 buyer's guide (CropX $695 + $300/yr) and the NSW DPI AgTech catalog (Sentek TriScan $2,115, Porosity Services probe package $3,995). Say "up to about $4,000 a station", never "a sensor costs $4k".
+   - Retail check 2026-09-26: one CropX Vertex V4 sensor is $1,200 with the first year of data (Roberts Irrigation) or $1,512 for the kit (IrrigationBox), and the data subscription is $309/yr after. Line: "One commercial soil sensor costs $1,200 to $1,500. Our entire parts order was $72.94, and that's 5 probes." Our $72.94 is hobby-grade parts, not a weatherproofed field product; say so if asked.
 
 ## 8. Judge questions, ready answers
 
