@@ -13,6 +13,7 @@
     DRY_PCT: 35, WET_PCT: 70, TARGET_PCT: 55, LOW_MARGIN: 5,
     POUR_CAP_S: 30, AI_MIN_GAP_MIN: 30, DAILY_MAX_ML: 1500, CHECK_EVERY_MIN: 15,
     TIMER_EVERY_S: 6 * 3600, TIMER_POUR_MS: 5000, FLOW_ML_S: 20,
+    ONE_POT: 0,   // PLAN 5e: box B is a real second box on the chip's timer. 1 = old one-pot mode (virtual timer)
     // firmware/farm_hand/farm_hand.ino
     RAW_AIR: 3400, RAW_WATER: 1507, PUMP_CAP_MS: 30000, PUMP_GAP_MS: 5000,
     // laptop/soak.py
@@ -75,11 +76,12 @@
 
   // ---------- the chip (firmware/farm_hand/farm_hand.ino) ----------
   class SimBoard {
-    constructor(world, emit) {
-      this.world = world; this.emit = emit;
+    constructor(worldA, worldB, emit, twoPot) {
+      this.worlds = { A: worldA, B: worldB }; this.world = worldA; this.emit = emit; this.twoPot = twoPot;
       this.ms = 0;
       this.activePot = null; this.pourStart = 0; this.pourMs = 0; this.pourBy = ''; this.lastPourEnd = null;
-      this.timerEveryMs = 6 * 3600 * 1000; this.timerPourMs = 5000;
+      this.timerEveryMs = 6 * 3600 * 1000; this.timerPourMs = 5000;   // firmware defaults: pot B every 6 h for 5 s
+      this.lastTimerAt = 0; this.timerPending = false;
     }
     line(obj) { this.emit(obj); }
     send(cmd) {
@@ -96,6 +98,8 @@
         const every = parseInt(p[1], 10) || 0;
         this.timerEveryMs = every * 1000;
         if (p[2]) this.timerPourMs = parseInt(p[2], 10) || this.timerPourMs;
+        this.lastTimerAt = this.ms;
+        this.timerPending = false;   // T 0 cancels a pour that was already waiting
         this.line({ type: 'timer', every_s: every, pour_ms: this.timerPourMs });
       } else if (c === 'S') this.report();
       else if (c === 'X') this.stopPour('emergency_stop');
@@ -116,9 +120,9 @@
     }
     report() {
       const w = this.world;
-      const pct = clamp(w.pct + gauss() * CFG.NOISE, 0, 100);
-      const ra = Math.round(CFG.RAW_AIR - pct / 100 * (CFG.RAW_AIR - CFG.RAW_WATER));
-      const rb = Math.round(1200 + Math.random() * 2000);        // pin 33 is empty: it reads junk
+      const raw = (pct) => Math.round(CFG.RAW_AIR - clamp(pct + gauss() * CFG.NOISE, 0, 100) / 100 * (CFG.RAW_AIR - CFG.RAW_WATER));
+      const ra = raw(w.pct);
+      const rb = this.twoPot ? raw(this.worlds.B.pct) : Math.round(1200 + Math.random() * 2000);   // one-pot: pin 33 is empty, it reads junk
       this.line({ type: 'reading', ms: this.ms, a_raw: ra, b_raw: rb, a_pct: Math.round(rawToPct(ra)), b_pct: Math.round(rawToPct(rb)),
                   temp_c: r1(w.tempC + gauss() * 0.05), pumping: this.activePot || 'none' });
     }
@@ -128,9 +132,13 @@
       if (this.activePot) {
         const end = this.pourStart + this.pourMs;
         const runMs = Math.max(0, Math.min(this.ms, end) - Math.max(t0, this.pourStart));
-        this.world.pump(runMs / 1000 * CFG.FLOW_ML_S);
+        this.worlds[this.activePot].pump(runMs / 1000 * CFG.FLOW_ML_S);
         if (this.ms >= end) { this.ms = end; this.stopPour('time_up'); this.ms = t0 + 1000; }
       }
+      // pot B's timer waits quietly until the pump is free and the 5 s gap has passed (farm_hand.ino loop())
+      if (this.timerEveryMs > 0 && this.ms - this.lastTimerAt >= this.timerEveryMs) { this.timerPending = true; this.lastTimerAt = this.ms; }
+      const pumpFree = !this.activePot && (this.lastPourEnd === null || this.ms - this.lastPourEnd >= CFG.PUMP_GAP_MS);
+      if (this.timerPending && pumpFree) { this.startPour('B', this.timerPourMs, 'timer'); if (this.activePot === 'B') this.timerPending = false; }
       this.report();
     }
     get pumping() { return !!this.activePot; }
@@ -138,7 +146,10 @@
 
   // ---------- the laptop (board.py, brain.py, soak.py, target.py, report.py) ----------
   class FarmHand {
-    constructor() { this.reset(); }
+    constructor(opts) {
+      this.onePot = opts && opts.onePot != null ? !!opts.onePot : !!CFG.ONE_POT;
+      this.reset();
+    }
 
     reset() {
       const d = new Date(); d.setHours(CFG.START_HOUR, 0, 0, 0);
@@ -146,21 +157,23 @@
       this.t = 0;
       this.brainMode = this.brainMode || 'gemini';   // 'gemini' | 'laya' | 'rules'
       this.world = new World();
-      this.board = new SimBoard(this.world, (o) => this.onLine(o));
+      this.worldB = new World();   // box B: same soil, same room, watered only by the chip's timer (PLAN 5e)
+      this.board = new SimBoard(this.world, this.worldB, (o) => this.onLine(o), !this.onePot);
       this.latest = null; this.boardEvents = [];
       this.tagNext = null; this.curTag = 'laptop';
       // store.py tables
       this.readings = []; this.history = []; this.pours = []; this.soaks = []; this.decisions = [];
       this.activity = []; this.serial = []; this.serialCount = 0;
       // soak.py
-      this.hist = []; this.long = []; this.lastPump = -1e9; this.watch = null;
+      this.hist = []; this.histB = []; this.long = []; this.lastPump = -1e9; this.watch = null;
       this.live = { phase: 'idle' }; this.hand = { phase: 'idle' }; this.PAUSED = false;
       // brain.py
       this.LAST = { laya: null, check: null }; this.team = null; this.nextCheck = 20;   // server.py loop sleeps 20 s first
       // target.py
       this.run = { phase: 'idle' }; this.tgt = null;
       this.log('<', JSON.stringify({ type: 'boot', fw: 'farm-hand-1', sim: 1, probes: 1 }));
-      this.send('T 0 5000');         // one-pot mode: the chip's pot-B timer off (board.py open_board)
+      // board.py open_board: one-pot mode switches the chip's pot-B timer off; two-pot mode sends the real schedule
+      this.send(this.onePot ? `T 0 ${CFG.TIMER_POUR_MS}` : `T ${CFG.TIMER_EVERY_S} ${CFG.TIMER_POUR_MS}`);
     }
 
     // ----- plumbing -----
@@ -176,6 +189,7 @@
     send(cmd) { this.log('>', cmd); this.board.send(cmd); }
     midnight() { return Math.floor((CFG.START_HOUR * 3600 + this.t) / 86400) * 86400 - CFG.START_HOUR * 3600; }
     nowPct() { const v = this.hist.slice(-6); return v.length ? r1(median(v)) : null; }
+    nowPctB() { const v = this.histB.slice(-6); return v.length ? r1(median(v)) : null; }
 
     // board.py _on_line
     onLine(obj) {
@@ -201,6 +215,7 @@
     step() {
       this.t++;
       this.world.step(this.t);
+      this.worldB.step(this.t);
       this.board.step();
       this.soakTick();
       this.targetTick();
@@ -210,7 +225,7 @@
         this.nextCheck = this.t + CFG.CHECK_EVERY_MIN * 60;
       }
       if (this.t % 10 === 0 && this.latest) {
-        this.history.push({ t: this.t, a: this.nowPct(), temp: this.latest.temp_c });
+        this.history.push({ t: this.t, a: this.nowPct(), temp: this.latest.temp_c, b: this.onePot ? null : this.nowPctB() });
         if (this.history.length > 80000) this.history.shift();
       }
     }
@@ -221,12 +236,15 @@
       if (obj.type === 'reading') {
         this.hist.push(obj.a_pct);
         if (this.hist.length > 30) this.hist.shift();
+        this.histB.push(obj.b_pct);
+        if (this.histB.length > 30) this.histB.shift();
         if (obj.pumping !== 'none') this.lastPump = this.t;
         this.checkHand(obj.a_pct);
       } else if (obj.type === 'pour_start') {
         this.lastPump = this.t;
-        if (!this.PAUSED && this.hist.length) {
-          const before = median(this.hist.slice(-6));
+        const h = obj.pot === 'B' ? this.histB : this.hist;
+        if (!this.PAUSED && h.length) {
+          const before = median(h.slice(-6));
           this.watch = { pot: obj.pot, poured_s: obj.ms / 1000, before, t0: this.t, peak: before, first: null, by: obj.by };
           this.live = { phase: 'soaking', pot: obj.pot, before, now: before, t0: this.t, watch_s: CFG.WATCH_S, poured_s: obj.ms / 1000 };
         }
@@ -235,7 +253,8 @@
     soakTick() {
       const w = this.watch;
       if (!w) return;
-      const v = this.hist[this.hist.length - 1];
+      const h = w.pot === 'B' ? this.histB : this.hist;
+      const v = h[h.length - 1];
       w.peak = Math.max(w.peak, v);
       this.live.now = v;
       if (w.first === null && v >= w.before + CFG.RISE_SEEN) w.first = this.t - w.t0;
@@ -446,7 +465,18 @@
       this.send('X');
     }
     demoDry() { this.world.pct = CFG.DRY_PCT + 1; this.world.soaking = 0; this.world.wetDepth = 0; }
-    demoHandPour() { this.world.soaking += CFG.CUP_ML * CFG.PCT_PER_ML; }
+    demoHandPour(pot) { (pot === 'B' ? this.worldB : this.world).soaking += CFG.CUP_ML * CFG.PCT_PER_ML; }
+
+    // server.py POST /api/baseline: the level to keep. Box A waters at or below it (+ LOW_MARGIN in the planner),
+    // and each pour aims 20 points above it, capped 5 under the wet limit.
+    setBaseline(pct) {
+      pct = Number(pct);
+      if (!(pct >= 20 && pct <= CFG.WET_PCT - 15)) return { error: `pick a level between 20% and ${CFG.WET_PCT - 15}%` };
+      CFG.DRY_PCT = r1(pct);
+      CFG.TARGET_PCT = r1(Math.min(pct + 20, CFG.WET_PCT - 5));
+      this.logAct('executor', `baseline set to ${CFG.DRY_PCT}%, pours aim for ${CFG.TARGET_PCT}%`);
+      return { baseline: CFG.DRY_PCT, target: CFG.TARGET_PCT, wet_limit: CFG.WET_PCT };
+    }
     demoPinch() { this.world.pinched = !this.world.pinched; return this.world.pinched; }
     refill() { this.world.cupMl = CFG.PUMP_CUP_ML; }
 
@@ -540,27 +570,36 @@
     }
 
     // ----- report.py -----
+    // one-pot: box B is virtual (full TIMER_EVERY_S intervals x TIMER_POUR_MS at pot A's flow).
+    // two-pot (ONE_POT=0): box B's water is its real pours, and its time in the healthy band is measured too.
     report() {
       const flow = CFG.FLOW_ML_S;
-      const a = this.pours.filter((p) => p.pot === 'A');
-      const aiMl = a.reduce((s, p) => s + p.ran_ms / 1000 * flow, 0);
-      const demoMl = a.filter((p) => p.by === 'manual' || p.by === 'target').reduce((s, p) => s + p.ran_ms / 1000 * flow, 0);
+      const ml = (arr) => arr.reduce((s, p) => s + p.ran_ms / 1000 * flow, 0);
+      const a = this.pours.filter((p) => p.pot === 'A'), b = this.pours.filter((p) => p.pot === 'B');
+      const aiMl = ml(a);
+      const demoMl = ml(a.filter((p) => p.by === 'manual' || p.by === 'target'));
       const span = this.t - 1;
-      const n = Math.floor(span / CFG.TIMER_EVERY_S);
-      const timerMl = n * CFG.TIMER_POUR_MS / 1000 * flow;
-      const vals = this.history.map((h) => h.a);
+      const n = this.onePot ? Math.floor(span / CFG.TIMER_EVERY_S) : b.length;
+      const timerMl = this.onePot ? n * CFG.TIMER_POUR_MS / 1000 * flow : ml(b);
+      const band = (key) => {
+        const vals = this.history.map((h) => h[key]).filter((v) => v != null);
+        return vals.length ? r1(100 * vals.filter((v) => v >= CFG.DRY_PCT && v <= CFG.WET_PCT).length / vals.length) : null;
+      };
       return {
         hours_logged: r1(span / 3600), ai_pot_ml: Math.round(aiMl), timer_pot_ml: Math.round(timerMl), ai_pot_demo_ml: Math.round(demoMl),
         ai_pours: a.length, timer_pours: n,
         water_saved_pct: timerMl ? r1(100 * (timerMl - aiMl) / timerMl) : null,
-        ai_pot_time_healthy_pct: vals.length ? r1(100 * vals.filter((v) => v >= CFG.DRY_PCT && v <= CFG.WET_PCT).length / vals.length) : null,
+        ai_pot_time_healthy_pct: band('a'), timer_pot_time_healthy_pct: this.onePot ? null : band('b'),
+        timer_is_virtual: this.onePot,
         timer_schedule: `${CFG.TIMER_POUR_MS / 1000} s every ${CFG.TIMER_EVERY_S / 3600} h`,
         timer_ml_per_pour: Math.round(CFG.TIMER_POUR_MS / 1000 * flow),
+        healthy_band: `${CFG.DRY_PCT}-${CFG.WET_PCT}%`,
       };
     }
-    // server.py /api/series: the timer's schedule, first reading + every TIMER_EVERY_S
+    // server.py /api/series: the virtual timer's schedule (one-pot mode only), first reading + every TIMER_EVERY_S
     timerPours() {
       const out = [];
+      if (!this.onePot) return out;
       for (let k = 1; 1 + k * CFG.TIMER_EVERY_S <= this.t; k++) out.push({ ts: 1 + k * CFG.TIMER_EVERY_S, s: CFG.TIMER_POUR_MS / 1000 });
       return out;
     }

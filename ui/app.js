@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   const { CFG, FarmHand } = window.FarmHandSim;
-  const fh = new FarmHand();
+  const fh = new FarmHand({ onePot: true });   // this page shows the one-pot virtual timer (PLAN 5b); ui-mui has the two-box view (5e)
   const $ = (id) => document.getElementById(id);
   const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
