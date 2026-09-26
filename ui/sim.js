@@ -431,6 +431,7 @@
           const soil = this.getSoil();
           const water = !soil.error && soil.moisture_pct <= CFG.DRY_PCT + CFG.LOW_MARGIN && this.failedPoursRecently() < 2;
           T.water = water;
+          T.pct = soil.error ? null : soil.moisture_pct;   // the reading the plan was made on
           T.secs = water ? Math.min(CFG.POUR_CAP_S, (CFG.TARGET_PCT - soil.moisture_pct) / this.learnedPctPerS()) : 0;
           this.logAct('planner_agent', `proposed ${water ? 'water' : 'wait'} ${f0(T.secs)}s`);
         }
@@ -438,14 +439,14 @@
       if (this.t < T.end) return;
       this.team = null;
       this.logAct('critic_agent', 'approved: plan matches the data');
-      const soil = this.getSoil(), pct = soil.moisture_pct;
+      const soil = this.getSoil(), pct = T.pct != null ? T.pct : soil.moisture_pct, p1 = r1(pct).toFixed(1);
       let got;
       if (soil.error) got = ['wait', 0, `WAIT: ${soil.error}.`];
       else if (this.failedPoursRecently() >= 2) got = ['wait', 0, "WAIT: the last pours didn't reach the probe, so I'm holding off. Check the pump and the tube."];
-      else if (!T.water) got = ['wait', 0, `WAIT: the soil is at ${f0(pct)}%, which still has enough water. I'll water when it gets down to ${CFG.DRY_PCT + CFG.LOW_MARGIN}%.`];
+      else if (!T.water) got = ['wait', 0, `WAIT: the soil is at ${p1}%, which still has enough water. I'll water when it gets down to ${CFG.DRY_PCT + CFG.LOW_MARGIN}%.`];
       else {
         const r = this.waterPot(T.secs, `planner: soil ${f0(pct)}%`);
-        got = r.watered ? ['water', r.seconds, `WATER: the soil dropped to ${f0(pct)}% and no rain can reach it indoors, so I'm giving it one real drink of ${f0(r.seconds)} seconds.`]
+        got = r.watered ? ['water', r.seconds, `WATER: the soil dropped to ${p1}% and no rain can reach it indoors, so I'm watering for ${f0(r.seconds)} seconds.`]
           : ['wait', 0, `WAIT: the plan said water, but the safety rules said no (${r.refused_because}).`];
         if (!r.watered) this.logAct('executor', 'approved plan refused by guards');
       }

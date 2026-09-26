@@ -452,3 +452,12 @@ WCAG 2.2: SC 1.4.1, 1.4.3, 1.4.11, 2.2.1, 2.4.7, 2.5.8 (w3.org/TR/WCAG22). Mater
 - The banner appearing pushes the rig down (layout shift). We chose this over covering the target readout.
 - A dark theme is not built. The tokens are ready for one, but the rig illustration colors would need a second pass.
 - The bundle is about 490 KB (154 KB gzip), mostly MUI + icons. Code-splitting was not needed for a local demo.
+
+## Round 5: last AI tells (owner request)
+
+- **Display face: Bricolage Grotesque → Public Sans** (US Web Design System, SIL OFL, `@fontsource-variable/public-sans`). Bricolage had become a common pick on generated sites; Public Sans is plain and utilitarian, with a plain zero and tabular figures. Atkinson Hyperlegible Next stays for text, Atkinson Hyperlegible Mono for code.
+- **Copy in a notebook voice, not a pitch:** Outside's title is now "Outside: 21 months of Miami weather"; the result paragraph lists the numbers in order instead of "Where Laya earns its place is the crop"; "Only the decider differs", "One minimum can't fit every crop" and "one real drink" are gone.
+- **No balanced-wrap headline** on Vs timer (`textWrap: balance` removed): ragged lines read as written, not generated.
+- **Decision sentences are shown as the brain wrote them.** The display used to swap the brain's whole-number reading for a nearby smoothed one, which could cross the watering line ("39.8%, which still has enough water… water at 40%"). The simulated Gemini sentence now carries the planner's own reading to one decimal.
+- **Kept on purpose:** the Live layout (drawing left, readings right, tabs under) is the team's PLAN 5e sketch. A centimetre scale on the tote was considered and dropped, because the drawing isn't to true scale and false precision is worse than none.
+- **Still the strongest non-AI signal to add:** a real photo of the assembled box next to the drawing. The repo's only photos show loose parts on a desk mat, not the box.

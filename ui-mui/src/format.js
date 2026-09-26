@@ -44,20 +44,9 @@ export function soilAt(fh, t) {
  * so it matches the big number. The digit is only replaced when it is that reading rounded, never otherwise.
  */
 export function callSentence(fh, d) {
-  let s = d.sentence.replace(/^(WATER|WAIT|TARGET):\s*/, '');
-  // The team reads the soil when it starts (up to ~50 s before it decides), so look back 2 min for that reading.
-  s = s.replace(/(\d+)%/, (m, n) => {
-    // Prefer a median that rounds to the brain's number; else the closest one within half a point.
-    const h = fh.history;
-    let best = null;
-    for (let i = h.length - 1; i >= 0 && h[i].t >= d.ts - 120; i--) {
-      const v = h[i].a;
-      if (h[i].t > d.ts || v == null) continue;
-      if (Math.round(v) === Number(n)) return `${f1(v)}%`;
-      if (Math.abs(v - n) <= 0.5 + 1e-9 && (best == null || Math.abs(v - n) < Math.abs(best - n))) best = v;
-    }
-    return best == null ? m : `${f1(best)}%`;
-  });
+  // Show the brain's own words, prefix stripped. Its numbers are the reading it decided on; swapping in a nearby
+  // smoothed value could land on the other side of the watering line ("39.8%… I'll water at 40%").
+  const s = d.sentence.replace(/^(WATER|WAIT|TARGET):\s*/, '');
   return s[0].toUpperCase() + s.slice(1);
 }
 

@@ -11,7 +11,9 @@ const MUTED = '#5b6472';        // 5.9:1 on white, 5.28:1 on the stage
 const AI = '#1f5fbf';           // 6.2:1
 const LINE = '#e2e6eb';
 
-const DISPLAY = "'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif";
+// Public Sans (US Web Design System, SIL OFL): plain, utilitarian, plain zero, tabular figures. It replaced
+// Bricolage Grotesque in round 5, which had become a common pick on generated sites.
+const DISPLAY = "'Public Sans Variable', 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif";
 const BODY = "'Atkinson Hyperlegible Next Variable', system-ui, sans-serif";
 const CODE = "'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace";
 const tnum = { fontVariantNumeric: 'tabular-nums' };
@@ -68,7 +70,7 @@ export const theme = createTheme({
   typography: {
     fontFamily: BODY,
     // Six sizes only (impeccable distill/typeset): 12 / 14 / 16 / 24 / 40 / tier1. 12px is the floor.
-    // Bricolage (DISPLAY) is for the app name, page titles and big numbers; everything else is Atkinson.
+    // Public Sans (DISPLAY) is for the app name, page titles and big numbers; everything else is Atkinson.
     h1: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, letterSpacing: '-0.01em' },
     h2: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, letterSpacing: '-0.01em' },
     h3: { fontFamily: BODY, fontWeight: 700, fontSize: px(16), lineHeight: 24 / 16 },
@@ -83,7 +85,7 @@ export const theme = createTheme({
     tier1: { fontFamily: DISPLAY, fontWeight: 700, fontSize: TIER1, lineHeight: 1, letterSpacing: '-0.02em', ...tnum },
     readout: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, ...tnum },
     readoutXL: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(40), lineHeight: 48 / 40, ...tnum },
-    // A status line (pump state, target stepper value): 24px in the body face, so Bricolage keeps meaning "a number".
+    // A status line (pump state, target stepper value): 24px in the body face, so the display face keeps meaning "a number".
     status: { fontFamily: BODY, fontWeight: 600, fontSize: px(24), lineHeight: 32 / 24, ...tnum },
     // Units ride inside big numbers at half their size, in the number's face at weight 400.
     unit: { fontWeight: 400, fontSize: '0.5em', color: MUTED },

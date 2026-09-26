@@ -210,10 +210,10 @@ export default function ControlPage({ fh, act, frac }) {
       <Box component="section" aria-label="Result" sx={{ position: 'relative', minHeight: 120 }}>
         <AlertOverlay alert={alert} />
         <Box inert={alert ? true : undefined} sx={(t) => ({ opacity: alert ? 0 : 1, transition: `opacity ${t.dur.panel}ms ${t.ease}` })}>
-          <Typography variant="readoutXL" sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, lineHeight: 1.2, maxWidth: '32ch', textWrap: 'balance' }} aria-live="polite">{h.first}</Typography>
+          <Typography variant="readoutXL" sx={{ fontSize: { xs: '1.5rem', md: '2.5rem' }, lineHeight: 1.2, maxWidth: '32ch' }} aria-live="polite">{h.first}</Typography>
           <Typography variant="body1" sx={{ mt: 1, maxWidth: '70ch', fontVariantNumeric: 'tabular-nums' }}>{h.rest}</Typography>
           <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 1 }}>
-            {fh.t < 60 ? `Started ${time.hhmm(0)}` : `${hrs(fh.t)} of data since ${time.hhmm(0)}`}. Same soil, same room. Only the decider differs.
+            {fh.t < 60 ? `Started ${time.hhmm(0)}` : `${hrs(fh.t)} of data since ${time.hhmm(0)}`}. Same soil, same room.
           </Typography>
         </Box>
       </Box>

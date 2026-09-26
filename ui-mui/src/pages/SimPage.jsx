@@ -76,12 +76,11 @@ function Result() {
       {/* Plain sentences, no bold lead-ins (the last AI-copy tell the final critic found). */}
       <Stack spacing={1.5} sx={{ mt: 4, maxWidth: '60ch' }}>
         <Typography variant="body1">
-          Most of the saving comes from measuring the soil: simple rules on a probe used {f1(rules)}% less than the timer, and Farm Hand {f1(laya)}% less.
-          Where Laya earns its place is the crop. With Laya deciding, the crop spent {BY.laya.stress} hours past the stress line, the same as the best case.
-          Rules: {BY.rules.stress}. Timer: {BY.timer.stress}.
+          Plain rules on the probe used {f1(rules)}% less water than the timer; Farm Hand used {f1(laya)}% less.
+          Hours the crop spent past the stress line: Farm Hand {BY.laya.stress}, best case {BY.oracle.stress}, rules {BY.rules.stress}, timer {BY.timer.stress}.
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Laya is right {f1(ACC.overall)}% of the time on unseen data, and {f1(ACC.waitRain)}% on "wait for rain", its hardest call.
+          On held-out weather Laya picked the best move {f1(ACC.overall)}% of the time; {f1(ACC.waitRain)}% of the time when the right call was to wait for rain.
         </Typography>
       </Stack>
 
@@ -145,8 +144,8 @@ function Crops({ fh, act }) {
         {healthy} of {CROPS.length} crops healthy at {base}%.
       </Typography>
       <Typography variant="body1" sx={{ mt: 0.5, maxWidth: '60ch' }}>
-        {top.name} need {top.line.toFixed(0)}%{top.line > hi ? `, above this box's ${hi}% max` : ''}. One minimum can't fit every crop.
-        {healthy < CROPS.length / 2 ? ' Raise the minimum to see which fit.' : ''}
+        {top.name} need {top.line.toFixed(0)}%{top.line > hi ? `, above this box's ${hi}% max` : ''}.
+        {healthy < CROPS.length / 2 ? ' Move the minimum to compare.' : ''}
       </Typography>
 
       <Box sx={{ mt: 2.5, maxWidth: 480 }}>
@@ -203,7 +202,7 @@ export default function SimPage({ fh, act }) {
   return (
     <Stack spacing={4} sx={{ maxWidth: 1120 }}>
       <Box>
-        <Typography variant="h2">Outside, it waits for rain</Typography>
+        <Typography variant="h2">Outside: 21 months of Miami weather</Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
           Simulated field on real Miami weather, Jan 2025 to Sep 2026. Not a measured farm.
         </Typography>
