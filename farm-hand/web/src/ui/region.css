@@ -1,0 +1,29 @@
+/* Map panel extras (Region.tsx): soil-water legend, layer switch, "this spot" card. Base map styles live in styles.css. */
+.map-legend-card .legend-soil { display: grid; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.map-legend-card .legend-soil h4 { font-size: 17px; }
+.map-legend-card .legend-soil h4 span { font-size: 14px; }
+.legend-ramp { height: 12px; border-radius: 6px; border: 1px solid rgba(22, 32, 26, 0.25); }
+.legend-ramp-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim); }
+.map-legend-card .legend-src { font-size: 13px; line-height: 1.4; color: var(--text-dim); padding-top: 8px; border-top: 1px solid var(--line); }
+
+.fieldmap .leaflet-control-layers { font: 600 14px var(--font-ui); color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-ctl); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }
+.fieldmap .leaflet-control-layers-expanded { padding: 8px 12px; }
+.fieldmap .leaflet-control-layers label { display: block; margin: 3px 0; cursor: pointer; }
+.fieldmap .leaflet-control-layers small { font-weight: 500; color: var(--text-dim); }
+
+.fc-src { font-weight: 500; color: var(--text-faint); margin-left: 6px; }
+.spot-icon { background: var(--water-soft); }
+.spot-icon i { width: 26px; height: 26px; border-radius: 50%; border: 4px solid var(--water); }
+.spot-farm {
+  width: 100%; display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px;
+  border: 0; border-radius: var(--r-ctl); background: var(--sunk); text-align: left; font: 600 15px var(--font-ui); color: var(--text); cursor: pointer;
+}
+.spot-farm i { width: 14px; height: 14px; border-radius: 3px; }
+.spot-farm b { color: var(--text-dim); font-weight: 600; }
+.near-h { font-size: 14px; color: var(--text-dim); font-weight: 600; margin: 0; }
+
+@media (max-width: 900px) {
+  .map-legend-card .legend-src { display: block; font-size: 12px; }
+  .map-legend-card .legend-soil h4 { font-size: 14px; }
+  .map-legend-card .legend-soil h4 span { font-size: 12px; }
+}

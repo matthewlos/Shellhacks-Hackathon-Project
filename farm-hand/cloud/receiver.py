@@ -50,8 +50,8 @@ LINK_TIMEOUT_S = 60                          # no reading for this long = the ES
 # Applied at read time (the chip ids are stored with every reading), so fixing it also fixes the history.
 TEMP_BOX = {"A": "2872EB240000003C", "B": "28B60E2400000077"}
 # The ESP32 turns raw into % itself (firmware/sensors_live/lib/comp_soil/comp_soil.cpp). Mirrored here for the web app.
-FIRMWARE_CAL = {"A": {"airRaw": 3400, "waterRaw": 1507, "calibratedAt": 1790179200000},    # D34, measured 2026-09-23
-                "B": {"airRaw": 3450, "waterRaw": 1875, "calibratedAt": 1790438400000}}    # D35, water measured 2026-09-26
+FIRMWARE_CAL = {"A": {"airRaw": 3450, "waterRaw": 1875, "calibratedAt": 1790438400000},    # D35 (board rewired), water measured 2026-09-26
+                "B": {"airRaw": 3400, "waterRaw": 1507, "calibratedAt": 1790179200000}}    # D34 (board rewired), measured 2026-09-23
 
 db = sqlite3.connect(DB_PATH, check_same_thread=False)
 db.executescript("""
@@ -201,9 +201,14 @@ def _temp_ok(c):                             # DS18B20: -127 = not answering, 85
     return _num(c) and -55 < c < 85
 
 
+TEMP_PIN = {"A": 21, "B": 4}                # soldered board: the data pin decides the box, whichever probe is on it
+
+
 def box_temp(r, box):
-    for x in r.get("temps") or []:
-        if isinstance(x, dict) and x.get("id") == TEMP_BOX.get(box):
+    temps = [x for x in r.get("temps") or [] if isinstance(x, dict)]
+    by_pin = any("pin" in x for x in temps)
+    for x in temps:
+        if (x.get("pin") == TEMP_PIN[box]) if by_pin else (x.get("id") == TEMP_BOX.get(box)):
             return x.get("c") if _temp_ok(x.get("c")) else None
     return None
 

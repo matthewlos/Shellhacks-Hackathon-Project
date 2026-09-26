@@ -30,3 +30,4 @@ farm-hand/alphaearth/out/*.npz
 farm-hand/alphaearth/out/*.tif
 farm-hand/web/node_modules/
 farm-hand/web/dist/
+farm-hand/cloud/local/

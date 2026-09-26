@@ -7,6 +7,7 @@ at once. The ESP32 keeps its own WiFi uploads going, so pulling the cable change
 
   python tools/usb_bridge.py                 # finds the ESP32's port, reads the token from firmware/sensors_live/include/secrets.h
   python tools/usb_bridge.py /dev/cu.usbserial-0001
+  python tools/usb_bridge.py --local         # also feed a copy of the server on this laptop (tools/local_site.sh), no internet needed
 
 Needs pyserial and requests. Never writes to the board.
 """
@@ -31,9 +32,13 @@ def secret(name):
     return m.group(1)
 
 
+LOCAL_URL = "http://127.0.0.1:8120/farmhand/reading"
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+
+
 def find_port():
-    if len(sys.argv) > 1:
-        return sys.argv[1]
+    if ARGS:
+        return ARGS[0]
     for p in list_ports.comports():
         d = f"{p.device} {p.description} {p.manufacturer or ''}".lower()
         if any(k in d for k in ("usbserial", "cp210", "ch340", "ch910", "silicon labs", "uart", "usbmodem")):
@@ -43,6 +48,7 @@ def find_port():
 
 def main():
     url, token = secret("FARMHAND_URL"), secret("FARMHAND_TOKEN")
+    urls = ([LOCAL_URL] if "--local" in sys.argv else []) + [url]
     port = find_port()
     s = serial.Serial()
     s.port, s.baudrate, s.timeout = port, 115200, 2
@@ -50,7 +56,7 @@ def main():
     s.open()
     http = requests.Session()
     http.headers.update({"X-Farmhand-Token": token, "Content-Type": "application/json"})
-    print(f"USB bridge: {port} -> {url} (Ctrl-C to stop)")
+    print(f"USB bridge: {port} -> {' + '.join(urls)} (Ctrl-C to stop)")
     sent = fails = 0
     last_print = 0.0
     while True:
@@ -63,14 +69,16 @@ def main():
             continue
         r.pop("type", None)
         r["via"] = "usb"                      # the server ignores unknown keys; handy when reading the log
-        try:
-            resp = http.post(url, data=json.dumps(r), timeout=5)
-            sent += resp.status_code == 200
-            fails += resp.status_code != 200
-            reply = resp.json() if resp.ok else {"error": resp.status_code}
-        except requests.RequestException as e:
-            fails += 1
-            reply = {"error": type(e).__name__}
+        reply = None
+        for u in urls:                        # local first: it answers in milliseconds
+            try:
+                resp = http.post(u, data=json.dumps(r), timeout=2 if u == LOCAL_URL else 5)
+                sent += resp.status_code == 200
+                fails += resp.status_code != 200
+                reply = reply or (resp.json() if resp.ok else {"error": resp.status_code})
+            except requests.RequestException as e:
+                fails += 1
+                reply = reply or {"error": type(e).__name__}
         if time.time() - last_print > 5:
             last_print = time.time()
             print(f"  A {r.get('a_pct')}%  B {r.get('b_pct')}%  temps {[t.get('c') for t in r.get('temps', [])]}  "

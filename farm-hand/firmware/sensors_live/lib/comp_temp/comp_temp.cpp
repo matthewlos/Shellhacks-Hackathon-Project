@@ -67,6 +67,7 @@ StatusCode_e    TEMP_update(TempReading_t *out)
         float c = bus_of[i]->getTempC(addr[i]);
         out->ok[i] = (c != DEVICE_DISCONNECTED_C);
         out->celsius[i] = c;
+        out->pin[i] = (bus_of[i] == &sensors) ? DS18B20_PIN : DS18B20_PIN_2;
     }
     sensors.requestTemperatures();           /* start the next conversion; read on the next loop (1 s later) */
     sensors2.requestTemperatures();

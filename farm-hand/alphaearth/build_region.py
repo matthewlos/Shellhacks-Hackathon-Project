@@ -1,7 +1,8 @@
 """AlphaEarth v2: the farm fields around Farm Hand, one by one, with crop, soil, water line, look-alikes and trend.
 
 Farm Hand's box sits at FIU. Miami-Dade's farm belt (Redland / Homestead) starts ~15 km south-west of it. This builds a
-RegionView (farm-hand/web/src/data/types.ts) for that land, from public data only:
+RegionView (farm-hand/web/src/data/types.ts) for the land from the belt north through Kendall, Sweetwater, the 8.5 Square
+Mile Area and FIU itself, from public data only (plus a SSURGO soil spot grid around FIU for land with no fields):
 
 1. Google DeepMind's AlphaEarth Foundations Satellite Embedding (64 numbers per pixel per year) for the farm belt,
    read at 20 m for 2024 and 2025, and at 40 m for every year 2017-2025 (trend). Only the window is downloaded.
@@ -46,7 +47,9 @@ OUT = HERE / "out"
 OUT.mkdir(exist_ok=True)
 CLOUD = HERE.parent / "cloud"
 
-W, S, E, N = -80.60, 25.43, -80.40, 25.62            # Redland / Homestead farm belt (same box as v1)
+W, S, E, N = -80.60, 25.43, -80.30, 25.82            # Redland / Homestead belt north through Kendall, Sweetwater and FIU
+BOX_TAG = f"{W:+.2f}{S:+.2f}{E:+.2f}{N:+.2f}".replace("+", "p").replace("-", "m").replace(".", "")
+SOIL_SPOT_KM, SOIL_SPOT_STEP_KM = 8, 1.0              # SSURGO spot grid around FIU (for land with no fields)
 FIU = {"name": "FIU", "lat": 25.7566, "lon": -80.3740}  # the Farm Hand box
 HALF_KM, GRID_N = 37, 148                             # UI grid: 74 km square on FIU, 500 m cells (covers the belt)
 BUCKET = "https://storage.googleapis.com/alphaearth_foundations/satellite_embedding/v1/annual"
@@ -106,7 +109,7 @@ P_TABLE = {
 for g in P_TABLE.values():
     g["baselinePct"] = None if g["p"] is None else round(20 + 45 * (1 - g["p"]), 1)
 
-# CDL legend names/families for codes the 74 km grid may show (colours follow Prompt Grass's cdl.ts families)
+# CDL legend names/families for codes the 74 km grid may show (colours by CDL family)
 FAMILY_LABEL = {"orchard": "Orchard", "vegetables": "Vegetables", "hay": "Hay & alfalfa", "other_crop": "Other crops", "grain": "Grain",
                 "oilseed": "Oilseeds & beans", "berries": "Berries", "pasture": "Pasture & grass", "fallow": "Fallow", "forest": "Forest",
                 "shrub": "Shrubland", "wetland": "Wetland", "water": "Water", "developed": "Towns & roads", "barren": "Barren", "nodata": "No data"}
@@ -172,7 +175,7 @@ def box_grid(pix):
 
 def read_raw(year, pix):
     """int8 window (64, h, w), north-up. Cached in out/. GDAL reads the tile's overviews at 20/40 m."""
-    f = OUT / f"aef_{year}_{pix}m_raw.npz"
+    f = OUT / f"aef_{year}_{pix}m_{BOX_TAG}_raw.npz"   # one cache per box
     if f.exists():
         return np.load(f)["raw"]
     (xmin, ymin, xmax, ymax), w, h, _, _ = box_grid(pix)
@@ -492,7 +495,8 @@ def main():
     print(f"box grid 20 m: {Wd}x{H}; 40 m: {W40}x{H40}", flush=True)
 
     print("AlphaEarth 2024 + 2025 at 20 m...", flush=True)
-    X24 = dequant(read_raw(2024, 20)); X25 = dequant(read_raw(2025, 20))
+    read_raw(2025, 20)                                     # download/cache now; dequantized later (memory)
+    X24 = dequant(read_raw(2024, 20))
     print("USDA CDL 2024...", flush=True)
     cdl20 = cdl_onto((H, Wd), tr20, crs, Resampling.nearest)
     g24 = group_of_cdl(cdl20)
@@ -510,6 +514,7 @@ def main():
     farm24 = ndimage.binary_opening((pf24 >= farm_t) & valid24)
     P24 = predict_proba_all(pclf, X24)
     land24 = np.where(valid24.ravel(), np.nanargmax(np.nan_to_num(P24, nan=-1), 1), -1).reshape(H, Wd)
+    del P24, pf24
 
     print("2024 fields -> field classifier...", flush=True)
     pca = PCA(12, random_state=0).fit(np.nan_to_num(X24[::37]))
@@ -536,7 +541,9 @@ def main():
     cls = np.arange(NF)
     conf = prob.max(1)
     # the same field outline, 2025 fingerprints, final model: what it looks like now (no answer key for 2025)
+    X25 = dequant(read_raw(2025, 20))
     F25, _, _ = field_features(X25, lab, n)
+    del X25
     P25f = proba_full(fclf, F25)
     gi25, conf25 = P25f.argmax(1), P25f.max(1)
     print(f"  {n} fields, {cnt.sum() * 400 / 4046.86:.0f} acres ({dropped} pieces, {dropped_ac:.0f} acres, called not farmland)", flush=True)
@@ -570,6 +577,14 @@ def main():
 
     print("SSURGO soil per field...", flush=True)
     soil, soil_failed = soils(list(zip(lat, lon)))
+
+    print("SSURGO spot grid around FIU (land with no fields)...", flush=True)
+    kk = int(SOIL_SPOT_KM / SOIL_SPOT_STEP_KM)
+    dla, dlo = SOIL_SPOT_STEP_KM / 110.574, SOIL_SPOT_STEP_KM / (111.320 * math.cos(math.radians(FIU["lat"])))
+    spot_pts = [(round(FIU["lat"] + i * dla, 5), round(FIU["lon"] + j * dlo, 5)) for i in range(kk, -kk - 1, -1) for j in range(-kk, kk + 1)]
+    spot_soil, _ = soils(spot_pts)
+    spots = [{"lat": la, "lon": lo, **({k: s_[k] for k in ("series", "mapUnit", "texture", "drainageClass", "drainagecl", "ph", "awsCm")} if s_ else {"series": None})}
+             for (la, lo), s_ in zip(spot_pts, spot_soil)]
 
     print("similar fields...", flush=True)
     U = M / np.linalg.norm(M, axis=1, keepdims=True)
@@ -698,12 +713,16 @@ def main():
         "fields": n, "acres": round(float(cnt.sum()) * acre), "mapYear": 2024, "byCrop": dict(sorted(counts.items(), key=lambda t: -t[1]["acres"])),
         "byCrop2025SameOutlines": dict(sorted(counts25.items(), key=lambda t: -t[1]["acres"])),
         "droppedNotFarmland": {"segments": dropped, "acres": round(dropped_ac)}, "cdl2024FarmAcresInBox": round(cdl_farm_share * valid24.sum() * 400 / 4046.86),
+        "nearFiu": {km: {"fields": int(sum(1 for f in fields if f["distanceKm"] <= km)),
+                         "acres": round(sum(f["acres"] for f in fields if f["distanceKm"] <= km))} for km in (5, 10, 15)},
         "soilKnown": soil_known, "soilUnknown": n - soil_known, "soilLookupFailed": soil_failed,
         "fieldClassifier": fmet, "pixelClassifier": pmet,
     }
     region = {
         "centre": {"lat": FIU["lat"], "lon": FIU["lon"]}, "label": "FIU (Farm Hand box)", "year": 2024, "halfKm": HALF_KM,
         "cellM": int(round(cellM)), "n": GRID_N, "cells": cells, "fieldOf": field_of, "fields": fields, "legend": legend,
+        "soilSpots": {"stepKm": SOIL_SPOT_STEP_KM, "halfKm": SOIL_SPOT_KM, "points": spots,
+                      "source": "USDA NRCS SSURGO (Soil Data Access): dominant component of the mapped soil unit at each point"},
         "sources": [
             {"name": "AlphaEarth Foundations Satellite Embedding (Google, Google DeepMind), 2017-2025",
              "what": "64-number yearly fingerprint of every 10 m of land; read at 20 m (fields, crops) and 40 m (trend)",
@@ -742,7 +761,7 @@ def main():
     out = OUT / "region_v2.json"
     out.write_text(json.dumps(view, separators=(",", ":")))
     shutil.copy(out, CLOUD / "region_v2.json")
-    print(json.dumps({k: summary[k] for k in ("fields", "acres", "byCrop", "soilKnown", "soilUnknown")}, indent=1))
+    print(json.dumps({k: summary[k] for k in ("fields", "acres", "nearFiu", "byCrop", "soilKnown", "soilUnknown")}, indent=1))
     print(f"similar threshold {thr:.4f}; region_v2.json {out.stat().st_size / 1e6:.2f} MB; done in {time.time() - t0:.0f} s")
 
 

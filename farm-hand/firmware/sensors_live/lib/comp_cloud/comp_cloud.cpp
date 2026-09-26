@@ -79,11 +79,11 @@ StatusCode_e    CLOUD_send(const SoilReading_t *soil, const TempReading_t *temp)
     last_send = millis();
 
     char body[320];
-    int n = snprintf(body, sizeof(body), "{\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"soil\":{\"34\":%d,\"35\":%d,\"32\":%d,\"33\":%d},\"temps\":[",
-                     millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1], soil->raw[0], soil->raw[1], soil->raw[2], soil->raw[3]);
+    int n = snprintf(body, sizeof(body), "{\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"soil\":{\"%d\":%d,\"%d\":%d,\"32\":%d,\"33\":%d},\"temps\":[",
+                     millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1], SOIL_A_PIN, soil->raw[0], SOIL_B_PIN, soil->raw[1], soil->raw[2], soil->raw[3]);
     for (int i = 0; i < temp->count && n < (int)sizeof(body) - 60; i++)
     {
-        n += snprintf(body + n, sizeof(body) - n, "%s{\"id\":\"%s\",\"c\":", i ? "," : "", temp->id[i]);
+        n += snprintf(body + n, sizeof(body) - n, "%s{\"id\":\"%s\",\"pin\":%d,\"c\":", i ? "," : "", temp->id[i], temp->pin[i]);
         n += snprintf(body + n, sizeof(body) - n, temp->ok[i] ? "%.2f}" : "null}", temp->celsius[i]);
     }
     snprintf(body + n, sizeof(body) - n, "],\"pumps\":[%d,%d],\"rssi\":%d}", RELAY_is_on(0), RELAY_is_on(1), WiFi.RSSI());

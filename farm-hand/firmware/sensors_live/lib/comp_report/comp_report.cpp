@@ -3,7 +3,7 @@
 
 /*
 * One JSON line a second to the laptop (tools/sensors_live.py reads it):
-* {"type":"sens","ms":..,"a_raw":..,"a_pct":..,"b_raw":..,"b_pct":..,"temps":[{"id":"28..","c":26.12}]}
+* {"type":"sens","ms":..,"a_raw":..,"a_pct":..,"b_raw":..,"b_pct":..,"temps":[{"id":"28..","pin":21,"c":26.12}]}
 */
 
 StatusCode_e    REPORT_init(void)
@@ -28,17 +28,17 @@ void    REPORT_status(StatusCode_e code)
 
 StatusCode_e    REPORT_send(const SoilReading_t *soil, const TempReading_t *temp)
 {
-    Serial.printf("{\"type\":\"sens\",\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"soil\":{\"34\":%d,\"35\":%d,\"32\":%d,\"33\":%d},\"temps\":[",
-                  millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1], soil->raw[0], soil->raw[1], soil->raw[2], soil->raw[3]);
+    Serial.printf("{\"type\":\"sens\",\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"soil\":{\"%d\":%d,\"%d\":%d,\"32\":%d,\"33\":%d},\"temps\":[",
+                  millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1], SOIL_A_PIN, soil->raw[0], SOIL_B_PIN, soil->raw[1], soil->raw[2], soil->raw[3]);
     for (int i = 0; i < temp->count; i++)
     {
         if (temp->ok[i])
         {
-            Serial.printf("%s{\"id\":\"%s\",\"c\":%.2f}", i ? "," : "", temp->id[i], temp->celsius[i]);
+            Serial.printf("%s{\"id\":\"%s\",\"pin\":%d,\"c\":%.2f}", i ? "," : "", temp->id[i], temp->pin[i], temp->celsius[i]);
         }
         else
         {
-            Serial.printf("%s{\"id\":\"%s\",\"c\":null}", i ? "," : "", temp->id[i]);
+            Serial.printf("%s{\"id\":\"%s\",\"pin\":%d,\"c\":null}", i ? "," : "", temp->id[i], temp->pin[i]);
         }
     }
     Serial.printf("],\"pumps\":[%d,%d]}\n", RELAY_is_on(0), RELAY_is_on(1));
