@@ -17,7 +17,7 @@ Or just tell the agent: "read design-skills/<folder>/SKILL.md and apply it."
 
 | Folder | What it's for | Source · license |
 |---|---|---|
-| `taste-skill/` | Anti-slop frontend taste: reads the brief, picks a direction, avoids templated looks. Start here. | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) |
+| `taste-skill/` | Anti-slop frontend taste: reads the brief, picks a direction, avoids templated looks. Start here. | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) · MIT |
 | `impeccable/` | Critique, polish, audit and harden any UI: hierarchy, type, spacing, color, motion, states. | [pbakaus/impeccable](https://github.com/pbakaus/impeccable) · Apache 2.0 |
 | `frontend-design/` | Distinctive visual direction for new UI. | [anthropics/skills](https://github.com/anthropics/skills) · see its LICENSE.txt |
 | `emil-kowalski/` | UI polish and motion: `emil-design-eng` (read it in full), `animate`, `review-animations`, `improve-animations`. | [emilkowalski/skills](https://github.com/emilkowalski/skills) · MIT |
