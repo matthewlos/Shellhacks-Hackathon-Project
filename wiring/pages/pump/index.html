@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pump Hookup</title>
+<meta name="description" content="Farm Hand, step by step: hook the mini pump to the working relay and make it pump.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9edf1;--panel:#fbfcfd;--ink:#0e1621;--ink2:#3d4a59;--muted:#5b6674;--line:rgba(14,22,33,.1);--ai:#1f64b8;--warn:#b35a00;--stage:#d9dfe5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1016;--panel:#141a22;--ink:#e8edf3;--ink2:#b3bdc9;--muted:#8b96a3;--line:rgba(255,255,255,.1);--ai:#5b9cf0;--warn:#f0a040;--stage:#1a212b}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.45 "Atkinson Hyperlegible Next",system-ui,sans-serif;min-height:100dvh;display:grid;grid-template-rows:auto 1fr}
+header{padding:14px 18px 8px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+h1{margin:0 auto 0 0;font:800 1.4rem/1.1 "Bricolage Grotesque",sans-serif}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line);cursor:pointer}.dots i.done{background:#1f9a3a}.dots i.on{background:var(--ai);transform:scale(1.4)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;padding:0 18px 18px;min-height:0}
+@media (max-width:980px){main{grid-template-columns:1fr}}
+.stage{position:relative;background:var(--stage);border-radius:16px;overflow:hidden;min-height:440px}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+.zc{position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:6px}
+.zc button{height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:700 13px "Atkinson Hyperlegible Next";cursor:pointer}
+.side{display:grid;gap:12px;align-content:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.now{border:2px solid var(--ai)}
+.k{font:700 12px "JetBrains Mono",monospace;color:var(--ai);letter-spacing:.06em;margin-bottom:6px}
+.big{font:800 1.5rem/1.15 "Bricolage Grotesque";margin:2px 0 8px}
+.p{color:var(--ink2)} .use{margin-top:10px;font-weight:700}
+.al{color:var(--warn);font-weight:700;font-size:14px;margin-top:8px}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}
+.nav button{font:700 16px "Atkinson Hyperlegible Next";padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.nav button.go{background:var(--ai);color:#fff;border:0;min-width:140px}
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.2s cubic-bezier(.3,.7,.3,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pulse{animation:pulse 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.7)}}
+.drop{animation:drop .9s cubic-bezier(.3,.7,.3,1) both}
+@keyframes drop{from{transform:translateY(-70px);opacity:0}to{transform:none;opacity:1}}
+.lift{animation:lift 1.8s ease-in forwards}
+@keyframes lift{0%{opacity:1;transform:none}55%{opacity:1;transform:translateY(-40px)}100%{opacity:0;transform:translateY(-130px)}}
+.fade{transition:opacity .4s}.dim{opacity:.2}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<header><h1>Part 2b: hook up the pump</h1><div class="dots" id="dots"></div></header>
+<main>
+  <div class="stage"><div class="zc"><button id="zfit">See everything</button><button id="zstep">Zoom to step</button></div><svg id="svg" viewBox="0 0 1600 900" role="img" aria-label="Breadboard, ESP32, relay and pump"></svg></div>
+  <div class="side">
+    <div class="card now"><div class="k" id="k"></div><div class="big" id="h"></div><div class="p" id="p"></div><div class="use" id="use"></div><div class="al" id="al"></div>
+      <div class="nav"><button id="back">← Back</button><button class="go" id="next">Next →</button></div></div>
+  </div>
+</main>
+<script>
+const NS = 'http://www.w3.org/2000/svg', svg = document.getElementById('svg');
+const el = (t, a = {}, p = svg) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const txt = (x, y, s, a = {}, p = svg) => { const t = el('text', {x, y, 'font-family': 'Arial', 'font-weight': 700, ...a}, p); t.textContent = s; return t; };
+const grp = id => el('g', {id, class: 'fade'});
+
+// Breadboard the way it sits on your desk (your photo): top edge red + rail then blue - rail, rows a..e,
+// middle gap, rows f..j, then red + and blue - rails. Column 1 on the RIGHT, 60 on the LEFT.
+const BB = {x: 360, y: 420, w: 1200, h: 440}, PITCH = 19.2;
+const colX = n => BB.x + BB.w - 36 - (n - 1) * PITCH;
+const ROWS = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 6.3, g: 7.3, h: 8.3, i: 9.3, j: 10.3};
+const rowY = r => BB.y + 108 + ROWS[r] * PITCH * 1.25;
+const RAILY = {topP: BB.y + 26, topN: BB.y + 50, botP: BB.y + BB.h - 50, botN: BB.y + BB.h - 26};
+const hole = (n, r) => [colX(n), rowY(r)];
+function drawBoard() {
+  const G = grp('bb');
+  el('rect', {x: BB.x, y: BB.y, width: BB.w, height: BB.h, rx: 10, fill: '#f4f3ee', stroke: '#c9c8c0', 'stroke-width': 2}, G);
+  el('rect', {x: BB.x + 10, y: rowY('e') + 16, width: BB.w - 20, height: 26, rx: 3, fill: '#e6e5de'}, G);
+  [[RAILY.topP, '#d32f2f', '+', -12], [RAILY.topN, '#1e5bd6', '−', 12], [RAILY.botP, '#d32f2f', '+', -12], [RAILY.botN, '#1e5bd6', '−', 12]].forEach(([y, c, s, off]) => {
+    el('line', {x1: BB.x + 30, x2: BB.x + BB.w - 30, y1: y + off, y2: y + off, stroke: c, 'stroke-width': 2.5}, G);
+    for (let n = 1; n <= 60; n++) if ((n - 1) % 6 !== 5) el('rect', {x: colX(n) - 5, y: y - 5, width: 10, height: 10, rx: 1.5, fill: '#2b2b2b'}, G);
+    txt(BB.x + 16, y + 6, s, {'text-anchor': 'middle', fill: c, 'font-size': 22}, G); txt(BB.x + BB.w - 14, y + 6, s, {'text-anchor': 'middle', fill: c, 'font-size': 22}, G);
+  });
+  for (const r of 'abcdefghij') {
+    for (let n = 1; n <= 60; n++) el('rect', {x: colX(n) - 5, y: rowY(r) - 5, width: 10, height: 10, rx: 1.5, fill: '#2b2b2b'}, G);
+    txt(BB.x + BB.w - 14, rowY(r) + 5, r, {'text-anchor': 'middle', fill: '#6d6d6d', 'font-size': 14}, G);
+  }
+  for (const n of [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]) {
+    txt(colX(n), rowY('a') - 18, n, {'text-anchor': 'middle', fill: '#6d6d6d', 'font-size': 13}, G);
+    txt(colX(n), rowY('j') + 26, n, {'text-anchor': 'middle', fill: '#6d6d6d', 'font-size': 13}, G);
+  }
+}
+// ESP32, USB at the top like your photo
+const EX = 60, EY = 40, EW = 250, EH = 620;
+const EL = ['3V3', 'GND', 'D15', 'D2', 'D4', 'RX2', 'TX2', 'D5', 'D18', 'D19', 'D21', 'RX0', 'TX0', 'D22', 'D23'];
+const ER = ['VIN', 'GND', 'D13', 'D12', 'D14', 'D27', 'D26', 'D25', 'D33', 'D32', 'D35', 'D34', 'VN', 'VP', 'EN'];
+const epy = i => EY + 110 + i * 32, EPIN = {};
+function drawESP() {
+  const G = grp('esp');
+  el('rect', {x: EX, y: EY, width: EW, height: EH, rx: 14, fill: '#17191d', stroke: '#2c3037', 'stroke-width': 2}, G);
+  el('rect', {id: 'usb', x: EX + 98, y: EY - 14, width: 54, height: 36, rx: 8, fill: '#c7ccd1'}, G);
+  txt(EX + 125, EY + 60, 'ESP32', {'text-anchor': 'middle', fill: '#e8e8e4', 'font-size': 22}, G);
+  EL.forEach((n, i) => { const x = EX + 22, y = epy(i); el('circle', {cx: x, cy: y, r: 9, fill: '#d9b35c'}, G); txt(x + 18, y + 5, n, {fill: '#e8e8e4', 'font-size': 15}, G); EPIN['L' + n] = [x, y]; });
+  ER.forEach((n, i) => { const x = EX + EW - 22, y = epy(i); el('circle', {cx: x, cy: y, r: 9, fill: '#d9b35c'}, G); txt(x - 18, y + 5, n, {'text-anchor': 'end', fill: '#e8e8e4', 'font-size': 15}, G); EPIN['R' + n] = [x, y]; });
+}
+// relay, top right
+const RX = 900, RY = 60, RW = 420, RH = 250, RO = {NO: [RX + RW - 40, RY + 70], COM: [RX + RW - 40, RY + 125], NC: [RX + RW - 40, RY + 180]}, RS = {'DC+': [RX + 40, RY + 70], 'DC−': [RX + 40, RY + 125], 'IN': [RX + 40, RY + 180]};
+let cap;
+function drawRelay() {
+  const G = grp('relay');
+  el('rect', {x: RX, y: RY, width: RW, height: RH, rx: 12, fill: '#c62828', stroke: '#8e1b1b', 'stroke-width': 2}, G);
+  el('rect', {x: RX + 130, y: RY + 40, width: 150, height: 170, rx: 8, fill: '#2d5fc4'}, G);
+  txt(RX + 205, RY + 125, 'SONGLE', {'text-anchor': 'middle', fill: '#fff', 'font-size': 22}, G);
+  el('rect', {x: RX + 12, y: RY + 40, width: 58, height: 170, rx: 6, fill: '#2f6fd6'}, G);
+  Object.entries(RS).forEach(([n, [x, y]]) => { el('circle', {cx: x, cy: y, r: 18, fill: '#d7dce0', stroke: '#888'}, G); el('line', {x1: x - 11, x2: x + 11, y1: y, y2: y, stroke: '#555', 'stroke-width': 4}, G);
+    txt(x + 40, y + 6, n, {fill: '#fff', 'font-size': 20}, G); });
+  el('rect', {x: RX + RW - 70, y: RY + 40, width: 58, height: 170, rx: 6, fill: '#2f6fd6'}, G);
+  Object.entries(RO).forEach(([n, [x, y]]) => { el('circle', {cx: x, cy: y, r: 18, fill: '#d7dce0', stroke: '#888'}, G); el('line', {x1: x - 11, x2: x + 11, y1: y, y2: y, stroke: '#555', 'stroke-width': 4}, G);
+    txt(x - 30, y + 6, n, {'text-anchor': 'end', fill: '#fff', 'font-size': 17}, G); });
+  el('circle', {cx: RX + 110, cy: RY + 22, r: 8, fill: '#ff3b30'}, G); txt(RX + 124, RY + 28, 'PWR', {fill: '#fff', 'font-size': 15}, G);
+  el('rect', {x: RX + 330, y: RY + 218, width: 76, height: 24, rx: 4, fill: '#222'}, G);
+  [-24, 0, 24].forEach(dx => el('circle', {cx: RX + 368 + dx, cy: RY + 230, r: 4, fill: '#d9b35c'}, G));
+  txt(RX + 322, RY + 236, 'L', {'text-anchor': 'end', fill: '#fff', 'font-size': 17}, G); txt(RX + 414, RY + 236, 'H', {fill: '#fff', 'font-size': 17}, G);
+  cap = el('rect', {x: RX + 327, y: RY + 216, width: 34, height: 28, rx: 3, fill: '#0b0b0b', stroke: '#ffd23f', 'stroke-width': 3}, G);
+  el('path', {d: `M ${RS['DC+'][0]} ${RS['DC+'][1]} C 760 ${RS['DC+'][1]}, 520 ${epy(0)}, ${EX + EW - 22} ${epy(0)}`, fill: 'none', stroke: '#d63a31', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: .55}, G);
+  el('path', {d: `M ${RS['DC−'][0]} ${RS['DC−'][1]} C 760 ${RS['DC−'][1]}, 540 ${epy(1)}, ${EX + EW - 22} ${epy(1)}`, fill: 'none', stroke: '#222', 'stroke-width': 7, 'stroke-linecap': 'round', opacity: .55}, G);
+  txt(RX + RW / 2, RY + RH + 26, 'already there: VIN → DC+, GND → DC−', {'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 15}, G);
+}
+
+// pump sitting in a cup of water, right of the relay
+const PX = 1470, PY = 150;
+const PUMP = {red: [PX - 16, PY - 40], blk: [PX + 16, PY - 40]};
+function drawPump() {
+  const G = grp('pump');
+  el('path', {d: `M ${PX - 85} ${PY - 70} L ${PX + 85} ${PY - 70} L ${PX + 70} ${PY + 190} L ${PX - 70} ${PY + 190} Z`, fill: 'rgba(160,200,235,.35)', stroke: '#8fb3cc', 'stroke-width': 3}, G);
+  el('path', {d: `M ${PX - 80} ${PY - 20} L ${PX + 80} ${PY - 20} L ${PX + 70} ${PY + 188} L ${PX - 70} ${PY + 188} Z`, fill: 'rgba(60,140,220,.45)'}, G);
+  el('rect', {x: PX - 40, y: PY + 40, width: 80, height: 120, rx: 14, fill: '#1d1d1f'}, G);
+  el('rect', {x: PX + 36, y: PY + 70, width: 30, height: 14, rx: 4, fill: '#333'}, G);
+  txt(PX, PY + 105, 'PUMP', {'text-anchor': 'middle', fill: '#ddd', 'font-size': 16}, G);
+  el('path', {d: `M ${PX - 16} ${PY + 40} L ${PUMP.red[0]} ${PUMP.red[1]}`, stroke: '#d63a31', 'stroke-width': 5}, G);
+  el('path', {d: `M ${PX + 16} ${PY + 40} L ${PUMP.blk[0]} ${PUMP.blk[1]}`, stroke: '#222', 'stroke-width': 5}, G);
+  txt(PX, PY + 222, 'cup of water', {'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 15}, G);
+}
+function wire(a, b, c, bend, animate, p, opacity) {
+  const d = `M ${a[0]} ${a[1]} C ${a[0]} ${a[1] + bend[0]}, ${b[0]} ${b[1] + bend[1]}, ${b[0]} ${b[1]}`;
+  el('path', {d, fill: 'none', stroke: 'rgba(0,0,0,.25)', 'stroke-width': 10, 'stroke-linecap': 'round', transform: 'translate(2 3)', opacity: opacity ?? 1}, p);
+  const w = el('path', {d, fill: 'none', stroke: c, 'stroke-width': 8, 'stroke-linecap': 'round', opacity: opacity ?? 1}, p);
+  if (animate) { w.style.setProperty('--len', w.getTotalLength()); w.classList.add('draw'); }
+}
+// what you already built (your photo): bottom half, transistor legs in j22 j21 j20, resistor 21 -> 15
+function drawBuilt() {
+  const G = grp('built'), y = rowY('j');
+  el('path', {d: `M ${colX(22) - 12} ${y - 52} L ${colX(20) + 12} ${y - 52} L ${colX(20) + 12} ${y - 18} A 36 10 0 0 1 ${colX(22) - 12} ${y - 18} Z`, fill: '#1d1d1f'}, G);
+  [20, 21, 22].forEach(n => el('rect', {x: colX(n) - 2, y: y - 20, width: 4, height: 20, fill: '#c9ccd0'}, G));
+  const ry = rowY('f'), x1 = colX(21), x2 = colX(15);
+  el('line', {x1, x2, y1: ry, y2: ry, stroke: '#c9ccd0', 'stroke-width': 4}, G);
+  el('rect', {x: x1 + 22, y: ry - 11, width: x2 - x1 - 44, height: 22, rx: 10, fill: '#8fb4d6', stroke: '#6f93b3'}, G);
+  [.15, .32, .49, .8].forEach((f, i) => el('rect', {x: x1 + 22 + (x2 - x1 - 44) * f, y: ry - 11, width: 8, height: 22, fill: ['#6b3a1e', '#111', '#c8281e', '#c09a3c'][i]}, G));
+  const w = (a, b, c, bd) => wire(a, b, c, bd, false, G, .75);
+  w(EPIN.LGND, hole(22, 'g'), '#e8e8e8', [300, -120]);
+  w(EPIN.RD26, hole(15, 'g'), '#777', [120, -200]);
+  w(hole(20, 'g'), RS.IN, '#d63a31', [-200, 0]);
+  txt(colX(18), rowY('j') + 50, 'your transistor build (done ✓, don’t touch)', {'text-anchor': 'middle', fill: 'var(--ink2)', 'font-size': 15}, G);
+}
+drawBoard(); drawESP(); drawRelay(); drawBuilt(); drawPump();
+const LAY = el('g'), FX = el('g');
+const ring = ([x, y]) => el('circle', {cx: x, cy: y, r: 22, fill: 'none', stroke: '#ffd23f', 'stroke-width': 5, class: 'pulse'}, FX);
+function tag([x, y], s, dy = -40) { const w = s.length * 10 + 22, G = el('g', {}, FX);
+  el('line', {x1: x, y1: y, x2: x, y2: y + dy + (dy < 0 ? 14 : -14), stroke: '#0e1621', 'stroke-width': 2, 'stroke-dasharray': '4 3'}, G);
+  el('rect', {x: x - w / 2, y: y + dy - 14, width: w, height: 30, rx: 8, fill: '#0e1621'}, G);
+  txt(x, y + dy + 6, s, {'text-anchor': 'middle', fill: '#fff', 'font-size': 16}, G); }
+
+const RELAY_ZOOM = [860, 0, 740, 420];
+const S = [
+  {h: 'Where you are', p: 'Relay clicks ✓. Your transistor build stays exactly like it is. Now the pump: 1 new wire + the pump’s 2 wires, all into relay screws. Nothing new on the breadboard.', zoom: [0, 0, 1600, 900], ring: [RS.IN]},
+  {h: 'Unplug USB', p: 'Pull the USB cable out of the ESP32. Never loosen screws with power on.', zoom: [0, 0, 700, 420], ring: [[EX + 125, EY]], tags: [[[EX + 125, EY - 10], 'unplug', 60]]},
+  {h: 'Jumper: DC+ → COM', p: 'Male-male wire. Loosen the DC+ screw, push one end in NEXT TO the red wire already there, tighten. Other end into COM (middle screw on the far side), tighten. Tug both. This gives the pump 5V to switch.', zoom: RELAY_ZOOM, wires: ['jump'], ring: [RS['DC+'], RO.COM], use: '1 male-male wire, any color', tags: [[RO.COM, 'COM', 60]]},
+  {h: 'Pump red → NO', p: 'Loosen the NO screw (top screw on the far side). Push the pump’s red wire in, tighten, tug. NO = “normally open”: power only flows when the relay clicks on.', zoom: RELAY_ZOOM, wires: ['red'], ring: [RO.NO, PUMP.red], use: 'The pump’s red wire', tags: [[RO.NO, 'NO', -44]]},
+  {h: 'Pump black → DC−', p: 'Loosen the DC− screw. Push the pump’s black wire in NEXT TO the black wire already there, tighten, tug. That’s the pump’s ground.', zoom: RELAY_ZOOM, wires: ['blk'], ring: [RS['DC−'], PUMP.blk], use: 'The pump’s black wire'},
+  {h: 'Pump in the water', p: 'Drop the pump in a cup of water so it’s fully under. Point the outlet tube into a second cup or the sink.', zoom: [1330, 0, 270, 420], ring: [[PX, PY + 100]], al: 'Never run the pump dry. It burns out.'},
+  {h: 'Plug in + watch', p: 'USB back in. Test code flips the relay every 2 s: click → pump runs 2 s → click → stops 2 s. Over and over.', zoom: [0, 0, 1600, 900], all: true, run: true, ring: [[EX + 125, EY]],
+    al: 'If the ESP32 keeps restarting when the pump kicks on, the USB can’t feed it. Tell me, that’s what the 9V adapter fixes.'},
+];
+const WIRES = {jump: [RS['DC+'], RO.COM, '#f2c12e', [-110, -110]], red: [PUMP.red, RO.NO, '#d63a31', [-60, -90]], blk: [PUMP.blk, RS['DC−'], '#222', [-160, -220]]};
+
+let cur = 0; try { cur = Math.min(S.length - 1, +localStorage.getItem('pump1') || 0); } catch (e) {}
+const dots = document.getElementById('dots'); S.forEach((_, i) => { const d = document.createElement('i'); d.onclick = () => { cur = i; render(); }; dots.appendChild(d); });
+let VB = [0, 0, 1600, 900], zid = 0;
+function zoom(to) { const r = svg.clientWidth / Math.max(1, svg.clientHeight); let [x, y, w, h] = to; const cx = x + w / 2, cy = y + h / 2;
+  if (w / h > r) h = w / r; else w = h * r; w *= 1.08; h *= 1.08; const T = [cx - w / 2, cy - h / 2, w, h], F = VB.slice(), t0 = performance.now(), id = ++zid;
+  const st = t => { if (id !== zid) return; const k = Math.min(1, (t - t0) / 700), e = 1 - Math.pow(1 - k, 3); VB = F.map((v, i) => v + (T[i] - v) * e); svg.setAttribute('viewBox', VB.join(' ')); if (k < 1) requestAnimationFrame(st); };
+  requestAnimationFrame(st); }
+let runId = 0;
+function render() {
+  try { localStorage.setItem('pump1', cur); } catch (e) {}
+  const x = S[cur];
+  document.getElementById('k').textContent = `STEP ${cur + 1} OF ${S.length}`;
+  document.getElementById('h').textContent = x.h; document.getElementById('p').textContent = x.p;
+  document.getElementById('use').textContent = x.use ? '🔌 ' + x.use : ''; document.getElementById('al').textContent = x.al ? '⚠ ' + x.al : '';
+  [...dots.children].forEach((d, i) => d.className = i < cur ? 'done' : i === cur ? 'on' : '');
+  LAY.innerHTML = ''; FX.innerHTML = '';
+  S.slice(0, cur).forEach(y => (y.wires || []).forEach(id => { const [a, b, c, bd] = WIRES[id]; wire(a, b, c, bd, false, LAY, x.all ? 1 : .55); }));
+  (x.wires || []).forEach(id => { const [a, b, c, bd] = WIRES[id]; wire(a, b, c, bd, true, LAY); });
+  (x.ring || []).forEach(ring); (x.tags || []).forEach(([p, s, dy]) => tag(p, s, dy));
+  const id = ++runId;
+  if (x.run) { const G = el('g', {}, FX), t0 = performance.now();
+    const a = t => { if (id !== runId) return; const on = Math.floor((t - t0) / 2000) % 2 === 0; G.innerHTML = '';
+      el('rect', {x: PX - 90, y: PY - 125, width: 180, height: 40, rx: 10, fill: on ? '#1f9a3a' : '#555'}, G);
+      txt(PX, PY - 98, on ? 'CLICK · PUMP ON' : 'PUMP OFF', {'text-anchor': 'middle', fill: '#fff', 'font-size': 17}, G);
+      if (on) for (let k = 0; k < 6; k++) { const ph = ((t / 600) + k / 6) % 1; el('circle', {cx: PX + 66 + ph * 40, cy: PY + 77 - ph * 60, r: 5, fill: '#3c8cdc', opacity: 1 - ph}, G); }
+      requestAnimationFrame(a); }; requestAnimationFrame(a); }
+  zoom(x.zoom);
+  document.getElementById('back').disabled = cur === 0; document.getElementById('next').textContent = cur === S.length - 1 ? 'Done ✓' : 'Next →';
+}
+document.getElementById('next').onclick = () => { if (cur < S.length - 1) { cur++; render(); } };
+document.getElementById('back').onclick = () => { if (cur > 0) { cur--; render(); } };
+document.getElementById('zfit').onclick = () => zoom([0, 0, 1600, 900]);
+document.getElementById('zstep').onclick = () => zoom(S[cur].zoom);
+addEventListener('keydown', e => { if (e.key === 'ArrowRight') document.getElementById('next').click(); if (e.key === 'ArrowLeft') document.getElementById('back').click(); });
+addEventListener('resize', () => zoom(S[cur].zoom));
+render();
+
+</script>
+</body>
+</html>

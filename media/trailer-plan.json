@@ -1,0 +1,26 @@
+{
+  "about": "Farm Hand (ShellHacks 2026) drought trailer. Owner 2026-09-24: news clips showing the drought, play the crazy moment and let it play out, the San Juan nursery story leads. Build: node scripts/director/trailer.mjs farmhand-drought. Law: harness/capture/TRAILER.md. Stills/rects/clips are captured by the agent in out/_farmhand-trailer/run-agent.mjs.",
+  "title": "FARM HAND",
+  "subtitle": "ShellHacks 2026 · When the soil can ask for water",
+  "voice": "farmhand-drought-trailer",
+  "lines": [
+    { "n": 1, "what": "NASA headline slams in", "vo": "You've probably seen the headlines.",
+      "beat": { "kind": "headline", "still": "real/fh-nasa-drought-focus.png", "rect": "headline" } },
+    { "n": 2, "what": "WCJB headline stacks on top, highlight on worst drought", "vo": "Florida is in its worst drought in decades, and it's hitting the farms.",
+      "beat": { "kind": "stack", "under": { "still": "real/fh-nasa-drought-focus.png", "rect": "headline" }, "still": "real/fh-wcjb-worst-drought-focus.png", "rect": "headline", "mark": "headline", "markWord": "worst" } },
+    { "n": 3, "what": "the Alligator article, highlight on the 70% blueberry loss", "vo": "One Gainesville blueberry farm lost seventy percent of its crop, while watering every single day.",
+      "beat": { "kind": "page", "still": "real/fh-alligator-blueberry-focus.png", "rect": "para", "fill": 0.85, "mark": "loss70", "markWord": "seventy" } },
+    { "n": 4, "what": "the water district order, big type", "vo": "A state famous for rain is now telling people to water their lawns once a week.",
+      "beat": { "kind": "page", "still": "real/fh-swfwmd-phase3-focus.png", "rect": "para", "fill": 0.85, "mark": "onceweek", "markWord": "once", "bigText": "WATER ONCE A WEEK", "bigWord": "week" } },
+    { "n": 5, "what": "USDA disaster declaration, big number", "vo": "Sixty one counties were declared drought disaster areas.",
+      "beat": { "kind": "page", "still": "real/fh-usda-61-counties-focus.png", "rect": "headline", "fill": 0.9, "mark": "headline", "markWord": "sixty", "bigText": "61 COUNTIES", "bigWord": "sixty" } },
+    { "n": 6, "what": "the question, word by word", "vo": "When a crop dies, you lose the time it took to grow it. So what if the soil could tell you when it's thirsty?",
+      "beat": { "kind": "question", "lines": [["When", "a", "crop", "dies,"], ["you", "lose", "the", "time", "it", "took", "to", "grow", "it."], ["So", "what", "if", "the", "soil", "could", "tell", "you"], ["when", "it's", "thirsty?"]] } }
+  ],
+  "bites": [
+    { "after": 2, "clip": "fh-fox-100pct", "start": "100", "end": "years", "source": "FOX · Florida drought impact orange farmers" },
+    { "after": 3, "clip": "fh-wink-nursery-thrown", "start": "for", "end": "drought", "source": "WINK News · Bonita Springs nursery battles extreme drought" },
+    { "after": 3, "clip": "fh-wink-palms-2years", "start": "its", "end": "saleable", "source": "WINK News · LaBelle palm farm devastated by freeze, drought slows recovery" },
+    { "after": 4, "clip": "fh-fox-bloom-water", "start": "during", "end": "be", "source": "FOX · Florida drought impact orange farmers" }
+  ]
+}
