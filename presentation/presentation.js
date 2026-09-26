@@ -8,7 +8,6 @@
   const previous = document.querySelector('#previous-chapter');
   const next = document.querySelector('#next-chapter');
   const pageNumber = document.querySelector('#page-number');
-  const progress = document.querySelector('.chapter-progress > span');
   const navigationStatus = document.querySelector('#navigation-status');
   const motionButton = document.querySelector('#motion-toggle');
   const fullscreenButton = document.querySelector('#fullscreen-toggle');
@@ -16,17 +15,16 @@
   const rig = document.querySelector('.rig-layout');
   const cyclePlay = document.querySelector('#cycle-play');
   const cycleButtons = [...document.querySelectorAll('[data-cycle]')];
-  const cycleKicker = document.querySelector('#cycle-kicker');
   const cycleTitle = document.querySelector('#cycle-title');
   const cycleDescription = document.querySelector('#cycle-description');
   const cycleAnnouncement = document.querySelector('#cycle-announcement');
   const moistureValue = document.querySelector('#moisture-value');
-  const loopSteps = [...document.querySelectorAll('.loop-step')];
+  // Example numbers for the drawing: 35% is box A's real minimum, 48% the example target.
   const stages = [
-    { kicker: '01 / READ THE SOIL', title: 'The soil asks.', description: 'The probe detects dry soil. Temperature gives the decision more context.', moisture: 32, duration: 2200 },
-    { kicker: '02 / MAKE THE CALL', title: 'Laya decides.', description: 'The reading calls for water. The controller checks its safety rules before running the pump.', moisture: 32, duration: 2200 },
-    { kicker: '03 / DELIVER WATER', title: 'The pump answers.', description: 'Water reaches the soil. The probe keeps reading as moisture rises.', moisture: 32, duration: 4800 },
-    { kicker: '04 / CHECK AGAIN', title: 'Enough. For now.', description: 'The pump stops. Farm Hand checks the response and keeps watching the soil.', moisture: 48, duration: 3000 },
+    { title: 'Soil at 32%', description: 'Below the 35% minimum. The temperature probe reads too, for context.', moisture: 32, duration: 2200 },
+    { title: 'Laya calls for a pour', description: 'The ESP32 checks its safety rules, then switches the relay on.', moisture: 32, duration: 2200 },
+    { title: 'Pouring', description: 'Water goes in and the probe keeps reading as the soil takes it up.', moisture: 32, duration: 4800 },
+    { title: 'Stopped at 48%', description: 'The pump is off. Farm Hand keeps reading every second.', moisture: 48, duration: 3000 },
   ];
 
   let activeIndex = -1;
@@ -35,7 +33,6 @@
   let cycleElapsed = 0;
   let cycleRunning = false;
   let cycleFinished = false;
-  let loopElapsed = 0;
   let animationFrame = 0;
   let lastFrame = 0;
   let scrollFrame = 0;
@@ -46,13 +43,10 @@
 
   function updateCycleButton() {
     if (reducedMotion.matches) {
-      cyclePlay.innerHTML = '<span aria-hidden="true">→</span> Next step';
-      cyclePlay.setAttribute('aria-label', 'Show the next step in the illustrative watering cycle');
+      cyclePlay.textContent = 'Next step';
       return;
     }
-    const label = cycleRunning && !paused ? 'Pause cycle' : cycleFinished ? 'Replay cycle' : cycleElapsed > 0 || cycleIndex > 0 ? 'Resume cycle' : 'Play the cycle';
-    cyclePlay.innerHTML = `<span aria-hidden="true">${cycleRunning && !paused ? 'Ⅱ' : '▶'}</span> ${label}`;
-    cyclePlay.setAttribute('aria-label', label);
+    cyclePlay.textContent = cycleRunning && !paused ? 'Pause' : cycleFinished ? 'Replay' : cycleElapsed > 0 || cycleIndex > 0 ? 'Resume' : 'Play';
   }
 
   function setMotion(value) {
@@ -71,16 +65,13 @@
     if (activeIndex === index) return;
     activeIndex = index;
     chapters.forEach((section, i) => section.classList.toggle('is-active', i === index));
-    chapters[index].classList.add('is-visible');
     navLinks.forEach((link, i) => {
       if (i === index) link.setAttribute('aria-current', 'step');
       else link.removeAttribute('aria-current');
     });
     previous.disabled = index === 0;
     next.disabled = index === chapters.length - 1;
-    pageNumber.innerHTML = `<strong>0${index + 1}</strong><span>/</span>04`;
-    pageNumber.setAttribute('aria-label', `Section ${index + 1} of 4`);
-    progress.style.width = `${(index + 1) * 25}%`;
+    pageNumber.textContent = `${index + 1} of 4`;
     syncAnimation();
   }
 
@@ -97,10 +88,9 @@
 
   function navigate(index, { updateHash = true, speak = true } = {}) {
     const target = Math.max(0, Math.min(chapters.length - 1, index));
-    chapters[target].classList.add('is-visible');
     chapters[target].scrollIntoView({ behavior: paused || reducedMotion.matches ? 'instant' : 'smooth', block: 'start' });
     if (updateHash) history.pushState(null, '', `#${chapters[target].id}`);
-    if (speak) announce(`Section ${target + 1} of 4. ${navLinks[target].textContent.replace(/^\s*\d+\s*/, '').trim()}.`);
+    if (speak) announce(`Section ${target + 1} of 4. ${navLinks[target].textContent.trim()}.`);
     if (paused || reducedMotion.matches) setActive(target);
   }
 
@@ -171,21 +161,16 @@
     }
   });
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add('is-visible');
-    });
-  }, { threshold: 0.1 });
-  chapters.forEach((chapter) => observer.observe(chapter));
-
   const soilButtons = [...document.querySelectorAll('[data-soil]')];
   soilButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const wet = button.dataset.soil === 'wet';
       document.querySelector('.problem-figure').dataset.water = button.dataset.soil;
       soilButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-      document.querySelector('#soil-state-label').textContent = wet ? 'SOIL: TOO WET' : 'SOIL: TOO DRY';
-      document.querySelector('#soil-caption').innerHTML = wet ? 'The schedule stays the same.<br /><strong>The water goes to waste.</strong>' : 'The schedule stays the same.<br /><strong>The crop pays for it.</strong>';
+      document.querySelector('#soil-state-label').textContent = wet ? 'Soil too wet' : 'Soil too dry';
+      document.querySelector('#soil-caption').textContent = wet
+        ? 'Same pour every morning. After the rain it runs off the top.'
+        : 'Same pour every morning. The soil dries out between pours.';
     });
   });
 
@@ -201,7 +186,7 @@
     const stage = stages[index];
     rig.dataset.stage = String(index);
     rig.style.setProperty('--wet-scale', '.25');
-    cycleKicker.textContent = stage.kicker;
+    rig.style.setProperty('--cup-scale', '1');
     cycleTitle.textContent = stage.title;
     cycleDescription.textContent = stage.description;
     // Manual/reduced-motion viewing shows the water step at a representative midpoint.
@@ -209,6 +194,7 @@
     if (index === 2 && !cycleRunning) {
       cycleElapsed = stages[2].duration / 2;
       rig.style.setProperty('--wet-scale', '.65');
+      rig.style.setProperty('--cup-scale', '.92');
     }
     cycleButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
     if (speak) announce(`${stage.title} ${stage.description}`, cycleAnnouncement);
@@ -250,7 +236,7 @@
   });
 
   function shouldAnimate() {
-    return !paused && !document.hidden && (activeIndex === 1 || (activeIndex === 2 && cycleRunning));
+    return !paused && !document.hidden && activeIndex === 2 && cycleRunning;
   }
 
   function syncAnimation() {
@@ -269,17 +255,13 @@
     if (!shouldAnimate()) return;
     const dt = lastFrame ? Math.min(now - lastFrame, 100) : 0;
     lastFrame = now;
-    if (activeIndex === 1) {
-      loopElapsed += dt;
-      const step = Math.floor(loopElapsed / 2400) % 3;
-      loopSteps.forEach((item, i) => item.classList.toggle('is-active', i === step));
-    }
-    if (activeIndex === 2 && cycleRunning) {
+    if (cycleRunning) {
       cycleElapsed += dt;
       if (cycleIndex === 2) {
         const fraction = Math.min(1, cycleElapsed / stages[2].duration);
         setMoisture(32 + fraction * 16);
         rig.style.setProperty('--wet-scale', String(.25 + fraction * .75));
+        rig.style.setProperty('--cup-scale', String(1 - fraction * .16));
       }
       if (cycleElapsed >= stages[cycleIndex].duration) {
         if (cycleIndex < stages.length - 1) showStage(cycleIndex + 1);
@@ -287,7 +269,7 @@
           cycleRunning = false;
           cycleFinished = true;
           updateCycleButton();
-          announce('Cycle complete. The pump is off; Farm Hand keeps watching the soil.', cycleAnnouncement);
+          announce('Cycle done. The pump is off and Farm Hand keeps reading.', cycleAnnouncement);
         }
       }
     }
@@ -304,7 +286,6 @@
     setMotion(reducedMotion.matches);
   });
 
-  loopSteps[0].classList.add('is-active');
   root.classList.add('js-ready');
   setMotion(paused);
   updateFromScroll();
