@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import { CFG } from '../sim.js';
+import { useSimValue } from '../useFarmHand.js';
 
-// "Keep the soil at least at __%" (PLAN 5e). Range 20 to wet - 15, step 1, committed on release.
-// It's the same control on the Live box and Simulation pages: both call farmHand.setBaseline().
-export default function BaselineSlider({ fh, act, label = 'Keep the soil at least at' }) {
+// "Keep soil above __%" (PLAN 5e): the minimum. Range 20 to wet - 15, step 1, committed on release.
+// The same control on the Live and Outside pages: both call farmHand.setBaseline().
+export default function BaselineSlider({ fh, act, label = 'Keep soil above', showAnswer = true }) {
+  const dry = useSimValue(() => CFG.DRY_PCT, 4);
   const lo = 20, hi = CFG.WET_PCT - 15;
-  const [v, setV] = useState(CFG.DRY_PCT);
+  const id = useId();
+  const [v, setV] = useState(dry);
   const [answer, setAnswer] = useState(null);
-  useEffect(() => { setV(CFG.DRY_PCT); }, [CFG.DRY_PCT]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setV(dry); }, [dry]);
 
   const commit = (pct) => {
-    if (typeof fh.setBaseline !== 'function') { setAnswer({ error: 'this sim build has no setBaseline yet' }); return; }
+    if (typeof fh.setBaseline !== 'function') { setAnswer({ error: true }); return; }
     setAnswer(act((f) => f.setBaseline(pct)));
   };
 
   return (
-    <Box component="section" aria-labelledby="baseline-label">
+    <Box component="section" aria-labelledby={id}>
       <Stack direction="row" sx={{ alignItems: 'baseline', justifyContent: 'space-between', gap: 2 }}>
-        <Typography variant="h3" component="h2" id="baseline-label">{label}</Typography>
-        <Typography sx={{ fontWeight: 600, fontSize: '1.25rem', fontVariantNumeric: 'tabular-nums' }} aria-hidden="true">{v}%</Typography>
+        <Typography variant="body2" id={id} sx={{ fontWeight: 600 }}>{label}</Typography>
+        <Typography variant="status" aria-hidden="true">{v}%</Typography>
       </Stack>
       <Slider
         value={v}
@@ -32,18 +35,23 @@ export default function BaselineSlider({ fh, act, label = 'Keep the soil at leas
         marks={[{ value: lo, label: `${lo}%` }, { value: hi, label: `${hi}%` }]}
         onChange={(_, x) => setV(x)}
         onChangeCommitted={(_, x) => commit(x)}
-        aria-labelledby="baseline-label"
+        aria-labelledby={id}
         getAriaValueText={(x) => `${x}%`}
-        sx={{ mt: 1, mx: 1.25, width: 'calc(100% - 20px)', '& .MuiSlider-markLabel': { typography: 'caption', color: 'text.secondary' },
+        sx={{ mt: 0.5, mx: 1.25, width: 'calc(100% - 20px)',
+          // No layout transitions (the thumb follows the pointer anyway); a 28px thumb on touch screens.
+          '& .MuiSlider-track, & .MuiSlider-thumb': { transition: 'none' },
+          '@media (pointer: coarse)': { '& .MuiSlider-thumb': { width: 28, height: 28 } }, '& .MuiSlider-markLabel': { typography: 'caption', color: 'text.secondary' },
           '& .MuiSlider-markLabel[data-index="0"]': { transform: 'translateX(-10px)' }, '& .MuiSlider-markLabel[data-index="1"]': { transform: 'translateX(calc(-100% + 10px))' } }}
       />
-      <Typography variant="body2" sx={{ mt: 1 }} role="status" aria-live="polite" color={answer?.error ? 'text.primary' : 'text.primary'}>
-        {answer == null
-          ? `Box A waters at or below ${CFG.DRY_PCT}%. Each drink aims for ${CFG.TARGET_PCT}%.`
-          : answer.error
-            ? `Not changed: ${answer.error}.`
-            : `Keeping it at ${answer.baseline}%. Each drink aims for ${answer.target}%.`}
-      </Typography>
+      {(showAnswer || answer?.error) && (
+        <Typography variant="body2" sx={{ mt: 1 }} role="status" aria-live="polite">
+          {answer?.error
+            ? "Couldn't change it: this build can't set a minimum."
+            : answer
+              ? `Waters near ${answer.baseline + CFG.LOW_MARGIN}%, never below ${answer.baseline}%. Fills to ${answer.target}%.`
+              : `Waters near ${dry + CFG.LOW_MARGIN}%, never below ${dry}%. Fills to ${CFG.TARGET_PCT}%.`}
+        </Typography>
+      )}
     </Box>
   );
 }

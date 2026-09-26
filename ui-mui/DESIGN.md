@@ -1,5 +1,198 @@
 # Farm Hand UI (ui-mui): design decisions
 
+## Round 4: humanify (wins over rounds 1-3 where they differ)
+
+The owner's note: it still read as AI-made. Three audits were done: words (`copy.md`), look (`visual.md`) and motion (`motion.md`). Builder A applied the words, layout and theme; builder B applied the motion and the drawing. Skills: impeccable distill / quieter / clarify / typeset / layout, taste-skill 4.4, 4.5, 4.7, 9.F, and owl-listener ux-writing. Outside sources: NN/g *How Users Read on the Web* and heuristic #8, Material 3 UX writing, Refactoring UI ("use fewer borders", "emphasize by de-emphasizing"), and WCAG 2.2 SC 1.3.1.
+
+### Words
+- **Glossary, one name per thing:**
+  - Farm Hand (not AI, box A or Pot A), Timer, Laya and Gemini team.
+  - pour (not drink), check (the button is "Check now"), in band.
+  - The minimum: "Keep soil above" on the control, "min 35%" on labels. Not "baseline" on screen.
+  - Sim table rows: Timer, Rules, Farm Hand, Best case; the column is Method. Not brain or Oracle.
+- **Honesty said once:**
+  - The "Simulated board" chip in the header ("Simulated" on phones). Its tooltip has the old subtitle.
+  - The "(modeled)" tag on the waterline.
+  - One line under the Outside title.
+  - Every other "(simulated)", "not a measured farm" and "The box is simulated" is gone.
+- **Compact citations stay:** FAO-56 Table 22 (linked), `eval.md` with the run date, Open-Meteo, "US Drought Monitor, Sep 15" on the hard-coded 100% drought row, and `brain.py` / `laya/` in the Agent team tab.
+- **Nav:** Live · Vs timer · Outside. The routes are unchanged (`#/`, `#/control`, `#/sim`). "Control" means settings to a farmer; the new label names what the page proves (copy.md 4.1).
+- **Sentences from `ui/sim.js` are shaped, never rewritten** (`format.js callSentence`):
+  - The "WATER:" / "WAIT:" prefix is stripped and the first letter capitalized.
+  - The whole-number soil % the brain wrote is shown with one decimal, using the 6-reading median at that moment. It is used only when that median rounds to the brain's number, or is within half a point of it.
+  - Safety-rule names are mapped to glossary words (`RULE`).
+- **Voice guide** (copy.md section 5, pin for new text):
+  1. Label first, sentence last.
+  2. Say it once.
+  3. Describe the data, never the design.
+  4. One name per thing.
+  5. Farmer words on screen, code words behind tabs.
+  6. Fact first, qualifier last, no "I" in UI chrome.
+  7. Buttons are 1-3 words.
+  8. Numbers match everywhere: one decimal, 1,500, no "0 min" tails, no "…".
+
+### Structure (visual.md)
+- **Un-boxed:**
+  - A white page. Sections are split by space and 1px rules.
+  - The drawing is the only boxed surface: a real bench, B's file.
+  - The 3px colored top borders are gone.
+  - Main width is capped at 1600, and Outside at 1120.
+- **One focal point per page:**
+  - **Live:** moisture and temperature stay equal (PLAN 5d owner rule). Both are ink now, each with a 24x3 bar in its house color (blue moisture, purple temperature). The pump state is a 24px status line, down from 40px.
+  - **Vs timer:** the computed headline sits on top at 40px. The box numbers drop to 40px, and the two boxes are split by one vertical rule.
+  - **Outside:** it leads with a tier-1 "56.2% less water than a timer" (from `eval.md`, not new data), then crops. The replay placeholder is one line at the bottom.
+- **Headings:**
+  - h1 is the app name. Page and section titles are h2 (h3 on Outside, under its h2 title).
+  - `subtitle1/2` map to `<p>`, where MUI's default was `<h6>`.
+  - Form-control titles ("Target", "Keep soil above") are labels, not headings.
+- **Type: six sizes,** 12 / 14 / 16 / 24 / 40 / tier1.
+  - The 13px toggles, table cells, chips and small buttons are now 14px.
+  - h3 is Atkinson 700 16px. `readout` is 24. There is a new `status` variant (Atkinson 600 24).
+  - Units are 0.5em of their number.
+  - Bricolage is kept for the app name, page titles, the Vs timer headline and big numbers.
+- **Buttons:**
+  - Go is the only filled button in its area.
+  - Check now, Test pour, Hand pour and the demo buttons are text buttons without icons.
+  - Stop pump keeps its square icon, and turns outlined red only while the pump runs.
+  - Refill cup turns filled when the cup is low (Stage.jsx).
+- **Header:** one 64px row on desktop, with the tabs inline and the tab indicator not animated. A phone gets two rows (93px, down from 258): speeds fold into a menu, Pause and Skip become icon buttons, and the clock drops its seconds.
+- **Phone order on Live:** readings and the call first, then the drawing, the controls and weather, then the tabs.
+- **Radius bug:** a number radius in `sx` is multiplied by 6. The 999s became 5,994px. Pills and bars now use strings (`'2px'`, `RADIUS.pill`).
+
+### Product calls (copy.md problem 8)
+- **(a) Too early to compare** (see the owner decision below for what follows it):
+  - Vs timer shows "Too early to compare." until each box has 2 pours or 24 h of simulated time has passed, then gives the ratio.
+  - The caption always gives the run length ("18 h of data since 8:00 AM").
+  - The ratio is honest either way, even when Farm Hand used more.
+- **(b) Crops open at box A's real 35%.** The default is unchanged. The count leads, followed by a nudge: "0 of 10 crops healthy at 35%. Strawberries need 56%, above this box's 55% max. One level can't fit every crop. Raise the level to see which fit."
+  - Rows lost their pills and dividers.
+  - A healthy row gets a green tick and the word "healthy". A stressed row shows "needs 56%". Neither state is shown by color alone.
+- **(c) County drought 100%** is kept, with its source on the row.
+- **(d) Outside order:** result, crops, then the replay line.
+
+### Owner decision: the Vs timer headline leads with the band
+- The headline says how each box did its job: time in band per box, from `fh.report()`. For example, "Farm Hand stayed in band 100% of the time. The timer, 62%."
+- When both boxes are at 100% it says "Both boxes stayed in band the whole time.", and the water line carries the difference.
+- The water ratio is the second line, whichever way it goes ("Farm Hand used 2.0x the water, so far."). Time below the minimum and time too wet are added only when they are nonzero.
+- "Too early to compare." (2 pours each or 24 h) and the run length are unchanged.
+- Why: at 18 h the ratio can favor the timer. That is honest, but a water ratio in the headline read as contradicting Outside's 56.2%. Holding the soil in band is the job Farm Hand is set indoors (PLAN 5e).
+
+### Fix round (final critic, `critic.md`)
+- **Covered call and covered headline** are now really inert (`inert={covered || undefined}`). React 19 read `inert=""` as false.
+- **The minimum answer matches the call:** "Waters near 40%, never below 35%. Fills to 55%." That is DRY_PCT + LOW_MARGIN, the level the brain actually waters at.
+- **No-water pours report pump seconds, never ml.** The Target receipt reads "Stopped. 1 pulse, 8 s pumped, no water reached the soil." Builder B's drawing chip uses the same words.
+- **Outside:**
+  - Dev notes are cut: the Kc sentence is gone, and the replay line is now "Season replay: coming."
+  - The bold lead-ins are merged into one plain paragraph: "the crop spent 0 hours past the stress line".
+  - Paragraphs are capped at 60ch and captions at 72ch.
+  - "minimum" replaces "level", and the crops legend now shows on phones.
+- **Vs timer:**
+  - The chart key's Pour swatch shows a blue dot and an orange dot, matching the chart.
+  - The caption reads "Only the decider differs." ("brain" is off the glossary).
+  - At start it reads "Started 8:00 AM", not "0 min of data".
+- **Small fixes:**
+  - The Slider has no layout transition and gets a 28px thumb on touch screens.
+  - Weather bars have a 15% floor, so a dry day doesn't look like a dashed rule.
+  - Agent notes sit inline next to the names, and the activity log is capped at 560px.
+- **Skipped, critic m5c:** rewording "a real drink" inside the brain's quoted sentences. Those sentences mirror `brain.py` word for word, so display shaping stops at the prefix and the decimal.
+
+### Numbers
+- **One soil value everywhere:** `fh.nowPct()` / `nowPctB()`, the 6-reading median. It is used on Live tier 1, the Vs timer boxes, the stale-call check and B's drawing. The raw reading is no longer shown beside it.
+- One decimal on measured values, tabular numerals, and thousands separators in ml.
+- The chart's wet band is ink at 5%, not timer orange (visual T15).
+
+### Render rates
+B's `useSim(hz)` / `useSimValue(read)` replace the 10 Hz App re-render:
+- LiveNow and Controls: 4 Hz
+- TheCall and Vs timer: 2 Hz
+- LogTabs: 1 Hz
+- The clock: once per sim second
+- The slider and crops: only when the minimum changes
+
+### Words on screen (default state, 1440x900, logs excluded)
+| Page | Before | After |
+|---|---:|---:|
+| Live (start / after 18 h) | 369 / 419 | 251 / 277 |
+| Vs timer (start / after 18 h) | 177 / 178 | 125 / 116 |
+| Outside | 704 | 331 |
+| Total (start) | 1,250 | 707 |
+| Phone header height | 258 px | 93 px |
+
+### Where A departed from the audits
+- **"No probe on this box"** (copy.md) would be wrong, because box B has a soil probe. It reads "No temp probe".
+- **The "Read … s ago" tick stays in tenths.** It updates at 4 Hz, not 10. Whole seconds (motion.md P2.6) would read "0 s ago" forever at 1x, because a reading arrives every second, and would lose the proof that the numbers are live.
+- **The Agent team tab's "Last call"** shows only when the live call has gone stale. A fresh call is already word for word in the right column (say it once).
+- **Crops rows say "needs 56%" on stressed rows** instead of copy.md's "stressed below 56%": the need, in 2 words.
+
+### Left open (round 4)
+- The season replay, per-crop Kc and "A whole field" are unchanged from round 3.
+- The Vs timer chart still sets its tooltip from an effect (motion.md P3). It is cheaper at 2 Hz but not yet moved to a ref.
+
+## Round 4: motion and the drawing (builder B)
+
+### Rendering
+- App no longer re-renders on sim ticks.
+- One rAF loop (`src/motion.js`) steps the sim first, then notifies subscribers (`useSim(hz)` / `useSimValue(read, hz)` in `useFarmHand.js`), then the drawing writes SVG attributes directly.
+- Measured at 1440x900 on `#/`, idle:
+  - dev: 27 fps -> 58 fps, rAF p95 150 -> 16.8 ms, script 823 -> 223 ms/s.
+  - prod: script 173 -> 72 ms/s.
+- `#/control`: dev script 506 -> 147 ms/s; prod 107 -> 44 ms/s.
+
+### Motion between readings
+- A critically damped spring, solved exactly per frame: response 0.9 s for the drawing (0.2 s when fast-forwarding), 0.35 s for numbers (Roll).
+- Velocity carries across new readings.
+- One transform moves the waterline, the wet layer and its chip together, and the soil color comes from the same spring value.
+- No CSS transitions on SVG geometry.
+- Roll renders its children once, so it can't flash the final value. It formats with thousands separators (1,500).
+
+### The pour (the one authored moment, every beat from data)
+- The relay LED turns on.
+- Water fills the tube from the pump in 400 ms. When the tube is pinched, it stops at the clamp.
+- A tapered stream extends in 120 ms (accelerating, gravity), and its highlight moves with the pour's own elapsed ms.
+- A wet patch under the nozzle grows with the ml. It fades as the probe rises by what the learned %/s says the pour is worth.
+- The ml chip counts, then holds the total. When the sim's soak result lands, it becomes the receipt ("+4.1% from 100 ml", held 5 s, 150 ms exit).
+- On stop, the stream falls away (150 ms) and the tube drains back (500 ms).
+- Fast-forward: a pour that lasts a single frame still plays (300 ms minimum). At 10 min/s and above, only the chip shows.
+- Removed: marching ants, metronome drops, pump buzz.
+- The cup level drops continuously.
+
+### Other motion
+- Heartbeat: a 300 ms blip, at most one per 800 ms, steady at speed.
+- The target line and chip stay for 20 real seconds after a run ends.
+- Alert exit: opacity only, 150 ms. The enter is delayed 60 ms so it doesn't double-expose with the call.
+
+### Reduced motion
+- Every value is written directly; color, the wet patch, ml, the receipt and the waterline all still change.
+- The tube is on or off instantly, and the stream is static.
+- Chips fade in 100 ms, opacity only.
+
+### Drawing
+- One scale for the side view. The relay and ESP32 sit in a dashed "from above" inset at 0.72 scale (audit D1 option A).
+- The pump leads are one bundled pair lying on the table behind the tote.
+- Probe cables turn and hang down to the ESP32 header, and every wire ends in a dupont housing on a pin.
+- One label system: halo text plus a 1px leader and a 2px dot for parts. White chips, with width measured from the text, are only for data over the soil (waterline (modeled), target, min, °C, the pour chip).
+- Soil: three coprime speckle tiles (13/17/23), an uneven surface heaved at each probe, and darker in its own color below the waterline.
+- DS18B20: a black cable into a steel can, with the tip ramping from temp.tip to temp.main and the °C value beside it.
+- The pinch clamp sits on the tube at 28% of its length, and the water stops there.
+- No wet patch for a hand pour.
+- Line weights: plastic 2, cables 2.5, USB 4, detail 1, tube 7.
+- Soil color maps over the working band (min - 10 to wet + 5), so a 4% pour is visible. Presentation only.
+
+### Fix round (builder B, final critic)
+- **No-water pours (critic M5).**
+  - When a pour moves no water (tube pinched, or the cup empty, so the cup level never drops), the drawing's chip counts pump seconds ("3.2 s pumped") and then holds "8 s pumped, no water".
+  - It never shows ml or a % receipt for such a pour.
+  - Pours that moved water keep "+100 ml" and then "+4.1% from 100 ml".
+- **No stale results (m10).** The drawing ignores pours and soak results more than 30 sim s old when they arrive. So Skip 6 h and fast-forward frames can't pop up an old receipt.
+- **Hand pour cue (m9).**
+  - When the pour detector reports a hand pour, a wet spot appears in the soil at x≈410, away from the nozzle. Its size comes from the detected rise.
+  - It holds 1.5 s, then fades over 4.5 s. There's no chip.
+  - It appears when the detector fires, about 12 s after the water goes in; this is the same moment as the banner.
+- **Alert alignment (m11).** The alert now sits flush with the column (left 0, right 0).
+- **Chart empty state (m2).** "No readings yet" is drawn between the 50% and 75% gridlines.
+- **Phone demo levers (m13).** On phones they form a 2x2 grid; wider screens keep one row.
+- **Cleanup (m15).** The legacy App tick is removed from useFarmHand.js.
+
 ## Round 3: PLAN.md section 5e, three pages and two boxes (wins over 5d and round 1 where they differ)
 
 5e says what goes on which page; 5d still sets the look (type, radii, motion, the human-made rules). The model is `ui/sim.js` in its 5e two-box mode (box B is a second simulated box watered only by the chip's timer).

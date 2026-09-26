@@ -1,43 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 
 /*
- * Alerts slide in over the top of the right column (PLAN 5d): never a modal, never pushing the layout.
- * 10 px + opacity, 250 ms strong ease-out (emil-design-eng). Reduced motion: opacity only.
- * They don't time out (WCAG 2.2.1); they clear when the condition ends or when closed.
+ * Alerts slide in over the call in the right column (PLAN 5d): never a modal, never pushing the layout.
+ * Enter: 10 px + opacity, 250 ms strong ease-out, 60 ms after the content under it starts fading, so the two
+ * never double-expose. Exit: opacity only, 150 ms (exit faster than enter; Emil, impeccable). Reduced motion:
+ * opacity only both ways. They don't time out (WCAG 2.2.1); they clear when the condition ends or when closed.
  */
+const EXIT_MS = 150;
+
 export default function AlertOverlay({ alert }) {
   const [closed, setClosed] = useState(null);
-  const [shown, setShown] = useState(false);
   const key = alert?.key;
   const open = !!alert && key !== closed;
+  // Keep the last alert on screen while it fades out.
+  const last = useRef(null);
+  if (open) last.current = alert;
+  const [phase, setPhase] = useState(open ? 'enter' : 'gone');   // 'enter' -> 'in' -> 'out' -> 'gone'
+
   useEffect(() => {
-    if (!open) { setShown(false); return undefined; }
-    const r = requestAnimationFrame(() => setShown(true));
-    return () => cancelAnimationFrame(r);
+    if (open) {
+      setPhase('enter');
+      const r = requestAnimationFrame(() => requestAnimationFrame(() => setPhase('in')));
+      return () => cancelAnimationFrame(r);
+    }
+    setPhase((p) => (p === 'gone' ? 'gone' : 'out'));
+    const t = setTimeout(() => setPhase('gone'), EXIT_MS);
+    return () => clearTimeout(t);
   }, [open, key]);
-  if (!open) return null;
+
+  const a = open ? alert : last.current;
+  if (!a || phase === 'gone') return null;
+  const shown = phase === 'in';
+  const leaving = phase === 'out';
   return (
     <Box
+      aria-hidden={leaving || undefined}
       sx={(t) => ({
-        position: 'absolute', top: 0, left: { xs: 16, lg: 24 }, right: { xs: 16, lg: 24 }, zIndex: 5,
-        opacity: shown ? 1 : 0, transform: shown ? 'none' : 'translateY(-10px)',
-        transition: `opacity ${t.dur.panel}ms ${t.ease}, transform ${t.dur.panel}ms ${t.ease}`,
+        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 5,   // flush with the text it covers
+        opacity: shown ? 1 : 0,
+        transform: shown || leaving ? 'none' : 'translateY(-10px)',
+        pointerEvents: leaving ? 'none' : undefined,
+        transition: leaving
+          ? `opacity ${EXIT_MS}ms ${t.ease}`
+          : `opacity ${t.dur.panel}ms ${t.ease} 60ms, transform ${t.dur.panel}ms ${t.ease} 60ms`,
         '@media (prefers-reduced-motion: reduce)': { transform: 'none' },
       })}
     >
       <Alert
         variant="filled"
-        severity={alert.severity}
-        role={alert.severity === 'error' ? 'alert' : 'status'}
-        onClose={() => setClosed(key)}
+        severity={a.severity}
+        role={a.severity === 'error' ? 'alert' : 'status'}
+        onClose={() => setClosed(a.key)}
         slotProps={{ closeButton: { sx: { width: 44, height: 44 } } }}
         sx={(t) => ({ boxShadow: `0 6px 16px ${t.palette.shadow}` })}
       >
-        <AlertTitle sx={{ fontWeight: 700, mb: 0.25 }}>{alert.title}</AlertTitle>
-        {alert.msg}
+        <AlertTitle sx={{ fontWeight: 700, mb: 0.25 }}>{a.title}</AlertTitle>
+        {a.msg}
       </Alert>
     </Box>
   );

@@ -17,8 +17,9 @@ const CODE = "'Atkinson Hyperlegible Mono Variable', ui-monospace, monospace";
 const tnum = { fontVariantNumeric: 'tabular-nums' };
 const px = (n) => `${n / 16}rem`;
 
-// One radius scale (taste-skill 4.4 "shape consistency lock"): 6px controls, 12px panels, 999px chips only.
-export const RADIUS = { control: 6, panel: 12, chip: 999 };
+// One radius scale (taste-skill 4.4 "shape consistency lock"): 6px controls, 12px panels (the drawing only), pills.
+// In `sx`, a NUMBER radius is multiplied by shape.borderRadius (6), so pills and panels use these strings there.
+export const RADIUS = { control: 6, panel: 12, chip: 999, pill: '999px', panelPx: '12px' };
 // Motion (emil-design-eng): strong ease-out, never ease-in, UI under 300 ms.
 export const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 export const DUR = { press: 120, tip: 150, panel: 250, number: 250 };
@@ -27,6 +28,11 @@ const TIER1 = 'clamp(3.5rem, 5vw, 6rem)';
 
 export const theme = createTheme({
   spacing: 8,
+  // One easing family for MUI internals too (motion audit P3): no M3 legacy cubic-bezier(0.4,0,0.2,1).
+  transitions: {
+    easing: { easeInOut: EASE_OUT, easeOut: EASE_OUT, easeIn: EASE_OUT, sharp: EASE_OUT },
+    duration: { shortest: 120, shorter: 150, short: 200, standard: 250, complex: 250, enteringScreen: 250, leavingScreen: 150 },
+  },
   shape: { borderRadius: RADIUS.control },
   palette: {
     mode: 'light',
@@ -36,7 +42,7 @@ export const theme = createTheme({
     error: { main: '#c62b2b', light: '#fcebeb' },                 // 5.6:1
     success: { main: '#1f8a4c', text: '#1b7a43', light: '#bfe3cc' }, // main for fills; text 5.37:1
     warning: { main: '#b54708', light: '#fff4e5', contrastText: INK },
-    background: { default: '#f4f6f8', paper: '#ffffff' },
+    background: { default: '#ffffff', paper: '#ffffff' },   // white page: sections are split by space and rules, not cards (visual audit F1)
     text: { primary: INK, secondary: MUTED },
     divider: LINE,
     moisture: { main: AI, light: '#e8f0fc', tip: '#8fb6f0' },
@@ -51,19 +57,21 @@ export const theme = createTheme({
       stage: '#eef1f4', table: '#efe9e0', tableEdge: '#ddd3c5', soilDry: '#c9b498', soilWet: '#3a291e', wet: '#241810',
       water: '#4f95d8', cupWater: '#8fc1ea', tube: '#d5dee6', plastic: '#aebccb', wireRed: '#d33a2c', wireBlack: '#1f2328',
       // Only one red thing on screen (von Restorff): the clamp, relay LED and dry LED are not red.
+      // The relay is hardware slate, not AI blue (motion audit D13). The probe tip ramps temp.tip -> temp.main (D9).
       clamp: '#3a4150', clampDark: '#262b35', relayOn: '#f0a030', relayOff: '#3a2a22', ledOk: '#2fbf6a', ledPump: '#2f7de1', ledDry: '#e0a13a',
-      tipCool: '#3d7fc4', tipWarm: '#e07a2e', targetLine: INK, tag: '#ffffff',
-      probe: '#b8c0c9', probeEdge: '#8c96a1', label: '#4b5563', labelDim: MUTED,
-      relayEdge: '#174a95', espBoard: '#1a1c20', probeHead: '#1d1f24', relayTerminal: '#1e8a4a', relayBoard: '#1f5fbf', probeBlade: '#23262c', relayCoil: '#2a74e0', pump: '#2b2f36', usb: '#2c3036', espLed: '#2f6fd6', probeChip: '#34373e', wireGrey: '#4a4f57', jumperGrey: '#8a8f98', espPort: '#9aa3ad', pins: '#c7a64a', espShield: '#c9cdd2', screw: '#c9d1d9', rim: '#e8eef3', jumperWhite: '#f1f1f1',
+      targetLine: INK, tag: '#ffffff',
+      probe: '#b8c0c9', probeEdge: '#8c96a1', label: '#4b5563', labelDim: MUTED, leader: alpha('#4b5563', 0.6),
+      relayEdge: '#23384f', espBoard: '#1a1c20', probeHead: '#1d1f24', relayTerminal: '#1e8a4a', relayBoard: '#34506e', probeBlade: '#23262c', relayCoil: '#46688c', pump: '#2b2f36', usb: '#2c3036', espLed: '#2f6fd6', probeChip: '#34373e', wireGrey: '#4a4f57', jumperGrey: '#8a8f98', espPort: '#9aa3ad', pins: '#c7a64a', espShield: '#c9cdd2', screw: '#c9d1d9', rim: '#e8eef3', jumperWhite: '#f1f1f1',
     },
     serial: { bg: '#10141a', fg: '#b9c6d3' },  // 10.9:1
   },
   typography: {
     fontFamily: BODY,
-    // M3 type scale (m3.material.io/styles/typography/type-scale-tokens); 12px is the floor.
+    // Six sizes only (impeccable distill/typeset): 12 / 14 / 16 / 24 / 40 / tier1. 12px is the floor.
+    // Bricolage (DISPLAY) is for the app name, page titles and big numbers; everything else is Atkinson.
     h1: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, letterSpacing: '-0.01em' },
-    h2: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(32), lineHeight: 40 / 32, letterSpacing: '-0.01em' },
-    h3: { fontFamily: DISPLAY, fontWeight: 600, fontSize: px(20), lineHeight: 28 / 20 },
+    h2: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, letterSpacing: '-0.01em' },
+    h3: { fontFamily: BODY, fontWeight: 700, fontSize: px(16), lineHeight: 24 / 16 },
     h4: undefined, h5: undefined, h6: undefined,
     subtitle1: { fontWeight: 600, fontSize: px(16), lineHeight: 24 / 16 },
     subtitle2: { fontWeight: 600, fontSize: px(14), lineHeight: 20 / 14 },
@@ -73,9 +81,12 @@ export const theme = createTheme({
     button: { fontWeight: 600, fontSize: px(14), lineHeight: 20 / 14, textTransform: 'none' },
     overline: { fontWeight: 600, fontSize: px(12), lineHeight: 16 / 12, textTransform: 'none', letterSpacing: 0 },
     tier1: { fontFamily: DISPLAY, fontWeight: 700, fontSize: TIER1, lineHeight: 1, letterSpacing: '-0.02em', ...tnum },
-    readout: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(32), lineHeight: 40 / 32, ...tnum },
+    readout: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(24), lineHeight: 32 / 24, ...tnum },
     readoutXL: { fontFamily: DISPLAY, fontWeight: 700, fontSize: px(40), lineHeight: 48 / 40, ...tnum },
-    unit: { fontFamily: BODY, fontWeight: 400, fontSize: px(20), lineHeight: 28 / 20, color: MUTED },
+    // A status line (pump state, target stepper value): 24px in the body face, so Bricolage keeps meaning "a number".
+    status: { fontFamily: BODY, fontWeight: 600, fontSize: px(24), lineHeight: 32 / 24, ...tnum },
+    // Units ride inside big numbers at half their size, in the number's face at weight 400.
+    unit: { fontWeight: 400, fontSize: '0.5em', color: MUTED },
     data: { fontFamily: BODY, fontWeight: 600, fontSize: px(14), lineHeight: 20 / 14, ...tnum },
     code: { fontFamily: CODE, fontWeight: 500, fontSize: px(12), lineHeight: 18 / 12 },
   },
@@ -105,7 +116,8 @@ theme.components = {
   },
   MuiTypography: {
     defaultProps: {
-      variantMapping: { tier1: 'p', readout: 'p', readoutXL: 'p', unit: 'span', data: 'span', code: 'span', h3: 'h3' },
+      // MUI maps subtitle1/2 to <h6>, which skipped heading levels (visual audit F9).
+      variantMapping: { tier1: 'p', readout: 'p', readoutXL: 'p', status: 'p', unit: 'span', data: 'span', code: 'span', h3: 'h3', subtitle1: 'p', subtitle2: 'p' },
     },
   },
   MuiPaper: {
@@ -118,7 +130,9 @@ theme.components = {
     defaultProps: { disableElevation: true },
     styleOverrides: {
       root: { minHeight: 40, whiteSpace: 'nowrap', ...pressable, '&.Mui-focusVisible': focus, [coarse]: { minHeight: 44 } },
+      sizeSmall: { fontSize: px(14) },
       sizeLarge: { minHeight: 48, fontSize: px(16) },
+      text: { paddingLeft: 8, paddingRight: 8 },
     },
   },
   MuiIconButton: {
@@ -127,7 +141,7 @@ theme.components = {
   MuiToggleButton: {
     styleOverrides: {
       root: {
-        textTransform: 'none', fontWeight: 600, fontSize: px(13), lineHeight: '16px', color: MUTED, padding: '0 12px', whiteSpace: 'nowrap', ...pressable,
+        textTransform: 'none', fontWeight: 600, fontSize: px(14), lineHeight: '16px', color: MUTED, padding: '0 12px', whiteSpace: 'nowrap', ...pressable,
         '&:hover': { backgroundColor: alpha(INK, 0.06) },
         // Selected = solid ink (17.6:1), not blue: blue means AI, and these also pick speed and chart window.
         '&.Mui-selected': { color: '#fff', backgroundColor: INK },
@@ -138,12 +152,12 @@ theme.components = {
     },
   },
   MuiTab: {
-    styleOverrides: { root: { textTransform: 'none', fontWeight: 600, fontSize: px(14), minHeight: 48, '&.Mui-focusVisible': focus } },
+    styleOverrides: { root: { textTransform: 'none', fontWeight: 600, fontSize: px(14), minHeight: 48, minWidth: 0, paddingLeft: 12, paddingRight: 12, '&.Mui-focusVisible': focus } },
   },
-  MuiChip: { styleOverrides: { root: { borderRadius: RADIUS.chip }, label: { fontWeight: 600 } } },
+  MuiChip: { styleOverrides: { root: { borderRadius: RADIUS.chip, fontSize: px(14) }, sizeSmall: { height: 28 }, label: { fontWeight: 600 } } },
   MuiTableCell: {
     styleOverrides: {
-      root: { fontSize: px(13), ...tnum, borderColor: LINE },
+      root: { fontSize: px(14), ...tnum, borderColor: LINE },
       sizeSmall: { height: 36, padding: '4px 8px' },
       head: { fontSize: px(12), lineHeight: '16px', fontWeight: 600, color: MUTED },
     },

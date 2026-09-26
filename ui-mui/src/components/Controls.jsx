@@ -8,17 +8,17 @@ import Chip from '@mui/material/Chip';
 import Alert from '@mui/material/Alert';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import GpsFixedIcon from '@mui/icons-material/GpsFixed';
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import StopIcon from '@mui/icons-material/Stop';
 import { CFG } from '../sim.js';
-import { clamp, signed } from '../format.js';
+import { clamp, secs, signed } from '../format.js';
+import { useSim } from '../useFarmHand.js';
 
 const T_LO = CFG.DRY_PCT, T_HI = CFG.WET_PCT - CFG.BAND;
 
-// Hit the Target stepper + Go, then Test pour / Stop pump. Stop pump turns red only while the pump runs
-// and no red alert is up (one red thing at a time).
+// Target stepper + Go (the one filled button here), then Test pour and Stop pump as text buttons.
+// Stop pump turns red only while the pump runs and no red alert is up (one red thing at a time).
 export default function Controls({ fh, act, redTaken }) {
+  useSim(4);
   const [tVal, setTVal] = useState(CFG.TARGET_PCT);
   const [msg, setMsg] = useState('');
   const run = fh.run;
@@ -27,42 +27,48 @@ export default function Controls({ fh, act, redTaken }) {
   useEffect(() => { if (run.target != null) setTVal(run.target); }, [run.t0]); // eslint-disable-line react-hooks/exhaustive-deps
   const done = !fh.tgt && run.phase !== 'idle';
   const pumping = fh.board.activePot === 'A';
+  const red = pumping && !redTaken;
 
   let status = '';
   if (fh.tgt) {
-    status = `Pulse ${run.pulses.length + 1}: ${run.phase === 'pulsing' || pumping ? 'pumping' : 'waiting for it to settle'}.`;
+    status = `Pulse ${run.pulses.length + 1}: ${run.phase === 'pulsing' || pumping ? 'pumping' : 'settling'}`;
   } else if (done) {
-    // The receipt. The pump state above already says "Locked at 54.8%"; the alert carries a fault.
+    // The receipt. A fault's reason is in the red alert above, so it isn't repeated here.
     const n = run.pulses.length;
-    const word = { locked: `Locked at ${run.now.toFixed(1)}% (target ${run.target}%)`, fault: "Stopped, water isn't reaching the soil", over: 'Overshot', short: 'Out of pulses',
-      blocked: 'Stopped by the safety rules', stopped: 'Stopped by hand' }[run.phase] || 'Stopped';
-    status = `${word}. ${n} ${n === 1 ? 'pulse' : 'pulses'}, ${run.secs} s of pumping, ${run.ml} ml, took ${run.took_s} s.`;
-    if (run.phase === 'over' || run.phase === 'blocked') status += ` ${run.msg}`;
+    // sim.js says "Safety rules stopped it: <why>." Say it once: "Blocked: <why>."
+    if (run.phase === 'blocked' && n === 0) status = `Blocked: ${run.msg.replace(/^Safety rules stopped it:\s*/, '')}`;
+    else {
+      const word = { locked: `Locked at ${run.now.toFixed(1)}%`, fault: 'Stopped', over: 'Overshot', short: 'Out of pulses', blocked: 'Blocked', stopped: 'Stopped' }[run.phase] || 'Stopped';
+      // A pour that moved no water (fault, pinched tube, empty cup) is reported in pump seconds, never as ml delivered.
+      const noWater = run.phase === 'fault' || fh.world.pinched || fh.world.cupMl <= 0;
+      const pl = `${n} ${n === 1 ? 'pulse' : 'pulses'}`;
+      status = noWater
+        ? `${word}. ${pl}, ${run.secs} s pumped, no water reached the soil.`
+        : `${word}. ${pl}, ${run.secs} s, ${run.ml} ml, ${secs(run.took_s)}.`;
+      if (run.phase === 'over' || run.phase === 'blocked') status += ` ${run.msg.replace(/^Safety rules stopped it:\s*/, '')}`;
+    }
   }
 
   return (
-    <Box component="section" aria-labelledby="target-title">
-      <Stack direction="row" useFlexGap sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-        <Typography variant="h3" id="target-title" sx={{ flex: { xs: '1 0 100%', sm: 1 }, whiteSpace: 'nowrap' }}>Hit a target</Typography>
-        <Stack direction="row" sx={{ alignItems: 'center', border: 1, borderColor: 'divider', borderRadius: 1 }} role="group" aria-label="Target moisture">
+    <Box component="section" aria-label="Target">
+      <Stack direction="row" useFlexGap sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+        <Typography variant="body2" id="target-label" sx={{ fontWeight: 600 }}>Target</Typography>
+        <Stack direction="row" sx={{ alignItems: 'center', border: 1, borderColor: 'divider', borderRadius: 1 }} role="group" aria-labelledby="target-label">
           <IconButton aria-label="Lower target" onClick={() => set(tVal - 1)} disabled={tVal <= T_LO}><RemoveIcon /></IconButton>
-          <Typography sx={{ width: 56, textAlign: 'center', fontWeight: 600, fontSize: '1.25rem', lineHeight: '28px', fontVariantNumeric: 'tabular-nums' }} aria-live="polite">{tVal}%</Typography>
+          <Typography variant="status" sx={{ width: 64, textAlign: 'center' }} aria-live="polite">{tVal}%</Typography>
           <IconButton aria-label="Raise target" onClick={() => set(tVal + 1)} disabled={tVal >= T_HI}><AddIcon /></IconButton>
         </Stack>
         <Button
-          sx={{ ml: 'auto' }}
           variant="contained"
           color="ink"
-          startIcon={<GpsFixedIcon />}
           disabled={!!fh.tgt}
           onClick={() => { const r = act((f) => f.startTarget(tVal)); setMsg(r.ok ? '' : r.why); }}
+          sx={{ px: 3 }}
         >
           Go
         </Button>
+        <Typography variant="caption" color="text.secondary">{T_LO}-{T_HI}%, up to {CFG.MAX_PULSES} pulses</Typography>
       </Stack>
-      <Typography variant="caption" color="text.secondary" component="p" sx={{ mt: 0.75 }}>
-        {T_LO}-{T_HI}%, up to {CFG.MAX_PULSES} short pulses.
-      </Typography>
 
       {fh.tgt && (run.pulses?.length > 0 || fh.tgt.state === 'settle') && (
         <Stack direction="row" useFlexGap sx={{ flexWrap: 'wrap', gap: 0.75, mt: 1.5 }} aria-label="Pulses">
@@ -76,24 +82,19 @@ export default function Controls({ fh, act, redTaken }) {
         </Typography>
       )}
 
-      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+      <Stack direction="row" spacing={1} sx={{ mt: 1.5, ml: -1 }}>
         <Button
-          fullWidth
-          variant="outlined"
+          variant="text"
           color="inherit"
-          startIcon={<WaterDropOutlinedIcon />}
-          onClick={() => { const r = act((f) => f.testPour(5)); setMsg(r.watered ? '' : `Refused: ${r.refused_because}.`); }}
-          sx={{ borderColor: 'divider' }}
+          onClick={() => { const r = act((f) => f.testPour(5)); setMsg(r.watered ? '' : `Not now: ${r.refused_because}.`); }}
         >
           Test pour 5 s
         </Button>
         <Button
-          fullWidth
-          variant="outlined"
-          color={pumping && !redTaken ? 'error' : 'inherit'}
+          variant={red ? 'outlined' : 'text'}
+          color={red ? 'error' : 'inherit'}
           startIcon={<StopIcon />}
           onClick={() => { act((f) => f.stop()); setMsg(''); }}
-          sx={pumping && !redTaken ? {} : { borderColor: 'divider' }}
         >
           Stop pump
         </Button>

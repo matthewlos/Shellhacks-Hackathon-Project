@@ -26,7 +26,7 @@ export function drawAB(cv, fh, win, hoverX, hhmm, C) {
   const span = win === 'all' ? Math.max(3600, fh.t) : win * 3600;
   const tEnd = Math.max(span, fh.t), tStart = tEnd - span;
   const X = (t) => Lp + ((t - tStart) / span) * plotW;
-  const lo = 15, hi = 85;
+  const lo = 25, hi = 75;
   const Y = (v) => top + (1 - (clamp(v, lo, hi) - lo) / (hi - lo)) * plotH;
 
   const hist = fh.history;
@@ -46,17 +46,18 @@ export function drawAB(cv, fh, win, hoverX, hhmm, C) {
     ctx.fillText(v + '%', 0, Y(v));
   }
   ctx.textAlign = 'right';
-  ctx.fillText(`wet above ${CFG.WET_PCT}%`, W - R - 4, top + 10);
+  ctx.fillText(`wet ${CFG.WET_PCT}%`, W - R - 4, top + 10);
   // baseline, dashed
   ctx.strokeStyle = C.baseline; ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(Lp, Y(CFG.DRY_PCT)); ctx.lineTo(W - R, Y(CFG.DRY_PCT)); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle = C.muted;
-  ctx.fillText(`baseline ${CFG.DRY_PCT}%`, W - R - 4, Y(CFG.DRY_PCT) + 10);
+  ctx.fillText(`min ${CFG.DRY_PCT}%`, W - R - 4, Y(CFG.DRY_PCT) + 10);
   ctx.textAlign = 'left';
 
   if (pts.length < 2) {
     ctx.textAlign = 'center'; ctx.font = `14px ${C.font}`;
-    ctx.fillText('Waiting for readings…', Lp + plotW / 2, top + plotH / 2);
+    // between gridlines, so no line runs through the words
+    ctx.fillText('No readings yet', Lp + plotW / 2, (Y(50) + Y(75)) / 2);
     ctx.textAlign = 'left'; ctx.font = `12px ${C.font}`;
   }
   const line = (key, color) => {

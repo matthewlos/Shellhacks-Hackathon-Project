@@ -18,7 +18,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <TopBar {...sim} route={route} />
-      <Box component="main" sx={{ maxWidth: 1880, mx: 'auto', px: { xs: 2, md: 3 }, pt: 2, pb: 4 }}>
+      <Box component="main" sx={{ maxWidth: 1600, mx: 'auto', px: { xs: 2, md: 3 }, pt: { xs: 2, md: 3 }, pb: 6 }}>
         {route === '/' && <LivePage fh={fh} act={act} frac={frac} />}
         {route === '/control' && <ControlPage fh={fh} act={act} frac={frac} />}
         {route === '/sim' && <SimPage fh={fh} act={act} />}

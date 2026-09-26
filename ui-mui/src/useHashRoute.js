@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 // Hash routes (#/, #/control, #/sim) so the static build works from any folder, no server rewrites needed.
 export const ROUTES = [
-  { path: '/', label: 'Live box' },
-  { path: '/control', label: 'Control' },
-  { path: '/sim', label: 'Simulation' },
+  { path: '/', label: 'Live' },
+  { path: '/control', label: 'Vs timer' },
+  { path: '/sim', label: 'Outside' },
 ];
 const read = () => {
   const p = (window.location.hash || '#/').slice(1) || '/';

@@ -478,7 +478,7 @@
       return { baseline: CFG.DRY_PCT, target: CFG.TARGET_PCT, wet_limit: CFG.WET_PCT };
     }
     demoPinch() { this.world.pinched = !this.world.pinched; return this.world.pinched; }
-    refill() { this.world.cupMl = CFG.PUMP_CUP_ML; }
+    refill() { this.world.cupMl = CFG.PUMP_CUP_ML; this.worldB.cupMl = CFG.PUMP_CUP_ML; }   // a person tops up both pump cups
 
     // ----- target.py -----
     startTarget(pct) {
