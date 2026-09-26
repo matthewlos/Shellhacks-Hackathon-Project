@@ -15,6 +15,7 @@
 
 static BLECharacteristic *reading = nullptr;
 static bool connected = false;
+static bool stopped = false;
 
 class ServerCallbacks : public BLEServerCallbacks
 {
@@ -70,6 +71,7 @@ StatusCode_e    BLE_send(const SoilReading_t *soil, const TempReading_t *temp)
     }
     snprintf(msg + n, sizeof(msg) - n, "],\"p\":[%d,%d],\"w\":\"%s\"}", RELAY_is_on(0), RELAY_is_on(1), WIFI_label());
 
+    if (stopped || !reading) return STATUS_OK;
     reading->setValue((uint8_t *)msg, strlen(msg));
     if (connected)
     {
@@ -77,6 +79,14 @@ StatusCode_e    BLE_send(const SoilReading_t *soil, const TempReading_t *temp)
     }
 
     return STATUS_OK;
+}
+
+void    BLE_stop(void)
+{
+    if (stopped) return;
+    stopped = true;
+    reading = nullptr;
+    BLEDevice::deinit(true);
 }
 
 bool    BLE_connected(void)

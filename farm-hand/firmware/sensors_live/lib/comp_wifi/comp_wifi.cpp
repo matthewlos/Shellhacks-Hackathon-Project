@@ -5,6 +5,8 @@
 #include "esp_wpa2.h"
 #include "ca_usertrust.h"
 #include <WiFiClientSecure.h>
+#include <Preferences.h>
+extern "C" void BLE_stop(void);     /* comp_ble: frees Bluetooth memory for the portal TLS */
 
 #include "secrets.h"            /* include/secrets.h: WIFI_SSID, WIFI_ENTERPRISE, WIFI_USER, WIFI_PASSWORD (never committed) */
 
@@ -146,12 +148,86 @@ static void WIFI_dump(const char *step, String body)
     }
 }
 
+#define PORTAL_UA "Mozilla/5.0 (Macintosh) AppleWebKit/605.1.15 Safari/605.1.15"
+
+/* One HTTPS request to the portal, keeping cookies. Prints heap + TLS error on failure (the portal is FIU's own server). */
+static int WIFI_portal_req(const String &url, const String &post, String &cookies, String &body, String &location)
+{
+    WiFiClientSecure tls;
+    tls.setInsecure();
+    tls.setTimeout(12);
+    HTTPClient h;
+    const char *keys[] = {"Location", "Set-Cookie"};
+    h.setFollowRedirects(HTTPC_DISABLE_FOLLOW_REDIRECTS);
+    h.setTimeout(12000);
+    h.setUserAgent(PORTAL_UA);
+    h.begin(tls, url);
+    h.collectHeaders(keys, 2);
+    if (cookies.length()) h.addHeader("Cookie", cookies);
+    int code;
+    if (post.length())
+    {
+        h.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        code = h.POST(post);
+    }
+    else
+    {
+        code = h.GET();
+    }
+    if (code < 0)
+    {
+        char err[100] = "";
+        tls.lastError(err, sizeof(err));
+        Serial.printf("PORTAL|tls_fail|code=%d heap=%u max_block=%u err=%s\n", code, ESP.getFreeHeap(), ESP.getMaxAllocHeap(), err);
+    }
+    String c = h.header("Set-Cookie");
+    if (c.length())
+    {
+        int semi = c.indexOf(';');
+        cookies += (cookies.length() ? "; " : "") + (semi > 0 ? c.substring(0, semi) : c);
+    }
+    location = h.header("Location");
+    body = (code > 0) ? h.getString() : "";
+    h.end();
+    return code;
+}
+
+/* Press "accept" on FIU_WiFi's Cisco ISE page ourselves: follow the gateway link to the policy page, read the one-time
+   token, POST aupAccepted=true. Same two requests tools/fiu_portal_accept.py sends from the laptop. */
+static bool WIFI_accept_portal(String link)
+{
+    String cookies, body, loc;
+    String base = link.substring(0, link.indexOf("/portal/")) + "/portal";
+    for (int hop = 0; hop < 5; hop++)
+    {
+        int code = WIFI_portal_req(link, "", cookies, body, loc);
+        Serial.printf("PORTAL|accept_get|hop=%d code=%d next=%s\n", hop, code, loc.c_str());
+        if (code <= 0) return false;
+        if (loc.length() == 0) break;
+        link = loc.startsWith("/") ? base.substring(0, base.indexOf("/portal")) + loc : loc;
+    }
+    int t = body.indexOf("name=\"token\" value=\"");
+    if (t < 0 || body.indexOf("AupSubmit") < 0)
+    {
+        Serial.println("PORTAL|accept|no policy form on the page");
+        return false;
+    }
+    t += 20;
+    String token = body.substring(t, body.indexOf('"', t));
+    int code = WIFI_portal_req(base + "/AupSubmit.action?from=AUP", "token=" + token + "&aupAccepted=true", cookies, body, loc);
+    bool ok = body.indexOf("successfully connected") >= 0;
+    Serial.printf("PORTAL|accept|code=%d ok=%d\n", code, ok);
+    return ok;
+}
+
 /* Joined an open network but no internet: follow the redirect to the login page and print it (once per boot) */
 static void WIFI_probe_portal(void)
 {
-    static bool done = false;
-    if (done) return;
-    done = true;
+    static unsigned long last = 0;
+    static bool first = true;
+    if (!first && millis() - last < 300000UL) return;       /* once, then every 5 min while there's no internet */
+    first = false;
+    last = millis();
 
     const char *keys[] = {"Location", "Set-Cookie"};
     HTTPClient http;
@@ -164,6 +240,20 @@ static void WIFI_probe_portal(void)
     Serial.printf("PORTAL|probe|code=%d location=%s cookie=%s\n", code, loc.c_str(), http.header("Set-Cookie").c_str());
     WIFI_dump("probe_body", http.getString());
     http.end();
+
+    /* FIU_WiFi (Cisco ISE guest portal): accept it ourselves. Its 4096-bit RSA key needs more memory than is free with
+       Bluetooth running, so Bluetooth goes off for this, and a restart after brings it back (about once a day). */
+    if (loc.indexOf("/portal/gateway") >= 0)
+    {
+        BLE_stop();
+        delay(200);
+        bool ok = WIFI_accept_portal(loc);
+        Serial.printf("PORTAL|self_accept|%s\n", ok ? "done" : "failed");
+        Serial.println("PORTAL|end|");
+        Serial.flush();
+        delay(500);
+        ESP.restart();
+    }
 
     /* follow up to 4 redirects, http or https (portal certs aren't checked: we only read the page) */
     for (int hop = 0; hop < 4 && loc.length(); hop++)
@@ -191,6 +281,33 @@ static void WIFI_probe_portal(void)
         loc = next;
     }
     Serial.println("PORTAL|end|");
+}
+
+/* One-time check (remembered in flash) that FIU's portal server opens with Bluetooth off. Restarts once afterwards. */
+static void WIFI_tls_selftest(void)
+{
+    static bool done = false;
+    if (done) return;
+    done = true;
+    Preferences nv;
+    nv.begin("farmhand", false);
+    if (nv.getBool("portal_tls", false))
+    {
+        Serial.printf("PORTAL|tls_selftest|already_ok (code %d)\n", nv.getInt("portal_code", 0));
+        nv.end();
+        return;
+    }
+    BLE_stop();
+    delay(200);
+    String cookies, body, loc;
+    int code = WIFI_portal_req("https://psn07.ise.nic.fiu.edu:8455/portal/", "", cookies, body, loc);
+    Serial.printf("PORTAL|tls_selftest|ble_off code=%d heap=%u max_block=%u\n", code, ESP.getFreeHeap(), ESP.getMaxAllocHeap());
+    nv.putBool("portal_tls", true);
+    nv.putInt("portal_code", code);
+    nv.end();
+    Serial.flush();
+    delay(500);
+    ESP.restart();
 }
 
 StatusCode_e    WIFI_init(void)
@@ -237,6 +354,10 @@ void    WIFI_update(void)
     if (!online)
     {
         WIFI_probe_portal();
+    }
+    else
+    {
+        WIFI_tls_selftest();
     }
 }
 

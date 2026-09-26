@@ -20,6 +20,7 @@ extern "C" {
 StatusCode_e    BLE_init(void);
 StatusCode_e    BLE_send(const SoilReading_t *soil, const TempReading_t *temp);
 bool            BLE_connected(void);
+void            BLE_stop(void);             /* frees Bluetooth's memory (for FIU's portal TLS). Only a restart brings it back */
 
 #ifdef __cplusplus
 }

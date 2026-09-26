@@ -66,6 +66,7 @@ void sys_loop(void)
     TEMP_update(&temp);
     REPORT_send(&soil, &temp);
     BLE_send(&soil, &temp);
+    CLOUD_send(&soil, &temp);
     OLED_update(&soil, &temp);
 
     /* Wiring check every 10 s, so moving a wire shows up without a reset */

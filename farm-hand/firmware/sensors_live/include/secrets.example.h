@@ -7,4 +7,8 @@
 #define WIFI_USER       "you@school.edu"        /* ignored when WIFI_ENTERPRISE is 0 */
 #define WIFI_PASSWORD   "your password"
 
+/* Farm Hand home server: where the ESP32 posts readings, and the token it sends (same as the server's .env) */
+#define FARMHAND_URL    "https://your-server.example/farmhand/reading"
+#define FARMHAND_TOKEN  "long random token"
+
 #endif

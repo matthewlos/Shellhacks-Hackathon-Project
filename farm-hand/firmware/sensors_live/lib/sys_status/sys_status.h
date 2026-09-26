@@ -13,6 +13,7 @@ typedef enum
 
     STATUS_ERR_OLED_NOT_FOUND,
     STATUS_ERR_NO_TEMP_PROBE,
+    STATUS_ERR_CLOUD,
 
 } StatusCode_e;
 
