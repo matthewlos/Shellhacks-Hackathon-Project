@@ -39,29 +39,52 @@ ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 
 def find_port():
     if ARGS:
-        return ARGS[0]
+        return ARGS[0] if Path(ARGS[0]).exists() else None
     for p in list_ports.comports():
         d = f"{p.device} {p.description} {p.manufacturer or ''}".lower()
         if any(k in d for k in ("usbserial", "cp210", "ch340", "ch910", "silicon labs", "uart", "usbmodem")):
             return p.device
-    sys.exit("No ESP32 found on USB. Is it a data cable?")
+    return None
+
+
+def open_port():
+    """Wait for the ESP32 (unplugged or re-plugged cable), then open it without resetting the board."""
+    said = False
+    while True:
+        port = find_port()
+        if port:
+            try:
+                s = serial.Serial()
+                s.port, s.baudrate, s.timeout = port, 115200, 2
+                s.dtr = s.rts = False             # DTR/RTS drive the ESP32's reset: keep them released
+                s.open()
+                return port, s
+            except serial.SerialException:
+                pass
+        if not said:
+            print("Waiting for the ESP32 on USB (plug in a data cable)...", flush=True)
+            said = True
+        time.sleep(1)
 
 
 def main():
     url, token = secret("FARMHAND_URL"), secret("FARMHAND_TOKEN")
     urls = ([LOCAL_URL] if "--local" in sys.argv else []) + ([] if "--local-only" in sys.argv else [url])
-    port = find_port()
-    s = serial.Serial()
-    s.port, s.baudrate, s.timeout = port, 115200, 2
-    s.dtr = s.rts = False                     # DTR/RTS drive the ESP32's reset: keep them released
-    s.open()
+    port, s = open_port()
     http = requests.Session()
     http.headers.update({"X-Farmhand-Token": token, "Content-Type": "application/json"})
     print(f"USB bridge: {port} -> {' + '.join(urls)} (Ctrl-C to stop)")
     sent = fails = 0
     last_print = 0.0
     while True:
-        line = s.readline().decode("utf-8", "replace").strip()
+        try:
+            line = s.readline().decode("utf-8", "replace").strip()
+        except (serial.SerialException, OSError):
+            print("USB unplugged, waiting for it to come back...", flush=True)
+            s.close()
+            port, s = open_port()
+            print(f"USB back on {port}", flush=True)
+            continue
         if not line.startswith('{"type":"sens"'):
             continue
         try:

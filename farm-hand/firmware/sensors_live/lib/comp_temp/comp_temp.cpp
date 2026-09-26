@@ -1,6 +1,5 @@
 #include "comp_temp.h"
 
-#define TEMP_RESCAN_MS 10000
 
 /* Two data lines: D21 (temp 1) and D4 (temp 2). Probes from both are listed together. */
 OneWire oneWire(DS18B20_PIN);
@@ -13,6 +12,7 @@ static DallasTemperature *bus_of[TEMP_MAX];
 static DeviceAddress addr[TEMP_MAX];
 static int count = 0;
 static unsigned long last_scan = 0;
+static bool dropped = false;             /* a found probe stopped answering on the last read */
 
 static void TEMP_scan_bus(DallasTemperature *bus)
 {
@@ -51,13 +51,14 @@ StatusCode_e    TEMP_init(void)
 
 StatusCode_e    TEMP_update(TempReading_t *out)
 {
-    /* Rescan so a probe plugged in while running shows up */
-    if (millis() - last_scan > ((count < TEMP_MAX) ? 15000UL : 60000UL))
+    /* A missing probe is searched for every 2 s (an empty bus answers in ~1 ms); with both found, every 30 s */
+    if (millis() - last_scan > ((count < TEMP_MAX || dropped) ? 2000UL : 30000UL))
     {
         TEMP_scan();
     }
 
     out->count = count;
+    dropped = false;
     for (int i = 0; i < count; i++)
     {
         for (int b = 0; b < 8; b++)
@@ -66,6 +67,7 @@ StatusCode_e    TEMP_update(TempReading_t *out)
         }
         float c = bus_of[i]->getTempC(addr[i]);
         out->ok[i] = (c != DEVICE_DISCONNECTED_C);
+        dropped |= !out->ok[i];
         out->celsius[i] = c;
         out->pin[i] = (bus_of[i] == &sensors) ? DS18B20_PIN : DS18B20_PIN_2;
     }
