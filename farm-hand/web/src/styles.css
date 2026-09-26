@@ -71,41 +71,73 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .is-replay .scene { outline: 2px dashed var(--line-strong); outline-offset: -8px; }
 
 /* -------------------------------------------------------------------- top bar */
+/*
+ * One grid, three areas (brand, status, reads). It answers to its OWN width (a container query), so it
+ * re-flows the same way whether the window is narrow or a side sheet has taken part of it:
+ *   wide     brand + status on the left, the readout table on the right, one row
+ *   medium   brand over status on the left, the readout on the right
+ *   narrow   everything stacked, the readout full width
+ * Nothing in it shrinks below its content: the brand and the pill never wrap, so they can never overlap.
+ */
 .topbar {
-  position: absolute; top: 0; left: 0; z-index: 3; display: flex; align-items: center; justify-content: flex-start;
-  gap: 20px; padding: 14px 20px; pointer-events: none; max-width: calc(100% - var(--sheet-w) - 40px);
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3; pointer-events: none; container-type: inline-size;
+  padding: calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 12px calc(20px + env(safe-area-inset-left));
 }
-.topbar > * { pointer-events: auto; }
-.brandmark { display: flex; align-items: flex-start; gap: 10px; color: var(--accent); min-width: 0; }
-.brandmark svg { flex: none; margin-top: 1px; }
-.brandmark h1 { font-size: 22px; color: var(--text); font-stretch: 95%; line-height: 1.1; }
-.brandmark p { color: var(--text-dim); font-size: 14px; }
+.app.has-side .topbar { right: calc(var(--sheet-w) + 24px); }
+.tb {
+  display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: 'brand status . reads';
+  align-items: start; gap: 12px 20px;
+}
+.tb > * { pointer-events: auto; }
+.brandmark { grid-area: brand; display: flex; align-items: flex-start; gap: 10px; color: var(--accent); white-space: nowrap; }
+.brandmark svg { flex: none; margin-top: 3px; }
+.brandmark h1 { font-size: 28px; color: var(--text); font-stretch: 95%; line-height: 1.1; }
+.brandmark p { color: var(--text-dim); font-size: 15px; margin-top: 2px; }
 .status {
-  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; flex: none;
-  border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--panel); font-size: 14px; font-weight: 600;
+  grid-area: status; justify-self: start; margin-top: 2px;
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; white-space: nowrap;
+  border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--panel); font-size: 15px; font-weight: 600;
 }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 .status-ok { color: var(--good); }
 .status-quiet { color: var(--text-dim); }
 .status-warn { color: var(--caution); }
 .status-bad { color: var(--danger); background: var(--danger-soft); border-color: transparent; }
-.live-reads { display: flex; gap: 8px; flex: none; }
-.live-read {
-  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2px 10px; padding: 8px 14px 8px 10px;
+
+/* the readout: one card, a small table (box | Moisture | Soil temp) with aligned columns and big numbers */
+.reads {
+  grid-area: reads; justify-self: end; display: grid; grid-template-columns: auto minmax(6.5em, auto) minmax(6.5em, auto);
+  column-gap: 26px; padding: 12px 20px 14px; min-width: 0;
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow);
 }
-.live-read-id {
-  grid-row: span 2; width: 26px; height: 26px; display: grid; place-items: center; border-radius: var(--r-ctl);
-  color: var(--accent-ink); background: var(--accent); font-weight: 700; font-size: 14px;
+.reads-row { display: contents; }
+.reads-head span { font-size: 13px; font-weight: 600; color: var(--text-dim); padding-bottom: 2px; }
+.reads-box { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 680; white-space: nowrap; }
+.reads-box i {
+  width: 24px; height: 24px; border-radius: var(--r-ctl); display: grid; place-items: center; flex: none;
+  font-style: normal; font-size: 13px; font-weight: 700; color: var(--accent-ink); background: var(--water);
 }
-.live-read-b .live-read-id { background: var(--warm); }
-.live-read-name { font-size: 13px; font-weight: 600; color: var(--text-dim); line-height: 1; }
-.live-read-vals { display: flex; gap: 16px; }
-.live-read-vals span { display: grid; line-height: 1.1; }
-.live-read-vals b { font-size: 22px; font-weight: 700; font-stretch: 90%; font-variant-numeric: tabular-nums; color: var(--text); }
-.live-read-vals small { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
-.live-read-vals .is-missing b { color: var(--text-faint); }
-.live-read-vals .is-missing small { color: var(--caution); }
+.reads-b .reads-box i { background: var(--warm); }
+.reads-row [role='cell'] { display: flex; align-items: center; min-height: 40px; }
+.reads b { font-size: 30px; font-weight: 700; font-stretch: 86%; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.reads b.is-off { font-size: 17px; font-weight: 650; font-stretch: 100%; color: var(--caution); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@container (max-width: 1180px) { .brandmark p { display: none; } }
+@container (max-width: 1020px) {
+  .tb { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'brand reads' 'status reads'; }
+}
+@container (max-width: 700px) {
+  .tb { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'brand' 'status' 'reads'; gap: 8px; }
+  .brandmark h1 { font-size: 24px; }
+  .status { height: 32px; font-size: 14px; padding: 0 12px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .reads { justify-self: stretch; grid-template-columns: auto 1fr 1fr; column-gap: 14px; padding: 8px 12px 10px; }
+  .reads-row [role='cell'] { min-height: 32px; }
+  .reads-box { font-size: 14px; }
+  .reads-box i { width: 20px; height: 20px; font-size: 12px; }
+  .reads b { font-size: 22px; }
+  .reads b.is-off { font-size: 14px; }
+}
 
 /* ----------------------------------------------------------------------- dock */
 .dock {
@@ -147,9 +179,13 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   opacity: 1; visibility: visible; pointer-events: auto; transform: none;
   transition: transform 240ms var(--ease-out), visibility 0s;   /* opacity is instant on open */
 }
-.place-side { top: 12px; right: 12px; bottom: 96px; width: var(--sheet-w); transform: translateX(24px); }
-.place-bottom { left: 16px; right: 16px; bottom: 96px; height: min(420px, 46vh); transform: translateY(16px); }
-.place-wide { top: 72px; left: 16px; right: 16px; bottom: 96px; transform: translateY(16px); }
+.place-side { top: 12px; right: 12px; bottom: auto; max-height: calc(100% - 108px); width: var(--sheet-w); transform: translateX(24px); }   /* as tall as its content, never a slab */
+.place-bottom { left: 16px; right: 16px; bottom: 96px; height: min(420px, 46dvh); transform: translateY(16px); }
+.place-wide { top: calc(12px + env(safe-area-inset-top)); left: 16px; right: 16px; bottom: 96px; transform: translateY(16px); }
+.app.sheet-l, .panel-shell.sheet-l { --sheet-w: min(640px, calc(100vw - 32px)); }
+/* while a panel is open the 3D labels step back, so they never sit on the readout or the sheet */
+.field-overlay { transition: opacity 160ms var(--ease-out); }
+.app.has-panel .field-overlay { opacity: 0; }
 .panel-head {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none;
   min-height: 60px; padding: 10px 12px 10px 24px; border-bottom: 1px solid var(--line);
@@ -160,7 +196,14 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* the 3D scene makes room: it shrinks beside a side sheet and above a bottom sheet (the canvas follows its box) */
 .app.has-side .scene { right: calc(var(--sheet-w) + 24px); }
-.app.has-bottom .scene { bottom: calc(min(420px, 46vh) + 96px); }
+.dock { bottom: calc(18px + env(safe-area-inset-bottom)); }
+.place-side { right: calc(12px + env(safe-area-inset-right)); top: calc(12px + env(safe-area-inset-top)); }
+/* touch screens: every control at least 44 px */
+@media (pointer: coarse), (max-width: 1024px) {
+  .btn-icon { width: 44px; height: 44px; }
+  .btn, .segmented button, .croplist button, .yb-row, .biggest-row, .spot-farm { min-height: 44px; }
+}
+.app.has-bottom .scene { bottom: calc(min(420px, 46dvh) + 96px); top: 124px; }   /* clear of the top bar, so the 3D labels never sit on it */
 
 /* ------------------------------------------------------------------ box panel */
 .box { display: grid; gap: 14px; }
@@ -175,6 +218,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .reading { display: grid; gap: 2px; min-width: 0; }
 .reading-value { font-size: clamp(44px, 3.6vw, 68px); font-weight: 620; font-stretch: 84%; letter-spacing: -0.025em; line-height: 1; white-space: nowrap; }
 .reading-value small { font-size: 0.42em; font-weight: 500; letter-spacing: 0; margin-left: 3px; color: var(--text-dim); font-stretch: 100%; }
+.reading-value.is-off { font-size: 24px; font-weight: 650; color: var(--caution); line-height: 1.5; letter-spacing: 0; font-stretch: 100%; }
 .reading-value.is-empty { font-size: 22px; font-weight: 500; color: var(--text-faint); line-height: 1.6; letter-spacing: 0; font-stretch: 100%; }
 .reading-label { font-size: 14px; color: var(--text-dim); }
 .probe-warn { font-size: 14px; color: var(--caution); font-weight: 600; }
@@ -185,27 +229,35 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .probe { font-size: 13px; color: var(--text-faint); }
 
 /* -------------------------------------------------------------------- history */
-.history { display: grid; gap: 8px; min-width: 0; }
-.history-head { display: flex; align-items: center; gap: 8px 20px; flex-wrap: wrap; }
-.legend { display: flex; gap: 16px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; font-size: 14px; color: var(--text-dim); flex: 1; }
+.history { display: grid; gap: 14px; min-width: 0; }
+.history-head { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; font-size: 14px; color: var(--text-dim); }
 .legend li { display: inline-flex; align-items: center; gap: 7px; }
 .legend li::before { content: ''; width: 18px; height: 0; border-top: 3px solid; }
 .legend .legend-a::before { border-color: var(--water); }
 .legend .legend-b::before { border-color: var(--warm); }
 .legend .legend-base::before { border-top: 2px dashed var(--text-faint); }
-.history-ctl { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.hist-range { width: 160px; flex: none; }
+.history-ctl { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.btn-replay { background: var(--water); border-color: var(--water); color: var(--accent-ink); padding: 0 16px 0 12px; }
+@media (hover: hover) and (pointer: fine) { .btn-replay:hover { background: var(--water); filter: brightness(1.08); } }
 .history-time { font-size: 14px; color: var(--text-dim); }
 .history-empty { padding: 4px 0 6px; }
-.chart { display: grid; grid-template-columns: auto 1fr; grid-template-rows: clamp(120px, 24vh, 260px) auto; column-gap: 8px; }
+.chart { display: grid; grid-template-columns: auto 1fr; grid-template-rows: clamp(180px, 32dvh, 300px) auto; column-gap: 8px; }
 .chart-y { display: flex; flex-direction: column; justify-content: space-between; font-size: 12px; color: var(--text-faint); text-align: right; margin: -0.5em 0; }
 .chart-x { grid-column: 2; display: flex; justify-content: space-between; font-size: 12px; color: var(--text-faint); padding-top: 4px; }
-.chart-plot { position: relative; background: var(--sunk); border-radius: var(--r-ctl); }
+.chart-plot { position: relative; background: var(--sunk); border-radius: var(--r-ctl); overflow: hidden; }
 .chart-plot svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
 .chart-plot .grid { stroke: var(--line); stroke-width: 1; }
 .chart-plot .baseline { stroke: var(--text-faint); stroke-width: 1.5; stroke-dasharray: 6 5; }
 .chart-plot .line { fill: none; stroke-linejoin: round; stroke-linecap: round; }
 .chart-plot .line-a { stroke: var(--water); stroke-width: 3; }
 .chart-plot .line-b { stroke: var(--warm); stroke-width: 2.5; }
+.chart-plot .gap-band { fill: var(--panel); opacity: 0.85; }
+.gap-label {
+  position: absolute; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); white-space: nowrap;
+  font-size: 11px; font-weight: 600; color: var(--text-faint); pointer-events: none;
+}
 .chart-plot input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
 .playhead { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--text); pointer-events: none; }
 
@@ -471,7 +523,8 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* --------------------------------------------------------------------- phone */
 @media (max-width: 900px) {
-  .topbar { padding: 10px 12px; align-items: flex-start; flex-direction: column; gap: 6px; max-width: 100%; }
+  .topbar { padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) 10px calc(12px + env(safe-area-inset-left)); }
+  .app.has-side .topbar { right: 0; }
   .map-legend-card { top: 8px; right: 8px; width: auto; max-width: calc(100% - 64px); padding: 10px 12px; gap: 6px; }
   .map-legend-card h4 { font-size: 15px; }
   .map-legend-card h4 span { font-size: 12px; }
@@ -479,27 +532,21 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .map-legend-card i { width: 18px; height: 18px; }
   .map-legend-card p { display: none; }
   .brandmark p { display: none; }
-  .live-reads { width: 100%; }
-  .live-read { flex: 1 1 0; min-width: 0; padding: 6px 10px 6px 8px; gap: 2px 8px; }
-  .live-read-vals { gap: 10px; }
-  .live-read-vals b { font-size: 18px; }
-  .live-read-vals small { font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
-  .status { height: 30px; font-size: 13px; padding: 0 10px; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
   /* phone: the dock is a 5-column grid of short labels (two rows, never wider than the screen);
      every panel is a bottom sheet above it with its own scroll */
-  :root { --dock-h: 118px; }
-  .dock { left: 8px; right: 8px; bottom: 8px; transform: none; max-width: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; padding: 4px; }
+  :root { --dock-h: calc(118px + env(safe-area-inset-bottom)); }
+  .dock { left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: calc(8px + env(safe-area-inset-bottom)); transform: none; max-width: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; padding: 4px; }
   .dock-sep { display: none; }
   .dock-btn { justify-items: center; text-align: center; padding: 6px 2px; min-height: 52px; min-width: 0; }
   .dl-full { display: none; } .dl-short { display: inline; }
   .dock-label { font-size: 14px; }
   .dock-glance { font-size: 11px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
-  .app.has-side .scene, .app.has-bottom .scene { right: 0; bottom: 0; }
+  .app.has-side .scene, .app.has-bottom .scene { right: 0; bottom: 0; top: 0; }
   .place-side, .place-bottom, .place-wide {
     top: auto; left: 8px; right: 8px; bottom: calc(var(--dock-h) + 8px); width: auto; height: auto;
-    max-height: calc(100dvh - var(--dock-h) - 96px); transform: translateY(20px);
+    max-height: calc(100dvh - var(--dock-h) - 214px); transform: translateY(20px);   /* stays under the readout */
   }
-  .place-wide { top: 64px; max-height: none; }
+  .place-wide { top: calc(8px + env(safe-area-inset-top)); max-height: none; }   /* Map and Results take the screen */
   .panel-head { min-height: 52px; padding: 6px 8px 6px 18px; }
   .panel-head h2 { font-size: 17px; }
   .panel-body { padding: 16px 18px 20px; }
@@ -532,4 +579,41 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   @keyframes fade { from { opacity: 0; } }
   .btn, .btn:active, .dock-btn:active { transform: none; }
   .day-bar i { transition: none; }
+}
+
+/* ------------------------------------------------------------ phone landscape */
+/* Short screens (a phone on its side): one slim row on top, one row of dock buttons, panels as a right-hand sheet,
+   so the 3D boxes keep the middle of the screen. */
+@media (max-height: 520px) and (orientation: landscape) {
+  :root { --dock-h: calc(56px + env(safe-area-inset-bottom)); --sheet-w: min(400px, 52vw); }
+  .app.sheet-l, .panel-shell.sheet-l { --sheet-w: min(480px, 60vw); }
+  .topbar { padding: calc(6px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) 6px calc(10px + env(safe-area-inset-left)); }
+  .tb, .app.has-panel .tb { grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: 'brand status . reads'; align-items: center; gap: 8px; }
+  .brandmark h1 { font-size: 17px; }
+  .brandmark svg { width: 20px; height: 20px; margin-top: 0; }
+  .status { height: 28px; font-size: 12px; margin: 0; }
+  .reads { justify-self: end; grid-template-columns: auto auto auto; column-gap: 12px; padding: 4px 10px; }
+  .reads-head { display: none; }
+  .reads-row [role='cell'] { min-height: 26px; }
+  .reads-box { font-size: 12px; } .reads-box i { width: 18px; height: 18px; font-size: 11px; }
+  .reads b { font-size: 16px; } .reads b.is-off { font-size: 12px; }
+  .app.has-panel .reads { display: none; }
+  .dock {
+    left: 50%; right: auto; transform: translateX(-50%); bottom: calc(6px + env(safe-area-inset-bottom));
+    display: flex; gap: 0; padding: 3px; max-width: calc(100vw - 16px - env(safe-area-inset-left) - env(safe-area-inset-right));
+  }
+  .dock-btn { min-height: 44px; min-width: 44px; padding: 4px 9px; }
+  .dock-glance { display: none; }
+  .dock-label { font-size: 13px; }
+  .place-side, .place-bottom {
+    top: calc(8px + env(safe-area-inset-top)); bottom: calc(var(--dock-h) + 8px); left: auto;
+    right: calc(8px + env(safe-area-inset-right)); width: var(--sheet-w); height: auto; max-height: none; transform: translateX(20px);
+  }
+  .place-wide { top: calc(8px + env(safe-area-inset-top)); bottom: calc(var(--dock-h) + 8px); left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); }
+  .app.has-side .scene, .app.has-bottom .scene { right: calc(var(--sheet-w) + 16px); bottom: 0; top: 0; }
+  .app.has-side .topbar, .app.has-bottom .topbar { right: calc(var(--sheet-w) + 16px); }
+  .panel-head { min-height: 48px; }
+  .panel-body { padding: 12px 16px 16px; }
+  .fieldmap { height: calc(100dvh - var(--dock-h) - 130px); min-height: 200px; }
+  .field-card.rich { position: static; max-height: none; box-shadow: none; }
 }

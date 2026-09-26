@@ -53,23 +53,18 @@ export function FieldCanvas() {
   );
 }
 
+/** Just which box is which: the readings live in the top bar's readout, so the labels don't repeat them. */
 function BoxLabel({ id, name, role }: { id: BoxId; name: string; role: string }) {
   const r = useBox(id);
   const narrow = useNarrow();
   const color = `var(--box-${id.toLowerCase()}, ${BOX_COLOR[id]})`;
   return (
-    <div style={{ ...chip, ...(narrow ? { fontSize: 10.5, padding: '4px 7px' } : null), pointerEvents: 'none' }}>
+    <div style={{ ...chip, ...(narrow ? { fontSize: 11.5, padding: '4px 8px' } : null), pointerEvents: 'none' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         <span style={{ ...badge, background: color }}>{id}</span>
-        <b style={{ fontWeight: 600 }}>{name}</b>
+        <b style={{ fontWeight: 650 }}>{name}</b>
         {!narrow && <span style={{ opacity: 0.6 }}>{role}</span>}
-      </div>
-      <div style={{ display: 'flex', gap: 10, marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>
-        <span title="Soil moisture (calibrated percent of the probe's dry-to-wet range)">
-          {r.moisturePct != null ? `${Math.round(r.moisturePct)}% moist` : r.present ? 'probe disconnected' : 'no reading yet'}
-        </span>
-        <span title="Soil temperature (DS18B20)">{r.tempC != null ? `${r.tempC.toFixed(1)} °C` : 'temp —'}</span>
-        {r.pumping && <span style={{ color, fontWeight: 600 }}>pumping</span>}
+        {r.pumping && <span style={{ color, fontWeight: 650 }}>watering</span>}
       </div>
     </div>
   );
@@ -85,7 +80,7 @@ function useNarrow(): boolean {
 }
 
 const chip: CSSProperties = {
-  whiteSpace: 'nowrap', font: '500 12px/1.3 var(--font-ui, system-ui, sans-serif)', color: 'var(--text, #1d2320)',
+  whiteSpace: 'nowrap', font: '500 13px/1.3 var(--font-ui, system-ui, sans-serif)', color: 'var(--text, #1d2320)',
   background: 'rgba(255,255,255,0.86)', border: '1px solid rgba(20,30,25,0.10)', borderRadius: 10, padding: '6px 10px',
   boxShadow: '0 2px 8px rgba(20,30,25,0.08)',
 };

@@ -1,0 +1,144 @@
+/*
+ * Crops simulator (Crops.tsx). Follows the rules in styles.css: radius scale --r-ctl / --r-panel / --r-pill only,
+ * tabular numbers on anything that changes, no eyebrow labels, transitions under 300 ms ease-out.
+ * Sliders (Emil): the value follows the finger 1:1, the thumb is 30 px and the input 44 px tall so it is easy to
+ * grab by touch; a horizontal drag moves it while a vertical swipe still scrolls the sheet (touch-action: pan-y).
+ */
+.csim { display: grid; gap: 20px; container-type: inline-size; }
+
+/* ------------------------------------------------------------ controls */
+.cs-controls { display: flex; flex-direction: column; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+/* Tall screens: the sliders stay put while the list scrolls under them, so every move shows its result. */
+@media (min-width: 901px) and (min-height: 760px) {
+  .cs-controls {
+    position: sticky; top: -20px; z-index: 1; background: var(--panel);
+    margin: -20px -24px 0; padding: 20px 24px 16px;
+  }
+}
+
+.cs-dials { display: grid; gap: 16px; }
+.cs-dial { --thumb: 30px; --fill: var(--water); display: grid; gap: 2px; }
+.cs-dial.is-heat { --fill: var(--warm); }
+.cs-dial-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.cs-dial-head label { font-size: 15px; font-weight: 600; }
+.cs-value { font-size: 44px; font-weight: 620; font-stretch: 84%; letter-spacing: -0.025em; line-height: 1; white-space: nowrap; }
+.cs-value small { font-size: 0.42em; font-weight: 500; letter-spacing: 0; margin-left: 2px; color: var(--text-dim); font-stretch: 100%; }
+.cs-hint { font-size: 13px; color: var(--text-dim); }
+
+.cs-track { position: relative; --at: calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--p)); }
+.cs-track input {
+  position: relative; display: block; width: 100%; height: 44px; margin: 0; padding: 0; background: transparent; cursor: pointer;
+  -webkit-appearance: none; appearance: none; touch-action: pan-y; -webkit-tap-highlight-color: transparent;
+}
+.cs-track input:focus-visible { outline: none; }
+.cs-track input::-webkit-slider-runnable-track {
+  height: 8px; border-radius: var(--r-pill);
+  background: linear-gradient(to right, var(--fill) 0 var(--at), var(--line) var(--at) 100%);
+}
+.cs-track input::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: var(--thumb); height: var(--thumb); margin-top: calc((8px - var(--thumb)) / 2);
+  border-radius: var(--r-pill); background: var(--panel); border: 3px solid var(--fill);
+  box-shadow: 0 1px 2px rgba(22, 32, 26, 0.16), 0 4px 10px -4px rgba(22, 32, 26, 0.32);
+  transition: transform 140ms var(--ease-out);
+}
+.cs-track input:active::-webkit-slider-thumb { transform: scale(1.1); }
+.cs-track input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--accent); }
+.cs-track input::-moz-range-track { height: 8px; border-radius: var(--r-pill); background: var(--line); }
+.cs-track input::-moz-range-progress { height: 8px; border-radius: var(--r-pill); background: var(--fill); }
+.cs-track input::-moz-range-thumb {
+  box-sizing: border-box; width: var(--thumb); height: var(--thumb); border-radius: var(--r-pill);
+  background: var(--panel); border: 3px solid var(--fill);
+  box-shadow: 0 1px 2px rgba(22, 32, 26, 0.16), 0 4px 10px -4px rgba(22, 32, 26, 0.32);
+  transition: transform 140ms var(--ease-out);
+}
+.cs-track input:active::-moz-range-thumb { transform: scale(1.1); }
+.cs-track input:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--accent); }
+/* Box A's live reading, a notch under the track */
+.cs-live {
+  position: absolute; top: calc(50% + 7px); left: calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--live));
+  width: 2px; height: 8px; margin-left: -1px; border-radius: 1px; background: var(--text-dim); pointer-events: none;
+}
+
+.cs-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs-actions .btn { min-height: 44px; height: auto; font-size: 15px; }
+.cs-actions .cs-send { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.cs-actions .cs-send:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .cs-actions .cs-send:not(:disabled):hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+}
+
+.cs-sent:empty { margin-top: -16px; }
+.cs-sent p {
+  display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--r-ctl);
+  background: var(--water-soft); font-size: 15px; line-height: 1.4; animation: cs-in 220ms var(--ease-out) both;
+}
+.cs-sent p svg { flex: none; margin-top: 2px; color: var(--accent); }
+.cs-sent b { font-weight: 650; }
+.cs-sent small { display: block; margin-top: 2px; font-size: 13px; color: var(--text-dim); }
+.cs-sent p.is-quiet { padding: 0; background: none; font-size: 14px; color: var(--text-dim); animation: none; }
+@keyframes cs-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* ------------------------------------------------------------ results */
+.cs-results { display: grid; gap: 18px; }
+.cs-lead { font-size: 18px; line-height: 1.4; text-wrap: pretty; }
+.cs-lead b { font-weight: 700; }
+.cs-group { display: grid; gap: 8px; }
+.cs-group h3 { font-size: 16px; display: flex; gap: 8px; align-items: baseline; }
+.cs-group h3 span { font-size: 14px; font-weight: 600; color: var(--text-faint); }
+.g-well h3 { color: var(--good); }
+.g-survive h3 { color: var(--caution); }
+.g-no h3 { color: var(--text-dim); }
+.cs-group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.cs-group li {
+  display: grid; grid-template-columns: 36px minmax(0, 1fr); column-gap: 12px; align-items: center;
+  padding: 6px 12px 6px 6px; border-radius: var(--r-ctl); background: var(--sunk); min-height: 50px;
+}
+.cs-icon {
+  grid-row: span 2; width: 36px; height: 36px; display: grid; place-items: center; border-radius: var(--r-ctl);
+  color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent);
+}
+.cs-icon svg { width: 26px; height: 26px; stroke-width: 3; }
+.cs-name { font-size: 15px; font-weight: 650; line-height: 1.25; }
+.cs-why { font-size: 14px; line-height: 1.3; color: var(--text-dim); }
+.cs-why b { font-weight: 650; }
+.g-well .cs-why b { color: var(--good); }
+.g-survive .cs-why b { color: var(--caution); }
+.g-no li { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.g-no .cs-icon { color: var(--text-faint); background: var(--sunk); }
+.g-no .cs-why b { color: var(--text); }
+.cs-more { justify-self: start; min-height: 44px; }
+.cs-foot { padding-top: 4px; }
+
+/* wide containers: the two dials side by side, name and reason side by side */
+@container (min-width: 560px) {
+  .cs-dials { grid-template-columns: 1fr 1fr; gap: 16px 28px; }
+  .cs-group li { grid-template-columns: 36px 10em minmax(0, 1fr); }
+  .cs-icon { grid-row: auto; }
+}
+
+/* phone on its side: shorter dials so a row or two of results shows under them */
+@media (max-height: 520px) and (orientation: landscape) {
+  .csim { gap: 14px; }
+  .cs-controls { gap: 10px; padding-bottom: 14px; }
+  .cs-sent:empty { margin-top: -10px; }
+  .cs-value { font-size: 32px; }
+  .cs-lead { font-size: 16px; }
+  @container (min-width: 400px) { .cs-dials { grid-template-columns: 1fr 1fr; gap: 10px 20px; } }
+}
+
+/* phone width: a tighter dial so the list starts higher in the sheet; both buttons on one row */
+@container (max-width: 420px) {
+  .cs-controls { gap: 12px; }
+  .cs-dials { gap: 10px; }
+  .cs-sent:empty { margin-top: -12px; }
+  .cs-value { font-size: 38px; }
+  .cs-actions .btn { font-size: 14px; padding: 0 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-track input::-webkit-slider-thumb { transition: none; }
+  .cs-track input::-moz-range-thumb { transition: none; }
+  .cs-track input:active::-webkit-slider-thumb { transform: none; }
+  .cs-track input:active::-moz-range-thumb { transform: none; }
+  .cs-sent p { animation: none; }
+}

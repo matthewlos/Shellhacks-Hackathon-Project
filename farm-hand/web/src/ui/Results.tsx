@@ -18,7 +18,7 @@ interface Results {
 
 const PLAY_S = 20;               // the whole 48 h in about 20 s at 1x
 const STREAM_H = 0.5;            // show the water stream for half a simulated hour, so a pour is visible
-const W = 1000, H = 240, LO = 40, HI = 100, SOGGY = 70;
+const W = 1000, H = 240, LO = 20, HI = 100, SOGGY = 70;   // 20 % is the bottom of the probe scale (wilting point)
 const X = (h: number, hours: number) => (h / hours) * W;
 const Y = (v: number) => H - ((Math.max(LO, Math.min(HI, v)) - LO) / (HI - LO)) * H;
 
@@ -54,9 +54,10 @@ function useTimeline() {
     const bAt = new Map((series.B?.points ?? []).map((p) => [Math.round(p.t / 1000), p]));
     const real: Pt[] = [];
     for (const p of series.A?.points ?? []) {
-      if (p.t <= endMs || p.moisturePct == null) continue;
+      // a probe that is off reports a rail value (0 or 100 %): not a reading
+      if (p.t <= endMs || p.moisturePct == null || p.moisturePct < 5 || p.moisturePct >= 99.5) continue;
       const q = bAt.get(Math.round(p.t / 1000));
-      if (!q || q.moisturePct == null) continue;
+      if (!q || q.moisturePct == null || q.moisturePct < 5 || q.moisturePct >= 99.5) continue;
       real.push({ h: (p.t - t0) / 3600e3, a: p.moisturePct, b: q.moisturePct, ta: p.tempC ?? NaN, tb: q.tempC ?? NaN });
     }
     real.sort((x, y) => x.h - y.h);
@@ -162,7 +163,7 @@ export function ResultsPanel() {
       </div>
 
       <div className="res-chart" style={{ ['--warmth' as string]: warmth.toFixed(3) }}>
-        <div className="res-y num" aria-hidden>{[100, SOGGY, r.baselinePct].map((v) => <span key={v} style={{ top: `${(Y(v) / H) * 100}%` }}>{v}%</span>)}</div>
+        <div className="res-y num" aria-hidden>{[100, SOGGY, r.baselinePct, LO].map((v) => <span key={v} style={{ top: `${(Y(v) / H) * 100}%` }}>{v}%</span>)}</div>
         <div className="res-plot">
           <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label="Soil moisture of both boxes over 48 hours">
             {soggy.map((s, i) => <rect key={i} className="res-soggy" x={X(s.a, r.hours)} width={Math.max(2, X(s.b, r.hours) - X(s.a, r.hours))} y={0} height={Y(SOGGY)} />)}

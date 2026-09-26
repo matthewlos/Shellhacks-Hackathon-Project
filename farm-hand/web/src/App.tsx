@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useApp } from './data/store';
 import { FieldCanvas } from './scene/FieldCanvas';
-import { Dock, Panels, placeOf, usePanel } from './ui/Dock';
+import { Dock, isLarge, Panels, placeOf, usePanel } from './ui/Dock';
 import { TopBar } from './ui/TopBar';
 
 /** The 3D boxes fill the screen; everything else opens from the dock as a panel over them. */
@@ -24,7 +24,7 @@ export function App() {
   }, [ready]);
 
   return (
-    <div className={`app ${replaying ? 'is-replay' : ''} ${open ? `has-panel has-${placeOf(open)}` : ''}`}>
+    <div className={`app ${replaying ? 'is-replay' : ''} ${open ? `has-panel has-${placeOf(open)}${isLarge(open) ? ' sheet-l' : ''}` : ''}`}>
       <div className="scene" aria-label="The two boxes in 3D">
         <FieldCanvas />
       </div>

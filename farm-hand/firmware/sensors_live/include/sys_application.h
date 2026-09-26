@@ -17,6 +17,7 @@
 #include "comp_wifi.h"
 #include "comp_cloud.h"
 #include "comp_pump.h"
+#include "comp_cmd.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -49,7 +49,7 @@ export const CROPS: Crop[] = [
   { id: 'pea', name: 'Peas', category: 'legume', tempMin: 4, tempOpt: [10, 21], drainage: D(65, 95, 60, 15),
     drainageNote: { very_slow: 'seeds rot before sprouting in cold, wet soil' },
     sun: S(100, 80, 35), ph: [6.0, 7.5], frost: 'hardy', spring: { start: -7, end: -1, method: 'direct sow' }, fall: { start: 11, end: 9, method: 'direct sow' }, maturity: [55, 70] },
-  { id: 'beet', name: 'Beets', category: 'root', tempMin: 5, tempOpt: [10, 27], drainage: D(80, 95, 60, 20),
+  { id: 'beet', name: 'Beets', category: 'root', tempMin: 5, tempOpt: [10, 24], drainage: D(80, 95, 60, 20),
     drainageNote: { fast: 'roots size up well in loose soil' },
     sun: S(100, 80, 40), ph: [6.2, 7.5], frost: 'half_hardy', spring: { start: -4, end: 6, method: 'direct sow' }, fall: { start: 10, end: 7, method: 'direct sow' }, maturity: [50, 65] },
   { id: 'onion', name: 'Onions', category: 'allium', tempMin: 5, tempOpt: [13, 24], drainage: D(80, 95, 50, 10),
@@ -238,6 +238,9 @@ export function scoreCrop(c: Crop, ctx: ScoreContext): CropScore {
   let score = wsum ? known.reduce((s, f) => s + f.weight * (f.score as number), 0) / wsum : 0;
   // A fatal mismatch cannot be averaged away by the other factors.
   if (known.some((f) => (f.score as number) < 25)) score = Math.min(score, 45);
+  // Soil well past its warm limit (5+ °C over the ideal: cool-season crops bolt, roots stall) cannot rate as thriving.
+  const heat = factors.find((f) => f.key === 'soil_temp');
+  if (heat?.known && ctx.soilTempC != null && ctx.soilTempC > c.tempOpt[1] && (heat.score as number) < 60) score = Math.min(score, 70);
   if (ctx.ph == null && needsAcid(c)) score = Math.min(score, ACID_CAP);
   score = Math.round(score);
 

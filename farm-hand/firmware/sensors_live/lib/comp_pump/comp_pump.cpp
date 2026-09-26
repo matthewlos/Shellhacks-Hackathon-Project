@@ -54,8 +54,11 @@ bool    PUMP_request(float seconds, const SoilReading_t *soil, const char *by)
     return true;
 }
 
+void    PUMP_test_update(void);
+
 void    PUMP_update(void)
 {
+    PUMP_test_update();
     if (running && (long)(millis() - stop_at) >= 0)
     {
         RELAY_set(0, false);
@@ -111,4 +114,61 @@ void    PUMP_fallback(const SoilReading_t *soil, unsigned long last_server_ok_ms
             PUMP_request(5, soil, "chip_baseline");
         }
     }
+}
+/* ---------- flow test (USB command only) ---------- */
+/* A hardware timer turns the pump off on the exact millisecond (the main loop only runs once a second),
+   so ml measured / seconds run is a true flow rate. */
+#include <Ticker.h>
+
+static Ticker t_timer;
+static volatile unsigned long t_start = 0, t_end = 0;
+static volatile int t_pump = -1;
+static volatile bool t_done = false;
+
+static void PUMP_test_timer(void)
+{
+    if (t_pump < 0) return;
+    RELAY_set(t_pump, false);
+    t_end = millis();
+    t_done = true;
+}
+
+bool    PUMP_test(int pump, float seconds)
+{
+    if (pump != 0 && pump != 1) return false;
+    if (running || b_running || t_pump >= 0)
+    {
+        Serial.println("{\"type\":\"pump_test\",\"state\":\"refused\",\"why\":\"a pump is already running\"}");
+        return false;
+    }
+    seconds = constrain(seconds, 0.5f, (float)PUMP_TEST_MAX_S);
+    t_done = false;
+    t_pump = pump;
+    t_start = millis();
+    RELAY_set(pump, true);
+    t_timer.once_ms((uint32_t)(seconds * 1000), PUMP_test_timer);
+    Serial.printf("{\"type\":\"pump_test\",\"state\":\"on\",\"pot\":\"%c\",\"for_s\":%.1f,\"on_level\":\"%s\"}\n",
+                  pump ? 'B' : 'A', seconds, RELAY_on_level() ? "HIGH" : "LOW");
+    return true;
+}
+
+static void PUMP_test_report(const char *why)
+{
+    Serial.printf("{\"type\":\"pump_test\",\"state\":\"off\",\"pot\":\"%c\",\"ran_s\":%.3f,\"why\":\"%s\"}\n",
+                  t_pump ? 'B' : 'A', (t_end - t_start) / 1000.0f, why);
+    t_pump = -1;
+    t_done = false;
+}
+
+void    PUMP_test_update(void)
+{
+    if (t_done) PUMP_test_report("done");
+}
+
+void    PUMP_stop_all(void)
+{
+    t_timer.detach();
+    RELAY_all_off();
+    if (t_pump >= 0) { t_end = millis(); PUMP_test_report("stopped"); }
+    running = b_running = false;
 }

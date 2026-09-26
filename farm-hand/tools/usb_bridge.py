@@ -34,6 +34,9 @@ def secret(name):
 
 
 LOCAL_URL = "http://127.0.0.1:8120/farmhand/reading"
+# Commands for the ESP32 (e.g. "pump A 10", "stop", "relay low"): write them to this file, one per line.
+# The bridge owns the USB port, so it sends them and prints the board's answer.
+CMD_FILE = HERE.parent / "cloud" / "local" / "usb_cmd.txt"
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 
 
@@ -85,6 +88,15 @@ def main():
             port, s = open_port()
             print(f"USB back on {port}", flush=True)
             continue
+        if CMD_FILE.exists():
+            cmds = CMD_FILE.read_text().splitlines()
+            CMD_FILE.unlink()
+            for c in cmds:
+                if c.strip():
+                    s.write((c.strip() + "\n").encode())
+                    print(f"  > {c.strip()}", flush=True)
+        if line.startswith(('{"type":"pump', '{"type":"cmd"')):
+            print(f"  < {line}", flush=True)
         if not line.startswith('{"type":"sens"'):
             continue
         try:

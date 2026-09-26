@@ -1,6 +1,6 @@
 import { brand } from '../brand';
 import { useApp } from '../data/store';
-import { ago, BOX_IDS, moistureOf, rawOf, toMs, useBox, useNow, type BoxId } from './farmData';
+import { ago, BOX_IDS, moistureOf, toMs, useBox, useNow, type BoxId } from './farmData';
 import { Logo } from './icons';
 
 /** A reading older than this means the ESP32 has gone quiet (it posts every ~10 s). */
@@ -23,7 +23,7 @@ export function TopBar() {
 
   // No spinners: before the stream answers, the boxes show the last known scan and this says how old it is.
   let status: { tone: 'ok' | 'warn' | 'bad' | 'quiet'; text: string };
-  if (timelapse) status = { tone: 'quiet', text: 'Playing the results timelapse' };
+  if (timelapse) status = { tone: 'quiet', text: 'Replaying recorded readings' };
   else if (!online && now - bootAt < 8000) status = { tone: 'quiet', text: `Connecting, ${lastText}` };
   else if (!online && streamOpen) status = { tone: 'warn', text: `Sensor board offline, ${lastText}` };
   else if (!online) status = { tone: 'bad', text: `Offline, ${lastText}` };
@@ -33,45 +33,45 @@ export function TopBar() {
 
   return (
     <header className="topbar">
-      <div className="brandmark">
-        <Logo size={26} />
-        <div>
-          <h1>{brand.name}</h1>
-          <p>{brand.tagline}</p>
+      <div className="tb">
+        <div className="brandmark">
+          <Logo size={26} />
+          <div>
+            <h1>{brand.name}</h1>
+            <p>{brand.tagline}</p>
+          </div>
         </div>
-      </div>
-      <span className={`status status-${status.tone}`} role="status" aria-live="polite">
-        <i className="dot" />
-        <span className="num">{status.text}</span>
-      </span>
-      <div className="live-reads" aria-label="Live soil readings">
-        <BoxRead id="A" name="Laya" />
-        <BoxRead id="B" name="Timer" />
+        <span className={`status status-${status.tone}`} role="status" aria-live="polite">
+          <i className="dot" />
+          <span className="num">{status.text}</span>
+        </span>
+        <div className="reads" role="table" aria-label="Live soil readings">
+          <div className="reads-row reads-head" role="row">
+            <span role="columnheader"><span className="sr-only">Box</span></span>
+            <span role="columnheader">Moisture</span>
+            <span role="columnheader">Soil temp</span>
+          </div>
+          <BoxRead id="A" name="Laya" />
+          <BoxRead id="B" name="Timer" />
+        </div>
       </div>
     </header>
   );
 }
 
-/** Always-on readout: each box's soil moisture and soil temperature, straight from the latest reading. */
+/** Always-on readout, one tile per box, readable from 3 m: the box, then Moisture and Soil temp as big numbers,
+ *  or one short state in the caution colour when a sensor is off (the raw count is in the Box panel). */
 function BoxRead({ id, name }: { id: BoxId; name: string }) {
   const l = useBox(id);
   const m = moistureOf(l);
-  const raw = rawOf(l);
   const temp = l?.tempOnline && l.tempC != null ? l.tempC : null;
+  const moist = m.pct != null ? `${Math.round(m.pct)}%` : null;
+  const moistOff = m.state === 'disconnected' ? 'Probe off' : m.state === 'uncalibrated' ? 'Not set up' : 'Waiting';
   return (
-    <div className={`live-read live-read-${id.toLowerCase()}`}>
-      <span className="live-read-id">{id}</span>
-      <div className="live-read-name">{name}</div>
-      <div className="live-read-vals">
-        <span className={m.pct == null ? 'is-missing' : ''}>
-          <b className="num">{m.pct != null ? `${Math.round(m.pct)}%` : '—'}</b>
-          <small>{m.pct != null ? 'moisture' : m.state === 'disconnected' ? `probe not reading${raw != null ? ` (${raw})` : ''}` : 'no moisture yet'}</small>
-        </span>
-        <span className={temp == null ? 'is-missing' : ''}>
-          <b className="num">{temp != null ? `${temp.toFixed(1)}°C` : '—'}</b>
-          <small>{temp != null ? 'soil temp' : 'no temp sensor'}</small>
-        </span>
-      </div>
+    <div className={`reads-row reads-${id.toLowerCase()}`} role="row">
+      <span className="reads-box" role="rowheader"><i>{id}</i>{name}</span>
+      <span role="cell">{moist ? <b className="num">{moist}</b> : <b className="is-off">{moistOff}</b>}</span>
+      <span role="cell">{temp != null ? <b className="num">{temp.toFixed(1)}°C</b> : <b className="is-off">{l ? 'No sensor' : 'Waiting'}</b>}</span>
     </div>
   );
 }

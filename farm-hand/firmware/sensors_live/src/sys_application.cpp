@@ -87,6 +87,7 @@ void sys_loop(void)
         PUMP_request(drink, &soil, "server");
     }
     PUMP_fallback(&soil, CLOUD_last_ok_ms());
+    CMD_update();
     PUMP_update();
     PUMP_timer_b();
 #if USE_OLED

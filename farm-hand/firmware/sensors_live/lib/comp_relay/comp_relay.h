@@ -12,6 +12,8 @@ extern "C" {
 StatusCode_e    RELAY_init(void);
 void            RELAY_all_off(void);
 bool            RELAY_is_on(int pump);
+void            RELAY_set_on_level(int level);  /* HIGH or LOW = relay on; saved in flash */
+int             RELAY_on_level(void);
 void            RELAY_set(int pump, bool on);   /* RELAY_ON_LEVEL = relay on */      /* what the ESP32 is telling the relay (not measured water flow) */
 
 #ifdef __cplusplus

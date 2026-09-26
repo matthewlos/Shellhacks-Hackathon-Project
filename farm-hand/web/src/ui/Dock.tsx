@@ -21,15 +21,15 @@ import { SavingsPanel, useSavings } from './Savings';
 export type PanelId = 'box-a' | 'box-b' | 'laya' | 'saves' | 'results' | 'history' | 'forecast' | 'crops' | 'map';
 type Place = 'side' | 'bottom' | 'wide';
 
-const PANELS: Record<PanelId, { title: string; place: Place; body: () => ReactNode }> = {
+const PANELS: Record<PanelId, { title: string; place: Place; large?: boolean; body: () => ReactNode }> = {
   'box-a': { title: `Box A, ${brand.boxes.A.name}`, place: 'side', body: () => <BoxPanel id="A" /> },
   'box-b': { title: `Box B, ${brand.boxes.B.name}`, place: 'side', body: () => <BoxPanel id="B" /> },
   laya: { title: "Laya's call for box A", place: 'side', body: () => <LayaCall /> },
   saves: { title: 'What Farm Hand saves', place: 'side', body: () => <SavingsPanel /> },
   results: { title: 'Results (fake)', place: 'wide', body: () => <ResultsPanel /> },
-  history: { title: 'Soil moisture over time', place: 'bottom', body: () => <History /> },
+  history: { title: 'Soil moisture over time', place: 'side', large: true, body: () => <History /> },
   forecast: { title: 'Rain forecast', place: 'side', body: () => <Forecast /> },
-  crops: { title: 'What can grow in each box', place: 'side', body: () => <CropsPanel /> },
+  crops: { title: 'What can grow in each box', place: 'side', large: true, body: () => <CropsPanel /> },
   map: { title: 'Farms near you', place: 'wide', body: () => <MapPanel /> },
 };
 const IDS = Object.keys(PANELS) as PanelId[];
@@ -44,6 +44,8 @@ export function usePanel(): [PanelId | null, (p: PanelId | null) => void] {
 
 /** Where a panel sits, so the app can make room for it (the 3D scene shrinks beside a side sheet). */
 export const placeOf = (id: PanelId | null): Place | null => (id ? PANELS[id].place : null);
+/** Side sheets come in two widths: most are narrow, charts and lists get the large one. */
+export const isLarge = (id: PanelId | null): boolean => !!(id && PANELS[id].large);
 
 function DockButton({ id, open, onToggle, label, short, glance }: { id: PanelId; open: PanelId | null; onToggle: (p: PanelId | null) => void; label: string; short?: string; glance?: string }) {
   const on = open === id;
@@ -63,7 +65,7 @@ export function Dock({ open, onToggle }: { open: PanelId | null; onToggle: (p: P
       <DockButton id="box-a" open={open} onToggle={onToggle} label="Box A" glance={a} />
       <DockButton id="box-b" open={open} onToggle={onToggle} label="Box B" glance={b} />
       <DockButton id="laya" open={open} onToggle={onToggle} label="Laya's call" short="Laya" glance={call} />
-      <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks.toLocaleString()} checks` : undefined} />
+      <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks >= 1000 ? `${(s.checks / 1000).toFixed(1)}k` : s.checks} checks` : undefined} />
       <DockButton id="results" open={open} onToggle={onToggle} label="Results" />
       <i className="dock-sep" aria-hidden />
       <DockButton id="history" open={open} onToggle={onToggle} label="History" />
@@ -106,7 +108,7 @@ export function Panels({ open, onClose }: { open: PanelId | null; onClose: () =>
     <section
       id="panel"
       ref={ref}
-      className={`panel-shell place-${p?.place ?? 'side'} ${open ? 'is-open' : ''}`}
+      className={`panel-shell place-${p?.place ?? 'side'} ${p?.large ? 'sheet-l' : ''} ${open ? 'is-open' : ''}`}
       role="dialog"
       aria-labelledby="panel-title"
       aria-hidden={!open}
