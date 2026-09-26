@@ -60,7 +60,9 @@ StatusCode_e    OLED_update(const SoilReading_t *soil, const TempReading_t *temp
     display.setTextSize(1);
 
     display.setCursor(0, 0);
-    display.print("FARM HAND   live");
+    display.print("FARM HAND");
+    display.setCursor(80, 0);
+    display.print(WIFI_label());
     display.drawFastHLine(0, 10, SCREEN_WIDTH, SSD1306_WHITE);
 
     display.setCursor(0, 15);

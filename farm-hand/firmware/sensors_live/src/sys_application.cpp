@@ -27,6 +27,12 @@ void sys_application(void)
         error_handler();
     }
 
+    ret = WIFI_init();
+    if (ret != STATUS_OK)
+    {
+        REPORT_status(ret);
+    }
+
     ret = SOIL_init();
     if (ret != STATUS_OK)
     {
@@ -55,6 +61,7 @@ void sys_loop(void)
     unsigned long start = millis();
 
     RELAY_all_off();
+    WIFI_update();
     SOIL_update(&soil);
     TEMP_update(&temp);
     REPORT_send(&soil, &temp);

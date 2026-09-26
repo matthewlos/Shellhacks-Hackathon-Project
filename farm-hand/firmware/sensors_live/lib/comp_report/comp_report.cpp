@@ -1,4 +1,5 @@
 #include "comp_report.h"
+#include "comp_relay.h"
 
 /*
 * One JSON line a second to the laptop (tools/sensors_live.py reads it):
@@ -40,7 +41,7 @@ StatusCode_e    REPORT_send(const SoilReading_t *soil, const TempReading_t *temp
             Serial.printf("%s{\"id\":\"%s\",\"c\":null}", i ? "," : "", temp->id[i]);
         }
     }
-    Serial.println("]}");
+    Serial.printf("],\"pumps\":[%d,%d]}\n", RELAY_is_on(0), RELAY_is_on(1));
 
     return STATUS_OK;
 }

@@ -14,6 +14,7 @@
 #include "comp_report.h"
 #include "comp_diag.h"
 #include "comp_ble.h"
+#include "comp_wifi.h"
 
 #ifdef __cplusplus
 extern "C" {

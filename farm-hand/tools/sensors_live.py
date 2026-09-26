@@ -86,7 +86,8 @@ def ble_reader():
             return
         now = time.time()
         r = {"type": "sens", "ms": m.get("ms"), "a_raw": m["a"], "a_pct": m["ap"], "b_raw": m["b"], "b_pct": m["bp"],
-             "temps": [{"id": f"probe {i + 1}", "c": c} for i, c in enumerate(m.get("t", []))], "t": now}
+             "temps": [{"id": f"probe {i + 1}", "c": c} for i, c in enumerate(m.get("t", []))],
+             "pumps": m.get("p"), "wifi": m.get("w"), "t": now}
         STATE.update(latest=r, rx_at=now)
         HIST.append(r)
 
@@ -166,6 +167,11 @@ pre{margin:0;font:500 12px/1.5 var(--f-num);color:var(--ink-2);white-space:pre-w
  <div class="tile heat" id="t1"><h2>Temp 1 · pin 4</h2><div class="big" id="v1">–</div><div class="meta" id="m1">looking for probe…</div><svg class="spark" id="s1" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
  <div class="tile heat" id="t2"><h2>Temp 2 · pin 4</h2><div class="big" id="v2">–</div><div class="meta" id="m2">looking for probe…</div><svg class="spark" id="s2" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
 </div>
+<div class="grid">
+ <div class="tile" id="tP1"><h2>Pump A · relay D26</h2><div class="big" id="vP1">–</div><div class="meta">what the ESP32 tells the relay</div></div>
+ <div class="tile" id="tP2"><h2>Pump B · relay D27</h2><div class="big" id="vP2">–</div><div class="meta">what the ESP32 tells the relay</div></div>
+ <div class="tile" id="tW" style="grid-column:span 2"><h2>ESP32 internet (WiFi)</h2><div class="big" id="vW" style="font-size:2rem">–</div><div class="meta">wifi ok = on eduroam and reached the internet</div></div>
+</div>
 <div class="panel help"><h3>Which temp probe is which?</h3><span>Hold one steel tip in your hand. The one that climbs toward <b>30–34 °C</b> is the one you're holding. Probes are listed by their chip ID, so the order stays the same every time.</span>
 <span>Soil check: probe in the air reads about <b>3400 raw</b> (0%), dipped in water up to the line about <b>1500 raw</b> (100%).</span></div>
 <div class="panel"><h3>Raw from the ESP32 (<span id="port">–</span>)</h3><pre id="log"></pre></div>
@@ -185,6 +191,8 @@ async function tick(){let d;try{d=await (await fetch('/data')).json()}catch(e){$
  // a probe with no power or no signal reads near 0 raw (the math would call that 100%): say so instead
  const soil=(raw,pct,v,m,t)=>{const off=raw<500;$(t).classList.toggle('off',off);$(v).textContent=off?'–':pct.toFixed(1)+'%';$(m).textContent=off?`not connected (raw ${raw})`:`raw ${raw}`};
  soil(L.a_raw,L.a_pct,'vA','mA','tA');soil(L.b_raw,L.b_pct,'vB','mB','tB');
+ for(const [k,i] of [['P1',0],['P2',1]]){const on=(L.pumps||[])[i];$('v'+k).textContent=on==null?'–':on?'ON':'off';$('v'+k).style.color=on?'#c43333':'var(--muted)'}
+ $('vW').textContent=L.wifi||'–';$('vW').style.color=L.wifi==='wifi ok'?'#0a8a0a':'var(--muted)';
  const H=d.hist;spark($('sA'),H.map(h=>h.a_pct),0,100,'#1f64b8');spark($('sB'),H.map(h=>h.b_pct),0,100,'#1f64b8');
  for(const i of [0,1]){const t=(L.temps||[])[i],k=i+1;$('t'+k).classList.toggle('off',!t||t.c==null);
   $('v'+k).textContent=t&&t.c!=null?t.c.toFixed(1)+'°C':'–';

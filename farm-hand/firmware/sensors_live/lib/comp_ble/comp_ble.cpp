@@ -1,4 +1,6 @@
 #include "comp_ble.h"
+#include "comp_relay.h"
+#include "comp_wifi.h"
 
 #include <BLEDevice.h>
 #include <BLEServer.h>
@@ -66,7 +68,7 @@ StatusCode_e    BLE_send(const SoilReading_t *soil, const TempReading_t *temp)
             n += snprintf(msg + n, sizeof(msg) - n, "%snull", i ? "," : "");
         }
     }
-    snprintf(msg + n, sizeof(msg) - n, "]}");
+    snprintf(msg + n, sizeof(msg) - n, "],\"p\":[%d,%d],\"w\":\"%s\"}", RELAY_is_on(0), RELAY_is_on(1), WIFI_label());
 
     reading->setValue((uint8_t *)msg, strlen(msg));
     if (connected)

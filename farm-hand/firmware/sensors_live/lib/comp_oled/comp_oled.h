@@ -9,6 +9,7 @@
 #include "sys_pinout.h"
 #include "sys_status.h"
 #include "sys_data.h"
+#include "comp_wifi.h"
 
 #include <Wire.h>
 #include <Adafruit_GFX.h>
