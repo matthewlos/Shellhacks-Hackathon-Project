@@ -28,8 +28,8 @@ void    REPORT_status(StatusCode_e code)
 
 StatusCode_e    REPORT_send(const SoilReading_t *soil, const TempReading_t *temp)
 {
-    Serial.printf("{\"type\":\"sens\",\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"temps\":[",
-                  millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1]);
+    Serial.printf("{\"type\":\"sens\",\"ms\":%lu,\"a_raw\":%d,\"a_pct\":%.1f,\"b_raw\":%d,\"b_pct\":%.1f,\"soil\":{\"34\":%d,\"35\":%d,\"32\":%d,\"33\":%d},\"temps\":[",
+                  millis(), soil->raw[0], soil->pct[0], soil->raw[1], soil->pct[1], soil->raw[0], soil->raw[1], soil->raw[2], soil->raw[3]);
     for (int i = 0; i < temp->count; i++)
     {
         if (temp->ok[i])

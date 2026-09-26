@@ -3,7 +3,7 @@
 
 #include "sys_target.h"
 
-#define SOIL_COUNT      2
+#define SOIL_COUNT      4               /* D34, D35, D32, D33: every soil pin is read, the box mapping picks two */
 #define TEMP_MAX        2
 #define LOOP_PERIOD_MS  1000
 

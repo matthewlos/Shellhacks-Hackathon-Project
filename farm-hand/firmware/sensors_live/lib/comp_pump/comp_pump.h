@@ -5,6 +5,9 @@
 #include "sys_status.h"
 #include "sys_data.h"
 
+/* 0 = never run a pump (log what would have happened). Set to 1 only after confirming which pump is box A's. */
+#define PUMP_ARMED          0
+
 /* Safety rules the chip enforces no matter who asks (server, Laya, or the chip's own baseline fallback) */
 #define PUMP_MAX_S          8           /* longest single drink */
 #define PUMP_GAP_MS         300000UL    /* 5 min between drinks: let the water soak to the probe */

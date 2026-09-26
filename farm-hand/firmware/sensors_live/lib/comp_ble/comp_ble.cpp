@@ -83,6 +83,7 @@ StatusCode_e    BLE_send(const SoilReading_t *soil, const TempReading_t *temp)
 
 void    BLE_stop(void)
 {
+    if (!reading) return;           /* never started (USE_BLE=0) */
     if (stopped) return;
     stopped = true;
     reading = nullptr;

@@ -27,11 +27,13 @@ void sys_application(void)
         error_handler();
     }
 
-    ret = BLE_init();
+#if USE_BLE
+    ret = BLE_init();                 /* off by default: its ~80 KB starved the WiFi uploads (demo = USB, testing = WiFi) */
     if (ret != STATUS_OK)
     {
         error_handler();
     }
+#endif
 
     ret = WIFI_init();
     if (ret != STATUS_OK)
@@ -70,7 +72,9 @@ void sys_loop(void)
     SOIL_update(&soil);
     TEMP_update(&temp);
     REPORT_send(&soil, &temp);
+#if USE_BLE
     BLE_send(&soil, &temp);
+#endif
     CLOUD_send(&soil, &temp);
 
     /* Box A: do what the server (Laya / baseline rule) asked, through the chip's safety rules.

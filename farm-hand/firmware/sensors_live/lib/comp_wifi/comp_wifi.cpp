@@ -6,7 +6,8 @@
 #include "ca_usertrust.h"
 #include <WiFiClientSecure.h>
 #include <Preferences.h>
-extern "C" void BLE_stop(void);     /* comp_ble: frees Bluetooth memory for the portal TLS */
+extern "C" void BLE_stop(void);
+extern "C" unsigned long CLOUD_last_ok_ms(void);   /* comp_cloud: last time the Mac mini answered */     /* comp_ble: frees Bluetooth memory for the portal TLS */
 
 #include "secrets.h"            /* include/secrets.h: WIFI_SSID, WIFI_ENTERPRISE, WIFI_USER, WIFI_PASSWORD (never committed) */
 
@@ -344,14 +345,22 @@ void    WIFI_update(void)
         return;
     }
 
+    unsigned long ok = CLOUD_last_ok_ms();
+    if (online && ok && millis() - ok < 30000UL)
+    {
+        return;                             /* the Mac mini answered lately: we're online, skip the slow check */
+    }
     HTTPClient http;
-    http.setTimeout(3000);
+    http.setTimeout(1500);
+    http.setConnectTimeout(1500);
     http.begin("http://connectivitycheck.gstatic.com/generate_204");
     net_code = http.GET();
     http.end();
+    static int misses = 0;
     online = (net_code == 204);
+    misses = online ? 0 : misses + 1;
     WIFI_report();
-    if (!online)
+    if (misses >= 2)
     {
         WIFI_probe_portal();
     }

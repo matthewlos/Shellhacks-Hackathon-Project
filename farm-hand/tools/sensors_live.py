@@ -64,7 +64,10 @@ def reader():
                         m = json.loads(line)
                     except ValueError:
                         continue
+                    if m.get("type") == "wifi":
+                        STATE["wifi"] = "wifi ok" if m.get("state") == "online" else ("wifi.." if m.get("state") == "joined_no_internet" else "no wifi")
                     if m.get("type") == "sens":
+                        m.setdefault("wifi", STATE.get("wifi"))
                         m["t"] = time.time()
                         STATE.update(latest=m, rx_at=m["t"])
                         HIST.append(m)
@@ -162,15 +165,15 @@ pre{margin:0;font:500 12px/1.5 var(--f-num);color:var(--ink-2);white-space:pre-w
 <header><div><h1>Farm Hand sensors</h1><p class="sub">Live from the ESP32 over <b id="via">…</b>, one reading a second. The same numbers show on the OLED on the breadboard. Pumps are off.</p></div>
 <div class="status"><span class="dot" id="dot"></span><span id="stat">Connecting…</span></div></header>
 <div class="grid">
- <div class="tile soil" id="tA"><h2>Soil A · pin 32</h2><div class="big" id="vA">–</div><div class="meta" id="mA">raw –</div><svg class="spark" id="sA" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
- <div class="tile soil" id="tB"><h2>Soil B · pin 33</h2><div class="big" id="vB">–</div><div class="meta" id="mB">raw –</div><div class="note">Not calibrated yet: uses probe A's numbers. Trust the raw value.</div><svg class="spark" id="sB" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
- <div class="tile heat" id="t1"><h2>Temp 1 · pin 4</h2><div class="big" id="v1">–</div><div class="meta" id="m1">looking for probe…</div><svg class="spark" id="s1" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
- <div class="tile heat" id="t2"><h2>Temp 2 · pin 4</h2><div class="big" id="v2">–</div><div class="meta" id="m2">looking for probe…</div><svg class="spark" id="s2" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
+ <div class="tile soil" id="tA"><h2>Soil · D34</h2><div class="big" id="vA">–</div><div class="meta" id="mA">raw –</div><svg class="spark" id="sA" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
+ <div class="tile soil" id="tB"><h2>Soil · D35</h2><div class="big" id="vB">–</div><div class="meta" id="mB">raw –</div><div class="note">Not calibrated yet: uses the other probe's numbers. Trust the raw value.</div><svg class="spark" id="sB" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
+ <div class="tile heat" id="t1"><h2>Temp 1</h2><div class="big" id="v1">–</div><div class="meta" id="m1">looking for probe…</div><svg class="spark" id="s1" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
+ <div class="tile heat" id="t2"><h2>Temp 2</h2><div class="big" id="v2">–</div><div class="meta" id="m2">looking for probe…</div><svg class="spark" id="s2" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
 </div>
 <div class="grid">
  <div class="tile" id="tP1"><h2>Pump A · relay D26</h2><div class="big" id="vP1">–</div><div class="meta">what the ESP32 tells the relay</div></div>
  <div class="tile" id="tP2"><h2>Pump B · relay D27</h2><div class="big" id="vP2">–</div><div class="meta">what the ESP32 tells the relay</div></div>
- <div class="tile" id="tW" style="grid-column:span 2"><h2>ESP32 internet (WiFi)</h2><div class="big" id="vW" style="font-size:2rem">–</div><div class="meta">wifi ok = on eduroam and reached the internet</div></div>
+ <div class="tile" id="tW" style="grid-column:span 2"><h2>ESP32 internet (WiFi)</h2><div class="big" id="vW" style="font-size:2rem">–</div><div class="meta">wifi ok = on FIU_WiFi and reached the internet</div></div>
 </div>
 <div class="panel help"><h3>Which temp probe is which?</h3><span>Hold one steel tip in your hand. The one that climbs toward <b>30–34 °C</b> is the one you're holding. Probes are listed by their chip ID, so the order stays the same every time.</span>
 <span>Soil check: probe in the air reads about <b>3400 raw</b> (0%), dipped in water up to the line about <b>1500 raw</b> (100%).</span></div>

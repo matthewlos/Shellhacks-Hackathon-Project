@@ -33,6 +33,12 @@ static void TEMP_scan(void)
     count = 0;
     TEMP_scan_bus(&sensors);
     TEMP_scan_bus(&sensors2);
+    for (DallasTemperature *b : {&sensors, &sensors2})
+    {
+        b->setResolution(11);                 /* 0.125 C, 375 ms conversion */
+        b->setWaitForConversion(false);       /* start it, read it next loop: never block the loop */
+        b->requestTemperatures();
+    }
     last_scan = millis();
 }
 
@@ -46,13 +52,10 @@ StatusCode_e    TEMP_init(void)
 StatusCode_e    TEMP_update(TempReading_t *out)
 {
     /* Rescan so a probe plugged in (or moved to D4) while running shows up */
-    if (millis() - last_scan > ((count < TEMP_MAX) ? 2000UL : TEMP_RESCAN_MS))
+    if (millis() - last_scan > ((count < TEMP_MAX) ? 15000UL : 60000UL))
     {
         TEMP_scan();
     }
-
-    sensors.requestTemperatures();
-    sensors2.requestTemperatures();
 
     out->count = count;
     for (int i = 0; i < count; i++)
@@ -65,6 +68,8 @@ StatusCode_e    TEMP_update(TempReading_t *out)
         out->ok[i] = (c != DEVICE_DISCONNECTED_C);
         out->celsius[i] = c;
     }
+    sensors.requestTemperatures();           /* start the next conversion; read on the next loop (1 s later) */
+    sensors2.requestTemperatures();
 
     return (count > 0) ? STATUS_OK : STATUS_ERR_NO_TEMP_PROBE;
 }

@@ -56,23 +56,6 @@ void    DIAG_run(void)
         Serial.printf("%s\"%d\":%d", i ? "," : "", adc_pins[i], analogRead(adc_pins[i]));
     }
 
-    Serial.print("},\"onewire\":[");
-    bool first = true;
-    for (size_t i = 0; i < sizeof(onewire_pins) / sizeof(onewire_pins[0]); i++)
-    {
-        OneWire ow(onewire_pins[i]);
-        int found = 0;
-        uint8_t rom[8];
-        ow.reset_search();
-        while (ow.search(rom) && found < 8)
-        {
-            found++;
-        }
-        if (found)
-        {
-            Serial.printf("%s{\"pin\":%d,\"probes\":%d}", first ? "" : ",", onewire_pins[i], found);
-            first = false;
-        }
-    }
-    Serial.println("]}");
+    /* The one-wire pin scan is off: searching 15 pins froze the sensor loop for seconds. Temps are on D4 and D2. */
+    Serial.println("}}");
 }

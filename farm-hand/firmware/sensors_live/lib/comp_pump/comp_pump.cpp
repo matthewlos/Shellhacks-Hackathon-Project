@@ -37,6 +37,15 @@ bool    PUMP_request(float seconds, const SoilReading_t *soil, const char *by)
     seconds = min(seconds, (float)PUMP_MAX_S);
     if (day_s + seconds > PUMP_DAILY_MAX_S) return refuse("daily water cap reached");
 
+#if !PUMP_ARMED
+    static unsigned long last_note = 0;
+    if (millis() - last_note > 60000UL)
+    {
+        last_note = millis();
+        Serial.printf("{\"type\":\"pump_disarmed\",\"pot\":\"A\",\"would_run_s\":%.1f,\"by\":\"%s\"}\n", seconds, by);
+    }
+    return false;
+#endif
     who = by;
     started = millis();
     stop_at = started + (unsigned long)(seconds * 1000);
