@@ -763,6 +763,8 @@ def main():
     shutil.copy(out, CLOUD / "region_v2.json")
     print(json.dumps({k: summary[k] for k in ("fields", "acres", "nearFiu", "byCrop", "soilKnown", "soilUnknown")}, indent=1))
     print(f"similar threshold {thr:.4f}; region_v2.json {out.stat().st_size / 1e6:.2f} MB; done in {time.time() - t0:.0f} s")
+    import build_landcover                                  # vegetation / land-cover overlay + region.landcover
+    build_landcover.main()
 
 
 if __name__ == "__main__":

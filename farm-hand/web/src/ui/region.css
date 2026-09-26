@@ -22,8 +22,42 @@
 .spot-farm b { color: var(--text-dim); font-weight: 600; }
 .near-h { font-size: 14px; color: var(--text-dim); font-weight: 600; margin: 0; }
 
+/* vegetation (USDA land cover): a quiet wash under the fields */
+.fieldmap .landcover-img { image-rendering: auto; }
+.map-legend-card .legend-land { display: grid; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.map-legend-card .legend-land h4 { font-size: 17px; }
+.map-legend-card .legend-land h4 span { font-size: 14px; }
+.map-legend-card .legend-land ul { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+.map-legend-card .legend-land li { grid-template-columns: 14px 1fr; gap: 8px; font-size: 14px; font-weight: 550; }
+.map-legend-card .legend-land i { width: 14px; height: 14px; border-radius: 3px; }
+.map-legend-card .legend-soil { padding-top: 10px; }
+
+/* this spot: what the land is, and what could grow on it */
+.spot-land { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: center; padding: 10px 12px; border-radius: var(--r-ctl); background: var(--sunk); }
+.spot-land i { width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(22, 32, 26, 0.25); }
+.spot-land span { display: grid; gap: 1px; }
+.spot-land b { font-size: 17px; font-weight: 650; }
+.spot-land small { font-size: 13px; color: var(--text-dim); }
+.spot-lead { font-size: 16px; line-height: 1.4; text-wrap: pretty; }
+.spot-lead b { font-weight: 700; }
+.spot-crops { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.spot-crops li { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center; padding: 6px 8px 6px 4px; border-radius: var(--r-ctl); }
+.spot-crops li:nth-child(odd) { background: var(--sunk); }
+.sc-icon { width: 36px; height: 36px; display: grid; place-items: center; }
+.sc-icon svg { width: 30px; height: 30px; }
+.sc-name { font-size: 16px; font-weight: 650; }
+.sc-verdict { font-size: 13px; font-weight: 650; padding: 2px 8px; border-radius: 999px; background: var(--water-soft); color: var(--water); }
+.sc-verdict.v-great { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
+.sc-verdict.v-marginal, .sc-verdict.v-poor { background: var(--sunk); color: var(--text-dim); }
+.spot-farm { grid-template-columns: 36px 1fr auto; }
+.spot-farm span b { font-weight: 650; color: var(--text); }
+.spot-farm > span:nth-child(2) { font-weight: 500; }
+
 @media (max-width: 900px) {
   .map-legend-card .legend-src { display: block; font-size: 12px; }
   .map-legend-card .legend-soil h4 { font-size: 14px; }
   .map-legend-card .legend-soil h4 span { font-size: 12px; }
+  .map-legend-card .legend-land h4 { font-size: 14px; }
+  .map-legend-card .legend-land h4 span { font-size: 12px; }
+  .map-legend-card .legend-land li { font-size: 13px; }
 }

@@ -3,7 +3,8 @@
  * Redland / Homestead), from the AlphaEarth v2 build served at /farmhand/api/region. Each field is drawn from its
  * own polygon, coloured by predicted crop. The map opens framed on FIU.
  * Click a field: crop, soil, the moisture line Farm Hand would hold it at, similar fields, the yearly trend.
- * Click anywhere else: that spot's soil water and temperature now (Open-Meteo) and its USDA soil type.
+ * Click anywhere else: that spot's land cover (USDA), soil water and temperature now (Open-Meteo), its USDA soil type,
+ * and the crops Farm Hand's crop rules (data/sim/crops.ts, same as the Crops page) say could grow there.
  *
  * TODO(data): the v2 extras (polygon, baselinePct, similar, trend, acres, confidence, region.alphaearth)
  * are not in data/types.ts yet, so they are read through the local types below.
@@ -16,6 +17,8 @@ import type { Region, RegionField } from '../data/types';
 import * as backend from '../data/backendBoard';
 import { CropIcon } from './CropIcons';
 import { IconClose } from './icons';
+import { scoreCrops } from '../data/sim/crops';
+import { fallbackFrostDates } from '../data/sim/season';
 import './region.css';
 
 // ------------------------------------------------------------------ v2 shapes, read defensively
@@ -63,6 +66,53 @@ function kmBetween(a: { lat: number; lon: number }, b: { lat: number; lon: numbe
 }
 type Spot = { lat: number; lon: number };
 
+// ------------------------------------------------------------------ land cover (USDA CDL 2024, alphaearth/build_landcover.py)
+interface LandClass { id: string; label: string; color: string; alpha: number }
+interface LandcoverMeta { url: string; year: number; bounds: [[number, number], [number, number]]; classes: LandClass[]; source?: string }
+const landcoverOf = (r: Region) => (r as Region & { landcover?: LandcoverMeta }).landcover ?? null;
+const landcoverUrl = (m: LandcoverMeta) => `${BACKEND}/${m.url.replace(/^\//, '')}`;
+const LAND_WORDS: Record<string, string> = {
+  trees: 'Trees', grass: 'Grass & parks', wetland: 'Wetland', yards: 'Suburb with yards and trees', built: 'Built-up (mostly paved)',
+  water: 'Water', farmland: 'Farmland',
+};
+const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+const mercY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
+
+/** Reads the overlay PNG's pixels once, so any tapped spot can be named (the palette is the lookup table). */
+function useLandcover(meta: LandcoverMeta | null) {
+  const [px, setPx] = useState<{ data: Uint8ClampedArray; w: number; h: number } | null>(null);
+  useEffect(() => {
+    if (!meta) return;
+    let alive = true;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+        const g = c.getContext('2d', { willReadFrequently: true }); if (!g) return;
+        g.drawImage(img, 0, 0);
+        if (alive) setPx({ data: g.getImageData(0, 0, c.width, c.height).data, w: c.width, h: c.height });
+      } catch { /* cross-origin without CORS: the overlay still shows, spots just go unnamed */ }
+    };
+    img.src = landcoverUrl(meta);
+    return () => { alive = false; };
+  }, [meta]);
+  return useMemo(() => {
+    if (!meta || !px) return null;
+    const [[s, w], [n, e]] = meta.bounds, yS = mercY(s), yN = mercY(n);
+    const pal = meta.classes.map((k) => ({ k, rgb: hex(k.color) }));
+    return (lat: number, lon: number): LandClass | null => {
+      const col = Math.floor(((lon - w) / (e - w)) * px.w), row = Math.floor(((yN - mercY(lat)) / (yN - yS)) * px.h);
+      if (col < 0 || row < 0 || col >= px.w || row >= px.h) return null;
+      const i = (row * px.w + col) * 4;
+      if (px.data[i + 3] === 0) return null;
+      let best: LandClass | null = null, bd = Infinity;
+      for (const { k, rgb } of pal) { const d = rgb.reduce((t, v, j) => t + (v - px.data[i + j]) ** 2, 0); if (d < bd) { bd = d; best = k; } }
+      return best;
+    };
+  }, [meta, px]);
+}
+
 // ------------------------------------------------------------------ the map (Leaflet over satellite imagery)
 function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
   region: Region; selected: string | null; onPick: (id: string | null) => void;
@@ -105,6 +155,11 @@ function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
     }).addTo(m);
     m.on('click', (e: L.LeafletMouseEvent) => { pick.current(null); spotRef.current({ lat: e.latlng.lat, lon: e.latlng.lng }); });
 
+    // vegetation / land cover (USDA), under the fields and dots
+    const lc = landcoverOf(region);
+    m.createPane('landcover').style.zIndex = '350';
+    const vegLayer = lc ? L.imageOverlay(landcoverUrl(lc), lc.bounds, { pane: 'landcover', opacity: 1, interactive: false, className: 'landcover-img' }) : null;
+    vegLayer?.addTo(m);
     const fieldsLayer = L.layerGroup().addTo(m);
     for (const f of region.fields) {
       const poly = fv(f).polygon;
@@ -128,6 +183,7 @@ function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
     const soilNowLayer = L.layerGroup().addTo(m);
     soilLayer.current = soilNowLayer;
     L.control.layers(undefined, {
+      ...(vegLayer ? { 'Vegetation <small>(USDA)</small>': vegLayer } : {}),
       'Farm fields <small>(Google AlphaEarth)</small>': fieldsLayer,
       'Soil water now <small>(Open-Meteo)</small>': soilNowLayer,
       'Soil type points <small>(USDA)</small>': typeLayer,
@@ -199,7 +255,8 @@ function soilWords(texture: string | null | undefined): string | null {
 // ------------------------------------------------------------------ soil right now (Open-Meteo model, via the server)
 interface SoilPoint { lat: number; lon: number; moisturePct: number | null; temp6cmC: number | null; week?: (number | null)[] }
 interface SoilNow { status: string; points: SoilPoint[] }
-const API = ((backend as unknown as { BACKEND_URL?: string }).BACKEND_URL ?? '/farmhand') + '/api/soil-now';
+const BACKEND = (backend as unknown as { BACKEND_URL?: string }).BACKEND_URL ?? '/farmhand';
+const API = BACKEND + '/api/soil-now';
 
 /** Fetched once per map open; the server caches it for 30 minutes. */
 function useSoilNow(): SoilNow | null {
@@ -308,7 +365,49 @@ function bearingWords(from: Spot, to: Spot) {
 }
 
 /** Any spot on the map, farm or not: soil water now (Open-Meteo), USDA soil type, the nearest farm. */
-function SpotCard({ spot, region, soilNow, onPick, onClose }: { spot: Spot; region: Region; soilNow: SoilNow | null; onPick: (id: string) => void; onClose: () => void }) {
+/**
+ * Open-Meteo gives soil water by volume (m3/m3). Farm Hand's crop rules use its probe scale, 20 % = wilting point and
+ * 65 % = field capacity. Put one on the other with typical wilting point / field capacity for the soil's texture
+ * (Saxton & Rawls 2006 class averages; muck from organic-soil tables). Rough, and the card says so.
+ */
+function probeScale(vwcPct: number, texture: string | null | undefined): number {
+  const t = (texture ?? '').toLowerCase();
+  const [wp, fc] = t.includes('muck') || t.includes('peat') ? [25, 55] : t.includes('clay') ? [24, 40] : t.includes('silt') || t.includes('marl') ? [12, 32]
+    : t.includes('sand') && !t.includes('loam') ? [5, 14] : t.includes('loam') ? [11, 28] : [8, 26];
+  return Math.max(5, Math.min(90, 20 + 45 * ((vwcPct - wp) / (fc - wp))));
+}
+const CAT_ICON: Record<string, string> = { fruiting: 'vegetables', root: 'vegetables', leafy: 'vegetables', legume: 'vegetables', allium: 'vegetables', grain: 'vegetables', fruit: 'tree fruit', herb: 'grass', cover: 'grass' };
+const CAT_COLOR: Record<string, string> = { fruiting: '#d9503f', root: '#c9822e', leafy: '#3f9a4a', legume: '#6f9a2e', allium: '#9a6fb0', grain: '#c9a23a', fruit: '#d24a6c', herb: '#2f8f7a', cover: '#5a8f3a' };
+
+function SpotCrops({ lat, soilNow, spot, soil }: { lat: number; soilNow: SoilNow | null; spot: Spot; soil: { texture?: string | null; drainageClass?: string | null; ph?: number | null } | null }) {
+  const pt = soilNow ? nearest(soilNow.points, spot.lat, spot.lon) : null;
+  const m = pt?.moisturePct ?? null, t = pt?.temp6cmC ?? null;
+  const probe = m == null ? null : probeScale(m, soil?.texture);
+  const crops = useMemo(() => (probe == null || t == null ? [] : scoreCrops({
+    drainageClass: (soil?.drainageClass as never) ?? null, soilTempC: t, soilMoisturePct: probe, sun: null, ph: soil?.ph ?? null, frost: fallbackFrostDates(lat),
+  })), [probe, t, soil, lat]);
+  if (probe == null || t == null) return <div className="fc-block"><h4>Crops that could grow here</h4><p className="muted">Waiting for today's soil reading.</p></div>;
+  const good = crops.filter((c) => c.score >= 55);
+  const list = (good.length ? good : crops).slice(0, 5);
+  return (
+    <div className="fc-block">
+      <h4>Crops that could grow here <span className="fc-src">Farm Hand crop rules</span></h4>
+      <p className="spot-lead">With soil at <b className="num">{m!.toFixed(1)}%</b> water and <b className="num">{t.toFixed(1)} °C</b>, {good.length ? 'these can grow here:' : 'nothing fits well right now; the closest are:'}</p>
+      <ul className="spot-crops">
+        {list.map((c) => (
+          <li key={c.id}>
+            <span className="sc-icon" style={{ color: CAT_COLOR[c.category] ?? 'var(--text-dim)' }}><CropIcon crop={CAT_ICON[c.category] ?? c.name} /></span>
+            <span className="sc-name">{c.name}</span>
+            <span className={`sc-verdict v-${c.verdict}`}>{c.score >= 80 ? 'thrives' : c.score >= 55 ? 'can grow' : 'struggles'}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="muted small num">{m!.toFixed(1)}% by volume is about {Math.round(probe)}% on Farm Hand's probe scale for {soil?.texture ? 'this soil' : 'an average soil'}.{soil ? '' : ' Soil type unknown here, so drainage is left out.'} Sun is not known for a map spot.</p>
+    </div>
+  );
+}
+
+function SpotCard({ spot, region, soilNow, land, onPick, onClose }: { spot: Spot; region: Region; soilNow: SoilNow | null; land: LandClass | null | undefined; onPick: (id: string) => void; onClose: () => void }) {
   const home = region.centre;
   const dk = kmBetween(home, spot);
   let soil: SoilSpot | null = null, sd = Infinity;
@@ -316,7 +415,10 @@ function SpotCard({ spot, region, soilNow, onPick, onClose }: { spot: Spot; regi
   if (sd > 1.2) soil = null;
   let farm: RegionField | null = null, fd = Infinity;
   for (const f of region.fields) { const d = kmBetween(spot, f); if (d < fd) { fd = d; farm = f; } }
-  const sw = soilWords(soil?.texture), ww = waterWords(soil?.awsCm);
+  // no soil point nearby: a farm within 1.2 km carries its own SSURGO soil
+  const farmSoil = !soil && farm && fd <= 1.2 && farm.soil ? (farm.soil as unknown as SoilSpot & { ph?: number | null }) : null;
+  const soilUse = soil ?? farmSoil;
+  const sw = soilWords(soilUse?.texture), ww = waterWords(soilUse?.awsCm);
   return (
     <section className="field-card rich" aria-label="This spot">
       <header className="fc-head">
@@ -327,24 +429,33 @@ function SpotCard({ spot, region, soilNow, onPick, onClose }: { spot: Spot; regi
         </div>
         <button className="btn btn-icon" onClick={onClose} aria-label="Back to the overview"><IconClose /></button>
       </header>
+      {land !== undefined && (
+        <p className="spot-land">
+          <i style={{ background: land?.color ?? 'transparent' }} aria-hidden />
+          <span><b>{land ? LAND_WORDS[land.id] ?? land.label : 'Not mapped'}</b><small>USDA land cover, {landcoverOf(region)?.year ?? 2024}</small></span>
+        </p>
+      )}
       <SoilNowBlock soilNow={soilNow} lat={spot.lat} lon={spot.lon} />
+      <SpotCrops lat={spot.lat} soilNow={soilNow} spot={spot} soil={soilUse} />
       <div className="fc-block">
         <h4>Soil type <span className="fc-src">USDA soil survey</span></h4>
-        {soil?.series ? (
-          <p className="fc-need"><b>{soil.series}</b>{sw ? `, ${sw}` : ''}{soil.drainageClass && DRAIN_WORDS[soil.drainageClass] ? `, ${DRAIN_WORDS[soil.drainageClass]}` : ''}{ww ? `; ${ww}` : ''}.</p>
+        {soilUse?.series ? (
+          <p className="fc-need"><b>{soilUse.series}</b>{sw ? `, ${sw}` : ''}{soilUse.drainageClass && DRAIN_WORDS[soilUse.drainageClass] ? `, ${DRAIN_WORDS[soilUse.drainageClass]}` : ''}{ww ? `; ${ww}` : ''}{farmSoil ? ' (at the nearest farm)' : ''}.</p>
         ) : (
           <p className="muted">{spotsOf(region).length ? 'Soil type points cover 8 km around your boxes; tap a farm for its soil.' : 'No soil type points in this map.'}</p>
         )}
       </div>
       {farm && (
         <div className="fc-block">
-          <h4>Nearest farm</h4>
-          <button className="spot-farm" onClick={() => onPick(farm.id)}>
-            <i style={{ background: cropColor(farm.crop) }} /><span>{farm.crop}</span><b className="num">{fd < 1 ? `${Math.round(fd * 1000)} m` : `${fd.toFixed(1)} km`}</b>
+          <h4>Nearest real farm <span className="fc-src">Google AlphaEarth</span></h4>
+          <button className="spot-farm" onClick={() => onPick(farm.id)} aria-label={`Open the nearest farm: ${farm.crop}`}>
+            <span className="sc-icon" style={{ color: cropColor(farm.crop) }}><CropIcon crop={farm.crop} /></span>
+            <span>Grows <b>{farm.crop.toLowerCase()}</b>, about {fmtInt(acresOf(farm))} acres</span>
+            <b className="num">{fd < 1 ? `${Math.round(fd * 1000)} m` : `${fd.toFixed(1)} km`} {bearingWords(spot, farm)}</b>
           </button>
         </div>
       )}
-      <p className="fc-source">Soil now: Open-Meteo model (~10 km). Soil type: USDA SSURGO. Farms: Google satellite (AlphaEarth).</p>
+      <p className="fc-source">Land cover: USDA Cropland Data Layer 2024. Soil now: Open-Meteo model (~10 km). Soil type: USDA SSURGO. Farms: Google satellite (AlphaEarth).</p>
     </section>
   );
 }
@@ -354,6 +465,7 @@ const shortName = (n: string) => SHORT.find(([re]) => re.test(n))?.[1] ?? n;
 
 /** Always on the map, readable from 2-3 m: what each colour means, and whose data it is. */
 function Legend({ region }: { region: Region }) {
+  const lc = landcoverOf(region);
   const counts = new Map<string, number>();
   const by = ae(region).summary?.byCrop;
   if (by) for (const [n, c] of Object.entries(by)) counts.set(n, c.fields);
@@ -373,8 +485,14 @@ function Legend({ region }: { region: Region }) {
         <div className="legend-ramp" aria-hidden style={{ background: `linear-gradient(90deg, ${moistColor(MOIST_LO)}, ${moistColor(20)} ${(100 * (20 - MOIST_LO)) / (MOIST_HI - MOIST_LO)}%, ${moistColor(MOIST_HI)})` }} />
         <div className="legend-ramp-labels num"><span>dry {MOIST_LO}%</span><span>wet {MOIST_HI}%</span></div>
       </div>
+      {lc && (
+        <div className="legend-land">
+          <h4>Vegetation <span>USDA land cover, {lc.year}</span></h4>
+          <ul>{lc.classes.filter((k) => k.id !== 'farmland').map((k) => <li key={k.id}><i style={{ background: k.color }} /><span>{k.label}</span></li>)}</ul>
+        </div>
+      )}
       <ul><li className="legend-home"><i /><span>Your boxes (FIU)</span></li></ul>
-      <p className="legend-src">Crops: Google DeepMind AlphaEarth. Soil water and temperature: Open-Meteo. Soil type: USDA. Tap anywhere for that spot.</p>
+      <p className="legend-src">Crops: Google DeepMind AlphaEarth. Vegetation and soil type: USDA. Soil water and temperature: Open-Meteo. Tap anywhere for that spot.</p>
     </div>
   );
 }
@@ -384,7 +502,7 @@ function HowWeKnow({ region }: { region: Region }) {
   return (
     <details className="how">
       <summary>How we know</summary>
-      <p>Crops are predicted from Google DeepMind's AlphaEarth satellite data ({region.year}){acc?.accuracy != null ? `, right on ${pct(acc.accuracy)} of test fields (${pct(acc.areaWeightedAccuracy ?? acc.accuracy)} of the area)` : ''}. Soil type comes from the USDA soil survey. Soil water and temperature right now come from the Open-Meteo soil model (about 10 km across, so nearby dots can read the same). The moisture line is FAO-56 guidance for each crop.</p>
+      <p>Crops are predicted from Google DeepMind's AlphaEarth satellite data ({region.year}){acc?.accuracy != null ? `, right on ${pct(acc.accuracy)} of test fields (${pct(acc.areaWeightedAccuracy ?? acc.accuracy)} of the area)` : ''}. Vegetation is the USDA Cropland Data Layer's land cover, grouped into a few plain classes. Soil type comes from the USDA soil survey. "Crops that could grow here" runs the same crop rules as the Crops page on the spot's modeled soil water (put on the probe scale using typical values for its soil texture) and temperature. Soil water and temperature right now come from the Open-Meteo soil model (about 10 km across, so nearby dots can read the same). The moisture line is FAO-56 guidance for each crop.</p>
       <ul>{region.sources.map((s) => <li key={s.name}><a href={s.url} target="_blank" rel="noreferrer">{s.name}</a></li>)}</ul>
     </details>
   );
@@ -411,6 +529,7 @@ export function MapPanel() {
   const [sel, setSel] = useState<string | null>(null);
   const [spot, setSpot] = useState<Spot | null>(null);
   const soilNow = useSoilNow();
+  const landAt = useLandcover(data?.status === 'ready' && data.region ? landcoverOf(data.region) : null);
   useEffect(() => { if (!useApp.getState().regionData) void useApp.getState().loadRegion(); }, []);
   const region = data?.status === 'ready' ? data.region : null;
   const field = region && sel ? region.fields.find((f) => f.id === sel) ?? null : null;
@@ -429,7 +548,7 @@ export function MapPanel() {
       </div>
       <div className="map-side">
         {field ? <FieldCard f={field} soilNow={soilNow} onClose={() => setSel(null)} />
-          : spot ? <SpotCard spot={spot} region={region} soilNow={soilNow} onPick={(id) => { setSpot(null); setSel(id); }} onClose={() => setSpot(null)} />
+          : spot ? <SpotCard spot={spot} region={region} soilNow={soilNow} land={landAt?.(spot.lat, spot.lon)} onPick={(id) => { setSpot(null); setSel(id); }} onClose={() => setSpot(null)} />
           : <Overview region={region} />}
         <HowWeKnow region={region} />
       </div>

@@ -803,6 +803,19 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
             return
+        if p == "/api/landcover.png":           # vegetation overlay for the map (alphaearth/build_landcover.py)
+            f = HERE / "landcover_v1.png"
+            if not f.is_file():
+                return self._send(404, '{"error":"no land cover"}')
+            body = f.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/png")
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.send_header("Access-Control-Allow-Origin", "*")      # the map reads its pixels (canvas) to name a spot
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if p.startswith("/api/"):
             return self._api("GET")
         if p in ("", "/"):
