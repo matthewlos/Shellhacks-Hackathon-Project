@@ -1,10 +1,11 @@
 """Live sensor page for firmware/sensors_live: both soil probes + every temp probe, in the browser.
 
-  python tools/sensors_live.py                 # auto-finds the ESP32's USB port
-  python tools/sensors_live.py /dev/cu.usbserial-0001
+  python tools/sensors_live.py                 # over Bluetooth (the ESP32 advertises as "FarmHand")
+  python tools/sensors_live.py --usb           # over the USB cable instead (auto-finds the port)
+  python tools/sensors_live.py --usb /dev/cu.usbserial-0001
   -> http://127.0.0.1:8099
 
-Reads the ESP32's JSON lines (115200 baud) and serves one page. Needs pyserial. Nothing here can run a pump:
+Bluetooth needs bleak (pip install bleak); macOS asks once to allow Bluetooth for the terminal. USB needs pyserial. Nothing here can run a pump:
 the firmware holds both relay pins off, and this script never writes to the board.
 """
 import collections
@@ -14,17 +15,23 @@ import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
+import asyncio
+
 import serial
 from serial.tools import list_ports
 
 PORT_HTTP = 8099
 HIST = collections.deque(maxlen=300)          # last 5 minutes at one reading a second
 STATE = {"latest": None, "rx_at": None, "port": None, "error": None, "log": collections.deque(maxlen=12)}
+USE_USB = "--usb" in sys.argv
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+BLE_NAME = "FarmHand"
+BLE_READING = "6f2a0002-8c3e-4b5a-9d1e-2f7c3a1b0e01"      # comp_ble.h BLE_READING_UUID
 
 
 def find_port():
-    if len(sys.argv) > 1:
-        return sys.argv[1]
+    if ARGS:
+        return ARGS[0]
     for p in list_ports.comports():
         d = f"{p.device} {p.description} {p.manufacturer or ''}".lower()
         if any(k in d for k in ("usbserial", "cp210", "ch340", "ch910", "silicon labs", "uart", "usbmodem")):
@@ -64,6 +71,44 @@ def reader():
         except (serial.SerialException, OSError) as e:
             STATE["error"] = f"{port}: {e}"
             time.sleep(2)
+
+
+def ble_reader():
+    """Find FarmHand, subscribe to its reading, reconnect forever. Short keys from comp_ble.cpp are mapped to the USB names."""
+    from bleak import BleakClient, BleakScanner
+
+    def on_note(_, data):
+        line = data.decode("utf-8", "replace")
+        STATE["log"].append("bt " + line[:200])
+        try:
+            m = json.loads(line)
+        except ValueError:
+            return
+        now = time.time()
+        r = {"type": "sens", "ms": m.get("ms"), "a_raw": m["a"], "a_pct": m["ap"], "b_raw": m["b"], "b_pct": m["bp"],
+             "temps": [{"id": f"probe {i + 1}", "c": c} for i, c in enumerate(m.get("t", []))], "t": now}
+        STATE.update(latest=r, rx_at=now)
+        HIST.append(r)
+
+    async def run():
+        while True:
+            try:
+                STATE["error"] = "Looking for FarmHand over Bluetooth…"
+                dev = await BleakScanner.find_device_by_name(BLE_NAME, timeout=10)
+                if not dev:
+                    STATE["error"] = "FarmHand not found over Bluetooth. Is the ESP32 powered and within about 10 m?"
+                    continue
+                async with BleakClient(dev) as c:
+                    STATE.update(port=f"Bluetooth: {dev.name}", error=None)
+                    await c.start_notify(BLE_READING, on_note)
+                    while c.is_connected:
+                        await asyncio.sleep(1)
+                STATE["error"] = "Bluetooth dropped. Reconnecting…"
+            except Exception as e:
+                STATE["error"] = f"Bluetooth: {type(e).__name__}: {e}"
+                await asyncio.sleep(2)
+
+    asyncio.run(run())
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -113,7 +158,7 @@ svg.spark{width:100%;height:46px;display:block;margin-top:6px}
 pre{margin:0;font:500 12px/1.5 var(--f-num);color:var(--ink-2);white-space:pre-wrap;word-break:break-all;max-height:220px;overflow:auto}
 .help{font-size:14px;color:var(--ink-2);display:grid;gap:4px}.help b{color:var(--ink)}
 </style></head><body><div class="wrap">
-<header><div><h1>Farm Hand sensors</h1><p class="sub">Live from the ESP32, one reading a second. The same numbers show on the OLED on the breadboard. Pumps are off.</p></div>
+<header><div><h1>Farm Hand sensors</h1><p class="sub">Live from the ESP32 over <b id="via">…</b>, one reading a second. The same numbers show on the OLED on the breadboard. Pumps are off.</p></div>
 <div class="status"><span class="dot" id="dot"></span><span id="stat">Connecting…</span></div></header>
 <div class="grid">
  <div class="tile soil" id="tA"><h2>Soil A · pin 32</h2><div class="big" id="vA">–</div><div class="meta" id="mA">raw –</div><svg class="spark" id="sA" viewBox="0 0 200 46" preserveAspectRatio="none"></svg></div>
@@ -123,7 +168,7 @@ pre{margin:0;font:500 12px/1.5 var(--f-num);color:var(--ink-2);white-space:pre-w
 </div>
 <div class="panel help"><h3>Which temp probe is which?</h3><span>Hold one steel tip in your hand. The one that climbs toward <b>30–34 °C</b> is the one you're holding. Probes are listed by their chip ID, so the order stays the same every time.</span>
 <span>Soil check: probe in the air reads about <b>3400 raw</b> (0%), dipped in water up to the line about <b>1500 raw</b> (100%).</span></div>
-<div class="panel"><h3>Serial from the ESP32 (<span id="port">–</span>)</h3><pre id="log"></pre></div>
+<div class="panel"><h3>Raw from the ESP32 (<span id="port">–</span>)</h3><pre id="log"></pre></div>
 </div>
 <script>
 const $=id=>document.getElementById(id);
@@ -135,19 +180,20 @@ async function tick(){let d;try{d=await (await fetch('/data')).json()}catch(e){$
  const L=d.latest,live=L&&d.age_s!=null&&d.age_s<3;
  $('dot').className='dot '+(live?'ok':'bad');
  $('stat').textContent=d.error?d.error:!L?'Connected, waiting for the first reading…':live?`Live · last reading ${d.age_s.toFixed(1)} s ago`:`No reading for ${d.age_s.toFixed(0)} s`;
- $('port').textContent=d.port||'no port';$('log').textContent=d.log.join('\n');
+ $('port').textContent=d.port||'no port';$('via').textContent=(d.port||'').startsWith('Bluetooth')?'Bluetooth':'USB';$('log').textContent=d.log.join('\n');
  if(!L)return;
- $('vA').textContent=L.a_pct.toFixed(1)+'%';$('mA').textContent=`raw ${L.a_raw}`;
- $('vB').textContent=L.b_pct.toFixed(1)+'%';$('mB').textContent=`raw ${L.b_raw}`;
+ // a probe with no power or no signal reads near 0 raw (the math would call that 100%): say so instead
+ const soil=(raw,pct,v,m,t)=>{const off=raw<500;$(t).classList.toggle('off',off);$(v).textContent=off?'–':pct.toFixed(1)+'%';$(m).textContent=off?`not connected (raw ${raw})`:`raw ${raw}`};
+ soil(L.a_raw,L.a_pct,'vA','mA','tA');soil(L.b_raw,L.b_pct,'vB','mB','tB');
  const H=d.hist;spark($('sA'),H.map(h=>h.a_pct),0,100,'#1f64b8');spark($('sB'),H.map(h=>h.b_pct),0,100,'#1f64b8');
  for(const i of [0,1]){const t=(L.temps||[])[i],k=i+1;$('t'+k).classList.toggle('off',!t||t.c==null);
   $('v'+k).textContent=t&&t.c!=null?t.c.toFixed(1)+'°C':'–';
-  $('m'+k).textContent=t?(t.c==null?`probe ${t.id.slice(-6)} dropped off`:`chip ${t.id.slice(-6)}`):'no probe found on the data line';
+  $('m'+k).textContent=t?(t.c==null?`${t.id.slice(-6)} dropped off`:t.id.startsWith('probe')?t.id:`chip ${t.id.slice(-6)}`):'no probe found on the data line';
   spark($('s'+k),H.map(h=>(h.temps||[])[i]?.c??null),null,null,'#7646b8')}}
 tick();setInterval(tick,500);
 </script></body></html>"""
 
 if __name__ == "__main__":
-    threading.Thread(target=reader, daemon=True).start()
-    print(f"Farm Hand sensors: http://127.0.0.1:{PORT_HTTP}")
+    threading.Thread(target=reader if USE_USB else ble_reader, daemon=True).start()
+    print(f"Farm Hand sensors ({'USB' if USE_USB else 'Bluetooth'}): http://127.0.0.1:{PORT_HTTP}")
     ThreadingHTTPServer(("127.0.0.1", PORT_HTTP), Handler).serve_forever()

@@ -13,6 +13,7 @@
 #include "comp_oled.h"
 #include "comp_report.h"
 #include "comp_diag.h"
+#include "comp_ble.h"
 
 #ifdef __cplusplus
 extern "C" {

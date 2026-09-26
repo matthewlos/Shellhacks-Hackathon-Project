@@ -45,9 +45,13 @@ StatusCode_e    OLED_init(void)
 StatusCode_e    OLED_update(const SoilReading_t *soil, const TempReading_t *temp)
 {
     /* The screen can come up after the ESP32 (it's on the other power supply): keep asking */
-    if (!found && OLED_init() != STATUS_OK)
+    static unsigned long last_try = 0;
+    if (!found)
     {
-        return STATUS_ERR_OLED_NOT_FOUND;
+        if (millis() - last_try < 5000 || (last_try = millis(), OLED_init() != STATUS_OK))
+        {
+            return STATUS_ERR_OLED_NOT_FOUND;
+        }
     }
 
     display.clearDisplay();

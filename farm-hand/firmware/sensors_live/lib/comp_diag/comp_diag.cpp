@@ -35,13 +35,20 @@ static void DIAG_i2c(int sda, int scl, const char *label)
 
 void    DIAG_run(void)
 {
-    Serial.print("{\"type\":\"diag\",");
-    DIAG_i2c(OLED_SDA, OLED_SCL, "i2c_21_22");
-    Serial.print(",");
-    DIAG_i2c(OLED_SCL, OLED_SDA, "i2c_swapped");
-    Wire.end();
-    Wire.begin(OLED_SDA, OLED_SCL);                       /* back to the real wiring for the screen */
-    Wire.setTimeOut(50);
+    Serial.print("{\"type\":\"diag\"");
+
+    /* The I2C scan runs once at boot only: re-scanning (and the swapped-pin scan) while the screen is
+       drawing blanked it every 10 s. The screen is confirmed on 21/22 (0x3C). */
+    static bool i2c_done = true;       /* off: with the screen unpowered, a full scan freezes the board for minutes */
+    if (!i2c_done)
+    {
+        Serial.print(",");
+        DIAG_i2c(OLED_SDA, OLED_SCL, "i2c_21_22");
+        Wire.end();
+        Wire.begin(OLED_SDA, OLED_SCL);
+        Wire.setTimeOut(50);
+        i2c_done = true;
+    }
 
     Serial.print(",\"adc\":{");
     for (size_t i = 0; i < sizeof(adc_pins) / sizeof(adc_pins[0]); i++)

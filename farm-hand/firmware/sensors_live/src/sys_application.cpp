@@ -21,6 +21,12 @@ void sys_application(void)
         error_handler();
     }
 
+    ret = BLE_init();
+    if (ret != STATUS_OK)
+    {
+        error_handler();
+    }
+
     ret = SOIL_init();
     if (ret != STATUS_OK)
     {
@@ -52,6 +58,7 @@ void sys_loop(void)
     SOIL_update(&soil);
     TEMP_update(&temp);
     REPORT_send(&soil, &temp);
+    BLE_send(&soil, &temp);
     OLED_update(&soil, &temp);
 
     /* Wiring check every 10 s, so moving a wire shows up without a reset */

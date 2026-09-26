@@ -10,8 +10,10 @@
 #define OLED_SCL 22
 #define OLED_SDA 21
 
-/* DS18B20 pinout (every temp probe on the same data line) */
-#define DS18B20_PIN 4
+/* DS18B20 pinout. All probes belong on D4; D2 is also read because temp 2 was wired there.
+   Note: a probe adapter on D2 holds it high and blocks flashing (D2 is a boot pin). Move it to D4. */
+#define DS18B20_PIN   4
+#define DS18B20_PIN_2 2
 
 /* Soil probe pinout (AOUT), ADC1 pins. Wired to D34 / D35 on the real board (found by comp_diag 2026-09-26) */
 #define SOIL_A_PIN 34
