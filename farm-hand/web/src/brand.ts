@@ -25,7 +25,7 @@ export const brand = {
 
   /** The two storage-tote boxes. Box A is the AI, box B is the control. */
   boxes: {
-    A: { name: 'Farm Hand', how: 'Watered by Laya, the AI', color: 'var(--water)' },
+    A: { name: 'Farm Hand', how: 'Watered by the decision model', color: 'var(--water)' },
     B: { name: 'Timer', how: 'Watered on a fixed schedule', color: 'var(--warm)' },
   },
   /** The baseline rule Laya falls back to, and the line drawn on the meters and the chart. */

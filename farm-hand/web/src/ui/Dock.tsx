@@ -23,7 +23,7 @@ type Place = 'side' | 'bottom' | 'wide';
 const PANELS: Record<PanelId, { title: string; place: Place; large?: boolean; body: () => ReactNode }> = {
   'box-a': { title: `Box A, ${brand.boxes.A.name}`, place: 'side', body: () => <BoxPanel id="A" /> },
   'box-b': { title: `Box B, ${brand.boxes.B.name}`, place: 'side', body: () => <BoxPanel id="B" /> },
-  laya: { title: "Laya's call for box A", place: 'side', body: () => <LayaCall /> },
+  laya: { title: "The decision model's call for box A", place: 'side', body: () => <LayaCall /> },
   saves: { title: 'What Farm Hand saves', place: 'side', body: () => <SavingsPanel /> },
   results: { title: 'Results', place: 'wide', body: () => <ResultsPanel /> },
   forecast: { title: 'Rain forecast', place: 'side', body: () => <Forecast /> },
@@ -62,7 +62,7 @@ export function Dock({ open, onToggle }: { open: PanelId | null; onToggle: (p: P
     <nav className="dock" aria-label="Panels">
       <DockButton id="box-a" open={open} onToggle={onToggle} label="Box A" glance={a} />
       <DockButton id="box-b" open={open} onToggle={onToggle} label="Box B" glance={b} />
-      <DockButton id="laya" open={open} onToggle={onToggle} label="Laya's call" short="Laya" glance={call} />
+      <DockButton id="laya" open={open} onToggle={onToggle} label="Decision model" short="Decision" glance={call} />
       <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks >= 1000 ? `${(s.checks / 1000).toFixed(1)}k` : s.checks} checks` : undefined} />
       <DockButton id="results" open={open} onToggle={onToggle} label="Results" />
       <i className="dock-sep" aria-hidden />

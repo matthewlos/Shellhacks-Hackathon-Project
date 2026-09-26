@@ -136,14 +136,14 @@ export function ResultsPanel() {
   return (
     <div className="results">
       <div className="res-head">
-        <p className="res-headline">Laya used <b className="num">{r.totals.savedL.toFixed(1)} L</b> less water than the timer</p>
+        <p className="res-headline">The decision model used <b className="num">{r.totals.savedL.toFixed(1)} L</b> less water than the timer</p>
         <p className="res-pct num">{r.totals.savedPct}% less</p>
       </div>
 
       <div className="res-top">
       <div className="res-race">
         <div className="res-box res-a">
-          <span className="res-who">Laya, box A</span>
+          <span className="res-who">Decision model, box A</span>
           <b className="num">{litres('A').toFixed(1)} L</b>
           <span className="num">{count('A')} of {r.totals.layaPours} drinks</span>
           <span className="res-bar" aria-hidden><i style={{ transform: `scaleX(${litres('A') / r.totals.timerL})` }} /></span>
@@ -198,9 +198,9 @@ export function ResultsPanel() {
         </div>
       </div>
       <ul className="legend">
-        <li className="legend-a">Box A, Laya</li>
+        <li className="legend-a">Box A, decision model</li>
         <li className="legend-b">Box B, timer</li>
-        <li className="legend-base">Laya's line, {r.baselinePct}%</li>
+        <li className="legend-base">Decision model's line, {r.baselinePct}%</li>
       </ul>
     </div>
   );

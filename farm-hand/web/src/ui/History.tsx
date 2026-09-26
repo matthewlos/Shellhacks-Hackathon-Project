@@ -155,7 +155,7 @@ export function History() {
         <ul className="legend">
           <li className="legend-a">Box A, Farm Hand</li>
           <li className="legend-b">Box B, Timer</li>
-          <li className="legend-base">Laya's line <span className="num">{brand.baselinePct}%</span></li>
+          <li className="legend-base">Decision model's line <span className="num">{brand.baselinePct}%</span></li>
         </ul>
         {Toggle}
       </div>

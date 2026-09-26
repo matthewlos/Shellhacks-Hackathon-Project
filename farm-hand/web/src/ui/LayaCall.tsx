@@ -14,11 +14,11 @@ export function pickWords(pick: string): { head: string; sub: string; kind: 'wat
 
 /** Who decided, in one sentence. The safety rule runs when a probe is missing: Laya never guesses a reading. */
 function decidedBy(d: Decision, probeAOk: boolean): { text: string; hideWhy: boolean } {
-  if (/laya/i.test(d.brain)) return { text: 'Decided by Laya, a small fine-tuned model on the Mac mini.', hideWhy: false };
+  if (/laya/i.test(d.brain)) return { text: 'Decided by our decision model, a small fine-tuned model on the Mac mini.', hideWhy: false };
   if (/rule|baseline|fallback|safety/i.test(d.brain)) {
     const probeMissing = !probeAOk || /probe|not connected|disconnect|no reading/i.test(d.why ?? '');
     return probeMissing
-      ? { text: "Decided by the safety rule: probe A isn't reporting, so Laya doesn't guess.", hideWhy: true }
+      ? { text: "Decided by the safety rule: probe A isn't reporting, so the decision model doesn't guess.", hideWhy: true }
       : { text: `Decided by the safety rule: keep the soil at ${brand.baselinePct}% or more.`, hideWhy: false };
   }
   return { text: `Decided by ${d.brain}.`, hideWhy: false };
@@ -60,11 +60,11 @@ export function useCallGlance(): string {
 export function LayaCall() {
   const d = useDecision();
   return (
-    <section className="call" aria-live="polite" aria-label="Laya's call for box A">
+    <section className="call" aria-live="polite" aria-label="The decision model's call for box A">
       {d ? <Body d={d} /> : (
         <div className="call-body">
           <p className="call-pick call-other">No call yet</p>
-          <p className="call-sub">Laya's first call for box A shows up here.</p>
+          <p className="call-sub">The decision model's first call for box A shows up here.</p>
         </div>
       )}
     </section>

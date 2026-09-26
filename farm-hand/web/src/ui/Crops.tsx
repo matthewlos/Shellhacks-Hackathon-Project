@@ -8,7 +8,7 @@
  * the sliders read true: soil past field capacity (65 %) drowns roots unless the crop takes waterlogging
  * (its very-slow-drainage score), and soil more than 10 °C over a crop's ideal is too hot for it.
  *
- * "Send this setting to Laya" is a preview: it confirms in the panel and calls nothing.
+ * "Send this setting to the decision model" is a preview: it confirms in the panel and calls nothing.
  *
  * Motion (Emil): rows that change place slide there (FLIP, 220 ms ease-out, interruptible mid-drag);
  * rows that appear fade in. Nothing moves under prefers-reduced-motion.
@@ -206,7 +206,7 @@ export function CropsPanel() {
             className="btn cs-send" disabled={!top}
             onClick={() => top && setSent({ m, crop: plainName(top.name) })}
           >
-            Send this setting to Laya
+            Send this setting to the decision model
           </button>
           {moved && (
             <button className="btn cs-reset" onClick={() => move({ m: startM, t: startT })}>
@@ -218,7 +218,7 @@ export function CropsPanel() {
           {sent ? (
             <p key={`${sent.m}-${sent.crop}`}>
               <IconCheck />
-              <span><b>Sent to Laya:</b> keep Box A near <span className="num">{sent.m}%</span> for {sent.crop}.<small>A preview: Box A's live watering stays as it is.</small></span>
+              <span><b>Sent to the decision model:</b> keep Box A near <span className="num">{sent.m}%</span> for {sent.crop}.<small>A preview: Box A's live watering stays as it is.</small></span>
             </p>
           ) : !top ? <p className="is-quiet">Nothing survives at this setting, so there is nothing to send.</p> : null}
         </div>

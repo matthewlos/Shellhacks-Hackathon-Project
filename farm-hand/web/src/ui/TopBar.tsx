@@ -51,7 +51,7 @@ export function TopBar() {
             <span role="columnheader">Moisture</span>
             <span role="columnheader">Soil temp</span>
           </div>
-          <BoxRead id="A" name="Laya" />
+          <BoxRead id="A" name="Decision model" />
           <BoxRead id="B" name="Timer" />
         </div>
       </div>

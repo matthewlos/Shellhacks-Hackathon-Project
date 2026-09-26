@@ -129,11 +129,11 @@ def decide(r):
         agent, qs = LAYA
         pick = agent.predict(state, qs)["answers"]["action"]["choice"]
     except Exception as e:
-        return rule[0], rule[1], rule[2], rule[3] + f" (Laya failed: {type(e).__name__})"
+        return rule[0], rule[1], rule[2], rule[3] + f" (decision model failed: {type(e).__name__})"
     secs = rule[2] if pick == "water" else 0
     if pick == "water" and a > BASELINE + 5:                     # the baseline is a floor, never let the model flood it
         secs, pick = 0, "wait_moist"
-    return "laya", pick, secs, f"Laya: {pick} (soil {a:.1f}%, baseline {BASELINE:.0f}%)"
+    return "laya", pick, secs, f"Decision model: {pick} (soil {a:.1f}%, baseline {BASELINE:.0f}%)"
 
 
 def save(r, d, ip):
@@ -328,7 +328,7 @@ def water_advice(box, lv):
     if not d:
         return {"needsWater": None, "action": "unknown", "headline": "No decision yet", "reasons": []}
     brain, pick, secs, why = d
-    who = "Laya" if brain == "laya" else "the baseline rule"
+    who = "the decision model" if brain == "laya" else "the baseline rule"
     tail = ["Pumps are disarmed in the firmware right now, so nothing is watered automatically."]
     if pick == "water":
         return {"needsWater": True, "action": "water", "headline": f"Water now: a {secs:.0f} s drink", "reasons": [why, f"Decided by {who}."] + tail}
@@ -867,7 +867,7 @@ async function tick(){let d;try{d=await (await fetch('data')).json()}catch(e){$(
  $('stat').textContent=L?(live?`Live from the ESP32 · last reading ${d.age_s.toFixed(0)} s ago · ${d.count.toLocaleString()} saved`:`No reading for ${Math.round(d.age_s)} s`):'Waiting for the ESP32';
  if(!L)return;$('a').textContent=L.a_raw<500?'–':f(L.a_pct,'%');$('b').textContent=L.b_raw<500?'–':f(L.b_pct,'%');
  $('t1').textContent=f(L.t1,'°C');$('t2').textContent=f(L.t2,'°C');$('bl').textContent=`keeps it at ${d.baseline}% or wetter`;
- if(d.decision){$('brain').textContent=d.decision[0]==='laya'?'Laya decided':'Baseline rule decided';$('pick').textContent=P[d.decision[1]]||d.decision[1];$('why').textContent=d.decision[3]}
+ if(d.decision){$('brain').textContent=d.decision[0]==='laya'?'Decision model decided':'Baseline rule decided';$('pick').textContent=P[d.decision[1]]||d.decision[1];$('why').textContent=d.decision[3]}
  const H=d.hist.filter(h=>h.a!=null);if(H.length>1){const x=i=>i/(H.length-1)*600,y=v=>115-v/100*110;
   $('ch').innerHTML=`<line x1="0" x2="600" y1="${y(d.baseline)}" y2="${y(d.baseline)}" stroke="#c4501f" stroke-dasharray="4 4"/><polyline fill="none" stroke="#1f64b8" stroke-width="2" vector-effect="non-scaling-stroke" points="${H.map((h,i)=>x(i)+','+y(h.a)).join(' ')}"/>`}
  $('cnt').textContent=`dashed line = baseline ${d.baseline}%`}

@@ -46,7 +46,7 @@ export function BoxPanel({ id }: { id: BoxId }) {
       <div className="box-foot">
         <PumpRow id={id} />
         <p className="probe">
-          {id === 'A' && <>Laya keeps it at <span className="num">{brand.baselinePct}%</span> or more. </>}
+          {id === 'A' && <>The decision model keeps it at <span className="num">{brand.baselinePct}%</span> or more. </>}
           Raw reading <span className="mono num">{raw != null ? Math.round(raw) : 'none'}</span>.
         </p>
       </div>
