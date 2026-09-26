@@ -523,6 +523,8 @@ def api(method, parts, qs, body):
             return 200, {"notes": []}
         if parts == ["connectivity"]:
             return 200, {"connectivity": connectivity()}
+        if parts == ["soil-now"]:
+            return 200, soil_now()
         if parts == ["region"]:
             return 200, region_view()
         if parts == ["fields"]:
@@ -584,6 +586,63 @@ def api(method, parts, qs, body):
         return nope if method in ("POST", "PUT", "PATCH") else (405, {"error": "method not allowed"})
     HUB.send({"type": "config", "config": board_config()})     # every config write goes out on the stream
     return 200, {"ok": True, "config": board_config()}
+
+
+# ---------- soil today across the map (Open-Meteo model, not measured) ----------
+_SOIL = {"t": 0, "v": None}
+SOIL_GRID = 12            # 12 x 12 points over the region box (about 6 km apart)
+
+
+def soil_now():
+    """Modeled soil moisture + soil temperature on a grid over the region map, now and the last 7 days (daily means).
+    Open-Meteo (free, no key): hourly soil_moisture_* (m3/m3) and soil_temperature_* (C). Cached 30 min."""
+    if _SOIL["v"] and time.time() - _SOIL["t"] < 1800:
+        return _SOIL["v"]
+    try:
+        reg = json.loads(REGION_PATH.read_text())["region"] if REGION_PATH.exists() else None
+        clat, clon = (reg["centre"]["lat"], reg["centre"]["lon"]) if reg else (25.7566, -80.3740)
+        half = float(reg["halfKm"]) if reg else 37.0
+    except Exception:
+        clat, clon, half = 25.7566, -80.3740, 37.0
+    import math
+    dlat = half / 110.574
+    dlon = half / (111.320 * math.cos(math.radians(clat)))
+    lats, lons = [], []
+    for i in range(SOIL_GRID):
+        for j in range(SOIL_GRID):
+            lats.append(round(clat + dlat - (2 * dlat) * (i + 0.5) / SOIL_GRID, 4))
+            lons.append(round(clon - dlon + (2 * dlon) * (j + 0.5) / SOIL_GRID, 4))
+    url = ("https://api.open-meteo.com/v1/forecast?latitude=" + ",".join(map(str, lats)) + "&longitude=" + ",".join(map(str, lons)) +
+           "&hourly=soil_moisture_0_to_1cm,soil_moisture_3_to_9cm,soil_moisture_9_to_27cm,soil_temperature_0cm,soil_temperature_6cm"
+           "&past_days=7&forecast_days=1&timezone=America%2FNew_York")
+    try:
+        data = json.load(urllib.request.urlopen(url, timeout=30))
+    except Exception as e:
+        return _SOIL["v"] or {"status": "unavailable", "reason": f"Open-Meteo: {type(e).__name__}"}
+    data = data if isinstance(data, list) else [data]
+    now_key = time.strftime("%Y-%m-%dT%H:00")
+    pts = []
+    for (la, lo), d in zip(zip(lats, lons), data):
+        h = d["hourly"]; ts = h["time"]
+        i = ts.index(now_key) if now_key in ts else max(0, min(len(ts) - 1, 7 * 24 + time.localtime().tm_hour))
+        def at(k): return h[k][i]
+        daily = []
+        for day in range(8):
+            chunk = [v for v in h["soil_moisture_3_to_9cm"][day * 24:(day + 1) * 24] if v is not None]
+            daily.append(round(sum(chunk) / len(chunk) * 100, 1) if chunk else None)
+        pts.append({"lat": la, "lon": lo,
+                    "moisturePct": None if at("soil_moisture_3_to_9cm") is None else round(at("soil_moisture_3_to_9cm") * 100, 1),
+                    "moistureSurfacePct": None if at("soil_moisture_0_to_1cm") is None else round(at("soil_moisture_0_to_1cm") * 100, 1),
+                    "moistureDeepPct": None if at("soil_moisture_9_to_27cm") is None else round(at("soil_moisture_9_to_27cm") * 100, 1),
+                    "tempSurfaceC": at("soil_temperature_0cm"), "temp6cmC": at("soil_temperature_6cm"),
+                    "week": daily[:7]})
+    v = {"status": "ready", "time": now_key, "grid": SOIL_GRID,
+         "units": {"moisture": "% water by volume (m3/m3 x 100)", "temp": "C"},
+         "depths": {"moisturePct": "3-9 cm", "moistureSurfacePct": "0-1 cm", "moistureDeepPct": "9-27 cm", "temp6cmC": "6 cm"},
+         "source": "Open-Meteo soil model (hourly, about 10 km grid). Modeled, not measured.",
+         "points": pts}
+    _SOIL.update(t=time.time(), v=v)
+    return v
 
 
 class Handler(BaseHTTPRequestHandler):
