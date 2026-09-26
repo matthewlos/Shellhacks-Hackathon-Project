@@ -25,7 +25,7 @@ const Y = (v: number) => H - ((Math.max(LO, Math.min(HI, v)) - LO) / (HI - LO)) 
 function useResults(): Results | null {
   const [d, setD] = useState<Results | null>(null);
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}results-fake.json`).then((r) => r.json()).then(setD).catch(() => {});
+    fetch(`${import.meta.env.BASE_URL}results.json`).then((r) => r.json()).then(setD).catch(() => {});
   }, []);
   return d;
 }

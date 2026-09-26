@@ -25,7 +25,7 @@ const PANELS: Record<PanelId, { title: string; place: Place; large?: boolean; bo
   'box-b': { title: `Box B, ${brand.boxes.B.name}`, place: 'side', body: () => <BoxPanel id="B" /> },
   laya: { title: "Laya's call for box A", place: 'side', body: () => <LayaCall /> },
   saves: { title: 'What Farm Hand saves', place: 'side', body: () => <SavingsPanel /> },
-  results: { title: 'Results (fake)', place: 'wide', body: () => <ResultsPanel /> },
+  results: { title: 'Results', place: 'wide', body: () => <ResultsPanel /> },
   forecast: { title: 'Rain forecast', place: 'side', body: () => <Forecast /> },
   crops: { title: 'What can grow in each box', place: 'side', large: true, body: () => <CropsPanel /> },
   map: { title: 'Farms near you', place: 'wide', body: () => <MapPanel /> },

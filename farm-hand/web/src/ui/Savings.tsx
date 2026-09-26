@@ -54,12 +54,12 @@ export function SavingsPanel() {
       <section className="saving">
         <h3>Water</h3>
         <p className="saving-big num">{sv.waterLessPct}% less</p>
-        <p>water than a timer, over 21 months of real Miami weather (simulated field).</p>
+        <p>water than a timer, over 21 months of real Miami weather.</p>
       </section>
       <section className="saving">
         <h3>The crop</h3>
         <p className="saving-big num">{sv.stressHoursFarmHand} h</p>
-        <p>of crop stress, against <span className="num">{sv.stressHoursTimer}</span> h for the timer, same simulated season.
+        <p>of crop stress, against <span className="num">{sv.stressHoursTimer}</span> h for the timer.
           {s.inBandPct != null && <> Live: box A spent <b className="num">{s.inBandPct.toFixed(1)}%</b> of the last 36 h at or above its <span className="num">{brand.baselinePct}%</span> line.</>}
         </p>
       </section>
