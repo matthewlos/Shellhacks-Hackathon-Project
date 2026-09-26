@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f5ef" />
+    <meta name="description" content="Farm Hand. Read the soil. Make the call. Use only the water it needs. A four-part presentation of our irrigation prototype and its results." />
+    <link rel="icon" href="./assets/mark.svg" type="image/svg+xml" />
+    <link rel="preload" href="./assets/public-sans.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./presentation.js" defer></script>
+    <title>Farm Hand — Every drop has a purpose.</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#problem">Skip to presentation</a>
+    <header class="masthead">
+      <a class="wordmark" href="#problem" aria-label="Farm Hand, back to the problem">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C13 8 6 15 6 21a10 10 0 0 0 20 0c0-6-7-13-10-18Z" fill="currentColor"/><path d="M16 25V14m0 6c-5 0-6-4-6-4 5 0 6 4 6 4Zm0-3s0-5 6-6c0 5-6 6-6 6Z" fill="none" stroke="#f6f5ef" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Farm Hand<span class="brand-period">.</span>
+      </a>
+      <nav aria-label="Presentation sections" class="chapter-nav">
+        <a href="#problem" aria-current="step"><span>01</span> Problem</a>
+        <a href="#solution"><span>02</span> Solution</a>
+        <a href="#visualization"><span>03</span> Visualization</a>
+        <a href="#data"><span>04</span> Data</a>
+      </nav>
+      <span class="event-label">SHELLHACKS ’26</span>
+    </header>
+
+    <main>
+      <section id="problem" class="chapter problem is-visible" aria-labelledby="problem-title">
+        <div class="chapter-inner two-column">
+          <div class="story reveal">
+            <p class="eyebrow"><span class="chapter-number">01</span> THE PROBLEM</p>
+            <h1 id="problem-title">A timer knows<br />the time.<br /><em>Not the soil.</em></h1>
+            <p class="lede">In a drought, growers can’t afford to lose the crop. Or waste the water trying to save it.</p>
+            <p class="quiet-statement">When a crop dies, you lose the time<br class="desktop-break" /> it took to grow it, too.</p>
+          </div>
+          <figure class="problem-figure reveal" data-water="dry">
+            <div class="figure-heading"><span class="figure-label">THE SAME SCHEDULE. DIFFERENT NEEDS.</span><span class="small-cross" aria-hidden="true">+</span></div>
+            <svg class="soil-illustration" viewBox="0 0 600 455" role="img" aria-labelledby="soil-title soil-description">
+              <title id="soil-title">A fixed watering schedule cannot read the soil</title>
+              <desc id="soil-description">An illustrative plant and its roots. Switch between dry and saturated soil to see why a fixed timer misses the plant’s needs.</desc>
+              <defs>
+                <clipPath id="ground-clip"><path d="M65 286 300 242 542 286 542 361 300 423 65 360Z"/></clipPath>
+                <pattern id="soil-specks" width="34" height="26" patternUnits="userSpaceOnUse"><circle cx="5" cy="9" r="1.3" fill="#8b7058"/><circle cx="23" cy="21" r="1" fill="#8b7058"/></pattern>
+                <linearGradient id="wet-gradient" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#81b5bd" stop-opacity=".65"/><stop offset="1" stop-color="#81b5bd" stop-opacity=".08"/></linearGradient>
+              </defs>
+              <g class="sun" fill="none" stroke="#b9ac82" stroke-width="1.2">
+                <circle cx="455" cy="95" r="31"/><circle cx="455" cy="95" r="45" stroke-dasharray="1 9"/>
+                <path d="M455 31v12m0 104v12m-64-64h12m104 0h12m-109-45 8 8m74 74 8 8m-90 0 8-8m74-74 8-8"/>
+              </g>
+              <path class="ground-top" d="m65 286 235-58 242 58-242 62Z" fill="#d5b99a" stroke="#ad9275"/>
+              <path class="ground-front" d="m65 286 235 62v75L65 360Z" fill="#c7a785" stroke="#ad9275"/>
+              <path class="ground-side" d="m300 348 242-62v75l-242 62Z" fill="#bba080" stroke="#ad9275"/>
+              <path d="m65 286 235 62 242-62v75l-242 62-235-63Z" fill="url(#soil-specks)"/>
+              <g class="soil-cracks" fill="none" stroke="#997751" stroke-width="1.6" stroke-linecap="round"><path d="m104 280 76 22 34-13 56 18 37-16 53 16 64-21 47 12m-291 4-12 25m102-20 9 35m81-35 18-33m46 12 5-27m-96 68-21 21v31m21-21 29 7m-87-43-20 11v21"/></g>
+              <g class="plant-roots" fill="none" stroke="#eee1ca" stroke-width="2" stroke-linecap="round"><path d="M301 296v76m0-61-26 18-18-3m44 11 27 19 17-2m-44-1-18 23m18-8 14 23m-38-62-7 25m58 2 7 23"/></g>
+              <g class="plant" stroke="#566c41" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path class="plant-stem" d="M302 294c-1-40 6-64 3-107s-12-57-30-66" fill="none"/>
+                <path class="leaf leaf-one" d="M303 229c-45 2-73-19-76-48 40-6 74 14 76 48Z" fill="#8b9b61"/>
+                <path class="leaf leaf-two" d="M306 203c43-4 69-30 64-63-39 2-68 26-64 63Z" fill="#748653"/>
+                <path class="leaf leaf-three" d="M295 158c-28 3-54-11-62-32 28-12 57 3 62 32Z" fill="#9da36d"/>
+                <path d="m235 188 57 34m67-72-46 44m-72-63 45 22" fill="none" stroke-width="1.2"/>
+              </g>
+              <g class="water-overlay" clip-path="url(#ground-clip)"><rect x="64" y="235" width="480" height="190" fill="url(#wet-gradient)"/><path class="runoff" d="M410 333v64m35-73v47m-284-24v48" fill="none" stroke="#478c9c" stroke-width="3" stroke-dasharray="7 12"/></g>
+              <g class="timer-dial" transform="translate(115 116)"><circle r="38" fill="#f6f5ef" stroke="#c3c6b8"/><circle r="29" fill="none" stroke="#d9dbcf" stroke-dasharray="1 6.6"/><path class="clock-hand" d="M0 4v-22M0 0l13 8" fill="none" stroke="#586557" stroke-width="2" stroke-linecap="round"/><circle r="3" fill="#586557"/></g>
+              <path d="M115 163v50l94 27" fill="none" stroke="#929982" stroke-dasharray="3 5"/>
+              <text x="115" y="62" text-anchor="middle" class="svg-label">ON A TIMER</text>
+              <g class="moisture-note"><path d="M415 270h118" fill="none" stroke="#9b9078"/><circle cx="415" cy="270" r="3" fill="#9b9078"/><text x="531" y="256" text-anchor="end" class="svg-label" id="soil-state-label">SOIL: TOO DRY</text></g>
+            </svg>
+            <figcaption>
+              <div class="soil-switch" role="group" aria-label="Illustrate soil conditions">
+                <button type="button" data-soil="dry" aria-pressed="true">Too little</button>
+                <button type="button" data-soil="wet" aria-pressed="false">Too much</button>
+              </div>
+              <p id="soil-caption" aria-live="polite">The schedule stays the same.<br /><strong>The crop pays for it.</strong></p>
+            </figcaption>
+          </figure>
+          <a class="chapter-cue" href="#solution"><span>What if we listened instead?</span><span aria-hidden="true">↓</span></a>
+        </div>
+      </section>
+
+      <section id="solution" class="chapter solution" aria-labelledby="solution-title">
+        <div class="chapter-inner two-column">
+          <div class="story reveal">
+            <p class="eyebrow"><span class="chapter-number">02</span> OUR SOLUTION</p>
+            <h2 id="solution-title">Let the soil<br /><em>make the call.</em></h2>
+            <p class="lede">Farm Hand closes the loop between what the soil needs and what the pump delivers.</p>
+            <div class="solution-note"><span class="tiny-sprout" aria-hidden="true">↳</span><p>Real sensors. A small AI model.<br />Water with a reason.</p></div>
+          </div>
+          <div class="feedback-loop reveal" aria-label="The Farm Hand feedback loop: sense, decide, water, then measure again">
+            <div class="loop-spine" aria-hidden="true"><span></span></div>
+            <article class="loop-step" data-loop="0">
+              <div class="loop-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M21 9h6v27l-3 5-3-5ZM17 9h14M11 19H7m34 0h-4M11 27H7m34 0h-4"/><path d="M16 17c-6 4-6 11 0 15m16-15c6 4 6 11 0 15" stroke-dasharray="2 4"/></svg></div>
+              <div><p class="step-kicker">01 / SENSE</p><h3>Read the root of it.</h3><p>Soil moisture and temperature.<br />A new reading every second.</p></div>
+              <span class="step-signal" aria-hidden="true"></span>
+            </article>
+            <article class="loop-step" data-loop="1">
+              <div class="loop-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="4"/><path d="M18 6v6m12-6v6M18 36v6m12-6v6M6 18h6m-6 12h6m24-12h6m-6 12h6m-23-6 4 4 7-8"/></svg></div>
+              <div><p class="step-kicker">02 / DECIDE</p><h3>A little intelligence.</h3><p>Laya makes the watering call.<br />Gemini agents check and explain.</p></div>
+              <span class="step-signal" aria-hidden="true"></span>
+            </article>
+            <article class="loop-step" data-loop="2">
+              <div class="loop-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 6S12 21 12 29a12 12 0 0 0 24 0C36 21 24 6 24 6Z"/><path d="M18 30a6 6 0 0 0 6 6"/></svg></div>
+              <div><p class="step-kicker">03 / WATER</p><h3>Just enough. Then check.</h3><p>The ESP32 runs the pump.<br />The probe measures the response.</p></div>
+              <span class="step-signal" aria-hidden="true"></span>
+            </article>
+            <div class="loop-return"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6v9a4 4 0 0 1-4 4H7m3-4-4 4 4 4M18 6l-4 4m4-4 4 4"/></svg><span>Measure again. Keep listening.</span></div>
+          </div>
+          <div class="chapter-footnote">One working box today. <span>In outdoor mode, forecast checks can tell it to wait for rain.</span></div>
+        </div>
+      </section>
+
+      <section id="visualization" class="chapter visualization" aria-labelledby="visualization-title">
+        <div class="chapter-inner">
+          <div class="visualization-heading reveal">
+            <div><p class="eyebrow"><span class="chapter-number">03</span> OUR SOLUTION, VISUALIZED</p><h2 id="visualization-title">From a reading<br />to <em>a reason to water.</em></h2></div>
+            <p class="visualization-note"><span class="status-dot" aria-hidden="true"></span> An illustrative cycle.<br /><span>Not live sensor data.</span></p>
+          </div>
+          <div class="rig-layout reveal" data-stage="0">
+            <figure class="rig-figure">
+              <svg class="rig-svg" viewBox="0 0 860 430" role="img" aria-labelledby="rig-title rig-description">
+                <title id="rig-title">The Farm Hand sensing and watering loop</title>
+                <desc id="rig-description">A soil probe reports to an ESP32 and relay. The pump sends water from a reservoir into a soil container. The measured response determines when to stop. The animation is illustrative.</desc>
+                <defs>
+                  <linearGradient id="soil-front" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bba184"/><stop offset="1" stop-color="#997d62"/></linearGradient>
+                  <linearGradient id="water-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8abcc7" stop-opacity=".5"/><stop offset="1" stop-color="#73a7b8" stop-opacity=".75"/></linearGradient>
+                  <pattern id="rig-grain" width="24" height="21" patternUnits="userSpaceOnUse"><circle cx="4" cy="7" r="1" fill="#725c48" opacity=".4"/><path d="m16 15 3 1" stroke="#e4d2b7" stroke-width="2"/></pattern>
+                  <clipPath id="soil-top-clip"><path d="m253 217 225-63 186 57-229 70Z"/></clipPath>
+                </defs>
+                <ellipse cx="452" cy="363" rx="339" ry="31" fill="#1d392b" opacity=".035"/>
+                <path d="M28 372h785" stroke="#c6cbbb" stroke-width="1"/>
+                <!-- The soil container, drawn as a cutaway. -->
+                <path d="m241 202 236-68 200 62-242 74Z" fill="#e2e5db" stroke="#9eaaa0" stroke-width="1.5"/>
+                <path d="m253 217 225-63 186 57-229 70Z" fill="#bba184"/>
+                <g clip-path="url(#soil-top-clip)"><path d="m253 217 225-63 186 57-229 70Z" fill="url(#rig-grain)"/><ellipse class="wet-patch" cx="367" cy="222" rx="175" ry="60" fill="#725f47"/><ellipse class="splash-ring" cx="367" cy="222" rx="15" ry="5" fill="none" stroke="#76a8b2" stroke-width="2"/></g>
+                <path d="m253 217 182 64v82l-178-54Z" fill="url(#soil-front)"/>
+                <path d="m435 281 229-70-3 106-226 46Z" fill="#a68b6d"/>
+                <path d="m253 217 182 64 229-70-3 106-226 46-178-54Z" fill="url(#rig-grain)"/>
+                <path class="soil-soak" d="m253 217 182 64 229-70-3 106-226 46-178-54Z" fill="#65533d" opacity="0"/>
+                <path d="m241 202 194 68 242-74-5 133-237 48-188-57Z" fill="#dde8de" fill-opacity=".1" stroke="#9aa69a" stroke-width="1.6"/>
+                <path d="M435 270v107M247 312l188 56 237-47" fill="none" stroke="#adb7a8"/>
+                <path d="m241 202 194 68 242-74m-431 15 189 65 241-73" fill="none" stroke="#bec9bd" stroke-width="4" stroke-linejoin="round"/>
+                <!-- Soil and temperature probes. -->
+                <path d="m513 204 9 3-13 90-9-3Z" fill="#364d3c" stroke="#183e2d"/>
+                <path d="m516 240-6 44" stroke="#c8b275" stroke-width="2"/>
+                <path d="m512 187 13 4-3 33-14-4Z" fill="#22543b" stroke="#153c2b"/>
+                <circle class="probe-led" cx="517" cy="200" r="3" fill="#c5de93"/>
+                <path d="m587 227-6 48" stroke="#c8d0c5" stroke-width="6" stroke-linecap="round"/>
+                <path d="m588 221 3-26" stroke="#4c5a4e" stroke-width="4"/>
+                <!-- Reservoir with visible water and pump. -->
+                <path d="m59 240 103-17 48 18-5 112-98 15-44-18Z" fill="#edf0e6" stroke="#9fafa4" stroke-width="1.5"/>
+                <g class="reservoir-water"><path d="m64 280 98-15 43 15-3 67-95 15-42-18Z" fill="url(#water-fill)"/><path d="m64 280 43 17 98-17-44-15Z" fill="#a9cdd3" stroke="#82b3c0"/></g>
+                <path d="M107 258v110m-48-128 48 18 103-17" fill="none" stroke="#a6b9af"/>
+                <path d="m120 319 24-5 16 7v23l-25 4-15-7Z" fill="#48594d" stroke="#2f4637"/><path d="M136 321v-15" stroke="#344e3c" stroke-width="8"/>
+                <!-- A single transparent tube and its animated flow. -->
+                <path class="tube-outline" d="M137 309V159q0-31 31-31h143q33 0 42 33l15 43"/>
+                <path class="tube-inner" d="M137 309V159q0-31 31-31h143q33 0 42 33l15 43"/>
+                <path class="tube-flow" d="M137 309V159q0-31 31-31h143q33 0 42 33l15 43"/>
+                <path class="pour-stream" d="M368 205v18" fill="none" stroke="#438a9d" stroke-width="4" stroke-linecap="round"/>
+                <!-- ESP32 and relay, driven by the probe. -->
+                <path d="m692 220 81-19 53 19-82 22Z" fill="#e6e9df" stroke="#bbc4b6"/><path d="m692 220 52 22 82-22v12l-82 23-52-22Z" fill="#d5ddce" stroke="#bbc4b6"/>
+                <path d="m716 210 28-7 23 8-30 8Z" fill="#365644" stroke="#203c2c"/><path d="m732 204 12-3 14 5-14 4Z" fill="#b7c1b3"/>
+                <path d="m771 220 20-6 14 5v12l-19 6-15-6Z" fill="#63869b" stroke="#436775"/>
+                <path d="M518 187v-26q0-12 15-9l173 45" class="signal-wire"/>
+                <path class="sensor-signal" d="M518 187v-26q0-12 15-9l173 45"/>
+                <path d="M590 196q45-62 128 1" fill="none" stroke="#889986" stroke-width="1.5"/>
+                <path d="M788 235v48q0 20-27 21l-79 5" fill="none" stroke="#a7906e" stroke-width="2"/>
+                <circle class="controller-led" cx="745" cy="212" r="3" fill="#bdcbbb"/>
+                <!-- Labels stay in the SVG coordinate space. -->
+                <g class="rig-labels" fill="none" stroke="#8f9c8b" stroke-width="1"><path d="M80 313H27v-17"/><path d="M519 176v-76h-40"/><path d="M756 191v-53h-25"/><path d="M588 280v75h50"/></g>
+                <g class="svg-label"><text x="19" y="282">PUMP + WATER</text><text x="426" y="87">SOIL PROBE</text><text x="672" y="124">ESP32 + RELAY</text><text x="646" y="360">TEMPERATURE</text></g>
+              </svg>
+              <figcaption><span>01 / Read</span><span>02 / Decide</span><span>03 / Water</span><span>04 / Check</span></figcaption>
+            </figure>
+            <div class="cycle-readout">
+              <p class="step-kicker" id="cycle-kicker">01 / READ THE SOIL</p>
+              <div class="moisture-value"><span id="moisture-value">32</span><span>%</span></div>
+              <p class="measurement-label">illustrative soil moisture</p>
+              <div class="moisture-track" aria-hidden="true"><span></span><i></i></div>
+              <div class="moisture-scale"><span>Dry</span><span>Enough water</span></div>
+              <h3 id="cycle-title">The soil asks.</h3>
+              <p id="cycle-description">The probe detects dry soil. Temperature gives the decision more context.</p>
+              <div class="cycle-controls">
+                <button type="button" class="primary-button" id="cycle-play"><span aria-hidden="true">▶</span> Play the cycle</button>
+                <button type="button" class="icon-button" id="cycle-reset" aria-label="Reset the illustrative watering cycle" title="Reset cycle">↺</button>
+              </div>
+              <div class="cycle-steps" role="group" aria-label="Show a step in the watering cycle">
+                <button type="button" data-cycle="0" aria-label="Step 1: Read" aria-pressed="true">1</button>
+                <button type="button" data-cycle="1" aria-label="Step 2: Decide" aria-pressed="false">2</button>
+                <button type="button" data-cycle="2" aria-label="Step 3: Water" aria-pressed="false">3</button>
+                <button type="button" data-cycle="3" aria-label="Step 4: Check" aria-pressed="false">4</button>
+              </div>
+              <p class="sr-only" id="cycle-announcement" role="status"></p>
+            </div>
+          </div>
+          <p class="chapter-footnote">A real hardware check: <strong>44% → 52%</strong> soil moisture after a 10-second pour. <span>Bench test, September 23, 2026.</span></p>
+        </div>
+      </section>
+
+      <section id="data" class="chapter data" aria-labelledby="data-title">
+        <div class="chapter-inner">
+          <div class="data-heading reveal"><div><p class="eyebrow"><span class="chapter-number">04</span> THE DATA</p><h2 id="data-title">Less water.<br /><em>Room to grow.</em></h2></div><p class="data-context">A simulated field.<br /> Real Miami weather.<br /><span>January 2025 – September 2026</span></p></div>
+          <div class="results-layout reveal">
+            <div class="headline-result"><p class="big-stat"><span data-count="56.2">56.2</span><span>%</span></p><p class="result-label">less irrigation than a timer</p><p class="result-explanation">Same weather. Same modeled soil.<br />A different decision about when to water.</p><span class="result-tag">SEASON REPLAY · 15,048 HOURS</span></div>
+            <div class="results-chart">
+              <div class="chart-heading"><h3>Total irrigation</h3><span>Millimeters · lower is better</span></div>
+              <div class="bar-row timer-row"><div class="bar-label"><span>Fixed timer</span><strong>3,316.8 <span>mm</span></strong></div><div class="bar-track"><div class="bar-fill timer-bar" style="--bar-width:100%"></div></div></div>
+              <div class="bar-row farmhand-row"><div class="bar-label"><span><svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 0S0 9 0 12a8 8 0 0 0 16 0C16 9 8 0 8 0Z"/></svg> Farm Hand / Laya</span><strong>1,452.8 <span>mm</span></strong></div><div class="bar-track"><div class="bar-fill laya-bar" style="--bar-width:43.8013%"></div></div></div>
+              <div class="supporting-results"><div><p><strong>0</strong><span>vs 12 hours</span></p><h4>Past the crop stress line</h4><span>Farm Hand vs the timer, in the replay.</span></div><div><p><strong>94.1<span>%</span></strong></p><h4>Held-out decision accuracy</h4><span>7,524 decisions not seen in training.</span></div></div>
+            </div>
+          </div>
+          <div class="evidence-note reveal"><p><strong>A simulation, not a measured farm result.</strong> FAO-56 soil-water model, assumed sandy soil, crop coefficient 1.05. Timer: 5.29 mm each morning. These results describe this replay, not a guarantee of field savings.</p><details><summary>Source & full comparison <span aria-hidden="true">+</span></summary><div class="source-detail"><p>Team evaluation, September 23, 2026. Period: January 1, 2025 – September 19, 2026. Decision accuracy is agreement with the held-out reference labels; balanced accuracy is 85.8%.</p><div class="table-scroll"><table><caption>All policies from the recorded season replay</caption><thead><tr><th scope="col">Policy</th><th scope="col">Irrigation (mm)</th><th scope="col">Stress (hours)</th></tr></thead><tbody><tr><th scope="row">Fixed timer</th><td>3,316.8</td><td>12</td></tr><tr><th scope="row">Rules</th><td>1,419.7</td><td>10</td></tr><tr><th scope="row">Laya</th><td>1,452.8</td><td>0</td></tr><tr><th scope="row">Oracle</th><td>1,415.2</td><td>0</td></tr></tbody></table></div><p>The oracle is the evaluation’s perfect-forecast reference. <a href="./assets/evaluation.md" target="_blank" rel="noopener">Read the original evaluation ↗</a></p></div></details></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="presentation-controls">
+      <div class="presenter-tools"><button type="button" id="motion-toggle" aria-pressed="false" aria-label="Pause animations" title="Pause animations"><svg class="pause-symbol" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10"/></svg><svg class="play-symbol" viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 8 5-8 5Z"/></svg></button><button type="button" id="fullscreen-toggle" aria-label="Enter fullscreen" title="Fullscreen (F)"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4m4 0h4v4m0 4v4h-4m-4 0H2v-4"/></svg></button><span class="keyboard-hint">← → to present</span></div>
+      <div class="chapter-progress" aria-hidden="true"><span></span></div>
+      <div class="page-controls"><button type="button" id="previous-chapter" aria-label="Previous section" disabled>←</button><span id="page-number" aria-label="Section 1 of 4"><strong>01</strong><span>/</span>04</span><button type="button" id="next-chapter" aria-label="Next section">→</button></div>
+    </footer>
+    <div class="sr-only" id="navigation-status" role="status"></div>
+  </body>
+</html>
