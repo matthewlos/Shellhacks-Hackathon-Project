@@ -73,7 +73,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 /* -------------------------------------------------------------------- top bar */
 .topbar {
   position: absolute; top: 0; left: 0; z-index: 3; display: flex; align-items: center; justify-content: flex-start;
-  gap: 20px; padding: 14px 20px; pointer-events: none; max-width: calc(100% - 260px);
+  gap: 20px; padding: 14px 20px; pointer-events: none; max-width: calc(100% - var(--sheet-w) - 40px);
 }
 .topbar > * { pointer-events: auto; }
 .brandmark { display: flex; align-items: flex-start; gap: 10px; color: var(--accent); min-width: 0; }
@@ -86,14 +86,15 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 .status-ok { color: var(--good); }
+.status-quiet { color: var(--text-dim); }
 .status-warn { color: var(--caution); }
 .status-bad { color: var(--danger); background: var(--danger-soft); border-color: transparent; }
 
 /* ----------------------------------------------------------------------- dock */
 .dock {
-  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 3;
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 4;
   display: flex; align-items: stretch; gap: 2px; padding: 5px; max-width: calc(100vw - 24px);
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow);
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow-float);
 }
 .dock-sep { width: 1px; margin: 6px 4px; background: var(--line); }
 .dock-btn {
@@ -103,30 +104,46 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 }
 .dock-btn:active { transform: scale(0.97); }
 .dock-label { font-size: 15px; font-weight: 650; }
+.dl-short { display: none; }
 .dock-glance { font-size: 13px; color: var(--text-dim); }
 .dock-btn.is-on { background: var(--water-soft); }
 .dock-btn.is-on .dock-label { color: var(--water); }
 @media (hover: hover) and (pointer: fine) { .dock-btn:not(.is-on):hover { background: var(--sunk); } }
 
 /* --------------------------------------------------------------------- panels */
-/* Transitions, not keyframes, so a close mid-open reverses smoothly. */
+/*
+ * Three placements, one look (same header, padding, radius, shadow):
+ *   side    a full-height sheet on the right; the 3D scene shrinks to the left of it, so nothing overlaps
+ *   bottom  a sheet above the dock (History); the scene shrinks above it
+ *   wide    Map and Results: they are the view, over the scene
+ * Motion (Emil): transform slides in 240 ms ease-out and can be interrupted; opacity switches fast, so a
+ * panel is readable even on the first frame of a slow machine. Nothing starts from scale(0).
+ */
+:root { --sheet-w: min(440px, calc(100vw - 32px)); --shadow-float: 0 1px 2px rgba(22, 32, 26, 0.06), 0 12px 32px -12px rgba(22, 32, 26, 0.28); }
 .panel-shell {
-  position: absolute; z-index: 2; display: flex; flex-direction: column; min-height: 0;
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: 0 2px 4px rgba(22, 32, 26, 0.06), 0 18px 40px -18px rgba(22, 32, 26, 0.35);
+  position: absolute; z-index: 3; display: flex; flex-direction: column; min-height: 0;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow-float);
   opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 0s linear 160ms;
+  transition: opacity 140ms var(--ease-out), transform 200ms var(--ease-out), visibility 0s linear 200ms;
 }
 .panel-shell.is-open {
   opacity: 1; visibility: visible; pointer-events: auto; transform: none;
-  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out), visibility 0s;
+  transition: transform 240ms var(--ease-out), visibility 0s;   /* opacity is instant on open */
 }
-.place-side { top: 72px; right: 16px; max-height: calc(100% - 168px); width: min(460px, calc(100vw - 32px)); transform: translateX(12px); }
-.place-bottom { left: 16px; right: 16px; bottom: 96px; max-height: 46vh; transform: translateY(12px); }
-.place-wide { top: 72px; left: 16px; right: 16px; bottom: 96px; transform: translateY(12px); }
-.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 10px 20px; }
-.panel-head h2 { font-size: 18px; }
-.panel-body { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 20px 20px; animation: body-in 200ms var(--ease-out) both; }
-@keyframes body-in { from { opacity: 0; } }
+.place-side { top: 12px; right: 12px; bottom: 96px; width: var(--sheet-w); transform: translateX(24px); }
+.place-bottom { left: 16px; right: 16px; bottom: 96px; height: min(420px, 46vh); transform: translateY(16px); }
+.place-wide { top: 72px; left: 16px; right: 16px; bottom: 96px; transform: translateY(16px); }
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none;
+  min-height: 60px; padding: 10px 12px 10px 24px; border-bottom: 1px solid var(--line);
+}
+.panel-head h2 { font-size: 18px; font-weight: 680; }
+.panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 20px 24px 24px; }
+.place-wide .panel-body { padding: 16px 20px 20px; }
+
+/* the 3D scene makes room: it shrinks beside a side sheet and above a bottom sheet (the canvas follows its box) */
+.app.has-side .scene { right: calc(var(--sheet-w) + 24px); }
+.app.has-bottom .scene { bottom: calc(min(420px, 46vh) + 96px); }
 
 /* ------------------------------------------------------------------ box panel */
 .box { display: grid; gap: 14px; }
@@ -178,7 +195,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 /* ---------------------------------------------------------------- Laya's call */
 .call { display: grid; gap: 10px; }
 .call-body { display: grid; gap: 8px; animation: call-in 240ms var(--ease-out) both; }
-@keyframes call-in { from { opacity: 0; transform: translateY(6px); filter: blur(2px); } }
+@keyframes call-in { from { opacity: 0.5; transform: translateY(6px); filter: blur(2px); } }
 .call-pick { font-size: clamp(34px, 2.8vw, 52px); font-weight: 680; font-stretch: 86%; letter-spacing: -0.02em; line-height: 1; }
 .call-water { color: var(--water); }
 .call-hold, .call-rain, .call-other { color: var(--text); }
@@ -212,7 +229,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .segmented button.is-on { background: var(--panel); color: var(--text); box-shadow: 0 1px 2px rgba(22, 32, 26, 0.14); }
 .crops-box { display: flex; flex-direction: column; gap: 12px; }
 .focal { display: grid; gap: 8px; padding: 14px 16px; border-radius: var(--r-ctl); background: var(--sunk); animation: rise-in 200ms var(--ease-out) both; }
-@keyframes rise-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes rise-in { from { opacity: 0.5; transform: translateY(6px); } }
 .focal-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .focal-head h3 { font-size: 30px; font-weight: 680; font-stretch: 88%; letter-spacing: -0.02em; line-height: 1.05; }
 .focal-score { white-space: nowrap; }
@@ -263,7 +280,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .leaflet-tooltip.field-tip::before, .leaflet-tooltip.home-tip::before { display: none; }
 .leaflet-container a.leaflet-control-zoom-in, .leaflet-container a.leaflet-control-zoom-out { font: 600 18px var(--font-ui); color: var(--text); }
 /* The one authored moment on this panel: the fields open out from the centre, once. */
-@keyframes map-reveal { from { clip-path: circle(0% at 50% 50%); } to { clip-path: circle(75% at 50% 50%); } }
+@keyframes map-reveal { from { clip-path: circle(30% at 50% 50%); } to { clip-path: circle(75% at 50% 50%); } }
 .map-label { font-size: 13px; color: var(--text-dim); }
 .map-side { min-height: 0; overflow-y: auto; }
 .map-empty { display: grid; place-items: center; height: 100%; }
@@ -342,7 +359,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* ------------------------------------------------------------- rich field card */
 .field-card.rich { gap: 16px; animation: card-in 220ms var(--ease-out) both; }
-@keyframes card-in { from { opacity: 0; transform: translateX(12px); } }
+@keyframes card-in { from { opacity: 0.5; transform: translateX(12px); } }
 .fc-head { display: grid !important; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
 .fc-icon { width: 72px; height: 72px; border-radius: var(--r-panel); display: grid; place-items: center; }
 .fc-icon svg { width: 48px; height: 48px; filter: saturate(1.2) brightness(0.8); }
@@ -437,7 +454,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* --------------------------------------------------------------------- phone */
 @media (max-width: 900px) {
-  .topbar { padding: 10px 12px; align-items: flex-start; flex-direction: column; gap: 6px; max-width: calc(100% - 150px); }
+  .topbar { padding: 10px 12px; align-items: flex-start; flex-direction: column; gap: 6px; max-width: 100%; }
   .map-legend-card { top: 8px; right: 8px; width: auto; max-width: calc(100% - 64px); padding: 10px 12px; gap: 6px; }
   .map-legend-card h4 { font-size: 15px; }
   .map-legend-card h4 span { font-size: 12px; }
@@ -445,13 +462,26 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .map-legend-card i { width: 18px; height: 18px; }
   .map-legend-card p { display: none; }
   .brandmark p { display: none; }
-  .status { height: 30px; font-size: 13px; padding: 0 10px; }
-  .dock { left: 8px; right: 8px; bottom: 8px; transform: none; overflow-x: auto; scrollbar-width: none; }
+  .status { height: 30px; font-size: 13px; padding: 0 10px; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
+  /* phone: the dock is a 5-column grid of short labels (two rows, never wider than the screen);
+     every panel is a bottom sheet above it with its own scroll */
+  :root { --dock-h: 118px; }
+  .dock { left: 8px; right: 8px; bottom: 8px; transform: none; max-width: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; padding: 4px; }
   .dock-sep { display: none; }
-  .dock-btn { padding: 6px 10px; min-height: 44px; }
+  .dock-btn { justify-items: center; text-align: center; padding: 6px 2px; min-height: 52px; min-width: 0; }
+  .dl-full { display: none; } .dl-short { display: inline; }
   .dock-label { font-size: 14px; }
-  .place-side, .place-bottom, .place-wide { top: auto; left: 8px; right: 8px; bottom: 72px; width: auto; max-height: 72dvh; height: auto; transform: translateY(16px); }
-  .place-wide { height: 78dvh; max-height: 78dvh; }
+  .dock-glance { font-size: 11px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .app.has-side .scene, .app.has-bottom .scene { right: 0; bottom: 0; }
+  .place-side, .place-bottom, .place-wide {
+    top: auto; left: 8px; right: 8px; bottom: calc(var(--dock-h) + 8px); width: auto; height: auto;
+    max-height: calc(100dvh - var(--dock-h) - 96px); transform: translateY(20px);
+  }
+  .place-wide { top: 64px; max-height: none; }
+  .panel-head { min-height: 52px; padding: 6px 8px 6px 18px; }
+  .panel-head h2 { font-size: 17px; }
+  .panel-body { padding: 16px 18px 20px; }
+  .place-wide .panel-body { padding: 12px 14px 16px; }
   .map-layout { display: flex; flex-direction: column; height: auto; gap: 12px; }
   .map-main { display: flex; flex-direction: column; }
   .map-intro { font-size: 15px; }
@@ -459,8 +489,8 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .fieldmap { height: 70vw; min-height: 260px; }
   .map-legend-card { position: static; width: auto; max-width: none; margin-top: 8px; box-shadow: none; border: 1px solid var(--line); }
   .map-side { overflow: visible; }
-  .field-card.rich { position: fixed; left: 8px; right: 8px; bottom: 72px; z-index: 1000; max-height: 72dvh; overflow-y: auto; padding: 16px; background: var(--panel); border-radius: var(--r-panel); box-shadow: 0 -8px 30px rgba(22, 32, 26, 0.3); animation-name: sheet-in; }
-  @keyframes sheet-in { from { opacity: 0; transform: translateY(24px); } }
+  .field-card.rich { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h) + 8px); z-index: 1000; max-height: 72dvh; overflow-y: auto; padding: 16px; background: var(--panel); border-radius: var(--r-panel); box-shadow: 0 -8px 30px rgba(22, 32, 26, 0.3); animation-name: sheet-in; }
+  @keyframes sheet-in { from { opacity: 0.5; transform: translateY(24px); } }
   .fc-icon { width: 56px; height: 56px; } .fc-icon svg { width: 38px; height: 38px; }
   .fc-head h3 { font-size: 24px; }
   .fc-big { font-size: 40px; }

@@ -1,0 +1,86 @@
+{
+ "source": "bundled",
+ "t": 1790454906524,
+ "config": {
+  "plot": {
+   "name": "Farm Hand bench",
+   "width": 120,
+   "length": 60
+  },
+  "zones": [
+   {
+    "id": "A",
+    "name": "Farm Hand box",
+    "probe": "A",
+    "x": 30,
+    "y": 30,
+    "sun": "partial",
+    "ph": null
+   },
+   {
+    "id": "B",
+    "name": "Timer box (control)",
+    "probe": "B",
+    "x": 90,
+    "y": 30,
+    "sun": "partial",
+    "ph": null
+   }
+  ],
+  "place": {
+   "name": "FIU",
+   "region": "Florida",
+   "country": "United States",
+   "lat": 25.7566,
+   "lon": -80.374
+  },
+  "onboarded": true,
+  "calibration": {
+   "A": {
+    "airRaw": 3400,
+    "waterRaw": 1507,
+    "calibratedAt": 1790179200000,
+    "source": "default"
+   },
+   "B": {
+    "airRaw": 3450,
+    "waterRaw": 1875,
+    "calibratedAt": 1790438400000,
+    "source": "default"
+   }
+  }
+ },
+ "live": {
+  "A": {
+   "t": 1790454906524,
+   "moistureRaw": 0,
+   "moisturePct": null,
+   "tempC": null,
+   "moistureOnline": false,
+   "tempOnline": false,
+   "raw": 0,
+   "probeOk": false
+  },
+  "B": {
+   "t": 1790454906524,
+   "moistureRaw": 0,
+   "moisturePct": null,
+   "tempC": null,
+   "moistureOnline": false,
+   "tempOnline": false,
+   "raw": 0,
+   "probeOk": false
+  }
+ },
+ "pumps": {
+  "A": false,
+  "B": false
+ },
+ "decision": {
+  "brain": "rules",
+  "pick": "wait",
+  "seconds": 0,
+  "why": "soil probe A not connected",
+  "t": 1790454906524
+ }
+}

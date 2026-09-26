@@ -8,7 +8,7 @@
 *   i2c      devices answering on SDA 21 / SCL 22, and with the two wires swapped
 *   adc      raw value on every ADC1 pin (a connected soil probe reads ~1500-3400; a loose pin reads near 0)
 *   onewire  pins where a DS18B20 answers a reset pulse
-* Relay pins (26, 27) are never touched.
+* Relay pins (13, 22) are never touched.
 */
 
 static const int adc_pins[]     = {32, 33, 34, 35, 36, 39};
@@ -38,12 +38,12 @@ void    DIAG_run(void)
     Serial.print("{\"type\":\"diag\"");
 
     /* The I2C scan runs once at boot only: re-scanning (and the swapped-pin scan) while the screen is
-       drawing blanked it every 10 s. The screen is confirmed on 21/22 (0x3C). */
+       drawing blanked it every 10 s. Screen is off on the soldered board (USE_OLED). */
     static bool i2c_done = true;       /* off: with the screen unpowered, a full scan freezes the board for minutes */
     if (!i2c_done)
     {
         Serial.print(",");
-        DIAG_i2c(OLED_SDA, OLED_SCL, "i2c_21_22");
+        DIAG_i2c(OLED_SDA, OLED_SCL, "i2c");
         Wire.end();
         Wire.begin(OLED_SDA, OLED_SCL);
         Wire.setTimeOut(50);
@@ -56,6 +56,6 @@ void    DIAG_run(void)
         Serial.printf("%s\"%d\":%d", i ? "," : "", adc_pins[i], analogRead(adc_pins[i]));
     }
 
-    /* The one-wire pin scan is off: searching 15 pins froze the sensor loop for seconds. Temps are on D4 and D2. */
+    /* The one-wire pin scan is off: searching 15 pins froze the sensor loop for seconds. Temps are on D21 and D4. */
     Serial.println("}}");
 }

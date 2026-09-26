@@ -6,7 +6,7 @@
  * Motion (Emil): panels ride CSS transitions (interruptible), 220 ms ease-out in, 160 ms out,
  * from 12 px and transparent, never from scale(0). The shell stays mounted so a close can animate.
  */
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Component, useEffect, useRef, useState, type ReactNode } from 'react';
 import { brand } from '../brand';
 import { BoxPanel, useBoxGlance } from './Boxes';
 import { CropsPanel } from './Crops';
@@ -42,11 +42,14 @@ export function usePanel(): [PanelId | null, (p: PanelId | null) => void] {
   return [open, set];
 }
 
-function DockButton({ id, open, onToggle, label, glance }: { id: PanelId; open: PanelId | null; onToggle: (p: PanelId | null) => void; label: string; glance?: string }) {
+/** Where a panel sits, so the app can make room for it (the 3D scene shrinks beside a side sheet). */
+export const placeOf = (id: PanelId | null): Place | null => (id ? PANELS[id].place : null);
+
+function DockButton({ id, open, onToggle, label, short, glance }: { id: PanelId; open: PanelId | null; onToggle: (p: PanelId | null) => void; label: string; short?: string; glance?: string }) {
   const on = open === id;
   return (
-    <button className={`dock-btn ${on ? 'is-on' : ''}`} aria-expanded={on} aria-controls="panel" onClick={() => onToggle(on ? null : id)}>
-      <span className="dock-label">{label}</span>
+    <button className={`dock-btn ${on ? 'is-on' : ''}`} aria-expanded={on} aria-controls="panel" aria-label={label} onClick={() => onToggle(on ? null : id)}>
+      <span className="dock-label"><span className="dl-full">{label}</span><span className="dl-short" aria-hidden>{short ?? label}</span></span>
       {glance && <span className="dock-glance num">{glance}</span>}
     </button>
   );
@@ -59,16 +62,24 @@ export function Dock({ open, onToggle }: { open: PanelId | null; onToggle: (p: P
     <nav className="dock" aria-label="Panels">
       <DockButton id="box-a" open={open} onToggle={onToggle} label="Box A" glance={a} />
       <DockButton id="box-b" open={open} onToggle={onToggle} label="Box B" glance={b} />
-      <DockButton id="laya" open={open} onToggle={onToggle} label="Laya's call" glance={call} />
-      <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks.toLocaleString()} checks` : 'time, water'} />
+      <DockButton id="laya" open={open} onToggle={onToggle} label="Laya's call" short="Laya" glance={call} />
+      <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks.toLocaleString()} checks` : undefined} />
       <DockButton id="results" open={open} onToggle={onToggle} label="Results" />
       <i className="dock-sep" aria-hidden />
       <DockButton id="history" open={open} onToggle={onToggle} label="History" />
-      <DockButton id="forecast" open={open} onToggle={onToggle} label="Forecast" />
+      <DockButton id="forecast" open={open} onToggle={onToggle} label="Forecast" short="Rain" />
       <DockButton id="crops" open={open} onToggle={onToggle} label="Crops" />
       <DockButton id="map" open={open} onToggle={onToggle} label="Map" />
     </nav>
   );
+}
+
+/** One panel failing must never blank the app: show a short note in the panel instead. */
+class PanelBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch(e: unknown) { console.error('[panel]', e); }
+  render() { return this.state.failed ? <p className="muted">This panel couldn't load. Close it and open it again.</p> : this.props.children; }
 }
 
 /** One shell per placement, always mounted; the last opened content stays while it animates out. */
@@ -96,17 +107,18 @@ export function Panels({ open, onClose }: { open: PanelId | null; onClose: () =>
       id="panel"
       ref={ref}
       className={`panel-shell place-${p?.place ?? 'side'} ${open ? 'is-open' : ''}`}
-      aria-label={p?.title}
+      role="dialog"
+      aria-labelledby="panel-title"
       aria-hidden={!open}
       inert={!open}
     >
       {p && (
         <>
           <header className="panel-head">
-            <h2>{p.title}</h2>
+            <h2 id="panel-title">{p.title}</h2>
             <button className="btn btn-icon" onClick={onClose} aria-label="Close panel"><IconClose /></button>
           </header>
-          <div className="panel-body" key={id}>{p.body()}</div>
+          <div className="panel-body" key={id}><PanelBoundary>{p.body()}</PanelBoundary></div>
         </>
       )}
     </section>

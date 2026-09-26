@@ -6,21 +6,27 @@
 
 #include "sys_target.h"
 
-/* OLED pinout */
-#define OLED_SCL 22
-#define OLED_SDA 21
+/* OLED pinout. Off on the soldered board: D21 / D22 now carry temp 1 and pump 2. To bring the screen back, wire it to 18 / 19 and set USE_OLED 1 */
+#ifndef USE_OLED
+#define USE_OLED 0
+#endif
+#define OLED_SCL 19
+#define OLED_SDA 18
 
-/* DS18B20 pinout. All probes belong on D4; D2 is also read because temp 2 was wired there.
-   Note: a probe adapter on D2 holds it high and blocks flashing (D2 is a boot pin). Move it to D4. */
-#define DS18B20_PIN   4
-#define DS18B20_PIN_2 2
+/* DS18B20 pinout: temp 1 on D21, temp 2 on D4. Boxes are matched by probe ID on the server (TEMP_BOX), not by pin */
+#define DS18B20_PIN   21
+#define DS18B20_PIN_2 4
 
-/* Soil probe pinout (AOUT), ADC1 pins. Wired to D34 / D35 on the real board (found by comp_diag 2026-09-26) */
-#define SOIL_A_PIN 34
-#define SOIL_B_PIN 35
+/* Soil probe pinout (AOUT), ADC1 pins (ADC2 stops working while WiFi is on) */
+#define SOIL_A_PIN 35
+#define SOIL_B_PIN 34
 
-/* Relay pinout (through the PN2222 driver: HIGH = relay on) */
-#define RELAY_A_PIN 26
-#define RELAY_B_PIN 27
+/* Relay pinout (soldered board 2026-09-26). RELAY_ON_LEVEL: HIGH for the PN2222 driver or a high-level trigger module,
+   LOW for a low-level trigger module */
+#define RELAY_A_PIN 13
+#define RELAY_B_PIN 22
+#ifndef RELAY_ON_LEVEL
+#define RELAY_ON_LEVEL HIGH
+#endif
 
 #endif

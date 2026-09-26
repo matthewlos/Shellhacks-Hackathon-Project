@@ -47,12 +47,14 @@ void sys_application(void)
         error_handler();
     }
 
+#if USE_OLED
     /* No screen is not fatal: keep reading and reporting over serial */
     ret = OLED_init();
     if (ret != STATUS_OK)
     {
         REPORT_status(ret);
     }
+#endif
 
     /* No temp probe yet is not fatal either: the bus is scanned again every 10 s */
     ret = TEMP_init();
@@ -87,7 +89,9 @@ void sys_loop(void)
     PUMP_fallback(&soil, CLOUD_last_ok_ms());
     PUMP_update();
     PUMP_timer_b();
+#if USE_OLED
     OLED_update(&soil, &temp);
+#endif
 
     /* Wiring check every 10 s, so moving a wire shows up without a reset */
     if (++loops % 10 == 0)

@@ -2,7 +2,7 @@
 
 #define TEMP_RESCAN_MS 10000
 
-/* Two data lines: D4 (where every probe belongs) and D2 (where temp 2 was wired). Probes from both are listed together. */
+/* Two data lines: D21 (temp 1) and D4 (temp 2). Probes from both are listed together. */
 OneWire oneWire(DS18B20_PIN);
 OneWire oneWire2(DS18B20_PIN_2);
 
@@ -51,7 +51,7 @@ StatusCode_e    TEMP_init(void)
 
 StatusCode_e    TEMP_update(TempReading_t *out)
 {
-    /* Rescan so a probe plugged in (or moved to D4) while running shows up */
+    /* Rescan so a probe plugged in while running shows up */
     if (millis() - last_scan > ((count < TEMP_MAX) ? 15000UL : 60000UL))
     {
         TEMP_scan();

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { BoardSource } from './source';
-import { BackendBoard } from './backendBoard';
+import { BackendBoard, BACKEND_URL } from './backendBoard';
+import { initialScan, saveScan, serverScan } from './lastScan';
 import { idlePour } from './sim/pour';
 import type {
   AgentCall, BoardConfig, CropScore, Decision, Diagnosis, Forecast, FrostDates, HistorySeries, Note, Overrides, PlantingWindow,
@@ -47,6 +48,11 @@ interface AppState {
    */
   timelapse: boolean;
   endTimelapse(): void;
+  /**
+   * Epoch ms of the reading on screen while it is NOT from the live stream (a stored scan at startup,
+   * or the last reading kept after the stream dropped). null while live samples are flowing.
+   */
+  staleAt: number | null;
   /** Farm Hand: pump state as the ESP32 last reported it */
   pumps: Pumps;
 
@@ -119,6 +125,7 @@ export const useApp = create<AppState>((set, get) => ({
   overrides: { forecast: null, zoneMoisture: {} },
   decision: null,
   timelapse: false,
+  staleAt: null,
   endTimelapse: () => {
     if (!get().timelapse) return;
     set({ timelapse: false, ...(parkedSample ? { live: parkedSample.live, pumps: parkedSample.pumps ?? { A: false, B: false } } : { live: {}, pumps: { A: false, B: false } }) });
@@ -224,6 +231,17 @@ export function startBoard(): void {
   let first = true;
   // `?quick` skips onboarding (team shortcut): the plot, place and calibration come from the backend.
   if (new URLSearchParams(location.search).get('quick') != null) board.setOnboarded(true);
+  // The boxes render at once from the last known scan; the stream swaps in when it arrives.
+  let gotSample = false;
+  const scan = initialScan();
+  useApp.setState({ ready: true, stage: 'live', config: scan.config, live: scan.live, pumps: scan.pumps, decision: scan.decision, staleAt: scan.t });
+  parkedSample = { live: scan.live, pumps: scan.pumps };
+  void serverScan(BACKEND_URL, scan.config).then((s) => {
+    if (!s || gotSample || s.t <= (useApp.getState().staleAt ?? 0)) return;
+    useApp.setState({ live: s.live, staleAt: s.t });
+    parkedSample = { live: s.live, pumps: useApp.getState().pumps };
+  });
+  const remember = () => { const st = useApp.getState(); if (st.config && !st.timelapse) saveScan({ t: Date.now(), config: st.config, live: parkedSample?.live ?? st.live, pumps: parkedSample?.pumps ?? st.pumps, decision: st.decision }); };
   board.connect((e) => {
     switch (e.type) {
       case 'config': {
@@ -238,8 +256,10 @@ export function startBoard(): void {
         break;
       }
       case 'sample':
+        gotSample = true;
         parkedSample = { live: e.zones, pumps: e.pumps };
-        if (!useApp.getState().timelapse) useApp.setState(e.pumps ? { live: e.zones, pumps: e.pumps } : { live: e.zones });
+        if (!useApp.getState().timelapse) useApp.setState(e.pumps ? { live: e.zones, pumps: e.pumps, staleAt: null } : { live: e.zones, staleAt: null });
+        remember();
         break;
       case 'decision': useApp.setState({ decision: { brain: e.brain, pick: e.pick, seconds: e.seconds, why: e.why, t: e.t } }); break;
       case 'pour': {
@@ -258,7 +278,12 @@ export function startBoard(): void {
       case 'ui_command': applyUiCommand(e); break;
       case 'link': {
         const was = useApp.getState().backendOnline;
-        useApp.setState({ backendOnline: e.online, ...(e.online ? {} : { live: {} }) });   // offline: no stale readings on screen
+        // offline: keep the last reading on screen (the boxes never go blank) and say how old it is
+        if (!e.online && was) {
+          const ts = Object.values(useApp.getState().live).map((z) => z?.t ?? 0);
+          useApp.setState({ staleAt: ts.length ? Math.max(...ts) : Date.now() });
+        }
+        useApp.setState({ backendOnline: e.online });
         if (e.online && !was) { void useApp.getState().refreshAnswers(); void useApp.getState().loadRegion(); }
         break;
       }

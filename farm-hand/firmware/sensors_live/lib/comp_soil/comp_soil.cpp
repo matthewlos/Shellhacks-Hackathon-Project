@@ -2,12 +2,12 @@
 
 #define SOIL_SAMPLES 16
 
-static const int pins[SOIL_COUNT]      = {34, 35, 32, 33};
+static const int pins[SOIL_COUNT]      = {SOIL_A_PIN, SOIL_B_PIN, 32, 33};
 
-/* D34 (probe A): measured 2026-09-23. D35 (probe B): water 1875 measured 2026-09-26, air ~3450 from open-air readings
-   (fine-tune once it's fully dry). D32/D33 unused. */
-static const int raw_air[SOIL_COUNT]   = {3400, 3450, 3400, 3400};
-static const int raw_water[SOIL_COUNT] = {1507, 1875, 1507, 1507};
+/* Calibration follows the pin: D35 water 1875 measured 2026-09-26, air ~3450 from open-air readings (fine-tune once it's
+   fully dry). D34 measured 2026-09-23. D32/D33 unused. Re-check both if the probes were swapped when the board was soldered. */
+static const int raw_air[SOIL_COUNT]   = {3450, 3400, 3400, 3400};
+static const int raw_water[SOIL_COUNT] = {1875, 1507, 1507, 1507};
 
 StatusCode_e    SOIL_init(void)
 {
