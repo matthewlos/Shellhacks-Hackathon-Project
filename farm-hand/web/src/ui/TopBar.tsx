@@ -1,6 +1,6 @@
 import { brand } from '../brand';
 import { useApp } from '../data/store';
-import { ago, BOX_IDS, toMs, useNow } from './farmData';
+import { ago, BOX_IDS, moistureOf, rawOf, toMs, useBox, useNow, type BoxId } from './farmData';
 import { Logo } from './icons';
 
 /** A reading older than this means the ESP32 has gone quiet (it posts every ~10 s). */
@@ -44,6 +44,34 @@ export function TopBar() {
         <i className="dot" />
         <span className="num">{status.text}</span>
       </span>
+      <div className="live-reads" aria-label="Live soil readings">
+        <BoxRead id="A" name="Laya" />
+        <BoxRead id="B" name="Timer" />
+      </div>
     </header>
+  );
+}
+
+/** Always-on readout: each box's soil moisture and soil temperature, straight from the latest reading. */
+function BoxRead({ id, name }: { id: BoxId; name: string }) {
+  const l = useBox(id);
+  const m = moistureOf(l);
+  const raw = rawOf(l);
+  const temp = l?.tempOnline && l.tempC != null ? l.tempC : null;
+  return (
+    <div className={`live-read live-read-${id.toLowerCase()}`}>
+      <span className="live-read-id">{id}</span>
+      <div className="live-read-name">{name}</div>
+      <div className="live-read-vals">
+        <span className={m.pct == null ? 'is-missing' : ''}>
+          <b className="num">{m.pct != null ? `${Math.round(m.pct)}%` : '—'}</b>
+          <small>{m.pct != null ? 'moisture' : m.state === 'disconnected' ? `probe not reading${raw != null ? ` (${raw})` : ''}` : 'no moisture yet'}</small>
+        </span>
+        <span className={temp == null ? 'is-missing' : ''}>
+          <b className="num">{temp != null ? `${temp.toFixed(1)}°C` : '—'}</b>
+          <small>{temp != null ? 'soil temp' : 'no temp sensor'}</small>
+        </span>
+      </div>
+    </div>
   );
 }

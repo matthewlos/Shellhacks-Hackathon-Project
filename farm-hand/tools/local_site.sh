@@ -1,6 +1,6 @@
 #!/bin/zsh
 # The whole Farm Hand site on this laptop, fed straight from the ESP32 over USB. No internet or Mac mini needed.
-#   tools/local_site.sh        then open http://127.0.0.1:8120/farmhand/
+#   tools/local_site.sh        then open http://127.0.0.1:8120/
 # Builds the web app, starts cloud/receiver.py on 127.0.0.1:8120 with a laptop-only database, and runs
 # tools/usb_bridge.py --local (it also keeps feeding the live site when there is internet).
 set -e
@@ -14,5 +14,5 @@ FARMHAND_TOKEN=$TOKEN SITE_DIR=$ROOT/web/dist FARMHAND_DB=$ROOT/cloud/local/farm
 SERVER=$!
 trap "kill $SERVER 2>/dev/null" EXIT
 sleep 1
-echo "Local site: http://127.0.0.1:8120/farmhand/"
+echo "Local site: http://127.0.0.1:8120/"
 $PY $HERE/usb_bridge.py --local "$@"

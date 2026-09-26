@@ -89,6 +89,23 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .status-quiet { color: var(--text-dim); }
 .status-warn { color: var(--caution); }
 .status-bad { color: var(--danger); background: var(--danger-soft); border-color: transparent; }
+.live-reads { display: flex; gap: 8px; flex: none; }
+.live-read {
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 2px 10px; padding: 8px 14px 8px 10px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow);
+}
+.live-read-id {
+  grid-row: span 2; width: 26px; height: 26px; display: grid; place-items: center; border-radius: var(--r-ctl);
+  color: var(--accent-ink); background: var(--accent); font-weight: 700; font-size: 14px;
+}
+.live-read-b .live-read-id { background: var(--warm); }
+.live-read-name { font-size: 13px; font-weight: 600; color: var(--text-dim); line-height: 1; }
+.live-read-vals { display: flex; gap: 16px; }
+.live-read-vals span { display: grid; line-height: 1.1; }
+.live-read-vals b { font-size: 22px; font-weight: 700; font-stretch: 90%; font-variant-numeric: tabular-nums; color: var(--text); }
+.live-read-vals small { font-size: 12px; color: var(--text-faint); white-space: nowrap; }
+.live-read-vals .is-missing b { color: var(--text-faint); }
+.live-read-vals .is-missing small { color: var(--caution); }
 
 /* ----------------------------------------------------------------------- dock */
 .dock {
@@ -462,6 +479,11 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .map-legend-card i { width: 18px; height: 18px; }
   .map-legend-card p { display: none; }
   .brandmark p { display: none; }
+  .live-reads { width: 100%; }
+  .live-read { flex: 1 1 0; min-width: 0; padding: 6px 10px 6px 8px; gap: 2px 8px; }
+  .live-read-vals { gap: 10px; }
+  .live-read-vals b { font-size: 18px; }
+  .live-read-vals small { font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
   .status { height: 30px; font-size: 13px; padding: 0 10px; white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis; }
   /* phone: the dock is a 5-column grid of short labels (two rows, never wider than the screen);
      every panel is a bottom sheet above it with its own scroll */

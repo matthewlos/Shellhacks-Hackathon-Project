@@ -7,6 +7,7 @@ at once. The ESP32 keeps its own WiFi uploads going, so pulling the cable change
 
   python tools/usb_bridge.py                 # finds the ESP32's port, reads the token from firmware/sensors_live/include/secrets.h
   python tools/usb_bridge.py /dev/cu.usbserial-0001
+  python tools/usb_bridge.py --local --local-only   # USB feeds only the laptop copy; the live site keeps the ESP32's own WiFi uploads
   python tools/usb_bridge.py --local         # also feed a copy of the server on this laptop (tools/local_site.sh), no internet needed
 
 Needs pyserial and requests. Never writes to the board.
@@ -48,7 +49,7 @@ def find_port():
 
 def main():
     url, token = secret("FARMHAND_URL"), secret("FARMHAND_TOKEN")
-    urls = ([LOCAL_URL] if "--local" in sys.argv else []) + [url]
+    urls = ([LOCAL_URL] if "--local" in sys.argv else []) + ([] if "--local-only" in sys.argv else [url])
     port = find_port()
     s = serial.Serial()
     s.port, s.baudrate, s.timeout = port, 115200, 2
