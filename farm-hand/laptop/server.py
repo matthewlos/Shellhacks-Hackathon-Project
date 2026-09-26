@@ -3,6 +3,7 @@
   python server.py                    # real ESP32 (auto-finds the USB port)
   SERIAL_PORT=fake python server.py   # no hardware: simulated pots (FAKE badge on the dashboard)
 """
+import json
 import threading
 import time
 from pathlib import Path
@@ -152,21 +153,26 @@ def series(hours: float = 24):
         t0, t1 = rows[0][0], rows[-1][0]
         step = max(1.0, (t1 - t0) / n)
         buck = {}
-        for ts, a, _b, temp in rows:
-            buck.setdefault(int((ts - t0) // step), []).append((ts, a, temp))
+        for ts, a, b, temp in rows:
+            buck.setdefault(int((ts - t0) // step), []).append((ts, a, temp, b))
         for k in sorted(buck):
             g = buck[k]
             tv = [x[2] for x in g if x[2] is not None]
+            bv = [x[3] for x in g if x[3] is not None]
             pts.append([round(sum(x[0] for x in g) / len(g), 1), round(sum(x[1] for x in g) / len(g), 2),
-                        round(sum(tv) / len(tv), 2) if tv else None])
+                        round(sum(tv) / len(tv), 2) if tv else None,
+                        round(sum(bv) / len(bv), 2) if bv else None])      # [ts, pot A %, temp, pot B %] (B for the control page)
     flow = config.load_cal()["flow_ml_per_s"]["A"]
-    pours = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * flow), "by": by} for ts, pot, ms, by, _w in store.pours_since(since) if pot == "A"]
+    cal = config.load_cal()["flow_ml_per_s"]
+    allp = store.pours_since(since)
+    pours = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * flow), "by": by} for ts, pot, ms, by, _w in allp if pot == "A"]
+    pours_b = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * cal.get("B", flow)), "by": by} for ts, pot, ms, by, _w in allp if pot == "B"]
     timer = []
     if rows and config.ONE_POT and config.TIMER_EVERY_S:      # same schedule report.py counts: first reading + every TIMER_EVERY_S
         k, t0 = 1, rows[0][0]
         while t0 + k * config.TIMER_EVERY_S <= rows[-1][0]:
             timer.append({"ts": t0 + k * config.TIMER_EVERY_S, "s": config.TIMER_POUR_MS / 1000, "ml": round(config.TIMER_POUR_MS / 1000 * flow)}); k += 1
-    return {"points": pts, "pours": pours, "timer": timer, "rate": soak.learned_pct_per_s("A"), "hours": hours,
+    return {"points": pts, "pours": pours, "pours_b": pours_b, "one_pot": bool(config.ONE_POT), "timer": timer, "rate": soak.learned_pct_per_s("A"), "hours": hours,
             "report": report.report(hours or None, include_fake=B.fake), "fake": B.fake,
             "band": [config.DRY_PCT, config.WET_PCT], "target": config.TARGET_PCT}
 
@@ -185,6 +191,39 @@ def stop():
     target.stop()
     B.stop()
     return {"stopped": True}
+
+
+BASELINE_FILE = config.DATA / "baseline.json"
+if BASELINE_FILE.exists():                           # keep the level you set across restarts
+    try:
+        _bl = json.loads(BASELINE_FILE.read_text())
+        config.DRY_PCT, config.TARGET_PCT = float(_bl["dry"]), float(_bl["target"])
+    except Exception as e:
+        print("[baseline] ignoring", BASELINE_FILE, e)
+
+
+@app.post("/api/baseline")
+def set_baseline(body: dict):
+    """The moisture level to keep (the live page's slider). Box A waters when it falls to this line, and each pour aims
+    20 points above it (capped 5 under the wet limit). Laya sees it too: _laya_state() maps DRY_PCT onto its stress line."""
+    pct = float(body.get("pct", config.DRY_PCT))
+    if not 20 <= pct <= config.WET_PCT - 15:
+        return {"error": f"pick a level between 20% and {config.WET_PCT - 15:.0f}%"}
+    config.DRY_PCT = round(pct, 1)
+    config.TARGET_PCT = round(min(pct + 20, config.WET_PCT - 5), 1)
+    BASELINE_FILE.write_text(json.dumps({"dry": config.DRY_PCT, "target": config.TARGET_PCT, "set_at": time.time()}))
+    return {"baseline": config.DRY_PCT, "target": config.TARGET_PCT, "wet_limit": config.WET_PCT}
+
+
+@app.get("/api/field-call")
+def field_call():
+    """Laya's pick for this soil if it were outdoors (real forecast on). Display only, never pours."""
+    return brain.field_call()
+
+
+@app.get("/sim")
+def sim_page():
+    return FileResponse(Path(__file__).parent / "static" / "sim.html")
 
 
 # the page, scene.js and models/farmhand.glb (mounted last so the /api routes win)

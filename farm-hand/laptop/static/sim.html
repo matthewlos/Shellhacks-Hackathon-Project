@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farm Hand: a season outside</title>
+<meta name="description" content="Farm Hand vs a sprinkler timer on 21 months of real Miami weather: a simulated field, day by day.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f64b8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1"></script>
+<style>
+/* Same house tokens as index.html: blue = Farm Hand (the AI), orange = the timer. */
+:root{
+  --ground:#eef1f4; --panel:#fbfcfd; --wash:#f2f5f8; --line:rgba(14,22,33,.09);
+  --ink:#0e1621; --ink-2:#3d4a59; --muted:#5b6674;
+  --ai:#1f64b8; --ai-wash:rgba(31,100,184,.09); --timer:#c4501f; --timer-wash:rgba(196,80,31,.09);
+  --good:#0a8a0a; --bad:#c43333; --rain:#5a8fc8;
+  --f-display:"Bricolage Grotesque","Atkinson Hyperlegible Next",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+  --r-ctl:6px; --r-panel:12px;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+::selection{background:rgba(31,100,184,.18)}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px;border-radius:var(--r-ctl)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+a{color:var(--ai)}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:28px 56px;display:grid;gap:22px}
+@media (max-width:560px){.wrap{padding-inline:16px}}
+
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:14px}
+h1{margin:0;font:700 clamp(1.6rem,3.2vw,2.3rem)/1.05 var(--f-display);letter-spacing:-.025em;text-wrap:balance;max-width:24ch}
+.lede{margin:8px 0 0;color:var(--ink-2);max-width:66ch}
+.back{font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.back:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* right now: Laya's call for this soil with the live forecast on (from /api/field-call) */
+.now{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-panel);padding:14px 18px}
+.now > i{width:40px;height:40px;border-radius:var(--r-ctl);display:grid;place-items:center;font-size:20px;background:var(--ai-wash);color:var(--ai)}
+.now span{display:block;font-size:13.5px;color:var(--ink-2)}
+.now b{display:block;font:700 1.35rem/1.2 var(--f-display);color:var(--ai)}
+.now small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* the timelapse */
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden}
+.fields{display:grid;grid-template-columns:1fr 1fr}
+@media (max-width:820px){.fields{grid-template-columns:1fr}}
+.field{display:grid;grid-template-rows:auto 1fr auto;min-width:0}
+.field + .field{border-left:1px solid var(--line)}
+@media (max-width:820px){.field + .field{border-left:0;border-top:1px solid var(--line)}}
+.fhead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px 0}
+.fhead h2{margin:0;font:700 1.15rem/1.1 var(--f-display);letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+.fhead h2 i{font-size:20px}
+.timer h2{color:var(--timer)} .hand h2{color:var(--ai)}
+.fhead .how{font-size:12.5px;color:var(--muted);text-align:right}
+canvas{display:block;width:100%;height:240px}
+.fstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 18px 16px}
+.fstats div{display:grid;gap:2px}
+.fstats span{font-size:12.5px;color:var(--muted)}
+.fstats b{font:600 1.2rem/1.1 var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.timer .fstats b.hot{color:var(--timer)} .hand .fstats b.hot{color:var(--ai)}
+.fstats b.bad{color:var(--bad)}
+
+.ctrl{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);background:var(--wash)}
+@media (max-width:640px){.ctrl{grid-template-columns:auto minmax(0,1fr);}.ctrl .date{grid-column:1/-1}.ctrl .spd{justify-self:end}}
+.play{width:42px;height:42px;border-radius:var(--r-ctl);background:var(--ink);color:#fff;display:grid;place-items:center;font-size:18px;transition:transform .12s var(--ease)}
+.play:active{transform:scale(.96)}
+.date{display:grid;gap:1px;min-width:150px}
+.date b{font:700 1.15rem/1.1 var(--f-display)}
+.date span{font-size:12.5px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--ai)}
+.spd{display:inline-flex;gap:2px;padding:3px;border-radius:var(--r-ctl);background:var(--panel);border:1px solid var(--line)}
+.spd button{height:28px;padding:0 10px;border-radius:4px;font:600 12.5px/1 var(--f-num);color:var(--ink-2)}
+.spd button.on{background:var(--ink);color:#fff}
+
+.moment{min-height:52px;display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink-2)}
+.moment i{font-size:20px;color:var(--ai);flex:none}
+.moment b{color:var(--ink)}
+
+/* the gap so far */
+.gap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-panel);overflow:hidden}
+@media (max-width:820px){.gap{grid-template-columns:1fr 1fr}}
+.gap > div{background:var(--panel);padding:16px 18px;display:grid;gap:3px;align-content:start}
+.gap span{font-size:13px;color:var(--muted)}
+.gap b{font:600 clamp(1.4rem,2.6vw,2rem)/1.05 var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.03em;color:var(--ai)}
+.gap small{font-size:12.5px;color:var(--ink-2)}
+
+/* chart */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-panel);padding:18px}
+.panel h3{margin:0 0 4px;font:700 1.1rem/1.2 var(--f-display)}
+.panel .sub{margin:0 0 12px;font-size:13.5px;color:var(--ink-2)}
+.chartbox{overflow-x:auto}
+#chart{display:block;width:100%;min-width:640px;height:auto}
+#chart text{font:500 11px var(--f-num);fill:var(--muted)}
+.key{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ink-2);margin-top:8px}
+.key i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+/* money + time */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:10px 0 14px}
+@media (max-width:560px){.inputs{grid-template-columns:1fr}}
+.inputs label{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}
+.inputs input{height:36px;border:1px solid var(--line);border-radius:var(--r-ctl);background:var(--wash);padding:0 10px;font:600 14px var(--f-num)}
+.rows{display:grid;gap:0;border-top:1px solid var(--line)}
+.rows div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.rows span{color:var(--ink-2)}
+.rows b{font:600 14px var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rows .total b{color:var(--ai);font-size:16px}
+.fine{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+
+.moments{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.moments li{border-bottom:1px solid var(--line)}
+.moments button{width:100%;display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding:9px 2px;text-align:left;font-size:14px;color:var(--ink-2)}
+.moments button:hover{background:var(--ai-wash)}
+.moments .d{font:600 12.5px var(--f-num);color:var(--ink)}
+
+.honest{font-size:13px;color:var(--muted);max-width:90ch;margin:0}
+.empty{padding:40px 18px;text-align:center;color:var(--ink-2)}
+.empty code{font-family:var(--f-num);font-size:13px;background:var(--wash);padding:2px 6px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>A season outside: Farm Hand vs a sprinkler timer</h1>
+      <p class="lede">Our box is indoors, so here's the same brain on a field. Two identical fields, the same 21 months of real Miami weather (Jan 2025 to Sep 2026). The timer waters every morning. Farm Hand checks the soil and the forecast every 6 hours and decides. Laya never saw these months in training.</p>
+    </div>
+    <a class="back" href="/"><i class="ph ph-arrow-left"></i>Back to the live box</a>
+  </header>
+
+  <section class="now" id="now" aria-live="polite">
+    <i class="ph-fill ph-lightning"></i>
+    <div><span>Right now, if our box sat in a field at FIU, Laya would</span><b id="nPick">ask the live box…</b><small id="nSub">Real forecast, the real soil reading from the box. Display only: the pump stays off.</small></div>
+  </section>
+
+  <section class="stage" id="stage">
+    <div class="fields">
+      <div class="field timer">
+        <div class="fhead"><h2><i class="ph ph-timer"></i>Timer</h2><span class="how" id="timerHow">every morning, same amount</span></div>
+        <canvas id="cT" aria-label="The timer's field: soil color shows moisture, spray shows watering"></canvas>
+        <div class="fstats">
+          <div><span>Water used</span><b class="num hot" id="tUse">–</b></div>
+          <div><span>Times watered</span><b class="num" id="tN">–</b></div>
+          <div><span>Hours the crop was stressed</span><b class="num" id="tS">–</b></div>
+        </div>
+      </div>
+      <div class="field hand">
+        <div class="fhead"><h2><i class="ph ph-plant"></i>Farm Hand</h2><span class="how">waters only when the soil needs it</span></div>
+        <canvas id="cL" aria-label="Farm Hand's field: soil color shows moisture, spray shows watering"></canvas>
+        <div class="fstats">
+          <div><span>Water used</span><b class="num hot" id="lUse">–</b></div>
+          <div><span>Times watered</span><b class="num" id="lN">–</b></div>
+          <div><span>Hours the crop was stressed</span><b class="num" id="lS">–</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="moment" id="moment" aria-live="polite"><i class="ph ph-cloud-rain"></i><span>Press play. Each second is about two weeks.</span></div>
+    <div class="ctrl">
+      <button class="play" id="play" aria-label="Play"><i class="ph-fill ph-play"></i></button>
+      <div class="date"><b id="dLabel">–</b><span id="dRain">&nbsp;</span></div>
+      <input type="range" id="scrub" min="0" max="0" value="0" aria-label="Day of the season">
+      <div class="spd" role="group" aria-label="Speed"><button data-s="1">1x</button><button data-s="3" class="on">3x</button><button data-s="8">8x</button></div>
+    </div>
+  </section>
+
+  <section class="gap" aria-label="What Farm Hand saved so far">
+    <div><span>Water saved, per acre</span><b id="gGal">–</b><small id="gGalSub">&nbsp;</small></div>
+    <div><span>Pumping cost saved, your farm</span><b id="gUsd">–</b><small id="gUsdSub">&nbsp;</small></div>
+    <div><span>Soil checks done for you</span><b id="gChk">–</b><small>every 6 hours, day and night</small></div>
+    <div><span>Stressed hours avoided</span><b id="gStr">–</b><small id="gStrSub">&nbsp;</small></div>
+  </section>
+
+  <section class="panel">
+    <h3>Water used over the season</h3>
+    <p class="sub">Gallons per acre, added up day by day. Blue bars at the bottom are rain. Where the blue line goes flat, Farm Hand let the rain do the work.</p>
+    <div class="chartbox"><svg id="chart" viewBox="0 0 1000 300" role="img" aria-label="Cumulative water used, timer vs Farm Hand"></svg></div>
+    <div class="key"><span><i style="background:var(--timer)"></i>Timer</span><span><i style="background:var(--ai)"></i>Farm Hand</span><span><i style="background:var(--rain);height:8px;width:6px"></i>Rain that day</span></div>
+  </section>
+
+  <div class="two">
+    <section class="panel">
+      <h3>Money and time</h3>
+      <p class="sub">Change these to match a real farm. The results update.</p>
+      <div class="inputs">
+        <label for="acres">Farm size (acres)<input id="acres" type="number" min="1" max="5000" step="1" value="20"></label>
+        <label for="diesel">Diesel ($ per gallon)<input id="diesel" type="number" min="2" max="7" step="0.1" value="4.0"></label>
+        <label for="walk">Minutes to walk and check the field<input id="walk" type="number" min="0" max="240" step="5" value="20"></label>
+      </div>
+      <div class="rows">
+        <div><span>Water saved on your farm</span><b id="mGal">–</b></div>
+        <div><span>That's this many acre-inches</span><b id="mAin">–</b></div>
+        <div><span>Pumping cost per acre-inch at your diesel price</span><b id="mRate">–</b></div>
+        <div class="total"><span>Pumping cost saved</span><b id="mUsd">–</b></div>
+        <div class="total"><span>Field-walking time saved (one check a day)</span><b id="mHrs">–</b></div>
+      </div>
+      <p class="fine">Pumping cost is fuel only, for a diesel well pump: $4.42 per acre-inch at $3 diesel and $7.36 at $5 (LSU AgCenter, <a href="https://southernagtoday.org/2026/07/20/fuel-pricing-impacts-irrigation-pumping-costs-across-all-systems/">Southern Ag Today, July 2026</a>), straight line in between. City or utility water costs far more. Field-walking time is your estimate: one walk a day that Farm Hand's automatic checks replace.</p>
+    </section>
+    <section class="panel">
+      <h3>Times it held off for rain</h3>
+      <p class="sub">Farm Hand chose "wait for the rain," and it came. Click one to jump there.</p>
+      <ul class="moments" id="moments"></ul>
+    </section>
+  </div>
+
+  <p class="honest" id="honest">This is a simulated field (a standard FAO-56 water-balance model, sandy soil, crop factor 1.05) run on real hourly Miami weather from Open-Meteo, with a forecast that's right on average but often wrong, like a real one. It is not a measured farm. The live box on the main page is what's measured.</p>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = (n, d = 0) => n.toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d});
+const GAL_PER_ACRE_INCH = 27154;
+let D = null, day = 0, playing = false, speed = 3, last = 0, acc = 0;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- right now ---------- */
+fetch('/api/field-call').then(r => r.json()).then(c => {
+  if (c.error) throw c.error;
+  $('nPick').textContent = {water: 'water now', wait_rain: 'wait for the rain', wait_moist: 'wait, the soil has water'}[c.pick] || c.pick;
+  $('nSub').textContent = `${Math.round(c.sure * 100)}% sure. Forecast: ${c.rain_mm} mm, up to ${c.rain_chance}% chance. Soil ${(+c.soil_pct).toFixed(1)}%. Display only: the pump stays off.`;
+}).catch(() => { $('now').hidden = true; });              // opened without the server (or Laya off): hide it
+
+/* ---------- data ---------- */
+fetch('sim_data.json').then(r => { if (!r.ok) throw 0; return r.json(); }).then(boot).catch(() => {
+  $('stage').innerHTML = '<p class="empty">The replay data isn\'t built yet. Run <code>laya/season_replay.py</code> to make <code>laptop/static/sim_data.json</code>.</p>';
+});
+
+let cum = null, moments = [];
+function boot(data) {
+  D = data;
+  const n = D.days.length, g = D.gal_per_mm_acre;
+  cum = {t: new Float64Array(n), l: new Float64Array(n), tn: new Int32Array(n), ln: new Int32Array(n), ts: new Int32Array(n), ls: new Int32Array(n), chk: new Int32Array(n)};
+  let a = [0, 0, 0, 0, 0, 0, 0];
+  D.days.forEach((x, i) => {
+    a[0] += x.timer.irr * g; a[1] += x.laya.irr * g; a[2] += x.timer.irr > 0; a[3] += x.laya.irr > 0;
+    a[4] += x.timer.stress; a[5] += x.laya.stress; a[6] += x.laya.picks.length;
+    cum.t[i] = a[0]; cum.l[i] = a[1]; cum.tn[i] = a[2]; cum.ln[i] = a[3]; cum.ts[i] = a[4]; cum.ls[i] = a[5]; cum.chk[i] = a[6];
+  });
+  // moments: a "wait for the rain" pick, then at least 5 mm fell that day or the next
+  D.days.forEach((x, i) => {
+    const w = x.laya.picks.find(p => p[1] === 'wait_rain');
+    if (!w) return;
+    const fell = x.rain + (D.days[i + 1]?.rain || 0);
+    if (fell >= 5 && (!moments.length || i - moments[moments.length - 1].i > 6)) moments.push({i, mm: fell, fmm: w[2], fp: w[3]});
+  });
+  $('timerHow').textContent = `every morning, ${D.timer_mm_each_morning} mm`;
+  $('scrub').max = n - 1;
+  $('moments').innerHTML = moments.length ? moments.map(m => `<li><button data-i="${m.i}"><span class="d">${dateLabel(m.i, true)}</span><span>Forecast said ${m.fmm} mm at ${m.fp}%. It waited. <b class="num">${fmt(m.mm, 1)} mm</b> fell.</span></button></li>`).join('')
+    : '<li style="padding:9px 2px;color:var(--muted)">None in this run.</li>';
+  $('moments').onclick = e => { const b = e.target.closest('[data-i]'); if (b) { go(+b.dataset.i); $('stage').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'start'}); } };
+  drawChart();
+  money();
+  size();
+  go(0);
+}
+
+function dateLabel(i, short) {
+  const d = new Date(D.days[i].d + 'T12:00:00');
+  return d.toLocaleDateString('en-US', short ? {month: 'short', day: 'numeric', year: '2-digit'} : {month: 'long', day: 'numeric', year: 'numeric'});
+}
+
+/* ---------- controls ---------- */
+$('play').onclick = () => toggle();
+document.addEventListener('keydown', e => { if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); toggle(); } });
+function toggle() {
+  if (!D) return;
+  if (!playing && day >= D.days.length - 1) go(0);
+  playing = !playing; last = 0;
+  $('play').innerHTML = playing ? '<i class="ph-fill ph-pause"></i>' : '<i class="ph-fill ph-play"></i>';
+  $('play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+}
+$('scrub').oninput = e => go(+e.target.value);
+document.querySelectorAll('.spd button').forEach(b => b.onclick = () => {
+  speed = +b.dataset.s; document.querySelectorAll('.spd button').forEach(x => x.classList.toggle('on', x === b)); });
+['acres', 'diesel', 'walk'].forEach(id => $(id).oninput = () => { money(); stats(); });
+
+function go(i) { day = Math.max(0, Math.min(D.days.length - 1, i)); acc = 0; $('scrub').value = day; stats(); }
+
+/* ---------- numbers ---------- */
+function rate() { const p = Math.max(2, Math.min(7, +$('diesel').value || 4)); return 4.42 + (p - 3) * (7.36 - 4.42) / 2; }
+function money(i = D ? D.days.length - 1 : 0) {
+  if (!D) return;
+  const acres = Math.max(0, +$('acres').value || 0), saved = (cum.t[i] - cum.l[i]) * acres, ain = saved / GAL_PER_ACRE_INCH;
+  $('mGal').textContent = `${fmt(saved)} gal`;
+  $('mAin').textContent = fmt(ain, 1);
+  $('mRate').textContent = `$${fmt(rate(), 2)}`;
+  $('mUsd').textContent = `$${fmt(ain * rate())}`;
+  $('mHrs').textContent = `${fmt(D.days.length * (+$('walk').value || 0) / 60)} h`;
+}
+function stats() {
+  const x = D.days[day], i = day;
+  $('dLabel').textContent = dateLabel(i);
+  $('dRain').textContent = x.rain >= .2 ? `${fmt(x.rain, 1)} mm of rain` : 'no rain';
+  $('tUse').textContent = `${fmt(cum.t[i] / 1000)}k gal`; $('lUse').textContent = `${fmt(cum.l[i] / 1000)}k gal`;
+  $('tN').textContent = fmt(cum.tn[i]); $('lN').textContent = fmt(cum.ln[i]);
+  $('tS').textContent = fmt(cum.ts[i]); $('lS').textContent = fmt(cum.ls[i]);
+  $('tS').classList.toggle('bad', cum.ts[i] > 0); $('lS').classList.toggle('bad', cum.ls[i] > 0);
+  const saved = cum.t[i] - cum.l[i], acres = Math.max(0, +$('acres').value || 0);
+  $('gGal').textContent = `${fmt(saved)} gal`;
+  $('gGalSub').textContent = cum.t[i] ? `${fmt(100 * saved / cum.t[i], 1)}% less than the timer` : ' ';
+  $('gUsd').textContent = `$${fmt(saved * acres / GAL_PER_ACRE_INCH * rate())}`;
+  $('gUsdSub').textContent = `${fmt(acres)} acres, diesel pumping`;
+  $('gChk').textContent = fmt(cum.chk[i]);
+  $('gStr').textContent = fmt(Math.max(0, cum.ts[i] - cum.ls[i]));
+  $('gStrSub').textContent = `timer ${fmt(cum.ts[i])} h, Farm Hand ${fmt(cum.ls[i])} h`;
+  const m = [...moments].reverse().find(m => m.i <= i && i - m.i < 12);
+  $('moment').innerHTML = m
+    ? `<i class="ph ph-cloud-rain"></i><span><b>${dateLabel(m.i, true)}:</b> the forecast said ${m.fmm} mm at ${m.fp}%. Farm Hand held off. <b class="num">${fmt(m.mm, 1)} mm</b> of rain came. The timer watered anyway.</span>`
+    : x.laya.irr > 0 ? `<i class="ph ph-drop"></i><span>The soil got dry, so <b>Farm Hand watered</b> (${fmt(x.laya.irr, 1)} mm).</span>`
+    : `<i class="ph ph-clock"></i><span>Farm Hand checked ${x.laya.picks.length} times today and didn't need to water.</span>`;
+  playhead();
+}
+
+/* ---------- the two fields ---------- */
+const C = {t: $('cT'), l: $('cL')};
+function size() {
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  Object.values(C).forEach(c => { const r = c.getBoundingClientRect(); c.width = r.width * dpr; c.height = r.height * dpr; c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0); });
+}
+addEventListener('resize', () => { if (D) size(); });
+const mix = (a, b, k) => a.map((v, j) => Math.round(v + (b[j] - v) * k));
+const DRY = [214, 190, 150], WET = [74, 52, 34];                  // soil: dry tan to wet dark brown
+const drops = {t: [], l: []}, rainDrops = [];
+
+function drawField(key, side, x, t, phase) {
+  const c = C[key], ctx = c.getContext('2d'), W = c.clientWidth, H = c.clientHeight;
+  const soil = side.soil ?? 40, k = Math.max(0, Math.min(1, (soil - 20) / 45));
+  // sky
+  const wet = x.rain >= 1;
+  ctx.fillStyle = wet ? '#dfe5ec' : '#eef3f8'; ctx.fillRect(0, 0, W, H);
+  // soil bed
+  const top = H * .38;
+  ctx.fillStyle = `rgb(${mix(DRY, WET, k)})`; ctx.fillRect(0, top, W, H - top);
+  // crop rows
+  const stressed = side.stress > 0, rows = 4, cols = Math.max(6, Math.round(W / 46));
+  for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) {
+    const px = (q + .5) * W / cols + (r % 2) * 8, py = top + 26 + r * ((H - top - 34) / rows);
+    const sway = reduce ? 0 : Math.sin(t / 900 + q + r) * 1.2;
+    ctx.strokeStyle = stressed ? '#a8973a' : '#2f7d32'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + sway, py - (stressed ? 9 : 14)); ctx.stroke();
+    ctx.fillStyle = stressed ? '#c2b04a' : '#3f9a43';
+    const lx = px + sway, ly = py - (stressed ? 7 : 11), droop = stressed ? 5 : 0;
+    ctx.beginPath(); ctx.ellipse(lx - 5, ly + droop / 2, 5, 2.4, stressed ? .9 : -.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(lx + 5, ly + droop / 2, 5, 2.4, stressed ? -.9 : .5, 0, Math.PI * 2); ctx.fill();
+  }
+  // sprinkler spray on watering days (first half of the day)
+  const color = key === 't' ? '196,80,31' : '31,100,184';
+  if (side.irr > 0 && phase < .55) {
+    const heads = 3;
+    for (let h = 0; h < heads; h++) {
+      const hx = (h + .5) * W / heads, hy = top - 2;
+      ctx.fillStyle = `rgb(${color})`; ctx.fillRect(hx - 2, hy - 10, 4, 12);
+      if (!reduce) for (let n = 0; n < 3; n++) drops[key].push({x: hx, y: hy - 10, vx: (Math.random() - .5) * 3.2, vy: -2 - Math.random() * 2, life: 1});
+      else { ctx.fillStyle = `rgba(${color},.25)`; ctx.beginPath(); ctx.arc(hx, hy + 8, 34, Math.PI, 0); ctx.fill(); }
+    }
+  }
+  const ps = drops[key];
+  for (let n = ps.length - 1; n >= 0; n--) {
+    const p = ps[n]; p.x += p.vx; p.y += p.vy; p.vy += .16; p.life -= .02;
+    if (p.life <= 0 || p.y > H) { ps.splice(n, 1); continue; }
+    ctx.fillStyle = `rgba(${color},${.75 * p.life})`; ctx.fillRect(p.x, p.y, 2, 3);
+  }
+  // rain (the same sky over both fields)
+  if (wet) {
+    const amt = Math.min(1, x.rain / 25);
+    ctx.strokeStyle = 'rgba(90,143,200,.55)'; ctx.lineWidth = 1.2;
+    const N = reduce ? 0 : Math.round(20 + 90 * amt);
+    for (let n = 0; n < N; n++) {
+      const rx = (n * 97.3 + t * .25) % (W + 40) - 20, ry = (n * 53.1 + t * .6) % H;
+      ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 3, ry + 9); ctx.stroke();
+    }
+  }
+  // soil moisture tag
+  ctx.fillStyle = 'rgba(251,252,253,.92)'; ctx.fillRect(10, 10, 132, 42);
+  ctx.fillStyle = '#5b6674'; ctx.font = '500 11px "Atkinson Hyperlegible Next",system-ui'; ctx.fillText('Soil moisture', 18, 26);
+  ctx.fillStyle = stressed ? '#c43333' : '#0e1621'; ctx.font = '600 15px "JetBrains Mono",monospace';
+  ctx.fillText(`${soil.toFixed(1)}%${stressed ? ' dry' : ''}`, 18, 45);
+}
+
+function frame(t) {
+  if (D) {
+    if (playing) {
+      const dt = last ? t - last : 0; acc += dt * speed / 250;          // 3x: about 12 days a second
+      while (acc >= 1) { acc -= 1; if (day < D.days.length - 1) { day++; $('scrub').value = day; stats(); } else { toggle(); break; } }
+    }
+    last = t;
+    const x = D.days[day], phase = playing ? acc : .3;
+    drawField('t', x.timer, x, t, phase);
+    drawField('l', x.laya, x, t, phase);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* ---------- chart ---------- */
+const CW = 1000, CH = 300, PL = 58, PR = 14, PT = 12, PB = 58;
+let sx, sy;
+function drawChart() {
+  const n = D.days.length, max = cum.t[n - 1] * 1.04, svg = $('chart');
+  sx = i => PL + i * (CW - PL - PR) / (n - 1); sy = v => PT + (1 - v / max) * (CH - PT - PB);
+  const line = arr => Array.from(arr, (v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)} ${sy(v).toFixed(1)}`).join('');
+  let g = '';
+  const step = max > 3e6 ? 1e6 : 5e5;
+  for (let v = 0; v <= max; v += step) g += `<line x1="${PL}" x2="${CW - PR}" y1="${sy(v)}" y2="${sy(v)}" stroke="rgba(14,22,33,.08)"/><text x="${PL - 8}" y="${sy(v) + 4}" text-anchor="end">${v ? (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : '0'}</text>`;
+  D.days.forEach((x, i) => { if (x.d.endsWith('-01') && [0, 3, 6, 9].includes(new Date(x.d + 'T12:00').getMonth())) g += `<text x="${sx(i)}" y="${CH - PB + 16}" text-anchor="middle">${new Date(x.d + 'T12:00').toLocaleDateString('en-US', {month: 'short', year: '2-digit'})}</text>`; });
+  const rb = CH - 8, rmax = 60;
+  D.days.forEach((x, i) => { if (x.rain >= 1) { const h = Math.min(1, x.rain / rmax) * 26; g += `<rect x="${sx(i) - .8}" y="${rb - h}" width="1.6" height="${h}" fill="#5a8fc8" opacity=".7"/>`; } });
+  g += `<path d="${line(cum.t)}" fill="none" stroke="#c4501f" stroke-opacity=".22" stroke-width="2"/><path d="${line(cum.l)}" fill="none" stroke="#1f64b8" stroke-opacity=".22" stroke-width="2"/>`;
+  g += `<clipPath id="upto"><rect id="uptoR" x="0" y="0" width="${PL}" height="${CH}"/></clipPath>`;
+  g += `<g clip-path="url(#upto)"><path d="${line(cum.t)}" fill="none" stroke="#c4501f" stroke-width="2.6"/><path d="${line(cum.l)}" fill="none" stroke="#1f64b8" stroke-width="2.6"/></g>`;
+  g += `<line id="ph" x1="${PL}" x2="${PL}" y1="${PT}" y2="${CH - PB}" stroke="#0e1621" stroke-opacity=".35" stroke-dasharray="3 3"/>`;
+  g += `<circle id="phT" r="4" fill="#c4501f"/><circle id="phL" r="4" fill="#1f64b8"/>`;
+  g += `<text x="${PL}" y="${CH - 30}" style="fill:#5b6674">rain</text>`;
+  svg.innerHTML = g;
+}
+function playhead() {
+  if (!sx) return;
+  const x = sx(day);
+  $('uptoR').setAttribute('width', x); $('ph').setAttribute('x1', x); $('ph').setAttribute('x2', x);
+  $('phT').setAttribute('cx', x); $('phT').setAttribute('cy', sy(cum.t[day]));
+  $('phL').setAttribute('cx', x); $('phL').setAttribute('cy', sy(cum.l[day]));
+}
+</script>
+</body>
+</html>

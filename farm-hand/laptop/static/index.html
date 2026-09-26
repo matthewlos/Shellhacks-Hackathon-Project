@@ -64,7 +64,7 @@ button:disabled{cursor:progress;opacity:.6}
 .tag{position:absolute;left:0;top:0;z-index:2;pointer-events:none}
 
 /* control column */
-aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0}
+aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto auto auto auto minmax(0,1fr);min-height:0}
 section{padding:22px 24px;border-bottom:1px solid var(--line)}
 .call .verdict{margin:0;font:700 2.1rem/1.02 var(--f-display);letter-spacing:-.025em}
 .call .verdict.water{color:var(--ai)}
@@ -194,6 +194,22 @@ section{padding:22px 24px;border-bottom:1px solid var(--line)}
 .br.fresh{background:var(--ai-wash)}
 .br.off .t,.br.off > i{color:var(--muted)}
 
+/* weather at FIU: live forecast, what it means indoors, and Laya's field call */
+.sky{display:grid;gap:10px}
+.skyhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.skyhead .src{font-size:12px;color:var(--muted)}
+.skynow{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.skynow b{font:600 1.5rem/1 var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.skynow span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+.skynow .r{text-align:right}
+.strip{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;align-items:end;height:40px}
+.strip i{display:block;border-radius:2px 2px 0 0;background:rgba(31,100,184,.22);min-height:2px;transition:height .3s var(--ease)}
+.strip i.wet{background:var(--ai)}
+.stripx{display:grid;grid-template-columns:repeat(4,1fr);font:500 11px/1 var(--f-num);color:var(--muted);margin-top:-4px}
+.indoor{margin:0;display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
+.indoor i{font-size:16px;color:var(--muted);margin-top:1px}
+.sky .link{justify-self:start}
+
 /* temperature card */
 .nums .heat .big{color:var(--heat)}
 
@@ -292,9 +308,19 @@ section{padding:22px 24px;border-bottom:1px solid var(--line)}
       <div class="heat"><span class="k">Soil temperature</span><span class="big num" id="tA">–</span><span class="sub" id="tSub">&nbsp;</span></div>
     </section>
 
+    <section class="sky" aria-label="Weather">
+      <div class="skyhead"><span class="k">Weather at FIU, next 24 h</span><span class="src">Open-Meteo, live</span></div>
+      <div class="skynow">
+        <div><b id="wNow">–</b><span>outside air now</span></div>
+        <div class="r"><b id="wRain">–</b><span id="wRainSub">rain expected</span></div>
+      </div>
+      <div><div class="strip" id="wStrip" aria-label="Chance of rain for each of the next 24 hours"></div><div class="stripx" id="wX"></div></div>
+      <p class="indoor" id="wIndoor"><i class="ph ph-house-line"></i><span>This box is indoors, so rain can't reach it. Farm Hand won't hold off for rain here.</span></p>
+      <a class="link" href="/sim"><i class="ph ph-play-circle"></i>How it would do outside</a>
+    </section>
+
     <section class="facts">
       <div class="fact"><span>Dries out in</span><b id="dry">–</b></div>
-      <div class="fact"><span>Rain, next 24 h<em id="rainD"></em></span><b id="rain">–</b></div>
       <div class="fact"><span>Evaporation, next 24 h</span><b id="et0">–</b></div>
       <div class="fact"><span>County in drought<em id="drD"></em></span><b id="drV">–</b></div>
     </section>
@@ -372,6 +398,16 @@ async function fast() {
   });
 }
 
+function sky(f, outdoors) {
+  $('wNow').textContent = f.temp_c_now != null ? `${(+f.temp_c_now).toFixed(1)}°C` : '–';
+  $('wRain').textContent = f.rain_mm_next_24h != null ? `${(+f.rain_mm_next_24h).toFixed(1)} mm` : '–';
+  $('wRainSub').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance` : (f.error ? 'forecast offline' : 'rain expected');
+  const H = f.hours || [];
+  $('wStrip').innerHTML = H.map(h => `<i class="${h.p >= 50 && h.mm >= 1 ? 'wet' : ''}" style="height:${Math.max(4, h.p)}%" title="${h.t}: ${h.p}% chance, ${h.mm} mm"></i>`).join('');
+  $('wX').innerHTML = H.length ? [0, 6, 12, 18].map(i => `<span>${(H[i] || {}).t || ''}</span>`).join('') : '';
+  $('wIndoor').hidden = !!outdoors;
+}
+
 async function slow() {
   try { S = await j('/api/state'); } catch (e) { $('reason').textContent = 'Can\'t reach the Farm Hand server.'; return; }
   const d = S.drought || {}, f = S.forecast || {}, p = S.prediction || {}, L = S.latest || {};
@@ -379,8 +415,7 @@ async function slow() {
   $('sA').textContent = `healthy ${S.config.dry}-${S.config.wet}%`;
   $('tSub').textContent = f.temp_c_now != null ? `outside air ${(+f.temp_c_now).toFixed(1)}°C, forecast` : 'steel probe in the soil';
   $('dry').textContent = p.settling ? 'measuring' : p.hours_until_dry != null ? (p.hours_until_dry < .05 ? 'now' : p.hours_until_dry >= 48 ? '2+ days' : `${p.hours_until_dry.toFixed(1)} h`) : '–';
-  $('rain').textContent = f.rain_mm_next_24h != null ? `${f.rain_mm_next_24h} mm` : '–';
-  $('rainD').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance${S.config.outdoors ? '' : ', pot is indoors'}` : '';
+  sky(f, S.config.outdoors);
   $('et0').textContent = f.et0_mm_next_24h != null ? `${f.et0_mm_next_24h} mm` : '–';
   $('drV').textContent = d.pct_in_D1_or_worse != null ? `${d.pct_in_D1_or_worse}%` : '–';
   $('drD').textContent = d.level ? `${(d.county || '').replace(' County', '')}, ${d.level} ${d.level_name}` : '';
