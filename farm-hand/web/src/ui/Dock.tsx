@@ -11,14 +11,13 @@ import { brand } from '../brand';
 import { BoxPanel, useBoxGlance } from './Boxes';
 import { CropsPanel } from './Crops';
 import { Forecast } from './Forecast';
-import { History } from './History';
 import { IconClose } from './icons';
 import { LayaCall, useCallGlance } from './LayaCall';
 import { MapPanel } from './Region';
 import { ResultsPanel } from './Results';
 import { SavingsPanel, useSavings } from './Savings';
 
-export type PanelId = 'box-a' | 'box-b' | 'laya' | 'saves' | 'results' | 'history' | 'forecast' | 'crops' | 'map';
+export type PanelId = 'box-a' | 'box-b' | 'laya' | 'saves' | 'results' | 'forecast' | 'crops' | 'map';
 type Place = 'side' | 'bottom' | 'wide';
 
 const PANELS: Record<PanelId, { title: string; place: Place; large?: boolean; body: () => ReactNode }> = {
@@ -27,7 +26,6 @@ const PANELS: Record<PanelId, { title: string; place: Place; large?: boolean; bo
   laya: { title: "Laya's call for box A", place: 'side', body: () => <LayaCall /> },
   saves: { title: 'What Farm Hand saves', place: 'side', body: () => <SavingsPanel /> },
   results: { title: 'Results (fake)', place: 'wide', body: () => <ResultsPanel /> },
-  history: { title: 'Soil moisture over time', place: 'side', large: true, body: () => <History /> },
   forecast: { title: 'Rain forecast', place: 'side', body: () => <Forecast /> },
   crops: { title: 'What can grow in each box', place: 'side', large: true, body: () => <CropsPanel /> },
   map: { title: 'Farms near you', place: 'wide', body: () => <MapPanel /> },
@@ -68,7 +66,6 @@ export function Dock({ open, onToggle }: { open: PanelId | null; onToggle: (p: P
       <DockButton id="saves" open={open} onToggle={onToggle} label="Saves" glance={s.checks != null ? `${s.checks >= 1000 ? `${(s.checks / 1000).toFixed(1)}k` : s.checks} checks` : undefined} />
       <DockButton id="results" open={open} onToggle={onToggle} label="Results" />
       <i className="dock-sep" aria-hidden />
-      <DockButton id="history" open={open} onToggle={onToggle} label="History" />
       <DockButton id="forecast" open={open} onToggle={onToggle} label="Forecast" short="Rain" />
       <DockButton id="crops" open={open} onToggle={onToggle} label="Crops" />
       <DockButton id="map" open={open} onToggle={onToggle} label="Map" />

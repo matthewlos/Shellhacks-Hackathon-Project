@@ -532,10 +532,10 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .map-legend-card i { width: 18px; height: 18px; }
   .map-legend-card p { display: none; }
   .brandmark p { display: none; }
-  /* phone: the dock is a 5-column grid of short labels (two rows, never wider than the screen);
+  /* phone: the dock is a 4-column grid of short labels (two rows, never wider than the screen);
      every panel is a bottom sheet above it with its own scroll */
   :root { --dock-h: calc(118px + env(safe-area-inset-bottom)); }
-  .dock { left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: calc(8px + env(safe-area-inset-bottom)); transform: none; max-width: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; padding: 4px; }
+  .dock { left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: calc(8px + env(safe-area-inset-bottom)); transform: none; max-width: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; padding: 4px; }
   .dock-sep { display: none; }
   .dock-btn { justify-items: center; text-align: center; padding: 6px 2px; min-height: 52px; min-width: 0; }
   .dl-full { display: none; } .dl-short { display: inline; }
