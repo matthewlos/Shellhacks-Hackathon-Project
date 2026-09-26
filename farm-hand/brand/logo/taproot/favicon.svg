@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="FarmHand"><title>FarmHand</title><rect width="48" height="48" rx="11" fill="#16201a"/><g transform="translate(4.8 4.8) scale(.8)">
+  <path d="M24 19C24 11.5 18.5 7 8.5 7c0 8 5.5 12 15.5 12z" fill="#5cb57e"/>
+  <path d="M24 14.5C24 8.5 28 3.5 39 3.5c0 7-4.5 11-15 11z" fill="#5cb57e"/>
+  <path d="M24 14v13" stroke="#5cb57e" stroke-width="5"/>
+  <path d="M5 27.5h38" stroke="#eef1ea" stroke-width="5" stroke-linecap="round"/>
+  <path d="M19 32.5h10v8L24 47l-5-6.5z" fill="#5b9cf0"/></g>
+</svg>

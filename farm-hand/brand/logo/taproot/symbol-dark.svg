@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="FarmHand Taproot symbol"><title>FarmHand Taproot symbol</title>
+  <path d="M24 19.5C24 12.5 19 8 10.5 8c0 7.5 5 11.5 13.5 11.5z" fill="#5cb57e"/>
+  <path d="M24 15.5C24 9.5 27.8 5 36.5 5c0 6.5-4 10.5-12.5 10.5z" fill="#5cb57e"/>
+  <path d="M24 15v11" stroke="#5cb57e" stroke-width="3.6"/>
+  <path d="M8 27.5h32" stroke="#eef1ea" stroke-width="3.6" stroke-linecap="round"/>
+  <path d="M20.2 31.2h7.6v10L24 46.5l-3.8-5.3z" fill="#5b9cf0"/>
+
+</svg>

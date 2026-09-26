@@ -1,0 +1,47 @@
+/*
+ * Saves panel tabs + the "Crop risk" tab. Same row grammar as the savings list (.saving in styles.css):
+ * a label column, then one big number and a plain sentence. Tokens only; tabular numbers; the drought level is the
+ * only coloured word, so there is never more than one red thing on screen.
+ */
+.saves-tabs { display: grid; gap: 18px; }
+.saves-tp { animation: risk-in 180ms var(--ease-out) both; }
+@keyframes risk-in { from { opacity: 0; transform: translateY(4px); } }
+
+/* stress hours: one small table, both boxes, value then a bar scaled to the larger of the two */
+.risk-boxes { width: 100%; border-collapse: collapse; margin: 2px 0 6px; }
+.risk-boxes th, .risk-boxes td { padding: 3px 0; vertical-align: middle; }
+.risk-boxes th { text-align: left; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; }
+.risk-boxes th span { color: var(--text-dim); font-weight: 500; }
+.rb-val { width: 4.2em; padding-left: 10px !important; text-align: right; font-size: 22px; font-weight: 680; font-stretch: 88%; line-height: 1.15; white-space: nowrap; }
+.rb-bar { width: 28%; padding-left: 12px !important; }
+.rb-bar b { display: block; height: 6px; border-radius: var(--r-pill); background: var(--sunk); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.rb-bar i { display: block; height: 100%; background: currentColor; transform-origin: left; transition: transform 240ms var(--ease-out); }
+.rb-a .rb-bar { color: var(--water); }
+.rb-b .rb-bar { color: var(--warm); }
+
+/* drought: the level word in its colour, and a three-step meter beside it */
+.risk-level { display: flex; align-items: center; gap: 12px; }
+.risk-steps { display: inline-grid; grid-template-columns: repeat(3, 18px); gap: 3px; }
+.risk-steps i { height: 8px; border-radius: 2px; background: var(--sunk); box-shadow: inset 0 0 0 1px var(--line); }
+.lv-low .saving-big { color: var(--good); }
+.lv-medium .saving-big { color: var(--caution); }
+.lv-high .saving-big { color: var(--danger); }
+.lv-low .risk-steps i:nth-child(-n + 1) { background: var(--good); box-shadow: none; }
+.lv-medium .risk-steps i:nth-child(-n + 2) { background: var(--caution); box-shadow: none; }
+.lv-high .risk-steps i:nth-child(-n + 3) { background: var(--danger); box-shadow: none; }
+.risk-meta { display: block; margin-top: 4px; font-size: 13px; color: var(--text-faint); }
+
+/* the closing line reads in full ink: it is the point of the tab */
+.saving.risk-why p { color: var(--text); font-weight: 560; text-wrap: pretty; }
+.risk-note { padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-faint); }
+
+@media (max-width: 900px) {
+  .saves-tabs { gap: 14px; }
+  .risk .saving { grid-template-columns: 1fr; row-gap: 4px; }
+  .risk .saving h3 { grid-row: auto; font-size: 14px; }
+  .rb-val { font-size: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .saves-tp { animation: none; }
+  .rb-bar i { transition: none; }
+}

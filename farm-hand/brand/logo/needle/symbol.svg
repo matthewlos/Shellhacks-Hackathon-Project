@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="FarmHand Needle symbol"><title>FarmHand Needle symbol</title>
+  <path d="M5.00 36.00A19 19 0 0 1 12.43 20.93" fill="none" stroke="#b3540c" stroke-width="4"/>
+  <path d="M14.36 19.63A19 19 0 0 1 33.64 19.63" fill="none" stroke="#2b7a45" stroke-width="4"/>
+  <path d="M35.57 20.93A19 19 0 0 1 43.00 36.00" fill="none" stroke="#1b66c9" stroke-width="4"/>
+  <path d="M2.5 36h43" stroke="#16201a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M0 0C4.80 -3.8 11.20 -3.8 16 0C11.20 3.8 4.80 3.8 0 0z" fill="#2b7a45" transform="translate(24 36) rotate(-100)"/>
+  <circle cx="24" cy="36" r="4.4" fill="#16201a"/>
+</svg>

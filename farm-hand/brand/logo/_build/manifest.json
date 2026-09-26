@@ -1,0 +1,42 @@
+{
+  "concepts": [
+    {
+      "slug": "taproot",
+      "name": "Taproot",
+      "idea": "A sprout whose root is the soil probe: leaves above the ground line, the blue sensor blade below it."
+    },
+    {
+      "slug": "needle",
+      "name": "Needle",
+      "idea": "A moisture dial sunk in the ground, dry to wet; the needle is a sprout parked in the good band."
+    },
+    {
+      "slug": "fork",
+      "name": "Fork",
+      "idea": "An F/H ligature drawn as the two-prong soil probe, with a water drop held between the prongs."
+    }
+  ],
+  "font": "file:///Users/chin/Documents/code/Shellhacks-Hackathon-Project/farm-hand/web/node_modules/@fontsource-variable/archivo/files/archivo-latin-standard-normal.woff2",
+  "light": {
+    "ink": "#16201a",
+    "water": "#1b66c9",
+    "good": "#2b7a45",
+    "warm": "#b3540c",
+    "ground": "#16201a",
+    "bg": "#e9ede7",
+    "panel": "#fafbf8",
+    "dim": "#44504a",
+    "knock": "#e9ede7"
+  },
+  "dark": {
+    "ink": "#eef1ea",
+    "water": "#5b9cf0",
+    "good": "#5cb57e",
+    "warm": "#e0843a",
+    "ground": "#eef1ea",
+    "bg": "#16201a",
+    "panel": "#1d2922",
+    "dim": "#a9b4ad",
+    "knock": "#16201a"
+  }
+}
