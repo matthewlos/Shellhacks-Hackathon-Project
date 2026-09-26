@@ -12,7 +12,8 @@ extern "C" {
 #endif
 
 StatusCode_e    CLOUD_send(const SoilReading_t *soil, const TempReading_t *temp);
-float           CLOUD_pump_a_s(void);       /* last drink the server asked for (s); 0 = wait. Not acted on in this test build */
+float           CLOUD_take_drink(void);     /* seconds the server asked for since the last call (0 = wait); returns it once */
+unsigned long   CLOUD_last_ok_ms(void);     /* millis() of the last 200 reply, 0 = never */
 
 #ifdef __cplusplus
 }

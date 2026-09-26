@@ -20,6 +20,13 @@ void    RELAY_all_off(void)
     state[0] = state[1] = false;
 }
 
+void    RELAY_set(int pump, bool on)
+{
+    if (pump != 0 && pump != 1) return;
+    digitalWrite(pump == 0 ? RELAY_A_PIN : RELAY_B_PIN, on ? HIGH : LOW);
+    state[pump] = on;
+}
+
 bool    RELAY_is_on(int pump)
 {
     return (pump == 0 || pump == 1) ? state[pump] : false;

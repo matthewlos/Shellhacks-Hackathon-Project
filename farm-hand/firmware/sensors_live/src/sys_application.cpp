@@ -15,6 +15,12 @@ void sys_application(void)
         error_handler();
     }
 
+    ret = PUMP_init();
+    if (ret != STATUS_OK)
+    {
+        error_handler();
+    }
+
     ret = REPORT_init();
     if (ret != STATUS_OK)
     {
@@ -60,13 +66,22 @@ void sys_loop(void)
 {
     unsigned long start = millis();
 
-    RELAY_all_off();
     WIFI_update();
     SOIL_update(&soil);
     TEMP_update(&temp);
     REPORT_send(&soil, &temp);
     BLE_send(&soil, &temp);
     CLOUD_send(&soil, &temp);
+
+    /* Box A: do what the server (Laya / baseline rule) asked, through the chip's safety rules.
+       Server silent for 2 min: the chip holds the baseline itself. */
+    float drink = CLOUD_take_drink();
+    if (drink > 0)
+    {
+        PUMP_request(drink, &soil, "server");
+    }
+    PUMP_fallback(&soil, CLOUD_last_ok_ms());
+    PUMP_update();
     OLED_update(&soil, &temp);
 
     /* Wiring check every 10 s, so moving a wire shows up without a reset */

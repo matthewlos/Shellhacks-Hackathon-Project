@@ -16,6 +16,8 @@
 
 static unsigned long last_send = 0;
 static float pump_a_s = 0;
+static bool  fresh = false;
+static unsigned long last_ok = 0;
 
 StatusCode_e    CLOUD_send(const SoilReading_t *soil, const TempReading_t *temp)
 {
@@ -49,6 +51,8 @@ StatusCode_e    CLOUD_send(const SoilReading_t *soil, const TempReading_t *temp)
     {
         int k = reply.indexOf("\"pump_a_s\":");
         pump_a_s = (k >= 0) ? reply.substring(k + 11).toFloat() : 0;
+        fresh = true;
+        last_ok = millis();
         Serial.printf("{\"type\":\"cloud\",\"code\":%d,\"reply\":%s}\n", code, reply.c_str());
     }
     else
@@ -60,7 +64,14 @@ StatusCode_e    CLOUD_send(const SoilReading_t *soil, const TempReading_t *temp)
     return (code == 200) ? STATUS_OK : STATUS_ERR_CLOUD;
 }
 
-float   CLOUD_pump_a_s(void)
+float   CLOUD_take_drink(void)
 {
+    if (!fresh) return 0;
+    fresh = false;
     return pump_a_s;
+}
+
+unsigned long   CLOUD_last_ok_ms(void)
+{
+    return last_ok;
 }

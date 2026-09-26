@@ -21,4 +21,5 @@ On the Mac mini (user `dante`):
 - `~/farmhand-server/` receiver.py, `.env` (the ESP32 token, never committed), `farmhand_home.db`, `server.log`. launchd: `com.farmhand.receiver` (always on).
 - `~/farmhand-site/` deploy.sh + deploy.conf (repo, branch, app folder), `current/` = live build, `previous/` = last build. launchd: `com.farmhand.deploy` (every 60 s).
 - Domain: `farmhand.dmchang.xyz` in `~/.cloudflared/config.yml` -> `localhost:8120`.
-- Decisions: the baseline rule until Laya's weights are in `~/farmhand-server/model/farmhand-laya` (then Laya, with the baseline as a floor).
+- Decisions: **Laya** (weights in `~/farmhand-server/model/farmhand-laya`, venv `~/farmhand-server/.venv`, runs on MPS), with the baseline as a floor. Falls back to the baseline rule if Laya fails to load.
+- The ESP32 acts on the decision for box A only, through its own rules (comp_pump.h: max 8 s a drink, 5 min apart, daily cap, never wet or with the probe disconnected) and holds the 45% baseline itself if the server is silent for 2 min.
