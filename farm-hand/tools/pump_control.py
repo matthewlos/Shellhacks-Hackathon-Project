@@ -39,7 +39,7 @@ def usb_up():
 
 def wifi(cmd=None):
     req = urllib.request.Request(API, method="POST" if cmd else "GET", data=json.dumps({"cmd": cmd}).encode() if cmd else None,
-                                 headers={"X-Farmhand-Token": TOKEN, "Content-Type": "application/json"})
+                                 headers={"X-Farmhand-Token": TOKEN, "Content-Type": "application/json", "User-Agent": "FarmHand-PumpControl/1.0"})
     with urllib.request.urlopen(req, timeout=6) as r:
         return json.load(r)
 
