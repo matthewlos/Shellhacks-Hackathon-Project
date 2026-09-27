@@ -698,8 +698,8 @@ def demo_status():
         d = dict(DEMO)
     if not d.get("t0"):
         return {"active": False}
-    el = min(DEMO_SECONDS, (time.time() if d["active"] else d["t_end"]) - d["t0"])
-    return {"active": d["active"], "elapsed_s": round(el, 1), "seconds": DEMO_SECONDS, "target": DEMO_TARGET,
+    el = min(d["seconds"], (time.time() if d["active"] else d["t_end"]) - d["t0"])
+    return {"active": d["active"], "elapsed_s": round(el, 1), "seconds": d["seconds"], "target": DEMO_TARGET,
             "ai_ml": round(d["ai_s"] * DEMO_ML_PER_S), "timer_ml": round(d["timer_s"] * DEMO_ML_PER_S),
             "ai_sips": d["ai_sips"], "timer_pours": d["timer_pours"],
             "learned_pct_per_s": round(d["gain"], 2), "learned_soak_s": round(d["soak"]),
@@ -717,7 +717,7 @@ def _demo_say(why, pick="wait_moist", secs=0.0):
 def _demo_tick():
     now = time.time()
     el = now - DEMO["t0"]
-    if el >= DEMO_SECONDS:
+    if el >= DEMO["seconds"]:
         _queue_cmd("stop")
         DEMO.update(active=False, t_end=now)
         HUB.send({"type": "demo", **demo_status()})
@@ -790,10 +790,11 @@ def _demo_loop():
             HUB.send({"type": "demo", **demo_status()})
 
 
-def demo_start(timer_pour=None):
+def demo_start(timer_pour=None, seconds=None):
     with DEMO_LOCK:
         DEMO.clear()
-        DEMO.update(timer_pour=float(timer_pour) if timer_pour else float(DEMO_TIMER_POUR_S))
+        DEMO.update(timer_pour=float(timer_pour) if timer_pour else float(DEMO_TIMER_POUR_S),
+                    seconds=float(seconds) if seconds else float(DEMO_SECONDS))
         DEMO.update(active=True, t0=time.time(), t_end=None, next_b=0, ai_s=0.0, timer_s=0.0, ai_sips=0, timer_pours=0,
                     gain=0.15, soak=20.0, learned=False, hist=[], sip=None, holding=False, log=[])
     return demo_status()
@@ -980,7 +981,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(400, '{"ok":false,"error":"action must be start or stop"}')
             tp = body.get("timer_s")
             tp = tp if isinstance(tp, (int, float)) and 1 <= tp <= 120 else None
-            return self._send(200, json.dumps(demo_start(tp) if act == "start" else demo_stop()))
+            sec = body.get("seconds")
+            sec = sec if isinstance(sec, (int, float)) and 30 <= sec <= 3600 else None
+            return self._send(200, json.dumps(demo_start(tp, sec) if act == "start" else demo_stop()))
         if parts == ["pump"]:
             if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
                 return self._send(401, '{"ok":false,"error":"bad token"}')
