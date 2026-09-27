@@ -1,7 +1,7 @@
 """Farm Hand home server: the ESP32 posts its readings here, gets a decision back, and the live page is served here.
 
 Runs on the Mac mini (always on), reachable from anywhere:
-    https://farmhand.dmchang.xyz/                    Matthew's site (ui-mui), auto-deployed from GitHub (see cloud/deploy.sh)
+    https://farmhand.dmchang.xyz/                    the web app (farm-hand/web), auto-deployed from GitHub (see cloud/deploy.sh)
     https://farmhand.dmchang.xyz/farmhand/            simple live page
     https://farmhand.dmchang.xyz/farmhand/data        live data (JSON) for the site
     https://farmhand.dmchang.xyz/farmhand/api/...     the web app's API (SSE at api/events + REST, see api() below)
