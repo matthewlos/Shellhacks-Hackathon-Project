@@ -654,7 +654,7 @@ def soil_now():
 # ---------- "Listen": the farm's status read aloud by an ElevenLabs voice (POST /api/speak) ----------
 ELEVEN_VOICE = os.environ.get("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")    # "George", a stock ElevenLabs voice
 ELEVEN_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")          # the fast, cheap one
-SPEAK_MAX_CHARS = 250                        # credits are limited: keep it to a few short sentences
+SPEAK_MAX_CHARS = 480                        # a short briefing; credits are limited, so whole sentences are dropped past this
 SPEAK_CACHE_S = 20                           # repeated taps inside this window replay the same clip (no new credits)
 WATER_LESS_PCT = 56                          # season replay on real Miami weather vs the timer (web brand.ts savings.waterLessPct)
 _SPEAK = {"t": 0, "text": "", "mp3": b""}
@@ -665,42 +665,68 @@ def _say_num(x):
     return str(int(round(x)))
 
 
+def _fiu_soil():
+    """Open-Meteo soil at the grid point nearest FIU, only if already cached (never a slow fetch mid-tap)."""
+    v = _SOIL["v"]
+    if not v or v.get("status") != "ready":
+        threading.Thread(target=soil_now, daemon=True).start()     # warm it for the next tap
+        return None
+    return min(v["points"], key=lambda q: (q["lat"] - LAT) ** 2 + (q["lon"] - LON) ** 2)
+
+
 def speak_text():
-    """One short paragraph about the farm right now, written to be heard (no symbols, whole numbers)."""
+    """A short spoken briefing about the farm right now, written to be heard (no symbols, whole numbers)."""
+    out = [f"Farm Hand briefing, {time.strftime('%-I:%M %p')}."]
     r, age = LAST["reading"], _age()
+    a = b = None
     if not r:
-        return "Farm Hand has not heard from the sensor board yet, so there is nothing to report."
-    out = []
-    if age is not None and age > LINK_TIMEOUT_S:
-        mins = int(age // 60)
-        out.append(f"The sensors last reported {mins} minute{'s' if mins != 1 else ''} ago." if mins
-                   else f"The sensors last reported {int(age)} seconds ago.")
-    a, b = probe_live(r, LAST["rx"] or 0, "A"), probe_live(r, LAST["rx"] or 0, "B")
-    ta = a["tempC"]
-    if a["moisturePct"] is not None:
-        out.append(f"Box A is at {_say_num(a['moisturePct'])} percent moisture"
-                   + (f" and {_say_num(ta)} degrees." if ta is not None else "."))
+        out.append("The sensor board has not reported yet.")
     else:
-        out.append("Box A's moisture probe is not connected" + (f", and the soil is {_say_num(ta)} degrees." if ta is not None else "."))
-    d = LAST["decision"]
-    if d:
-        brain, pick, secs, _why = d
-        who = "The decision model" if brain == "laya" else "The baseline rule"
-        if pick == "water":
-            out.append(f"{who} wants to give it a {_say_num(secs)} second drink.")
-        elif pick == "wait_moist":
-            out.append(f"{who} is holding off because the soil is still moist.")
-        elif pick == "wait_rain":
-            out.append(f"{who} is holding off because rain is on the way.")
-        elif a["moisturePct"] is not None:
-            out.append(f"{who} is waiting.")
-    if b["moisturePct"] is not None:
-        out.append(f"Box B, on the timer, is at {_say_num(b['moisturePct'])} percent.")
-    else:
-        out.append("Box B, on the timer, has no moisture reading.")
-    saved = f"Over a 21 month weather replay, Farm Hand used {WATER_LESS_PCT} percent less water than a timer."
-    text = " ".join(out)
-    return f"{text} {saved}" if len(text) + 1 + len(saved) <= SPEAK_MAX_CHARS else text
+        if age is not None and age > LINK_TIMEOUT_S:
+            mins = int(age // 60)
+            out.append(f"The sensors last reported {mins} minute{'s' if mins != 1 else ''} ago." if mins
+                       else f"The sensors last reported {int(age)} seconds ago.")
+        a, b = probe_live(r, LAST["rx"] or 0, "A"), probe_live(r, LAST["rx"] or 0, "B")
+        ta, tb = a["tempC"], b["tempC"]
+        if a["moisturePct"] is not None:
+            line = f"Box A, run by the decision model, is at {_say_num(a['moisturePct'])} percent moisture"
+            line += f" and {_say_num(ta)} degrees" if ta is not None else ""
+            line += f", above its {_say_num(BASELINE)} percent line." if a["moisturePct"] >= BASELINE else f", below its {_say_num(BASELINE)} percent line."
+            out.append(line)
+        else:
+            out.append("Box A's moisture probe is not reading" + (f", soil is {_say_num(ta)} degrees." if ta is not None else "."))
+        d = LAST["decision"]
+        if d and a["moisturePct"] is not None:
+            brain, pick, secs, _why = d
+            if pick == "water":
+                out.append(f"The decision model is giving it a {_say_num(secs)} second drink.")
+            elif pick == "wait_moist":
+                out.append("The decision model is holding off: the soil is still moist.")
+            elif pick == "wait_rain":
+                out.append("The decision model is holding off: rain is on the way.")
+        if b["moisturePct"] is not None:
+            out.append(f"Box B, on the timer, is at {_say_num(b['moisturePct'])} percent"
+                       + (f" and {_say_num(tb)} degrees." if tb is not None else "."))
+        else:
+            out.append("Box B's probe is not reading.")
+    fc = forecast() or {}                 # cached 15 min; about a second when cold
+    if fc:
+        if fc.get("rain_mm", 0) >= 1:
+            out.append(f"Rain is likely in the next day, about {_say_num(fc['rain_mm'])} millimeters.")
+        else:
+            out.append("No real rain in the next 24 hours" + (f", {_say_num(fc['air_c'])} degrees outside." if fc.get("air_c") is not None else "."))
+    q = _fiu_soil()
+    if q and q.get("moisturePct") is not None:
+        wk = [w for w in (q.get("week") or []) if w is not None]
+        trend = " and drying" if len(wk) >= 2 and wk[-1] < wk[0] - 0.5 else ""
+        out.append(f"Soil around FIU holds {_say_num(q['moisturePct'])} percent water{trend}.")
+    out.append(f"Over a 21 month weather replay, Farm Hand used {WATER_LESS_PCT} percent less water than a timer.")
+    text = ""
+    for part in out:                      # keep whole sentences inside the credit budget
+        if len(text) + 1 + len(part) > SPEAK_MAX_CHARS:
+            continue
+        text = f"{text} {part}".strip()
+    return text
 
 
 def eleven_tts(text, key):

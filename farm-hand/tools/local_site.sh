@@ -8,6 +8,8 @@ HERE=${0:A:h}; ROOT=$HERE/..
 PY=$ROOT/laya/.venv-mac/bin/python
 TOKEN=$(sed -nE 's/^#define[[:space:]]+FARMHAND_TOKEN[[:space:]]+"([^"]*)".*/\1/p' $ROOT/firmware/sensors_live/include/secrets.h)
 [ -n "$TOKEN" ] || { echo "FARMHAND_TOKEN not found in secrets.h"; exit 1; }
+# the Listen button's ElevenLabs key lives on the Mac mini; borrow it for this run (never written to disk here)
+export ELEVENLABS_API_KEY=$(ssh -o ConnectTimeout=4 mac-mini 'sed -n "s/^ELEVENLABS_API_KEY=//p" ~/farmhand-server/elevenlabs.env' 2>/dev/null)
 (cd $ROOT/web && npm run build --silent >/dev/null)
 mkdir -p $ROOT/cloud/local
 FARMHAND_TOKEN=$TOKEN SITE_DIR=$ROOT/web/dist FARMHAND_DB=$ROOT/cloud/local/farmhand_local.db $PY -u $ROOT/cloud/receiver.py &
