@@ -76,7 +76,7 @@ let running=null,t0=0,tick=null;
 const st=document.getElementById('st');
 function show(p,s){document.getElementById('t'+p).textContent=s.toFixed(1)+' s'}
 async function post(path){try{const r=await fetch(path,{method:'POST'});const j=await r.json();if(!r.ok){st.className='state';st.textContent='Not sent: '+(j.error||r.status)+'. Try again.';return null}return j}catch(e){st.className='state';st.textContent='Page server not reachable.';return null}}
-async function go(p){const j=await post('/on/'+p);if(!j)return;running=p;t0=performance.now();st.textContent=j.via=='usb'?'Pump '+(p=='A'?1:2)+' starting…':'Sent. Pump '+(p=='A'?1:2)+' starts at the board\'s next check-in (about 2 s)…';st.className='state run';
+async function go(p){const j=await post('/on/'+p);if(!j)return;running=p;t0=performance.now();st.textContent=j.via=='usb'?'Pump '+(p=='A'?1:2)+' starting…':'Sent. Pump '+(p=='A'?1:2)+' starts when the board checks in (about 2 s)…';st.className='state run';
  clearInterval(tick);tick=setInterval(()=>{if(running)show(running,(performance.now()-t0)/1000)},100)}
 async function stop(){await post('/off');running=null;clearInterval(tick);st.className='state';st.textContent='Stopping…'}
 let lastWifi='';
