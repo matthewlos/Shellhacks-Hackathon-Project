@@ -23,6 +23,7 @@ import queue
 import sqlite3
 import threading
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -650,6 +651,88 @@ def soil_now():
     return v
 
 
+# ---------- "Listen": the farm's status read aloud by an ElevenLabs voice (POST /api/speak) ----------
+ELEVEN_VOICE = os.environ.get("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")    # "George", a stock ElevenLabs voice
+ELEVEN_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")          # the fast, cheap one
+SPEAK_MAX_CHARS = 250                        # credits are limited: keep it to a few short sentences
+SPEAK_CACHE_S = 20                           # repeated taps inside this window replay the same clip (no new credits)
+WATER_LESS_PCT = 56                          # season replay on real Miami weather vs the timer (web brand.ts savings.waterLessPct)
+_SPEAK = {"t": 0, "text": "", "mp3": b""}
+_SPEAK_LOCK = threading.Lock()
+
+
+def _say_num(x):
+    return str(int(round(x)))
+
+
+def speak_text():
+    """One short paragraph about the farm right now, written to be heard (no symbols, whole numbers)."""
+    r, age = LAST["reading"], _age()
+    if not r:
+        return "Farm Hand has not heard from the sensor board yet, so there is nothing to report."
+    out = []
+    if age is not None and age > LINK_TIMEOUT_S:
+        mins = int(age // 60)
+        out.append(f"The sensors last reported {mins} minute{'s' if mins != 1 else ''} ago." if mins
+                   else f"The sensors last reported {int(age)} seconds ago.")
+    a, b = probe_live(r, LAST["rx"] or 0, "A"), probe_live(r, LAST["rx"] or 0, "B")
+    ta = a["tempC"]
+    if a["moisturePct"] is not None:
+        out.append(f"Box A is at {_say_num(a['moisturePct'])} percent moisture"
+                   + (f" and {_say_num(ta)} degrees." if ta is not None else "."))
+    else:
+        out.append("Box A's moisture probe is not connected" + (f", and the soil is {_say_num(ta)} degrees." if ta is not None else "."))
+    d = LAST["decision"]
+    if d:
+        brain, pick, secs, _why = d
+        who = "The decision model" if brain == "laya" else "The baseline rule"
+        if pick == "water":
+            out.append(f"{who} wants to give it a {_say_num(secs)} second drink.")
+        elif pick == "wait_moist":
+            out.append(f"{who} is holding off because the soil is still moist.")
+        elif pick == "wait_rain":
+            out.append(f"{who} is holding off because rain is on the way.")
+        elif a["moisturePct"] is not None:
+            out.append(f"{who} is waiting.")
+    if b["moisturePct"] is not None:
+        out.append(f"Box B, on the timer, is at {_say_num(b['moisturePct'])} percent.")
+    else:
+        out.append("Box B, on the timer, has no moisture reading.")
+    saved = f"Over a 21 month weather replay, Farm Hand used {WATER_LESS_PCT} percent less water than a timer."
+    text = " ".join(out)
+    return f"{text} {saved}" if len(text) + 1 + len(saved) <= SPEAK_MAX_CHARS else text
+
+
+def eleven_tts(text, key):
+    """ElevenLabs text-to-speech -> MP3 bytes. The key only ever goes in the request header."""
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{urllib.parse.quote(ELEVEN_VOICE)}?output_format=mp3_44100_128"
+    req = urllib.request.Request(url, method="POST", data=json.dumps({"text": text, "model_id": ELEVEN_MODEL}).encode(),
+                                 headers={"xi-api-key": key, "Content-Type": "application/json", "Accept": "audio/mpeg"})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return resp.read()
+
+
+def speak():
+    """Returns (status, content-type, body bytes, text). Cached for SPEAK_CACHE_S; one ElevenLabs call at a time."""
+    text = speak_text()
+    key = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+    if not key:
+        return 503, "application/json", json.dumps({"error": "no ElevenLabs key", "text": text}).encode(), text
+    with _SPEAK_LOCK:
+        if _SPEAK["mp3"] and time.time() - _SPEAK["t"] < SPEAK_CACHE_S:
+            return 200, "audio/mpeg", _SPEAK["mp3"], _SPEAK["text"]
+        try:
+            mp3 = eleven_tts(text, key)
+        except urllib.error.HTTPError as e:
+            print("[speak] ElevenLabs HTTP", e.code)                  # status only: never the key or the request
+            return 502, "application/json", json.dumps({"error": f"ElevenLabs answered {e.code}", "text": text}).encode(), text
+        except Exception as e:
+            print("[speak] ElevenLabs failed:", type(e).__name__)
+            return 502, "application/json", json.dumps({"error": "ElevenLabs unreachable", "text": text}).encode(), text
+        _SPEAK.update(t=time.time(), text=text, mp3=mp3)
+        return 200, "audio/mpeg", mp3, text
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -700,12 +783,31 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError
             except ValueError:
                 return self._send(400, '{"ok":false,"error":"bad json"}')
+        if method == "POST" and parts == ["speak"]:
+            return self._speak()                                     # binary MP3, not JSON
         try:
             code, obj = api(method, parts, urllib.parse.parse_qs(u.query), body)
         except Exception as e:                                        # never kill the thread over one bad request
             print("[api]", method, self.path, repr(e)[:200])
             code, obj = 500, {"ok": False, "error": type(e).__name__}
         self._send(code, json.dumps(obj))
+
+    def _speak(self):
+        """POST /api/speak: MP3 of the status sentence (text also in X-Farmhand-Text), or 503/502 JSON with the text."""
+        try:
+            code, ctype, body, text = speak()
+        except Exception as e:
+            print("[speak]", type(e).__name__)
+            return self._send(500, '{"error":"speak failed"}')
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("X-Farmhand-Text", urllib.parse.quote(text))
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Expose-Headers", "X-Farmhand-Text")
+        self.end_headers()
+        self.wfile.write(body)
 
     def _sse(self, text):
         self.wfile.write(text.encode())

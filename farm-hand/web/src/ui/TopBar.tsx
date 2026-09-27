@@ -2,6 +2,7 @@ import { brand } from '../brand';
 import { useApp } from '../data/store';
 import { ago, BOX_IDS, moistureOf, toMs, useBox, useNow, type BoxId } from './farmData';
 import { Logo } from './icons';
+import { Listen } from './Listen';
 
 /** A reading older than this means the ESP32 has gone quiet (it posts every ~10 s). */
 const QUIET_MS = 60_000;
@@ -41,10 +42,13 @@ export function TopBar() {
             <p>{brand.tagline}</p>
           </div>
         </div>
-        <span className={`status status-${status.tone}`} role="status" aria-live="polite">
-          <i className="dot" />
-          <span className="num">{status.text}</span>
-        </span>
+        <div className="tb-status">
+          <span className={`status status-${status.tone}`} role="status" aria-live="polite">
+            <i className="dot" />
+            <span className="num">{status.text}</span>
+          </span>
+          <Listen />
+        </div>
         <div className="reads" role="table" aria-label="Live soil readings">
           <div className="reads-row reads-head" role="row">
             <span role="columnheader"><span className="sr-only">Box</span></span>

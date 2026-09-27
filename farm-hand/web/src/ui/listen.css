@@ -1,0 +1,61 @@
+/* "Listen" (Listen.tsx): a pill beside the status pill, same height and weight, so the two read as one row. */
+.tb-status {
+  grid-area: status; justify-self: start; min-width: 0; max-width: 100%; position: relative;
+  display: flex; align-items: center; gap: 8px;
+}
+.tb-status .status { min-width: 0; }
+
+.listen-wrap { flex: none; margin-top: 2px; }
+.listen {
+  display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 16px 0 12px; white-space: nowrap;
+  border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--panel); color: var(--text);
+  font-size: 15px; font-weight: 600;
+  transition: transform 140ms var(--ease-out), background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.listen .listen-ico { flex: none; color: var(--accent); }
+.listen:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .listen:hover { background: var(--sunk); } }
+
+.listen-loading .listen-w1, .listen-loading .listen-w2 { animation: listen-wave 900ms var(--ease-out) infinite; }
+.listen-loading .listen-w2 { animation-delay: 150ms; }
+@keyframes listen-wave { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+.listen-playing { background: var(--water-soft); border-color: transparent; color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .listen-playing:hover { background: var(--water-soft); } }
+.listen-bars rect { transform-box: fill-box; transform-origin: center; animation: listen-bar 800ms ease-in-out infinite; }
+.listen-bars rect:nth-child(2) { animation-delay: -250ms; }
+.listen-bars rect:nth-child(3) { animation-delay: -500ms; }
+@keyframes listen-bar { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.45); } }
+
+/* the words, under the button: always for the browser voice, and as captions for the ElevenLabs clip */
+.listen-cap {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 4;   /* right-aligned under the status row: clear of the readout card */ width: min(420px, calc(100vw - 32px));
+  padding: 12px 40px 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel);
+  box-shadow: var(--shadow); font-size: 15px; line-height: 1.45; color: var(--text); text-wrap: pretty;
+  animation: listen-in 200ms var(--ease-out) both;
+}
+.listen-note { margin-top: 6px; font-size: 13px; color: var(--text-dim); }
+.listen-x {
+  position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; display: grid; place-items: center;
+  border: 0; border-radius: var(--r-ctl); background: transparent; color: var(--text-dim);
+}
+@media (hover: hover) and (pointer: fine) { .listen-x:hover { background: var(--sunk); } }
+@keyframes listen-in { from { opacity: 0; transform: translateY(-4px); } }
+
+/* narrow top bar (same breakpoint as the status pill in styles.css) */
+@container (max-width: 700px) {
+  .listen { height: 32px; font-size: 14px; padding: 0 12px 0 10px; gap: 6px; }
+  .listen-cap { left: 0; right: auto; width: min(420px, 100cqw); }   /* anchored to the status row, full width of the bar */
+}
+/* phone on its side: the slim one-row bar */
+@media (max-height: 520px) and (orientation: landscape) {
+  .listen-wrap { margin-top: 0; }
+  .listen { height: 28px; font-size: 12px; padding: 0 10px 0 8px; }
+  .listen .listen-ico { width: 15px; height: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listen, .listen:active { transform: none; }
+  .listen-loading .listen-w1, .listen-loading .listen-w2, .listen-bars rect, .listen-cap { animation: none; }
+}
