@@ -16,7 +16,7 @@ A web page that acts out the real Farm Hand build: one box of soil, the soil and
 | Water saved: virtual timer (5 s every 6 h, full intervals only) vs every pot A pour, test pours and demos included; the orange "if a timer watered" line | `laptop/report.py`, `laptop/static/views.js` |
 
 ## What is simulated (not from the real code)
-- **The soil**: 0.04% per ml (the real box took 200 ml → +8% on 2026-09-23), water seeps to the probe at 0.4 %/s, drying 0.8 %/h at 26 °C (faster when hot or wet), probe noise ±0.25%, temperature 27 ± 5 °C over the day like the FakeBoard. The drying rate is a guess.
+- **The soil**: 0.04% per ml (the real box took 200 ml → +8% on 2026-09-23), water seeps to the probe at 0.4 %/s, drying 0.8 %/h at 26 °C (faster when hot or wet), probe noise ±0.25%, temperature 27 ± 5 °C over the day like the simulated board. The drying rate is a guess.
 - **Laya**: the real one is a fine-tuned model (`laya/`). Here it picks water at or below 40%, else "wait, soil has water", in 12–32 ms.
 - **The Gemini team**: the timings (20–50 s) and the critic sending a plan back about 1 time in 4 are made up. The plan follows the planner's rules of thumb.
 - The forecast and drought feeds: the pot is indoors, so rain is ignored; the county drought number is the saved Sep 15 value.

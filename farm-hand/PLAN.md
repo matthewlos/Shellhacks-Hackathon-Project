@@ -683,7 +683,7 @@ Rerun: `python farm-hand/alphaearth/build_fields.py`, then copy `fields.html`, `
 | **Box A / Box B** (shows moisture or "no probe") | moisture %, temperature °C, one quiet amber line if a probe isn't reporting, pump row ("off, disarmed until wiring is confirmed"), raw reading |
 | **Laya's call** (shows the pick) | Water now / Holding off / Waiting for rain, seconds, the why, the time. "Decided by Laya" or "Decided by the safety rule: probe A isn't reporting, so Laya doesn't guess." |
 | **Saves** | the four savings: time (soil checks done, from `/farmhand/data` count), money ($72.94 parts vs $1,200-1,512 + $309/yr for one commercial sensor), water (56% less than a timer, simulated field on real weather), crop (0 h stress vs 12 h, same replay; plus box A's live time at or above 45%) |
-| **Results** | panel titled "Results (fake)": a timelapse from 1 AM to now (`public/results-fake.json`, then the real recorded readings appended). Headline "Laya used 4.0 L less water than the timer", two litre counters racing, clock with a soil-temperature day/night tint, both moisture lines drawing, a drop on each pour, box B soggy band, end frame "Saved 4.0 L". While it plays it drives the 3D soil and water streams (store `timelapse` mode parks the real samples; closing the panel restores them). |
+| **Results** | panel titled "Results (simulated)": a timelapse from 1 AM to now (`public/results-sim.json`, then the real recorded readings appended). Headline "Laya used 4.0 L less water than the timer", two litre counters racing, clock with a soil-temperature day/night tint, both moisture lines drawing, a drop on each pour, box B soggy band, end frame "Saved 4.0 L". While it plays it drives the 3D soil and water streams (store `timelapse` mode parks the real samples; closing the panel restores them). |
 | **History** | moisture over time, A vs B, 45% line, drag to replay in 3D |
 | **Forecast** | Open-Meteo rain, next 7 days |
 | **Crops** | per box: "With soil at 38.2% moisture and 26.1 °C, these crops can survive in Box A:" grouped Thrive / Can survive / Would struggle, one short reason each. The engine (`src/data/sim/crops.ts`) now has a moisture factor: FAO-56 depletion fraction p per crop, dryness line = 20 + 45 x (1 - p). No probe: "Plug in the probes to see which crops fit." |
@@ -819,7 +819,7 @@ Every ✅ has a saved proof file in `farm-hand\evidence\`. Anything without one 
   - a full overnight A-vs-B run
   - the `OUTDOORS` switch in a live Gemini run
 
-## 12. Fake-run results (FakeBoard, code tests only, NEVER for slides)
+## 12. Simulated run results (code tests only, NEVER for slides)
 
 ⚠️ These 2 runs happened in this session, but their database was wiped before the proof files existed, so there are no saved rows behind them. Treat them as lessons, not data.
 
@@ -828,7 +828,7 @@ Every ✅ has a saved proof file in `farm-hand\evidence\`. Anything without one 
 | v1 rule brain, 300x speed | 926 ml, 29 pours | 500 ml | The AI took 1-second sips all day. Fixed: it only waters within 5 points of the dry line, then gives one real drink. |
 | v2 after the fix | 547 ml, 2 pours | 400 ml | A timer sized *perfectly* is hard to beat. The real savings come from rain skips (outdoors) and from real timers being oversized. |
 
-Both runs used a fake world with no rain and a timer tuned to that exact pot. The real test in section 4 decides the pitch number.
+Both runs used a simulated test environment with no rain and a timer tuned to that exact pot. The real test in section 4 decides the pitch number.
 
 ---
 
@@ -1407,6 +1407,8 @@ def forecast():
             "hours_until_real_rain": first_rain,            # None = no solid rain in 24 h
             "et0_mm_next_24h": round(sum(x or 0 for x in h["et0_fao_evapotranspiration"]), 2),
             "temp_c_now": h["temperature_2m"][0],
+            "hours": [{"t": t[11:16], "p": p_, "mm": round(mm, 1), "c": c}          # the dashboard's 24 h weather strip
+                      for t, p_, mm, c in zip(h["time"], prob, rain_mm, h["temperature_2m"])],
             "source": "open-meteo.com",
         }
     return _cached("forecast", 15 * 60, get)
@@ -2091,13 +2093,13 @@ def water_pot(seconds, reason, tag=None):
 # Trained on the field scale: wilting 20%, stress line 42.5%, field capacity 65%. The box's healthy band
 # (DRY_PCT..WET_PCT) is mapped onto stress line..field capacity so the model sees the same picture.
 
-def _laya_state():
+def _laya_state(outdoors=None):
     soil = get_soil("A")
     if "error" in soil:
         return None, soil["error"]
     pct = soil["moisture_pct"]
     fc, dr = feeds.forecast(), feeds.drought()
-    outdoors = bool(config.OUTDOORS)
+    outdoors = bool(config.OUTDOORS) if outdoors is None else outdoors
     lt = time.localtime()
     return {
         "soil_moisture_pct": round(42.5 + (pct - config.DRY_PCT) * (65 - 42.5) / (config.WET_PCT - config.DRY_PCT), 1),
@@ -2127,6 +2129,30 @@ def get_fast_decision() -> dict:
     log_act("laya", f"{r['choice']} {max(r['probabilities'].values()):.0%} ({r['ms']} ms)")
     LAST["laya"] = {"ts": time.time(), "pick": r["choice"], "sure": max(r["probabilities"].values()), "ms": r["ms"], "soil_pct": pct}
     return {"pick": r["choice"], "probabilities": r["probabilities"], "ms": r["ms"], "soil_pct": pct}
+
+
+_FIELD = {"ts": 0, "val": None}
+
+
+def field_call():
+    """What Laya would pick if this box sat in a field: the same live soil reading, with the real forecast switched on.
+    Display only. It never pours, never logs a decision, and never touches LAST (the real call)."""
+    if _FIELD["val"] and time.time() - _FIELD["ts"] < 300:
+        return _FIELD["val"]
+    if not config.USE_LAYA:
+        return {"error": "Laya is switched off"}
+    state, pct = _laya_state(outdoors=True)
+    if state is None:
+        return {"error": pct}
+    try:
+        import requests
+        r = requests.post(config.LAYA_URL + "/decide", json={"state": state}, timeout=3).json()
+    except Exception as e:
+        return {"error": f"Laya not reachable: {type(e).__name__}"}
+    val = {"pick": r["choice"], "sure": max(r["probabilities"].values()), "ms": r["ms"], "soil_pct": pct,
+           "rain_mm": state["rain_forecast_next_24h_mm"], "rain_chance": state["rain_chance_next_24h_pct"], "ts": time.time()}
+    _FIELD.update(ts=time.time(), val=val)
+    return val
 
 
 def laya_decide():
@@ -2506,6 +2532,7 @@ if __name__ == "__main__":
   python server.py                    # real ESP32 (auto-finds the USB port)
   SERIAL_PORT=fake python server.py   # no hardware: simulated pots (FAKE badge on the dashboard)
 """
+import json
 import threading
 import time
 from pathlib import Path
@@ -2655,21 +2682,26 @@ def series(hours: float = 24):
         t0, t1 = rows[0][0], rows[-1][0]
         step = max(1.0, (t1 - t0) / n)
         buck = {}
-        for ts, a, _b, temp in rows:
-            buck.setdefault(int((ts - t0) // step), []).append((ts, a, temp))
+        for ts, a, b, temp in rows:
+            buck.setdefault(int((ts - t0) // step), []).append((ts, a, temp, b))
         for k in sorted(buck):
             g = buck[k]
             tv = [x[2] for x in g if x[2] is not None]
+            bv = [x[3] for x in g if x[3] is not None]
             pts.append([round(sum(x[0] for x in g) / len(g), 1), round(sum(x[1] for x in g) / len(g), 2),
-                        round(sum(tv) / len(tv), 2) if tv else None])
+                        round(sum(tv) / len(tv), 2) if tv else None,
+                        round(sum(bv) / len(bv), 2) if bv else None])      # [ts, pot A %, temp, pot B %] (B for the control page)
     flow = config.load_cal()["flow_ml_per_s"]["A"]
-    pours = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * flow), "by": by} for ts, pot, ms, by, _w in store.pours_since(since) if pot == "A"]
+    cal = config.load_cal()["flow_ml_per_s"]
+    allp = store.pours_since(since)
+    pours = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * flow), "by": by} for ts, pot, ms, by, _w in allp if pot == "A"]
+    pours_b = [{"ts": ts, "s": ms / 1000, "ml": round(ms / 1000 * cal.get("B", flow)), "by": by} for ts, pot, ms, by, _w in allp if pot == "B"]
     timer = []
     if rows and config.ONE_POT and config.TIMER_EVERY_S:      # same schedule report.py counts: first reading + every TIMER_EVERY_S
         k, t0 = 1, rows[0][0]
         while t0 + k * config.TIMER_EVERY_S <= rows[-1][0]:
             timer.append({"ts": t0 + k * config.TIMER_EVERY_S, "s": config.TIMER_POUR_MS / 1000, "ml": round(config.TIMER_POUR_MS / 1000 * flow)}); k += 1
-    return {"points": pts, "pours": pours, "timer": timer, "rate": soak.learned_pct_per_s("A"), "hours": hours,
+    return {"points": pts, "pours": pours, "pours_b": pours_b, "one_pot": bool(config.ONE_POT), "timer": timer, "rate": soak.learned_pct_per_s("A"), "hours": hours,
             "report": report.report(hours or None, include_fake=B.fake), "fake": B.fake,
             "band": [config.DRY_PCT, config.WET_PCT], "target": config.TARGET_PCT}
 
@@ -2688,6 +2720,39 @@ def stop():
     target.stop()
     B.stop()
     return {"stopped": True}
+
+
+BASELINE_FILE = config.DATA / "baseline.json"
+if BASELINE_FILE.exists():                           # keep the level you set across restarts
+    try:
+        _bl = json.loads(BASELINE_FILE.read_text())
+        config.DRY_PCT, config.TARGET_PCT = float(_bl["dry"]), float(_bl["target"])
+    except Exception as e:
+        print("[baseline] ignoring", BASELINE_FILE, e)
+
+
+@app.post("/api/baseline")
+def set_baseline(body: dict):
+    """The moisture level to keep (the live page's slider). Box A waters when it falls to this line, and each pour aims
+    20 points above it (capped 5 under the wet limit). Laya sees it too: _laya_state() maps DRY_PCT onto its stress line."""
+    pct = float(body.get("pct", config.DRY_PCT))
+    if not 20 <= pct <= config.WET_PCT - 15:
+        return {"error": f"pick a level between 20% and {config.WET_PCT - 15:.0f}%"}
+    config.DRY_PCT = round(pct, 1)
+    config.TARGET_PCT = round(min(pct + 20, config.WET_PCT - 5), 1)
+    BASELINE_FILE.write_text(json.dumps({"dry": config.DRY_PCT, "target": config.TARGET_PCT, "set_at": time.time()}))
+    return {"baseline": config.DRY_PCT, "target": config.TARGET_PCT, "wet_limit": config.WET_PCT}
+
+
+@app.get("/api/field-call")
+def field_call():
+    """Laya's pick for this soil if it were outdoors (real forecast on). Display only, never pours."""
+    return brain.field_call()
+
+
+@app.get("/sim")
+def sim_page():
+    return FileResponse(Path(__file__).parent / "static" / "sim.html")
 
 
 # the page, scene.js and models/farmhand.glb (mounted last so the /api routes win)
@@ -2768,7 +2833,7 @@ button:disabled{cursor:progress;opacity:.6}
 .tag{position:absolute;left:0;top:0;z-index:2;pointer-events:none}
 
 /* control column */
-aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto auto auto minmax(0,1fr);min-height:0}
+aside{background:var(--panel);border-left:1px solid var(--line);display:grid;grid-template-rows:auto auto auto auto minmax(0,1fr);min-height:0}
 section{padding:22px 24px;border-bottom:1px solid var(--line)}
 .call .verdict{margin:0;font:700 2.1rem/1.02 var(--f-display);letter-spacing:-.025em}
 .call .verdict.water{color:var(--ai)}
@@ -2898,6 +2963,22 @@ section{padding:22px 24px;border-bottom:1px solid var(--line)}
 .br.fresh{background:var(--ai-wash)}
 .br.off .t,.br.off > i{color:var(--muted)}
 
+/* weather at FIU: live forecast, what it means indoors, and Laya's field call */
+.sky{display:grid;gap:10px}
+.skyhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.skyhead .src{font-size:12px;color:var(--muted)}
+.skynow{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.skynow b{font:600 1.5rem/1 var(--f-num);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.skynow span{display:block;font-size:12.5px;color:var(--muted);margin-top:3px}
+.skynow .r{text-align:right}
+.strip{display:grid;grid-template-columns:repeat(24,minmax(0,1fr));gap:2px;align-items:end;height:40px}
+.strip i{display:block;border-radius:2px 2px 0 0;background:rgba(31,100,184,.22);min-height:2px;transition:height .3s var(--ease)}
+.strip i.wet{background:var(--ai)}
+.stripx{display:grid;grid-template-columns:repeat(4,1fr);font:500 11px/1 var(--f-num);color:var(--muted);margin-top:-4px}
+.indoor{margin:0;display:flex;gap:8px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
+.indoor i{font-size:16px;color:var(--muted);margin-top:1px}
+.sky .link{justify-self:start}
+
 /* temperature card */
 .nums .heat .big{color:var(--heat)}
 
@@ -2996,9 +3077,19 @@ section{padding:22px 24px;border-bottom:1px solid var(--line)}
       <div class="heat"><span class="k">Soil temperature</span><span class="big num" id="tA">–</span><span class="sub" id="tSub">&nbsp;</span></div>
     </section>
 
+    <section class="sky" aria-label="Weather">
+      <div class="skyhead"><span class="k">Weather at FIU, next 24 h</span><span class="src">Open-Meteo, live</span></div>
+      <div class="skynow">
+        <div><b id="wNow">–</b><span>outside air now</span></div>
+        <div class="r"><b id="wRain">–</b><span id="wRainSub">rain expected</span></div>
+      </div>
+      <div><div class="strip" id="wStrip" aria-label="Chance of rain for each of the next 24 hours"></div><div class="stripx" id="wX"></div></div>
+      <p class="indoor" id="wIndoor"><i class="ph ph-house-line"></i><span>This box is indoors, so rain can't reach it. Farm Hand won't hold off for rain here.</span></p>
+      <a class="link" href="/sim"><i class="ph ph-play-circle"></i>How it would do outside</a>
+    </section>
+
     <section class="facts">
       <div class="fact"><span>Dries out in</span><b id="dry">–</b></div>
-      <div class="fact"><span>Rain, next 24 h<em id="rainD"></em></span><b id="rain">–</b></div>
       <div class="fact"><span>Evaporation, next 24 h</span><b id="et0">–</b></div>
       <div class="fact"><span>County in drought<em id="drD"></em></span><b id="drV">–</b></div>
     </section>
@@ -3076,6 +3167,16 @@ async function fast() {
   });
 }
 
+function sky(f, outdoors) {
+  $('wNow').textContent = f.temp_c_now != null ? `${(+f.temp_c_now).toFixed(1)}°C` : '–';
+  $('wRain').textContent = f.rain_mm_next_24h != null ? `${(+f.rain_mm_next_24h).toFixed(1)} mm` : '–';
+  $('wRainSub').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance` : (f.error ? 'forecast offline' : 'rain expected');
+  const H = f.hours || [];
+  $('wStrip').innerHTML = H.map(h => `<i class="${h.p >= 50 && h.mm >= 1 ? 'wet' : ''}" style="height:${Math.max(4, h.p)}%" title="${h.t}: ${h.p}% chance, ${h.mm} mm"></i>`).join('');
+  $('wX').innerHTML = H.length ? [0, 6, 12, 18].map(i => `<span>${(H[i] || {}).t || ''}</span>`).join('') : '';
+  $('wIndoor').hidden = !!outdoors;
+}
+
 async function slow() {
   try { S = await j('/api/state'); } catch (e) { $('reason').textContent = 'Can\'t reach the Farm Hand server.'; return; }
   const d = S.drought || {}, f = S.forecast || {}, p = S.prediction || {}, L = S.latest || {};
@@ -3083,8 +3184,7 @@ async function slow() {
   $('sA').textContent = `healthy ${S.config.dry}-${S.config.wet}%`;
   $('tSub').textContent = f.temp_c_now != null ? `outside air ${(+f.temp_c_now).toFixed(1)}°C, forecast` : 'steel probe in the soil';
   $('dry').textContent = p.settling ? 'measuring' : p.hours_until_dry != null ? (p.hours_until_dry < .05 ? 'now' : p.hours_until_dry >= 48 ? '2+ days' : `${p.hours_until_dry.toFixed(1)} h`) : '–';
-  $('rain').textContent = f.rain_mm_next_24h != null ? `${f.rain_mm_next_24h} mm` : '–';
-  $('rainD').textContent = f.max_rain_chance_next_24h != null ? `up to ${f.max_rain_chance_next_24h}% chance${S.config.outdoors ? '' : ', pot is indoors'}` : '';
+  sky(f, S.config.outdoors);
   $('et0').textContent = f.et0_mm_next_24h != null ? `${f.et0_mm_next_24h} mm` : '–';
   $('drV').textContent = d.pct_in_D1_or_worse != null ? `${d.pct_in_D1_or_worse}%` : '–';
   $('drD').textContent = d.level ? `${(d.county || '').replace(' County', '')}, ${d.level} ${d.level_name}` : '';

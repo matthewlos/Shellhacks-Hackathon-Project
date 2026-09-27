@@ -1,5 +1,5 @@
 /**
- * Results: a 48 h timelapse of box A (Laya) against box B (timer), from public/results-fake.json.
+ * Results: a 48 h timelapse of box A (Laya) against box B (timer), from public/results-sim.json.
  * While it plays or is scrubbed, it also drives the 3D scene: the store's `timelapse` mode parks the real
  * samples and `live` / `pumps` carry the timelapse values, so the soil and the water streams follow it.
  * Closing the panel hands the scene back to the live readings (`endTimelapse`).

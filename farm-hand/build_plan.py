@@ -1,4 +1,4 @@
-"""PLAN.md = PLAN_BODY.md + section 12 (fake-run results) + a code appendix copied from the real files.
+"""PLAN.md = PLAN_BODY.md + section 12 (simulated run results) + a code appendix copied from the real files.
 Re-run after any code change so the plan never shows stale code:  python build_plan.py"""
 from pathlib import Path
 
@@ -22,7 +22,7 @@ FILES = [
 ]
 
 out = [(H / "PLAN_BODY.md").read_text(encoding="utf-8").rstrip(), ""]
-res = H / "FAKE_RUN_RESULTS.md"
+res = H / "SIM_RUN_RESULTS.md"
 if res.exists():
     out += [res.read_text(encoding="utf-8").rstrip(), ""]
 out += ["---", "", "## Appendix: all the code", "",
