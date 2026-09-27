@@ -129,17 +129,11 @@ The server runs on a Mac mini under launchd, exposed through a Cloudflare tunnel
 
 ## Decision model
 
-Laya is a fine-tuned classifier that picks an action (`water`, `wait_moist`, …) from a structured state: soil moisture mapped onto its training scale, air temperature, hour, month, rain forecast and evapotranspiration. It was trained on an NVIDIA RTX 4070 (`laya/train.py`). The weights (about 615 MB) are not in git; they live in a private Hugging Face repo. Indoors, rain inputs are forced to zero, and the server never lets the model water above baseline + 5%.
+Laya is a fine-tuned classifier that picks an action (`water`, `wait_moist`, …) from a structured state: soil moisture mapped onto its training scale, air temperature, hour, month, rain forecast and evapotranspiration. Indoors, rain inputs are forced to zero, and the server never lets the model water above baseline + 5%.
 
 ## Large files
 
 Videos, full-size design frames and test captures are in the [`prep-media` release](https://github.com/matthewlos/Shellhacks-Hackathon-Project/releases/tag/prep-media) (`videos-and-audio.zip`, `design-frames.zip`, `test-captures.zip`). Unzip them at the repo root and each file lands back in its folder.
-
-## Project docs
-
-- `PLAN.md`: build plan, wiring history, demo script, judge Q&A, sponsor tracks, risks. Sections 5e–5g are the most recent.
-- `farm-hand/PLAN.md`: plan with a code appendix. `WORK_HISTORY.md`: how `ui/` was built.
-- `pitch/story_final.md`: the pitch, plus the rules for what may be claimed on stage.
 
 ## Licenses
 
