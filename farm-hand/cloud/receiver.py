@@ -84,6 +84,7 @@ if LAYA_DIR.exists() and any(LAYA_DIR.iterdir()):
     except Exception as e:
         print("[laya] not used:", repr(e)[:200])
 
+LAYA_LOCK = threading.Lock()          # one inference at a time: two readings at once (USB + WiFi) crash Metal (MPS)
 _fc = {"t": 0, "v": {}}
 
 
@@ -128,7 +129,12 @@ def decide(r):
         "hours_since_real_rain": 48, "county_drought": "unknown"}
     try:
         agent, qs = LAYA
-        pick = agent.predict(state, qs)["answers"]["action"]["choice"]
+        if not LAYA_LOCK.acquire(timeout=0.5):                  # busy with another reading: this one uses the rule
+            return rule
+        try:
+            pick = agent.predict(state, qs)["answers"]["action"]["choice"]
+        finally:
+            LAYA_LOCK.release()
     except Exception as e:
         return rule[0], rule[1], rule[2], rule[3] + f" (decision model failed: {type(e).__name__})"
     secs = rule[2] if pick == "water" else 0
@@ -686,6 +692,31 @@ def _queue_cmd(cmd):
         PUMP_CMD["t"] = time.time()
 
 
+def _demo_send(pot, secs):
+    """Queue a demo pour and remember it: if the board doesn't report that pump on, send it again (weak WiFi can
+    lose the reply that carries the command)."""
+    cmd = f"pump {pot} {secs:g}"
+    _queue_cmd(cmd)
+    DEMO.setdefault("expect", {})[pot] = {"cmd": cmd, "t": time.time(), "tries": 1, "until": time.time() + secs}
+
+
+def _demo_confirm():
+    r = LAST["reading"] or {}
+    pumps = r.get("pumps") or [0, 0]
+    now = time.time()
+    for pot, e in list(DEMO.get("expect", {}).items()):
+        idx = 0 if pot == "A" else 1
+        if len(pumps) > idx and pumps[idx]:
+            DEMO["expect"].pop(pot)                          # the board says it's running
+        elif now > e["until"]:
+            DEMO["expect"].pop(pot)                          # its time is over either way
+        elif now - e["t"] > 7 and e["tries"] < 3:
+            _queue_cmd(e["cmd"])                             # not seen running: send it again
+            e.update(t=now, tries=e["tries"] + 1)
+            DEMO["log"].append({"t": round(now - DEMO["t0"], 1), "box": pot, "pick": "retry", "s": 0,
+                                "why": f"resending {e['cmd']}: the board didn't report it running"})
+
+
 def _box_a_pct():
     r = LAST["reading"] or {}
     if (r.get("a_raw") or 0) < 500 or r.get("a_pct") is None:
@@ -722,9 +753,10 @@ def _demo_tick():
         DEMO.update(active=False, t_end=now)
         HUB.send({"type": "demo", **demo_status()})
         return
+    _demo_confirm()
     # timer box: on schedule, no questions asked
     if el >= DEMO["next_b"]:
-        _queue_cmd(f"pump B {DEMO['timer_pour']:g}")
+        _demo_send("B", DEMO["timer_pour"])
         DEMO["timer_s"] += DEMO["timer_pour"]
         DEMO["timer_pours"] += 1
         DEMO["next_b"] += DEMO_TIMER_EVERY_S
@@ -760,7 +792,7 @@ def _demo_tick():
         need = DEMO_TARGET - ms
         secs = DEMO_FIRST_SIP_S if not DEMO["learned"] else DEMO_AIM * need / max(DEMO["gain"], 0.05)
         secs = max(DEMO_SIP_MIN_S, min(DEMO_SIP_MAX_S, secs))
-        _queue_cmd(f"pump A {secs:.1f}")
+        _demo_send("A", round(secs, 1))
         DEMO["ai_s"] += secs
         DEMO["ai_sips"] += 1
         DEMO["sip"] = {"m0": ms, "s": secs, "start": now, "end": now + secs + 3, "peak": ms, "peak_t": now}

@@ -90,8 +90,11 @@ def main():
             print(f"USB back on {port}", flush=True)
             continue
         if CMD_FILE.exists():
-            cmds = CMD_FILE.read_text().splitlines()
+            stale = time.time() - CMD_FILE.stat().st_mtime > 10       # written before the bridge could send it: drop
+            cmds = [] if stale else CMD_FILE.read_text().splitlines()
             CMD_FILE.unlink()
+            if stale:
+                print("  (dropped old pump commands left from before)", flush=True)
             for c in cmds:
                 if c.strip():
                     s.write((c.strip() + "\n").encode())
@@ -116,7 +119,13 @@ def main():
                 resp = http.post(u, data=json.dumps(r), timeout=2 if u == LOCAL_URL else 5)
                 sent += resp.status_code == 200
                 fails += resp.status_code != 200
-                reply = reply or (resp.json() if resp.ok else {"error": resp.status_code})
+                j = resp.json() if resp.ok else {"error": resp.status_code}
+                reply = reply or j
+                if u != LOCAL_URL and j.get("cmd"):          # the live server's pump commands, down the cable (instant)
+                    for c in str(j["cmd"]).split(";"):
+                        if c.strip():
+                            s.write((c.strip() + "\n").encode())
+                            print(f"  > {c.strip()}  (from the live server)", flush=True)
             except requests.RequestException as e:
                 fails += 1
                 reply = reply or {"error": type(e).__name__}

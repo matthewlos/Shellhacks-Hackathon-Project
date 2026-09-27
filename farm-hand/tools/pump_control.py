@@ -34,7 +34,10 @@ TOKEN = secret("FARMHAND_TOKEN")
 
 
 def usb_up():
-    return subprocess.run(["pgrep", "-f", "usb_bridge.py"], capture_output=True).returncode == 0
+    """USB only when the bridge runs AND the ESP32 is actually on the cable (else the command would wait unsent)."""
+    import glob
+    return bool(glob.glob("/dev/cu.usbserial-*")) and \
+        subprocess.run(["pgrep", "-f", "usb_bridge.py"], capture_output=True).returncode == 0
 
 
 def wifi(cmd=None):
