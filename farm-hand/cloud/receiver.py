@@ -672,7 +672,9 @@ DEMO_TARGET, DEMO_BAND = 50.0, 1.0           # % : sip when below target - band
 DEMO_SECONDS = 300
 DEMO_TIMER_EVERY_S, DEMO_TIMER_POUR_S = 120, 30
 DEMO_ML_PER_S = float(os.environ.get("DEMO_ML_PER_S", 1.03))   # drip tip, measured: 60 ml in ~58 s (bare tube: 23.5 ml/s)
-DEMO_SIP_MIN_S, DEMO_SIP_MAX_S = 3.0, 30.0   # drip is slow: a sip needs tens of seconds to move the probe
+DEMO_SIP_MIN_S, DEMO_SIP_MAX_S = 3.0, 15.0   # small sips: water keeps spreading after the pump stops, so creep up on the target
+DEMO_FIRST_SIP_S = 10.0                      # the first sip is a probe of the soil: nothing is learned yet
+DEMO_AIM = 0.6                               # size each sip for 60% of the gap; the next sip covers the rest
 DEMO_WET_STOP = 70.0                         # never sip at or above this
 DEMO = {"active": False}
 DEMO_LOCK = threading.RLock()            # re-entrant: the tick calls demo_status() while holding it
@@ -734,38 +736,42 @@ def _demo_tick():
     DEMO["hist"] = DEMO["hist"][-6:]
     ms = sorted(v for _, v in DEMO["hist"][-3:])[len(DEMO["hist"][-3:]) // 2]     # median of the last 3: probe noise
     sip = DEMO.get("sip")
-    if sip:                                   # watching a sip soak in
-        if ms > sip["peak"]:
+    if sip:                                   # watching a sip soak in: never decide again until it has
+        if now >= sip["start"] and ms > sip["peak"]:
             sip.update(peak=ms, peak_t=now)
-        waited = now - sip["end"]
         rise = sip["peak"] - sip["m0"]
-        seen = rise > 0.3                                       # the water has reached the probe
-        settled = seen and now - sip["peak_t"] > 6              # ...and no new high for 6 s: it has spread
-        if settled or waited > max(45.0, DEMO["soak"] * 2.5):
-            if rise > 0.3:
-                DEMO["gain"] = 0.5 * DEMO["gain"] + 0.5 * (rise / sip["s"])
-                DEMO["soak"] = 0.5 * DEMO["soak"] + 0.5 * max(4.0, sip["peak_t"] - sip["end"])
-            DEMO["sip"] = None
+        if now < sip["end"]:                  # still pouring (plus the check-in delay): just watch
+            return
+        seen = rise > 0.3
+        settled = seen and now - max(sip["peak_t"], sip["end"]) > 8     # no new high for 8 s after the pour
+        if settled or now - sip["end"] > max(45.0, DEMO["soak"] * 2.5):
             if seen:
-                _demo_say(f"That {sip['s']:.1f} s sip raised the soil {rise:.1f}% after {sip['peak_t'] - sip['end']:.0f} s. "
-                          f"This soil gains about {DEMO['gain']:.2f}% per second of water.")
+                DEMO["gain"] = rise / sip["s"] if not DEMO["learned"] else 0.5 * DEMO["gain"] + 0.5 * (rise / sip["s"])
+                DEMO["soak"] = max(4.0, sip["peak_t"] - sip["end"]) if not DEMO["learned"] else \
+                    0.5 * DEMO["soak"] + 0.5 * max(4.0, sip["peak_t"] - sip["end"])
+                DEMO["learned"] = True
+                _demo_say(f"That {sip['s']:.1f} s sip raised the soil {rise:.1f}%. This soil gains about "
+                          f"{DEMO['gain']:.2f}% per second of water and takes about {DEMO['soak']:.0f} s to soak in.")
+            DEMO["sip"] = None
         return
     if ms >= DEMO_WET_STOP:
         return
     if ms < DEMO_TARGET - DEMO_BAND:
         need = DEMO_TARGET - ms
-        secs = max(DEMO_SIP_MIN_S, min(DEMO_SIP_MAX_S, 0.8 * need / max(DEMO["gain"], 0.05)))
+        secs = DEMO_FIRST_SIP_S if not DEMO["learned"] else DEMO_AIM * need / max(DEMO["gain"], 0.05)
+        secs = max(DEMO_SIP_MIN_S, min(DEMO_SIP_MAX_S, secs))
         _queue_cmd(f"pump A {secs:.1f}")
         DEMO["ai_s"] += secs
         DEMO["ai_sips"] += 1
-        DEMO["sip"] = {"m0": ms, "s": secs, "end": now + secs + 2, "peak": ms, "peak_t": now + secs + 2}
-        _demo_say(f"Soil {ms:.0f}%, target {DEMO_TARGET:.0f}%. Giving a {secs:.1f} s sip, then waiting for it to soak in.",
-                  "water", secs)
+        DEMO["sip"] = {"m0": ms, "s": secs, "start": now, "end": now + secs + 3, "peak": ms, "peak_t": now}
+        DEMO["holding"] = False
+        first = "" if DEMO["learned"] else " to learn how this soil takes water"
+        _demo_say(f"Soil {ms:.0f}%, target {DEMO_TARGET:.0f}%. Giving a {secs:.1f} s sip{first}, then waiting for it "
+                  f"to soak in.", "water", secs)
     elif not DEMO.get("holding"):
         DEMO["holding"] = True
-        _demo_say(f"Soil {ms:.0f}%, at the {DEMO_TARGET:.0f}% target. Holding off.")
-    if ms < DEMO_TARGET - DEMO_BAND:
-        DEMO["holding"] = False
+        where = "above" if ms > DEMO_TARGET + DEMO_BAND else "at"
+        _demo_say(f"Soil {ms:.0f}%, {where} the {DEMO_TARGET:.0f}% target. Holding off.")
 
 
 def _demo_loop():
@@ -788,7 +794,7 @@ def demo_start():
     with DEMO_LOCK:
         DEMO.clear()
         DEMO.update(active=True, t0=time.time(), t_end=None, next_b=0, ai_s=0.0, timer_s=0.0, ai_sips=0, timer_pours=0,
-                    gain=0.15, soak=30.0, hist=[], sip=None, holding=False, log=[])
+                    gain=0.15, soak=20.0, learned=False, hist=[], sip=None, holding=False, log=[])
     return demo_status()
 
 

@@ -99,7 +99,7 @@ void main(){
   if(top){
     float g1 = fbm(p*2.6), g2 = fbm(p*5. + 4.), g3 = vnoise(p*17.);
     float grain = g1*.58 + g2*.36 + g3*.06;
-    float wetness = sstep(.06, .82, m);
+    float wetness = sstep(.02, 1., m) * .85;          // even: 60% is damp mid-brown, only soaked soil goes dark
     vec3 dry = cSoilDry * (.80 + .40*grain);
     vec3 wet = cSoilWet * (.70 + .65*grain);
     col = mix(dry, wet, wetness);
@@ -175,7 +175,7 @@ void main(){
       dampBand = (1. - sstep(front, front + .11, x)) * (1. - wetSide) * has;
       wetSide *= 1. - .4 * clamp(x / max(front, .01), 0., 1.);              // wettest near the top
     }
-    float wetness = max(wetSide, max(dampBand * .3, sstep(.06, .82, mB) * (.72 + .25*depth)));
+    float wetness = max(wetSide, max(dampBand * .3, sstep(.02, 1., mB) * .85 * (.72 + .25*depth)));
     vec3 dryCol = cSoilDry * (.3 + 1.2 * photo) * (.9 + .2*grain) * (1. - .55 * pore);
     vec3 wetCol = cSoilWet * 1.3 * (.45 + 1.1 * photo) * (.9 + .2*grain) * (1. - .25 * pore);   // wet: darker, but the grain still shows
     col = mix(dryCol, wetCol, wetness);

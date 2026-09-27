@@ -293,8 +293,8 @@ export class FieldScene {
 
       // moisture -> soil colour; unknown -> grey (and we stop showing the last value)
       if (d.moisturePct != null) {
-        // qualitative colour ramp, not a measurement: ~15% reads as dry tan, ~80% as wet near-black
-        const target = Math.max(0, Math.min(1, (d.moisturePct - 15) / 65));
+        // even colour ramp over the whole probe scale: 0% dry tan, 50% damp mid-brown, 100% soaked dark
+        const target = Math.max(0, Math.min(1, d.moisturePct / 100));
         b.shown = b.shown == null ? target : damp(b.shown, target, 2.5, dt);
         u.uM.value = b.shown;
       }

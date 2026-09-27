@@ -85,7 +85,7 @@ export const brand = {
     probeYellow: '#d1ab48',
     soilUnknown: '#655e50',
     soilDry: '#8d7d68',
-    soilWet: '#2b2117',
+    soilWet: '#3d2e20',
     soilSub: '#6b5138',
     soilDeep: '#3a2a1e',
     sproutAlive: '#9be05a',
