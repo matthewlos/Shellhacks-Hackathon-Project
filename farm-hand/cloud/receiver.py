@@ -938,7 +938,7 @@ class Handler(BaseHTTPRequestHandler):
                 reply["cmd"] = PUMP_CMD["cmd"]
                 PUMP_CMD["sent_t"] = time.time()
             PUMP_CMD["cmd"] = None
-        self._send(200, json.dumps(reply))
+        self._send(200, json.dumps(reply, separators=(",", ":")))    # compact: the ESP32 matches "cmd":" exactly
 
     def do_GET(self):
         if not (self.path.startswith("/farmhand") or self.headers.get("X-Forwarded-Prefix") == "/farmhand"):
