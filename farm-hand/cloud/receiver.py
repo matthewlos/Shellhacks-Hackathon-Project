@@ -651,6 +651,19 @@ def soil_now():
     return v
 
 
+# ---------- remote pump control (tools/pump_control.py): a command queued here rides back in the ESP32's next reply ----------
+import re as _re
+PUMP_CMD_RE = _re.compile(r"^(pump [AB] \d{1,4}(\.\d+)?|stop)$")
+PUMP_CMD = {"cmd": None, "t": 0, "sent_t": 0}
+PUMP_CMD_LOCK = threading.Lock()
+
+
+def pump_state():
+    r = LAST["reading"] or {}
+    return {"pumps": r.get("pumps"), "test": r.get("test"), "rx": LAST["rx"], "age_s": _age(),
+            "queued": PUMP_CMD["cmd"], "queued_t": PUMP_CMD["t"], "sent_t": PUMP_CMD["sent_t"]}
+
+
 # ---------- "Listen": the farm's status read aloud by an ElevenLabs voice (POST /api/speak) ----------
 ELEVEN_VOICE = os.environ.get("ELEVENLABS_VOICE_ID", "JBFqnCBsd6RMkjVDRZzb")    # "George", a stock ElevenLabs voice
 ELEVEN_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")          # the fast, cheap one
@@ -811,6 +824,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(400, '{"ok":false,"error":"bad json"}')
         if method == "POST" and parts == ["speak"]:
             return self._speak()                                     # binary MP3, not JSON
+        if parts == ["pump"]:
+            if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
+                return self._send(401, '{"ok":false,"error":"bad token"}')
+            if method == "POST":
+                cmd = str(body.get("cmd", "")).strip()
+                if not PUMP_CMD_RE.match(cmd):
+                    return self._send(400, '{"ok":false,"error":"cmd must be \\"pump A|B <s>\\" or \\"stop\\""}')
+                with PUMP_CMD_LOCK:
+                    PUMP_CMD.update(cmd=cmd, t=time.time())
+            return self._send(200, json.dumps({"ok": True, **pump_state()}))
         try:
             code, obj = api(method, parts, urllib.parse.parse_qs(u.query), body)
         except Exception as e:                                        # never kill the thread over one bad request
@@ -908,8 +931,14 @@ class Handler(BaseHTTPRequestHandler):
         HUB.set_online(True)
         HUB.send(sample_event(r, now))
         HUB.send(decision_event(d, now))
-        self._send(200, json.dumps({"brain": d[0], "pick": d[1], "pump_a_s": round(d[2], 1), "why": d[3],
-                                    "baseline": BASELINE, "server_time": int(time.time())}))
+        reply = {"brain": d[0], "pick": d[1], "pump_a_s": round(d[2], 1), "why": d[3],
+                 "baseline": BASELINE, "server_time": int(time.time())}
+        with PUMP_CMD_LOCK:
+            if PUMP_CMD["cmd"] and time.time() - PUMP_CMD["t"] < 60:     # a command older than a minute is stale: drop it
+                reply["cmd"] = PUMP_CMD["cmd"]
+                PUMP_CMD["sent_t"] = time.time()
+            PUMP_CMD["cmd"] = None
+        self._send(200, json.dumps(reply))
 
     def do_GET(self):
         if not (self.path.startswith("/farmhand") or self.headers.get("X-Forwarded-Prefix") == "/farmhand"):

@@ -88,6 +88,11 @@ void sys_loop(void)
     }
     PUMP_fallback(&soil, CLOUD_last_ok_ms());
     CMD_update();
+    char remote[32];
+    if (CLOUD_take_cmd(remote, sizeof(remote)))
+    {
+        CMD_exec(remote);                 /* from the pump page over WiFi */
+    }
     PUMP_update();
     PUMP_timer_b();
 #if USE_OLED

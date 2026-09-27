@@ -7,6 +7,7 @@ static size_t len = 0;
 
 static void CMD_run(char *c)
 {
+    Serial.printf("{\"type\":\"cmd_rx\",\"cmd\":\"%s\"}\n", c);
     char pot = 0;
     float s = 0;
     if (sscanf(c, "pump %c %f", &pot, &s) == 2 && (pot == 'A' || pot == 'a' || pot == 'B' || pot == 'b'))
@@ -43,4 +44,11 @@ void    CMD_update(void)
             line[len++] = ch;
         }
     }
+}
+
+void    CMD_exec(const char *cmd)
+{
+    char c[sizeof(line)];
+    strlcpy(c, cmd, sizeof(c));
+    CMD_run(c);
 }

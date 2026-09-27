@@ -152,8 +152,13 @@ bool    PUMP_test(int pump, float seconds)
     return true;
 }
 
+static int t_last_pot = -1;
+static float t_last_s = 0;
+
 static void PUMP_test_report(const char *why)
 {
+    t_last_pot = t_pump;
+    t_last_s = (t_end - t_start) / 1000.0f;
     Serial.printf("{\"type\":\"pump_test\",\"state\":\"off\",\"pot\":\"%c\",\"ran_s\":%.3f,\"why\":\"%s\"}\n",
                   t_pump ? 'B' : 'A', (t_end - t_start) / 1000.0f, why);
     t_pump = -1;
@@ -163,6 +168,15 @@ static void PUMP_test_report(const char *why)
 void    PUMP_test_update(void)
 {
     if (t_done) PUMP_test_report("done");
+}
+
+static char t_json[48] = "null";
+
+const char *PUMP_test_json(void)
+{
+    if (t_pump >= 0) snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":1,\"s\":%.2f}", t_pump ? 'B' : 'A', (millis() - t_start) / 1000.0f);
+    else if (t_last_pot >= 0) snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":0,\"s\":%.3f}", t_last_pot ? 'B' : 'A', t_last_s);
+    return t_json;
 }
 
 void    PUMP_stop_all(void)

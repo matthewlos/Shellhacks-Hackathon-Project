@@ -2,20 +2,46 @@
 
   python tools/pump_control.py          then open http://127.0.0.1:8130  (also on this laptop's Tailscale IP)
 
-Needs tools/local_site.sh (or usb_bridge.py) running: that owns the ESP32's USB port. This page writes a command to
-cloud/local/usb_cmd.txt, the bridge sends it within about a second, and the board answers.
-"On" runs the pump until "Off", with the firmware's own cutoff at PUMP_TEST_MAX_S (30 s). "Off" stops both pumps.
+Two links, picked automatically:
+  USB   when tools/local_site.sh (usb_bridge.py) is running: the command goes to cloud/local/usb_cmd.txt, the bridge sends it
+        within about a second.
+  WiFi  otherwise: the command is queued on the Mac mini (POST /farmhand/api/pump, token from secrets.h) and rides back to
+        the ESP32 in its next upload reply, within about 2 s. No cable needed.
+"On" runs the pump until "Off". The firmware keeps a failsafe at PUMP_TEST_MAX_S (10 min) in case "Off" never arrives.
 """
 import json
+import re
 import subprocess
 import time
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 LOCAL = HERE.parent / "cloud" / "local"
 CMD_FILE, STATE_FILE = LOCAL / "usb_cmd.txt", LOCAL / "pump_state.json"
-PORT, MAX_S = 8130, 30
+PORT, MAX_S = 8130, 600
+SECRETS = HERE.parent / "firmware" / "sensors_live" / "include" / "secrets.h"
+
+
+def secret(name):
+    m = re.search(rf'#define\s+{name}\s+"([^"]*)"', SECRETS.read_text())
+    return m.group(1) if m else ""
+
+
+API = secret("FARMHAND_URL").replace("/reading", "/api/pump")
+TOKEN = secret("FARMHAND_TOKEN")
+
+
+def usb_up():
+    return subprocess.run(["pgrep", "-f", "usb_bridge.py"], capture_output=True).returncode == 0
+
+
+def wifi(cmd=None):
+    req = urllib.request.Request(API, method="POST" if cmd else "GET", data=json.dumps({"cmd": cmd}).encode() if cmd else None,
+                                 headers={"X-Farmhand-Token": TOKEN, "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=6) as r:
+        return json.load(r)
 
 PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Pump control</title>
@@ -35,7 +61,7 @@ button:active{transform:scale(.98)}.on{background:var(--on)}.off{background:var(
 .stopall{margin-top:16px;max-width:760px;width:100%;background:var(--ink)}
 small{color:var(--dim)}
 </style></head><body>
-<h1>Pump control</h1><p class="sub">On runs until Off (safety cutoff at MAXs s). Off stops both pumps.</p>
+<h1>Pump control</h1><p class="sub">On runs until Off. Off stops both pumps. <b id="link">…</b></p>
 <div class="grid">
  <div class="card a"><div class="head"><div class="badge">A</div><div><b>Pump 1</b><br><span>Group 1 · Box A (D13)</span></div></div>
   <div class="timer" id="tA">0.0 s</div><div class="btns"><button class="on" onclick="go('A')">On</button><button class="off" onclick="stop()">Off</button></div></div>
@@ -51,9 +77,18 @@ const st=document.getElementById('st');
 function show(p,s){document.getElementById('t'+p).textContent=s.toFixed(1)+' s'}
 async function post(path){try{const r=await fetch(path,{method:'POST'});return await r.json()}catch(e){st.textContent='Page server not reachable.';return null}}
 async function go(p){await post('/on/'+p);running=p;t0=performance.now();st.textContent='Pump '+(p=='A'?1:2)+' starting…';st.className='state run';
- clearInterval(tick);tick=setInterval(()=>{if(running)show(running,Math.min((performance.now()-t0)/1000,MAXs))},100)}
+ clearInterval(tick);tick=setInterval(()=>{if(running)show(running,(performance.now()-t0)/1000)},100)}
 async function stop(){await post('/off');running=null;clearInterval(tick);st.className='state';st.textContent='Stopping…'}
-setInterval(async()=>{try{const s=await (await fetch('/state')).json();if(!s.line)return;const l=s.line;
+let lastWifi='';
+setInterval(async()=>{try{const s=await (await fetch('/state')).json();
+ document.getElementById('link').textContent=s.link=='usb'?'Link: USB (instant)':'Link: WiFi via the Mac mini (about 2 s)';
+ if(s.link=='wifi'){const w=s.wifi;if(!w){st.textContent='WiFi: '+(s.error||'no answer');return}
+  const t=w.test;const k=JSON.stringify(t)+w.queued;if(k==lastWifi)return;lastWifi=k;
+  if(w.queued){st.className='state run';st.textContent='Sent, waiting for the board to check in…';return}
+  if(t&&t.on){st.className='state run';st.textContent='Pump '+(t.pot=='A'?1:2)+' ON ('+t.s.toFixed(1)+' s so far)'}
+  else if(t&&!t.on){show(t.pot,t.s);running=null;clearInterval(tick);st.className='state';st.textContent='Pump '+(t.pot=='A'?1:2)+' off after '+t.s.toFixed(3)+' s'}
+  return}
+ if(!s.line)return;const l=s.line;
  if(l.type=='pump_test'&&l.state=='off'){running=null;clearInterval(tick);show(l.pot,l.ran_s);st.className='state';st.textContent='Pump '+(l.pot=='A'?1:2)+' off after '+l.ran_s.toFixed(3)+' s ('+l.why+')'}
  else if(l.type=='pump_test'&&l.state=='on'){st.className='state run';st.textContent='Pump '+(l.pot=='A'?1:2)+' ON'}
  else if(l.type=='pump_test'&&l.state=='refused'){st.textContent='Refused: '+l.why}
@@ -62,9 +97,13 @@ setInterval(async()=>{try{const s=await (await fetch('/state')).json();if(!s.lin
 
 
 def send(cmd):
-    LOCAL.mkdir(parents=True, exist_ok=True)
-    with CMD_FILE.open("a") as f:
-        f.write(cmd + "\n")
+    if usb_up():
+        LOCAL.mkdir(parents=True, exist_ok=True)
+        with CMD_FILE.open("a") as f:
+            f.write(cmd + "\n")
+        return "usb"
+    wifi(cmd)
+    return "wifi"
 
 
 class H(BaseHTTPRequestHandler):
@@ -82,19 +121,31 @@ class H(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/state":
+            if usb_up():
+                try:
+                    st = json.loads(STATE_FILE.read_text())
+                except (OSError, ValueError):
+                    st = {}
+                return self._send(200, json.dumps({"link": "usb", **st}))
             try:
-                return self._send(200, STATE_FILE.read_text())
-            except OSError:
-                return self._send(200, "{}")
+                return self._send(200, json.dumps({"link": "wifi", "wifi": wifi()}))
+            except Exception as e:
+                return self._send(200, json.dumps({"link": "wifi", "error": type(e).__name__}))
         return self._send(200, PAGE, "text/html; charset=utf-8")
 
     def do_POST(self):
         if self.path in ("/on/A", "/on/B"):
-            send(f"pump {self.path[-1]} {MAX_S}")
-            return self._send(200, json.dumps({"sent": f"pump {self.path[-1]} on"}))
+            try:
+                via = send(f"pump {self.path[-1]} {MAX_S}")
+            except Exception as e:
+                return self._send(502, json.dumps({"error": type(e).__name__}))
+            return self._send(200, json.dumps({"sent": f"pump {self.path[-1]} on", "via": via}))
         if self.path == "/off":
-            send("stop")
-            return self._send(200, json.dumps({"sent": "stop"}))
+            try:
+                via = send("stop")
+            except Exception as e:
+                return self._send(502, json.dumps({"error": type(e).__name__}))
+            return self._send(200, json.dumps({"sent": "stop", "via": via}))
         return self._send(404, "{}")
 
 

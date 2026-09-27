@@ -22,8 +22,9 @@
 #define TIMER_B_EVERY_MS    (6UL * 3600UL * 1000UL)   /* every 6 h */
 #define TIMER_B_POUR_S      5.0f
 
-/* Flow test from the laptop over USB ("pump A 10"): measure the cup, work out ml per second */
-#define PUMP_TEST_MAX_S     30
+/* Manual run from the pump page (USB or WiFi, "pump A 60"): runs until "stop". PUMP_TEST_MAX_S is only a failsafe
+   in case the stop never arrives (a dropped connection must not flood the box). */
+#define PUMP_TEST_MAX_S     600
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +37,7 @@ void            PUMP_fallback(const SoilReading_t *soil, unsigned long last_serv
 void            PUMP_timer_b(void);                                                         /* box B's schedule */
 bool            PUMP_test(int pump, float seconds);     /* USB flow test: runs even when disarmed, max PUMP_TEST_MAX_S */
 void            PUMP_stop_all(void);
+const char     *PUMP_test_json(void);   /* {"pot":"B","on":1,"s":3.2} for the upload: the manual run now or the last one */
 
 #ifdef __cplusplus
 }
