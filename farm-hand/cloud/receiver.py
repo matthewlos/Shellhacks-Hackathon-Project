@@ -661,7 +661,7 @@ PUMP_CMD_LOCK = threading.Lock()
 def pump_state():
     r = LAST["reading"] or {}
     return {"pumps": r.get("pumps"), "test": r.get("test"), "rx": LAST["rx"], "age_s": _age(),
-            "queued": PUMP_CMD["cmd"], "queued_t": PUMP_CMD["t"], "sent_t": PUMP_CMD["sent_t"]}
+            "queued": ";".join(PUMP_CMD["extra"]) or PUMP_CMD["cmd"], "queued_t": PUMP_CMD["t"], "sent_t": PUMP_CMD["sent_t"]}
 
 
 # ---------- live demo (POST /api/demo {"action":"start"}): 5 minutes, decision model vs timer ----------
@@ -992,7 +992,10 @@ class Handler(BaseHTTPRequestHandler):
                 if not PUMP_CMD_RE.match(cmd):
                     return self._send(400, '{"ok":false,"error":"cmd must be \\"pump A|B <s>\\" or \\"stop\\""}')
                 with PUMP_CMD_LOCK:
-                    PUMP_CMD.update(cmd=cmd, t=time.time())
+                    if cmd == "stop":                       # stop wins: drop anything still waiting
+                        PUMP_CMD["extra"] = []
+                    PUMP_CMD["extra"].append(cmd)           # queue, so "pump A" then "pump B" both reach the board
+                    PUMP_CMD.update(t=time.time())
             return self._send(200, json.dumps({"ok": True, **pump_state()}))
         try:
             code, obj = api(method, parts, urllib.parse.parse_qs(u.query), body)
@@ -1096,7 +1099,7 @@ class Handler(BaseHTTPRequestHandler):
         reply = {"brain": d[0], "pick": d[1], "pump_a_s": round(d[2], 1), "why": d[3],
                  "baseline": BASELINE, "server_time": int(time.time())}
         with PUMP_CMD_LOCK:
-            cmds = PUMP_CMD["extra"]
+            cmds = PUMP_CMD["extra"] if time.time() - PUMP_CMD["t"] < 60 else []
             if PUMP_CMD["cmd"] and time.time() - PUMP_CMD["t"] < 60:     # a command older than a minute is stale: drop it
                 cmds = cmds + [PUMP_CMD["cmd"]]
             if cmds:
