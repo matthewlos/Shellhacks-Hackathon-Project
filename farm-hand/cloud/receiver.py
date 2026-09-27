@@ -668,7 +668,7 @@ def pump_state():
 # Box A: pulse and soak. Pour a short sip, wait until the water has spread to the probe, measure how much the reading
 # rose per second of pumping (the soil's absorption), and size the next sip from that. Holds DEMO_TARGET.
 # Box B: the timer pours DEMO_TIMER_POUR_S every DEMO_TIMER_EVERY_S no matter what the soil says.
-DEMO_TARGET, DEMO_BAND = 50.0, 1.0           # % : sip when below target - band
+DEMO_TARGET, DEMO_BAND = 50.0, 5.0           # % : hold 45-55; sip only below 45, aimed at the middle (50)
 DEMO_SECONDS = 300
 DEMO_TIMER_EVERY_S, DEMO_TIMER_POUR_S = 120, 30
 DEMO_ML_PER_S = float(os.environ.get("DEMO_ML_PER_S", 1.03))   # drip tip, measured: 60 ml in ~58 s (bare tube: 23.5 ml/s)
@@ -766,12 +766,12 @@ def _demo_tick():
         DEMO["sip"] = {"m0": ms, "s": secs, "start": now, "end": now + secs + 3, "peak": ms, "peak_t": now}
         DEMO["holding"] = False
         first = "" if DEMO["learned"] else " to learn how this soil takes water"
-        _demo_say(f"Soil {ms:.0f}%, target {DEMO_TARGET:.0f}%. Giving a {secs:.1f} s sip{first}, then waiting for it "
-                  f"to soak in.", "water", secs)
+        _demo_say(f"Soil {ms:.0f}%, below the {DEMO_TARGET - DEMO_BAND:.0f}-{DEMO_TARGET + DEMO_BAND:.0f}% range. "
+                  f"Giving a {secs:.1f} s sip{first}, then waiting for it to soak in.", "water", secs)
     elif not DEMO.get("holding"):
         DEMO["holding"] = True
-        where = "above" if ms > DEMO_TARGET + DEMO_BAND else "at"
-        _demo_say(f"Soil {ms:.0f}%, {where} the {DEMO_TARGET:.0f}% target. Holding off.")
+        where = "above" if ms > DEMO_TARGET + DEMO_BAND else "inside"
+        _demo_say(f"Soil {ms:.0f}%, {where} the {DEMO_TARGET - DEMO_BAND:.0f}-{DEMO_TARGET + DEMO_BAND:.0f}% range. Holding off.")
 
 
 def _demo_loop():
