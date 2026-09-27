@@ -37,6 +37,7 @@ LOCAL_URL = "http://127.0.0.1:8120/farmhand/reading"
 # Commands for the ESP32 (e.g. "pump A 10", "stop", "relay low"): write them to this file, one per line.
 # The bridge owns the USB port, so it sends them and prints the board's answer.
 CMD_FILE = HERE.parent / "cloud" / "local" / "usb_cmd.txt"
+STATE_FILE = HERE.parent / "cloud" / "local" / "pump_state.json"   # last pump / command reply, for tools/pump_control.py
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 
 
@@ -97,6 +98,10 @@ def main():
                     print(f"  > {c.strip()}", flush=True)
         if line.startswith(('{"type":"pump', '{"type":"cmd"')):
             print(f"  < {line}", flush=True)
+            try:
+                STATE_FILE.write_text(json.dumps({"t": time.time(), "line": json.loads(line)}))
+            except (OSError, ValueError):
+                pass
         if not line.startswith('{"type":"sens"'):
             continue
         try:
