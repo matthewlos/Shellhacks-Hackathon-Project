@@ -18,13 +18,14 @@
 #define DS18B20_PIN_2 4
 
 /* Soil probe pinout (AOUT), ADC1 pins (ADC2 stops working while WiFi is on) */
-#define SOIL_A_PIN 35
-#define SOIL_B_PIN 34
+#define SOIL_A_PIN 34
+#define SOIL_B_PIN 35
 
-/* Relay pinout (soldered board 2026-09-26). RELAY_ON_LEVEL: HIGH for the PN2222 driver or a high-level trigger module,
+/* Box A (decision model) = group 2: pump D22, soil D34, temp D4. Box B (timer) = group 1: pump D13, soil D35, temp D21.
+   Relay pinout (soldered board 2026-09-26). RELAY_ON_LEVEL: HIGH for the PN2222 driver or a high-level trigger module,
    LOW for a low-level trigger module */
-#define RELAY_A_PIN 13
-#define RELAY_B_PIN 22
+#define RELAY_A_PIN 22
+#define RELAY_B_PIN 13
 #ifndef RELAY_ON_LEVEL
 #define RELAY_ON_LEVEL HIGH
 #endif

@@ -51,8 +51,8 @@ LINK_TIMEOUT_S = 60                          # no reading for this long = the ES
 # Applied at read time (the chip ids are stored with every reading), so fixing it also fixes the history.
 TEMP_BOX = {"A": "2872EB240000003C", "B": "28B60E2400000077"}
 # The ESP32 turns raw into % itself (firmware/sensors_live/lib/comp_soil/comp_soil.cpp). Mirrored here for the web app.
-FIRMWARE_CAL = {"A": {"airRaw": 3450, "waterRaw": 1875, "calibratedAt": 1790438400000},    # D35 (board rewired), water measured 2026-09-26
-                "B": {"airRaw": 3400, "waterRaw": 1507, "calibratedAt": 1790179200000}}    # D34 (board rewired), measured 2026-09-23
+FIRMWARE_CAL = {"A": {"airRaw": 3400, "waterRaw": 1507, "calibratedAt": 1790179200000},    # D34, group 2 = box A (decision model)
+                "B": {"airRaw": 3450, "waterRaw": 1875, "calibratedAt": 1790438400000}}    # D35, group 1 = box B (timer)
 
 db = sqlite3.connect(DB_PATH, check_same_thread=False)
 db.executescript("""
@@ -202,7 +202,7 @@ def _temp_ok(c):                             # DS18B20: -127 = not answering, 85
     return _num(c) and -55 < c < 85
 
 
-TEMP_PIN = {"A": 21, "B": 4}                # soldered board: the data pin decides the box, whichever probe is on it
+TEMP_PIN = {"A": 4, "B": 21}                # soldered board: the data pin decides the box, whichever probe is on it
 
 
 def box_temp(r, box):
@@ -654,7 +654,7 @@ def soil_now():
 # ---------- remote pump control (tools/pump_control.py): a command queued here rides back in the ESP32's next reply ----------
 import re as _re
 PUMP_CMD_RE = _re.compile(r"^(pump [AB] \d{1,4}(\.\d+)?|stop)$")
-PUMP_CMD = {"cmd": None, "t": 0, "sent_t": 0}
+PUMP_CMD = {"cmd": None, "t": 0, "sent_t": 0, "extra": []}     # extra: commands the demo queues, sent with the next reply
 PUMP_CMD_LOCK = threading.Lock()
 
 
@@ -662,6 +662,145 @@ def pump_state():
     r = LAST["reading"] or {}
     return {"pumps": r.get("pumps"), "test": r.get("test"), "rx": LAST["rx"], "age_s": _age(),
             "queued": PUMP_CMD["cmd"], "queued_t": PUMP_CMD["t"], "sent_t": PUMP_CMD["sent_t"]}
+
+
+# ---------- live demo (POST /api/demo {"action":"start"}): 5 minutes, decision model vs timer ----------
+# Box A: pulse and soak. Pour a short sip, wait until the water has spread to the probe, measure how much the reading
+# rose per second of pumping (the soil's absorption), and size the next sip from that. Holds DEMO_TARGET.
+# Box B: the timer pours DEMO_TIMER_POUR_S every DEMO_TIMER_EVERY_S no matter what the soil says.
+DEMO_TARGET, DEMO_BAND = 50.0, 1.0           # % : sip when below target - band
+DEMO_SECONDS = 300
+DEMO_TIMER_EVERY_S, DEMO_TIMER_POUR_S = 120, 30
+DEMO_ML_PER_S = float(os.environ.get("DEMO_ML_PER_S", 1.03))   # drip tip, measured: 60 ml in ~58 s (bare tube: 23.5 ml/s)
+DEMO_SIP_MIN_S, DEMO_SIP_MAX_S = 3.0, 30.0   # drip is slow: a sip needs tens of seconds to move the probe
+DEMO_WET_STOP = 70.0                         # never sip at or above this
+DEMO = {"active": False}
+DEMO_LOCK = threading.RLock()            # re-entrant: the tick calls demo_status() while holding it
+
+
+def _queue_cmd(cmd):
+    with PUMP_CMD_LOCK:
+        PUMP_CMD["extra"].append(cmd)
+        PUMP_CMD["t"] = time.time()
+
+
+def _box_a_pct():
+    r = LAST["reading"] or {}
+    if (r.get("a_raw") or 0) < 500 or r.get("a_pct") is None:
+        return None
+    return float(r["a_pct"])
+
+
+def demo_status():
+    with DEMO_LOCK:
+        d = dict(DEMO)
+    if not d.get("t0"):
+        return {"active": False}
+    el = min(DEMO_SECONDS, (time.time() if d["active"] else d["t_end"]) - d["t0"])
+    return {"active": d["active"], "elapsed_s": round(el, 1), "seconds": DEMO_SECONDS, "target": DEMO_TARGET,
+            "ai_ml": round(d["ai_s"] * DEMO_ML_PER_S), "timer_ml": round(d["timer_s"] * DEMO_ML_PER_S),
+            "ai_sips": d["ai_sips"], "timer_pours": d["timer_pours"],
+            "learned_pct_per_s": round(d["gain"], 2), "learned_soak_s": round(d["soak"]),
+            "log": d["log"][-12:]}
+
+
+def _demo_say(why, pick="wait_moist", secs=0.0):
+    d = ("laya", pick, secs, why)
+    now = time.time()
+    LAST.update(decision=d, decision_t=now)
+    HUB.send(decision_event(d, now))
+    DEMO["log"].append({"t": round(now - DEMO["t0"], 1), "box": "A", "pick": pick, "s": round(secs, 1), "why": why})
+
+
+def _demo_tick():
+    now = time.time()
+    el = now - DEMO["t0"]
+    if el >= DEMO_SECONDS:
+        _queue_cmd("stop")
+        DEMO.update(active=False, t_end=now)
+        HUB.send({"type": "demo", **demo_status()})
+        return
+    # timer box: on schedule, no questions asked
+    if el >= DEMO["next_b"]:
+        _queue_cmd(f"pump B {DEMO_TIMER_POUR_S}")
+        DEMO["timer_s"] += DEMO_TIMER_POUR_S
+        DEMO["timer_pours"] += 1
+        DEMO["next_b"] += DEMO_TIMER_EVERY_S
+        DEMO["log"].append({"t": round(el, 1), "box": "B", "pick": "water", "s": DEMO_TIMER_POUR_S, "why": "timer: it's time"})
+    m = _box_a_pct()
+    if m is None:
+        return
+    DEMO["hist"].append((now, m))
+    DEMO["hist"] = DEMO["hist"][-6:]
+    ms = sorted(v for _, v in DEMO["hist"][-3:])[len(DEMO["hist"][-3:]) // 2]     # median of the last 3: probe noise
+    sip = DEMO.get("sip")
+    if sip:                                   # watching a sip soak in
+        if ms > sip["peak"]:
+            sip.update(peak=ms, peak_t=now)
+        waited = now - sip["end"]
+        rise = sip["peak"] - sip["m0"]
+        seen = rise > 0.3                                       # the water has reached the probe
+        settled = seen and now - sip["peak_t"] > 6              # ...and no new high for 6 s: it has spread
+        if settled or waited > max(45.0, DEMO["soak"] * 2.5):
+            if rise > 0.3:
+                DEMO["gain"] = 0.5 * DEMO["gain"] + 0.5 * (rise / sip["s"])
+                DEMO["soak"] = 0.5 * DEMO["soak"] + 0.5 * max(4.0, sip["peak_t"] - sip["end"])
+            DEMO["sip"] = None
+            if seen:
+                _demo_say(f"That {sip['s']:.1f} s sip raised the soil {rise:.1f}% after {sip['peak_t'] - sip['end']:.0f} s. "
+                          f"This soil gains about {DEMO['gain']:.2f}% per second of water.")
+        return
+    if ms >= DEMO_WET_STOP:
+        return
+    if ms < DEMO_TARGET - DEMO_BAND:
+        need = DEMO_TARGET - ms
+        secs = max(DEMO_SIP_MIN_S, min(DEMO_SIP_MAX_S, 0.8 * need / max(DEMO["gain"], 0.05)))
+        _queue_cmd(f"pump A {secs:.1f}")
+        DEMO["ai_s"] += secs
+        DEMO["ai_sips"] += 1
+        DEMO["sip"] = {"m0": ms, "s": secs, "end": now + secs + 2, "peak": ms, "peak_t": now + secs + 2}
+        _demo_say(f"Soil {ms:.0f}%, target {DEMO_TARGET:.0f}%. Giving a {secs:.1f} s sip, then waiting for it to soak in.",
+                  "water", secs)
+    elif not DEMO.get("holding"):
+        DEMO["holding"] = True
+        _demo_say(f"Soil {ms:.0f}%, at the {DEMO_TARGET:.0f}% target. Holding off.")
+    if ms < DEMO_TARGET - DEMO_BAND:
+        DEMO["holding"] = False
+
+
+def _demo_loop():
+    last_push = 0
+    while True:
+        time.sleep(1)
+        with DEMO_LOCK:
+            if not DEMO.get("active"):
+                continue
+            try:
+                _demo_tick()
+            except Exception as e:
+                print("[demo]", repr(e)[:200])
+        if time.time() - last_push > 2:
+            last_push = time.time()
+            HUB.send({"type": "demo", **demo_status()})
+
+
+def demo_start():
+    with DEMO_LOCK:
+        DEMO.clear()
+        DEMO.update(active=True, t0=time.time(), t_end=None, next_b=0, ai_s=0.0, timer_s=0.0, ai_sips=0, timer_pours=0,
+                    gain=0.15, soak=30.0, hist=[], sip=None, holding=False, log=[])
+    return demo_status()
+
+
+def demo_stop():
+    with DEMO_LOCK:
+        if DEMO.get("active"):
+            DEMO.update(active=False, t_end=time.time())
+    _queue_cmd("stop")
+    return demo_status()
+
+
+threading.Thread(target=_demo_loop, daemon=True).start()
 
 
 # ---------- "Listen": the farm's status read aloud by an ElevenLabs voice (POST /api/speak) ----------
@@ -824,6 +963,15 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(400, '{"ok":false,"error":"bad json"}')
         if method == "POST" and parts == ["speak"]:
             return self._speak()                                     # binary MP3, not JSON
+        if parts == ["demo"]:
+            if method == "GET":
+                return self._send(200, json.dumps(demo_status()))
+            if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
+                return self._send(401, '{"ok":false,"error":"bad token"}')
+            act = body.get("action")
+            if act not in ("start", "stop"):
+                return self._send(400, '{"ok":false,"error":"action must be start or stop"}')
+            return self._send(200, json.dumps(demo_start() if act == "start" else demo_stop()))
         if parts == ["pump"]:
             if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
                 return self._send(401, '{"ok":false,"error":"bad token"}')
@@ -925,6 +1073,8 @@ class Handler(BaseHTTPRequestHandler):
         r["t1"] = (t[0].get("c") if t and isinstance(t[0], dict) else (t[0] if t else None))
         r["t2"] = (t[1].get("c") if len(t) > 1 and isinstance(t[1], dict) else (t[1] if len(t) > 1 else None))
         d = decide(r)
+        if DEMO.get("active") and LAST.get("decision"):
+            d = (LAST["decision"][0], LAST["decision"][1], 0, LAST["decision"][3])     # the demo drives box A
         save(r, d, self.headers.get("X-Forwarded-For", self.client_address[0]))
         now = time.time()
         LAST.update(reading=r, decision=d, rx=now, decision_t=now)
@@ -934,10 +1084,13 @@ class Handler(BaseHTTPRequestHandler):
         reply = {"brain": d[0], "pick": d[1], "pump_a_s": round(d[2], 1), "why": d[3],
                  "baseline": BASELINE, "server_time": int(time.time())}
         with PUMP_CMD_LOCK:
+            cmds = PUMP_CMD["extra"]
             if PUMP_CMD["cmd"] and time.time() - PUMP_CMD["t"] < 60:     # a command older than a minute is stale: drop it
-                reply["cmd"] = PUMP_CMD["cmd"]
+                cmds = cmds + [PUMP_CMD["cmd"]]
+            if cmds:
+                reply["cmd"] = ";".join(cmds)[:60]
                 PUMP_CMD["sent_t"] = time.time()
-            PUMP_CMD["cmd"] = None
+            PUMP_CMD["cmd"], PUMP_CMD["extra"] = None, []
         self._send(200, json.dumps(reply, separators=(",", ":")))    # compact: the ESP32 matches "cmd":" exactly
 
     def do_GET(self):

@@ -4,10 +4,10 @@
 
 static const int pins[SOIL_COUNT]      = {SOIL_A_PIN, SOIL_B_PIN, 32, 33};
 
-/* Calibration follows the pin: D35 water 1875 measured 2026-09-26, air ~3450 from open-air readings (fine-tune once it's
+/* Calibration follows the pin (A = D34, B = D35): D35 water 1875 measured 2026-09-26, air ~3450 from open-air readings (fine-tune once it's
    fully dry). D34 measured 2026-09-23. D32/D33 unused. Re-check both if the probes were swapped when the board was soldered. */
-static const int raw_air[SOIL_COUNT]   = {3450, 3400, 3400, 3400};
-static const int raw_water[SOIL_COUNT] = {1875, 1507, 1507, 1507};
+static const int raw_air[SOIL_COUNT]   = {3400, 3450, 3400, 3400};
+static const int raw_water[SOIL_COUNT] = {1507, 1875, 1507, 1507};
 
 StatusCode_e    SOIL_init(void)
 {

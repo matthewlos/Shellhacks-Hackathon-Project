@@ -48,7 +48,13 @@ void    CMD_update(void)
 
 void    CMD_exec(const char *cmd)
 {
-    char c[sizeof(line)];
-    strlcpy(c, cmd, sizeof(c));
-    CMD_run(c);
+    /* the server may send several at once, separated by ';' ("pump A 4.5;pump B 30") */
+    char all[64];
+    strlcpy(all, cmd, sizeof(all));
+    for (char *part = strtok(all, ";"); part; part = strtok(nullptr, ";"))
+    {
+        char c[sizeof(line)];
+        strlcpy(c, part, sizeof(c));
+        CMD_run(c);
+    }
 }

@@ -115,74 +115,84 @@ void    PUMP_fallback(const SoilReading_t *soil, unsigned long last_server_ok_ms
         }
     }
 }
-/* ---------- flow test (USB command only) ---------- */
-/* A hardware timer turns the pump off on the exact millisecond (the main loop only runs once a second),
+/* ---------- manual runs (USB or WiFi command): each pump on its own timer, both can run at once ---------- */
+/* A hardware timer turns each pump off on the exact millisecond (the main loop only runs once a second),
    so ml measured / seconds run is a true flow rate. */
 #include <Ticker.h>
 
-static Ticker t_timer;
-static volatile unsigned long t_start = 0, t_end = 0;
-static volatile int t_pump = -1;
-static volatile bool t_done = false;
+static Ticker t_timer[2];
+static volatile unsigned long t_start[2] = {0, 0}, t_end[2] = {0, 0};
+static volatile bool t_on[2] = {false, false}, t_done[2] = {false, false};
+static int t_last = -1;                      /* the pump most recently started or stopped: reported in the upload */
+static float t_last_s[2] = {0, 0};
 
-static void PUMP_test_timer(void)
+static void PUMP_test_timer(int pump)
 {
-    if (t_pump < 0) return;
-    RELAY_set(t_pump, false);
-    t_end = millis();
-    t_done = true;
+    if (!t_on[pump]) return;
+    RELAY_set(pump, false);
+    t_end[pump] = millis();
+    t_done[pump] = true;
 }
 
 bool    PUMP_test(int pump, float seconds)
 {
     if (pump != 0 && pump != 1) return false;
-    if (running || b_running || t_pump >= 0)
+    if (t_on[pump] || (pump == 0 && running) || (pump == 1 && b_running))
     {
-        Serial.println("{\"type\":\"pump_test\",\"state\":\"refused\",\"why\":\"a pump is already running\"}");
+        Serial.printf("{\"type\":\"pump_test\",\"state\":\"refused\",\"pot\":\"%c\",\"why\":\"this pump is already running\"}\n", pump ? 'B' : 'A');
         return false;
     }
     seconds = constrain(seconds, 0.5f, (float)PUMP_TEST_MAX_S);
-    t_done = false;
-    t_pump = pump;
-    t_start = millis();
+    t_done[pump] = false;
+    t_on[pump] = true;
+    t_last = pump;
+    t_start[pump] = millis();
     RELAY_set(pump, true);
-    t_timer.once_ms((uint32_t)(seconds * 1000), PUMP_test_timer);
+    t_timer[pump].once_ms((uint32_t)(seconds * 1000), PUMP_test_timer, pump);
     Serial.printf("{\"type\":\"pump_test\",\"state\":\"on\",\"pot\":\"%c\",\"for_s\":%.1f,\"on_level\":\"%s\"}\n",
                   pump ? 'B' : 'A', seconds, RELAY_on_level() ? "HIGH" : "LOW");
     return true;
 }
 
-static int t_last_pot = -1;
-static float t_last_s = 0;
-
-static void PUMP_test_report(const char *why)
+static void PUMP_test_report(int pump, const char *why)
 {
-    t_last_pot = t_pump;
-    t_last_s = (t_end - t_start) / 1000.0f;
+    t_last_s[pump] = (t_end[pump] - t_start[pump]) / 1000.0f;
+    t_last = pump;
     Serial.printf("{\"type\":\"pump_test\",\"state\":\"off\",\"pot\":\"%c\",\"ran_s\":%.3f,\"why\":\"%s\"}\n",
-                  t_pump ? 'B' : 'A', (t_end - t_start) / 1000.0f, why);
-    t_pump = -1;
-    t_done = false;
+                  pump ? 'B' : 'A', t_last_s[pump], why);
+    t_on[pump] = false;
+    t_done[pump] = false;
 }
 
 void    PUMP_test_update(void)
 {
-    if (t_done) PUMP_test_report("done");
+    for (int p = 0; p < 2; p++)
+    {
+        if (t_done[p]) PUMP_test_report(p, "done");
+    }
 }
 
 static char t_json[48] = "null";
 
 const char *PUMP_test_json(void)
 {
-    if (t_pump >= 0) snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":1,\"s\":%.2f}", t_pump ? 'B' : 'A', (millis() - t_start) / 1000.0f);
-    else if (t_last_pot >= 0) snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":0,\"s\":%.3f}", t_last_pot ? 'B' : 'A', t_last_s);
+    int p = t_on[0] ? 0 : t_on[1] ? 1 : t_last;       /* a running pump first, else the last one */
+    if (p < 0) return "null";
+    if (t_on[p]) snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":1,\"s\":%.2f}", p ? 'B' : 'A', (millis() - t_start[p]) / 1000.0f);
+    else snprintf(t_json, sizeof(t_json), "{\"pot\":\"%c\",\"on\":0,\"s\":%.3f}", p ? 'B' : 'A', t_last_s[p]);
     return t_json;
 }
 
 void    PUMP_stop_all(void)
 {
-    t_timer.detach();
+    for (int p = 0; p < 2; p++)
+    {
+        t_timer[p].detach();
+    }
     RELAY_all_off();
-    if (t_pump >= 0) { t_end = millis(); PUMP_test_report("stopped"); }
+    for (int p = 0; p < 2; p++)
+    {
+        if (t_on[p]) { t_end[p] = millis(); PUMP_test_report(p, "stopped"); }
+    }
     running = b_running = false;
 }

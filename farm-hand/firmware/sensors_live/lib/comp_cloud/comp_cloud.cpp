@@ -19,7 +19,7 @@ static unsigned long last_send = 0;
 static float pump_a_s = 0;
 static volatile bool fresh = false;
 static volatile unsigned long last_ok = 0;
-static char cmd_buf[32] = "";
+static char cmd_buf[64] = "";
 static volatile bool cmd_new = false;
 
 /* The upload runs on core 0 in its own task, so a slow HTTPS round trip never stalls the 1 s sensor loop.
