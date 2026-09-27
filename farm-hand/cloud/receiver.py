@@ -724,11 +724,11 @@ def _demo_tick():
         return
     # timer box: on schedule, no questions asked
     if el >= DEMO["next_b"]:
-        _queue_cmd(f"pump B {DEMO_TIMER_POUR_S}")
-        DEMO["timer_s"] += DEMO_TIMER_POUR_S
+        _queue_cmd(f"pump B {DEMO['timer_pour']:g}")
+        DEMO["timer_s"] += DEMO["timer_pour"]
         DEMO["timer_pours"] += 1
         DEMO["next_b"] += DEMO_TIMER_EVERY_S
-        DEMO["log"].append({"t": round(el, 1), "box": "B", "pick": "water", "s": DEMO_TIMER_POUR_S, "why": "timer: it's time"})
+        DEMO["log"].append({"t": round(el, 1), "box": "B", "pick": "water", "s": DEMO["timer_pour"], "why": "timer: it's time"})
     m = _box_a_pct()
     if m is None:
         return
@@ -790,9 +790,10 @@ def _demo_loop():
             HUB.send({"type": "demo", **demo_status()})
 
 
-def demo_start():
+def demo_start(timer_pour=None):
     with DEMO_LOCK:
         DEMO.clear()
+        DEMO.update(timer_pour=float(timer_pour) if timer_pour else float(DEMO_TIMER_POUR_S))
         DEMO.update(active=True, t0=time.time(), t_end=None, next_b=0, ai_s=0.0, timer_s=0.0, ai_sips=0, timer_pours=0,
                     gain=0.15, soak=20.0, learned=False, hist=[], sip=None, holding=False, log=[])
     return demo_status()
@@ -977,7 +978,9 @@ class Handler(BaseHTTPRequestHandler):
             act = body.get("action")
             if act not in ("start", "stop"):
                 return self._send(400, '{"ok":false,"error":"action must be start or stop"}')
-            return self._send(200, json.dumps(demo_start() if act == "start" else demo_stop()))
+            tp = body.get("timer_s")
+            tp = tp if isinstance(tp, (int, float)) and 1 <= tp <= 120 else None
+            return self._send(200, json.dumps(demo_start(tp) if act == "start" else demo_stop()))
         if parts == ["pump"]:
             if not TOKEN or self.headers.get("X-Farmhand-Token") != TOKEN:
                 return self._send(401, '{"ok":false,"error":"bad token"}')
