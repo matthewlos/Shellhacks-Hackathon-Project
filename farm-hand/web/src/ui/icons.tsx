@@ -7,9 +7,14 @@ const I = ({ children, size = 18 }: { children: ReactNode; size?: number }) => (
   </svg>
 );
 
+/** Taproot: a sprout above the ground line, its root the soil probe (farm-hand/brand/logo/taproot). */
 export const Logo = ({ size = 22 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
-    <path d={brand.logoPath} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden>
+    <path d="M24 19.5C24 12.5 19 8 10.5 8c0 7.5 5 11.5 13.5 11.5z" fill="var(--good)" />
+    <path d="M24 15.5C24 9.5 27.8 5 36.5 5c0 6.5-4 10.5-12.5 10.5z" fill="var(--good)" />
+    <path d="M24 15v11" stroke="var(--good)" strokeWidth="3.6" />
+    <path d="M8 27.5h32" stroke="var(--text)" strokeWidth="3.6" strokeLinecap="round" />
+    <path d="M20.2 31.2h7.6v10L24 46.5l-3.8-5.3z" fill="var(--accent)" />
   </svg>
 );
 
