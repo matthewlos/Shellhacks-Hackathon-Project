@@ -37,7 +37,8 @@ export function Forecast() {
           </p>
           <ol className="days" aria-label="Rain per day, next 7 days">
             {days.map((d, i) => (
-              <li key={d.date} title={`${d.precipMm.toFixed(1)} mm${d.precipProb != null ? `, ${d.precipProb}% chance` : ''}`}>
+              <li key={d.date} aria-label={`${day(d.date, i)}: ${d.precipMm.toFixed(1)} mm${d.precipProb != null ? `, ${d.precipProb}% chance` : ''}`}>
+                <span className="day-mm num" aria-hidden>{d.precipMm < 0.05 ? '0' : d.precipMm.toFixed(1)}</span>
                 <span className="day-bar"><i style={{ transform: `scaleY(${Math.min(1, d.precipMm / top)})` }} /></span>
                 <span className="day-name">{day(d.date, i)}</span>
               </li>

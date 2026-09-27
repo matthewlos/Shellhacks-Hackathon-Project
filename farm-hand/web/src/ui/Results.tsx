@@ -7,6 +7,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../data/store';
 import { IconDrop, IconPause, IconPlay } from './icons';
+import { useTouchRange } from './touchRange';
 
 interface Pour { t: number; box: 'A' | 'B'; s: number; ml: number; by: string }
 interface Pt { h: number; a: number; b: number; ta: number; tb: number }
@@ -74,6 +75,8 @@ export function ResultsPanel() {
   const [h, setH] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState<1 | 2>(1);
+  // scrub by touch: the playhead jumps to the finger and follows it (touchRange.ts); pauses like a drag does
+  const scrub = useTouchRange((v) => { setPlaying(false); setH(v); });
   const hRef = useRef(0);
   hRef.current = h;
 
@@ -191,7 +194,7 @@ export function ResultsPanel() {
         <button className="btn btn-icon" aria-label={playing ? 'Pause' : 'Play'} onClick={() => { if (done) setH(0); setPlaying(!playing); }}>
           {playing ? <IconPause /> : <IconPlay />}
         </button>
-        <input type="range" min={0} max={r.hours} step="any" value={h} aria-label="Timelapse time"
+        <input ref={scrub} type="range" min={0} max={r.hours} step="any" value={h} aria-label="Timelapse time"
           onChange={(e) => { setPlaying(false); setH(+e.target.value); }} />
         <div className="segmented res-speed" role="group" aria-label="Speed">
           {([1, 2] as const).map((s) => <button key={s} className={speed === s ? 'is-on' : ''} aria-pressed={speed === s} onClick={() => setSpeed(s)}>{s}x</button>)}

@@ -30,14 +30,15 @@
 
 /* the words, under the button: always for the browser voice, and as captions for the ElevenLabs clip */
 .listen-cap {
-  position: absolute; top: calc(100% + 8px); right: 0; z-index: 4;   /* right-aligned under the status row: clear of the readout card */ width: min(420px, calc(100vw - 32px));
-  padding: 12px 40px 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel);
+  /* left-aligned under the status row, as wide as the status column (so it stays clear of the readout), never wider than the top bar (100cqw) */
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 4; width: min(420px, max(100%, 300px), 100cqw);
+  padding: 12px 44px 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel);
   box-shadow: var(--shadow); font-size: 15px; line-height: 1.45; color: var(--text); text-wrap: pretty;
   animation: listen-in 200ms var(--ease-out) both;
 }
 .listen-note { margin-top: 6px; font-size: 13px; color: var(--text-dim); }
 .listen-x {
-  position: absolute; top: 6px; right: 6px; width: 28px; height: 28px; display: grid; place-items: center;
+  position: absolute; top: 0; right: 0; width: 44px; height: 44px; display: grid; place-items: center;
   border: 0; border-radius: var(--r-ctl); background: transparent; color: var(--text-dim);
 }
 @media (hover: hover) and (pointer: fine) { .listen-x:hover { background: var(--sunk); } }
@@ -46,13 +47,17 @@
 /* narrow top bar (same breakpoint as the status pill in styles.css) */
 @container (max-width: 700px) {
   .listen { height: 32px; font-size: 14px; padding: 0 12px 0 10px; gap: 6px; }
-  .listen-cap { left: 0; right: auto; width: min(420px, 100cqw); }   /* anchored to the status row, full width of the bar */
 }
 /* phone on its side: the slim one-row bar */
 @media (max-height: 520px) and (orientation: landscape) {
   .listen-wrap { margin-top: 0; }
   .listen { height: 28px; font-size: 12px; padding: 0 10px 0 8px; }
   .listen .listen-ico { width: 15px; height: 15px; }
+}
+
+/* touch (iPad): a full 44 px target, matching the status pill beside it (styles.css) */
+@media (pointer: coarse) and (min-height: 521px) {
+  .tb .listen { height: 44px; padding: 0 18px 0 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

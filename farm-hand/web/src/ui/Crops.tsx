@@ -19,6 +19,7 @@ import type { CropScore } from '../data/types';
 import { CropIcon } from './CropIcons';
 import { moistureOf, useBox } from './farmData';
 import { IconCheck } from './icons';
+import { useTouchRange } from './touchRange';
 import './crops.css';
 
 const DEFAULT_M = 45;
@@ -130,6 +131,8 @@ function Dial(props: {
 }) {
   const { id, label, unit, unitText, value, range, live, hint, tone, onChange } = props;
   const at = (v: number) => (clamp(v, range) - range[0]) / (range[1] - range[0]);
+  // by touch the thumb follows the finger from wherever it lands on the track (see touchRange.ts); 30 px = --thumb
+  const touchRef = useTouchRange((v) => { if (v !== value) onChange(v); }, 30);
   return (
     <div className={`cs-dial is-${tone}`}>
       <div className="cs-dial-head">
@@ -139,7 +142,7 @@ function Dial(props: {
       <div className="cs-track" style={{ ['--p' as string]: at(value), ['--live' as string]: live == null ? 0 : at(live) }}>
         {live != null && <span className="cs-live" aria-hidden />}
         <input
-          id={id} type="range" min={range[0]} max={range[1]} step={1} value={value}
+          ref={touchRef} id={id} type="range" min={range[0]} max={range[1]} step={1} value={value}
           aria-valuetext={`${value} ${unitText}`}
           onChange={(e) => onChange(Number(e.currentTarget.value))}
         />

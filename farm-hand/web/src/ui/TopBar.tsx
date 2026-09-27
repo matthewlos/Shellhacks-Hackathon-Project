@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { brand } from '../brand';
 import { useApp } from '../data/store';
 import { ago, BOX_IDS, moistureOf, toMs, useBox, useNow, type BoxId } from './farmData';
@@ -32,8 +33,21 @@ export function TopBar() {
   else if (last != null && now - last > QUIET_MS) status = { tone: 'warn', text: `Sensors quiet, ${lastText}` };
   else status = { tone: 'ok', text: last != null ? `Live, last reading ${ago(now - last)}` : 'Live' };
 
+  // The bar re-flows (one row, two, or stacked in Split View): publish its real height as --topbar-h, so the
+  // bottom sheets on narrow screens stop just under it instead of guessing.
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const set = () => document.documentElement.style.setProperty('--topbar-h', `${Math.ceil(el.getBoundingClientRect().height)}px`);
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    set();
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <header className="topbar">
+    <header className="topbar" ref={ref}>
       <div className="tb">
         <div className="brandmark">
           <Logo size={26} />

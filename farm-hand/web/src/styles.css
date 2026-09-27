@@ -20,13 +20,16 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html, body, #root { height: 100%; margin: 0; }
+html, body, #root { height: 100%; height: 100dvh; margin: 0; }
+html { overflow: hidden; overscroll-behavior: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--bg); color: var(--text); font-family: var(--font-ui); font-size: 15px; line-height: 1.45;
   -webkit-font-smoothing: antialiased; overflow: hidden; overscroll-behavior: none; caret-color: var(--accent);
 }
 button, input { font: inherit; color: inherit; }
-button { cursor: pointer; }
+button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+/* iOS Safari zooms the page into any text field under 16 px */
+input:not([type='range']):not([type='checkbox']):not([type='radio']), select, textarea { font-size: max(16px, 1em); }
 h1, h2, h3, p { margin: 0; }
 h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .num { font-variant-numeric: tabular-nums; }
@@ -58,13 +61,16 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 
 /* --------------------------------------------------------------------- layout */
 /* The 3D scene is the page. Top bar, dock and panels float over it. */
-.app { position: fixed; inset: 0; overflow: hidden; }
+.app { position: fixed; inset: 0; overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+/* Panel reading text can be selected; the things you drag (sliders, charts, the map) and every button cannot. */
+.panel-body { -webkit-user-select: text; user-select: text; }
+.panel-body button, .panel-body input, .segmented, .cs-controls, .res-ctl, .res-chart, .fieldmap, .map-legend-card, .days { -webkit-user-select: none; user-select: none; }
 .scene {
   position: absolute; inset: 0;
   background: radial-gradient(ellipse 70% 75% at 50% 52%, var(--bg-glow), transparent 75%);
 }
 .field, .field-canvas, .field-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
-.field-canvas { display: block; touch-action: none; outline: none; }
+.field-canvas { display: block; touch-action: none; outline: none; -webkit-tap-highlight-color: transparent; }
 .field-overlay { pointer-events: none; overflow: hidden; }
 .anchor { position: absolute; left: 0; top: 0; will-change: transform; }
 .anchor > * { position: absolute; transform: translate(-50%, -50%); }
@@ -73,31 +79,33 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 /* -------------------------------------------------------------------- top bar */
 /*
  * One grid, three areas (brand, status, reads). It answers to its OWN width (a container query), so it
- * re-flows the same way whether the window is narrow or a side sheet has taken part of it:
- *   wide     brand + status on the left, the readout table on the right, one row
- *   medium   brand over status on the left, the readout on the right
- *   narrow   everything stacked, the readout full width
- * Nothing in it shrinks below its content: the brand and the pill never wrap, so they can never overlap.
+ * re-flows the same way whether the window is full screen, in iPad Split View, or a side sheet has taken part of it:
+ *   wide     (>= 1260) brand + status on the left, the readout table on the right, one row
+ *   medium   brand over status on the left, the readout on the right; Listen drops under the pill if the column is short
+ *   narrow   (< 700) everything stacked, the readout full width
+ * Nothing can overlap: the readout never shrinks, and the status column gives way first (Listen wraps, and only
+ * then does the pill's text end in an ellipsis).
  */
 .topbar {
   position: absolute; top: 0; left: 0; right: 0; z-index: 3; pointer-events: none; container-type: inline-size;
   padding: calc(16px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) 12px calc(20px + env(safe-area-inset-left));
 }
-.app.has-side .topbar { right: calc(var(--sheet-w) + 24px); }
+.app.has-side .topbar { right: calc(var(--sheet-w) + 24px + env(safe-area-inset-right)); }
 .tb {
-  display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: 'brand status . reads';
+  display: grid; grid-template-columns: auto minmax(0, auto) minmax(0, 1fr) auto; grid-template-areas: 'brand status . reads';
   align-items: start; gap: 12px 20px;
 }
 .tb > * { pointer-events: auto; }
 .brandmark { grid-area: brand; display: flex; align-items: flex-start; gap: 10px; color: var(--accent); white-space: nowrap; }
 .brandmark svg { flex: none; margin-top: 3px; }
 .brandmark h1 { font-size: 28px; color: var(--text); font-stretch: 95%; line-height: 1.1; }
-.brandmark p { color: var(--text-dim); font-size: 15px; margin-top: 2px; }
+.brandmark p { color: var(--text-dim); font-size: 15px; margin-top: 2px; white-space: normal; max-width: 30ch; text-wrap: balance; }
 .status {
-  grid-area: status; justify-self: start; margin-top: 2px;
+  grid-area: status; justify-self: start; margin-top: 2px; min-width: 0; overflow: hidden;
   display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; white-space: nowrap;
   border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--panel); font-size: 15px; font-weight: 600;
 }
+.status > .num { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 .status-ok { color: var(--good); }
 .status-quiet { color: var(--text-dim); }
@@ -123,14 +131,16 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .reads b.is-off { font-size: 17px; font-weight: 650; font-stretch: 100%; color: var(--caution); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-@container (max-width: 1180px) { .brandmark p { display: none; } }
-@container (max-width: 1020px) {
-  .tb { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'brand reads' 'status reads'; }
+@container (max-width: 1259px) {
+  .brandmark p { display: none; }
+  .tb { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'brand reads' 'status reads'; }
+  .tb-status { flex-wrap: wrap; row-gap: 8px; }
 }
-@container (max-width: 700px) {
+@container (max-width: 699px) {
   .tb { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'brand' 'status' 'reads'; gap: 8px; }
+  .tb-status { flex-wrap: nowrap; }
   .brandmark h1 { font-size: 24px; }
-  .status { height: 32px; font-size: 14px; padding: 0 12px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  .status { height: 32px; font-size: 14px; padding: 0 12px; max-width: 100%; }
   .reads { justify-self: stretch; grid-template-columns: auto 1fr 1fr; column-gap: 14px; padding: 8px 12px 10px; }
   .reads-row [role='cell'] { min-height: 32px; }
   .reads-box { font-size: 14px; }
@@ -138,6 +148,8 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .reads b { font-size: 22px; }
   .reads b.is-off { font-size: 14px; }
 }
+/* touch: the status pill and Listen share one 44 px row, so Listen is a full-size target and the two still match */
+@media (pointer: coarse) and (min-height: 521px) { .tb .status { height: 44px; } }
 
 /* ----------------------------------------------------------------------- dock */
 .dock {
@@ -168,7 +180,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
  * Motion (Emil): transform slides in 240 ms ease-out and can be interrupted; opacity switches fast, so a
  * panel is readable even on the first frame of a slow machine. Nothing starts from scale(0).
  */
-:root { --sheet-w: min(440px, calc(100vw - 32px)); --shadow-float: 0 1px 2px rgba(22, 32, 26, 0.06), 0 12px 32px -12px rgba(22, 32, 26, 0.28); }
+:root { --dock-clear: calc(96px + env(safe-area-inset-bottom)); --sheet-w: min(440px, calc(100vw - 32px)); --shadow-float: 0 1px 2px rgba(22, 32, 26, 0.06), 0 12px 32px -12px rgba(22, 32, 26, 0.28); }
 .panel-shell {
   position: absolute; z-index: 3; display: flex; flex-direction: column; min-height: 0;
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-panel); box-shadow: var(--shadow-float);
@@ -179,9 +191,10 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   opacity: 1; visibility: visible; pointer-events: auto; transform: none;
   transition: transform 240ms var(--ease-out), visibility 0s;   /* opacity is instant on open */
 }
-.place-side { top: 12px; right: 12px; bottom: auto; max-height: calc(100% - 108px); width: var(--sheet-w); transform: translateX(24px); }   /* as tall as its content, never a slab */
-.place-bottom { left: 16px; right: 16px; bottom: 96px; height: min(420px, 46dvh); transform: translateY(16px); }
-.place-wide { top: calc(12px + env(safe-area-inset-top)); left: 16px; right: 16px; bottom: 96px; transform: translateY(16px); }
+/* every placement clears the dock and the safe areas (home indicator, rounded corners, Stage Manager chrome) */
+.place-side { top: 12px; right: 12px; bottom: auto; max-height: calc(100% - var(--dock-clear) - 12px - env(safe-area-inset-top)); width: var(--sheet-w); transform: translateX(24px); }   /* as tall as its content, never a slab */
+.place-bottom { left: calc(16px + env(safe-area-inset-left)); right: calc(16px + env(safe-area-inset-right)); bottom: var(--dock-clear); height: min(420px, 46dvh); transform: translateY(16px); }
+.place-wide { top: calc(12px + env(safe-area-inset-top)); left: calc(16px + env(safe-area-inset-left)); right: calc(16px + env(safe-area-inset-right)); bottom: var(--dock-clear); transform: translateY(16px); }
 .app.sheet-l, .panel-shell.sheet-l { --sheet-w: min(640px, calc(100vw - 32px)); }
 /* while a panel is open the 3D labels step back, so they never sit on the readout or the sheet */
 .field-overlay { transition: opacity 160ms var(--ease-out); }
@@ -195,15 +208,19 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .place-wide .panel-body { padding: 16px 20px 20px; }
 
 /* the 3D scene makes room: it shrinks beside a side sheet and above a bottom sheet (the canvas follows its box) */
-.app.has-side .scene { right: calc(var(--sheet-w) + 24px); }
+.app.has-side .scene { right: calc(var(--sheet-w) + 24px + env(safe-area-inset-right)); }
 .dock { bottom: calc(18px + env(safe-area-inset-bottom)); }
 .place-side { right: calc(12px + env(safe-area-inset-right)); top: calc(12px + env(safe-area-inset-top)); }
 /* touch screens: every control at least 44 px */
 @media (pointer: coarse), (max-width: 1024px) {
   .btn-icon { width: 44px; height: 44px; }
   .btn, .segmented button, .croplist button, .yb-row, .biggest-row, .spot-farm { min-height: 44px; }
+  .how summary { padding: 12px 0; }   /* 44 px tall, and it keeps its disclosure triangle */
+  .fieldmap.leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
+  .fieldmap .leaflet-control-layers label { display: flex; align-items: center; gap: 8px; min-height: 44px; margin: 0; }
+  .fieldmap .leaflet-control-layers-selector { width: 20px; height: 20px; margin: 0; flex: none; }
 }
-.app.has-bottom .scene { bottom: calc(min(420px, 46dvh) + 96px); top: 124px; }   /* clear of the top bar, so the 3D labels never sit on it */
+.app.has-bottom .scene { bottom: calc(min(420px, 46dvh) + var(--dock-clear)); top: 124px; }   /* clear of the top bar, so the 3D labels never sit on it */
 
 /* ------------------------------------------------------------------ box panel */
 .box { display: grid; gap: 14px; }
@@ -278,7 +295,10 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .forecast-head { font-size: 16px; }
 .forecast-head b { font-weight: 650; }
 .days { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; height: 130px; }
-.days li { display: grid; grid-template-rows: 1fr auto; gap: 4px; justify-items: center; min-height: 0; }
+/* each day's rain is written above its bar (no hover tooltips: on an iPad nothing can be hovered) */
+.days { height: 150px; }
+.days li { display: grid; grid-template-rows: auto 1fr auto; gap: 4px; justify-items: center; min-height: 0; }
+.day-mm { font-size: 12px; font-weight: 600; color: var(--text-dim); }
 .day-bar { width: 100%; height: 100%; border-radius: var(--r-ctl); background: var(--sunk); overflow: hidden; display: flex; align-items: flex-end; }
 .day-bar i { display: block; width: 100%; height: 100%; background: var(--water); opacity: 0.55; transform-origin: bottom; transition: transform 240ms var(--ease-out); }
 .day-name { font-size: 12px; color: var(--text-faint); }
@@ -501,7 +521,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
 .res-end { position: absolute; inset: 0; display: grid; place-items: center; animation: rise-in 240ms var(--ease-out) both; pointer-events: none; }
 .res-end b { font-size: clamp(40px, 5vw, 96px); font-weight: 750; font-stretch: 84%; color: var(--water); background: color-mix(in oklab, var(--panel) 88%, transparent); padding: 6px 28px; border-radius: var(--r-panel); box-shadow: var(--shadow); }
 .res-ctl { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
-.res-ctl input[type='range'] { width: 100%; accent-color: var(--water); }
+.res-ctl input[type='range'] { width: 100%; height: 44px; margin: 0; accent-color: var(--water); touch-action: none; }
 .res-speed { width: 110px; }
 @media (prefers-reduced-motion: reduce) { .res-drop.is-new, .res-end { animation: none; } .res-plot { transition: none; } }
 
@@ -534,7 +554,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .brandmark p { display: none; }
   /* phone: the dock is a 4-column grid of short labels (two rows, never wider than the screen);
      every panel is a bottom sheet above it with its own scroll */
-  :root { --dock-h: calc(118px + env(safe-area-inset-bottom)); }
+  :root { --dock-h: calc(124px + env(safe-area-inset-bottom)); --dock-clear: calc(var(--dock-h) + 12px); }
   .dock { left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: calc(8px + env(safe-area-inset-bottom)); transform: none; max-width: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; padding: 4px; }
   .dock-sep { display: none; }
   .dock-btn { justify-items: center; text-align: center; padding: 6px 2px; min-height: 52px; min-width: 0; }
@@ -543,8 +563,8 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .dock-glance { font-size: 11px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
   .app.has-side .scene, .app.has-bottom .scene { right: 0; bottom: 0; top: 0; }
   .place-side, .place-bottom, .place-wide {
-    top: auto; left: 8px; right: 8px; bottom: calc(var(--dock-h) + 8px); width: auto; height: auto;
-    max-height: calc(100dvh - var(--dock-h) - 214px); transform: translateY(20px);   /* stays under the readout */
+    top: auto; left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: var(--dock-clear); width: auto; height: auto;
+    max-height: calc(100dvh - var(--dock-clear) - var(--topbar-h, 214px)); transform: translateY(20px);   /* stays under the readout */
   }
   .place-wide { top: calc(8px + env(safe-area-inset-top)); max-height: none; }   /* Map and Results take the screen */
   .panel-head { min-height: 52px; padding: 6px 8px 6px 18px; }
@@ -558,15 +578,15 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; text-wrap: balance; }
   .fieldmap { height: 70vw; min-height: 260px; }
   .map-legend-card { position: static; width: auto; max-width: none; margin-top: 8px; box-shadow: none; border: 1px solid var(--line); }
   .map-side { overflow: visible; }
-  .field-card.rich { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h) + 8px); z-index: 1000; max-height: 72dvh; overflow-y: auto; padding: 16px; background: var(--panel); border-radius: var(--r-panel); box-shadow: 0 -8px 30px rgba(22, 32, 26, 0.3); animation-name: sheet-in; }
+  .field-card.rich { position: fixed; left: calc(8px + env(safe-area-inset-left)); right: calc(8px + env(safe-area-inset-right)); bottom: var(--dock-clear); z-index: 1000; max-height: min(72dvh, calc(100dvh - var(--dock-clear) - 24px - env(safe-area-inset-top))); overflow-y: auto; overscroll-behavior: contain; padding: 16px; background: var(--panel); border-radius: var(--r-panel); box-shadow: 0 -8px 30px rgba(22, 32, 26, 0.3); animation-name: sheet-in; }
   @keyframes sheet-in { from { opacity: 0.5; transform: translateY(24px); } }
   .fc-icon { width: 56px; height: 56px; } .fc-icon svg { width: 38px; height: 38px; }
   .fc-head h3 { font-size: 24px; }
   .fc-big { font-size: 40px; }
   .res-top { grid-template-columns: 1fr 1fr; }
   .res-clock { grid-column: 1 / -1; justify-items: start; }
-  .res-chart { grid-template-rows: 220px auto; }
-  .results { height: auto; }
+  .res-chart { grid-template-rows: minmax(220px, 1fr) auto; }
+  .results { height: auto; min-height: 100%; }   /* the chart takes whatever height is left (iPad portrait), never under 220 px */
   .res-drop em, .res-soggy-label { display: none; }
   .res-drop svg { width: 14px; height: 14px; }
   .readings { gap: 8px 12px; }

@@ -127,9 +127,23 @@ export class FieldScene {
   /** the scene sits full-screen behind the top bar (~64 px) and the dock (~120 px): frame the boxes in the band between */
   static readonly INSET = { top: 64, bottom: 120 };
 
+  /**
+   * The band actually left between the top bar and the dock. Both re-flow with the window (iPad portrait and
+   * Split View stack the top bar to ~200 px), so measure them rather than assume; never less than INSET.
+   */
+  private inset(): { top: number; bottom: number } {
+    const el = this.canvas.parentElement ?? this.canvas;
+    const box = el.getBoundingClientRect();
+    const bar = document.querySelector('.topbar .tb')?.getBoundingClientRect();
+    const dock = document.querySelector('.dock')?.getBoundingClientRect();
+    const top = bar && bar.height ? Math.max(FieldScene.INSET.top, bar.bottom - box.top + 8) : FieldScene.INSET.top;
+    const bottom = dock && dock.height ? Math.max(FieldScene.INSET.bottom, box.bottom - dock.top + 8) : FieldScene.INSET.bottom;
+    // a band under a third of the canvas is not worth framing into: fall back to the fixed insets
+    return box.height - top - bottom > box.height / 3 ? { top, bottom } : FieldScene.INSET;
+  }
+
   /** distance at which both boxes (and their cups) fill the visible band, at any aspect */
-  private homeDist(w: number, h: number): number {
-    const { top, bottom } = FieldScene.INSET;
+  private homeDist(w: number, h: number, { top, bottom }: { top: number; bottom: number }): number {
     const band = Math.max(0.35, (h - top - bottom) / h);          // share of the height the boxes may use
     const vHalf = THREE.MathUtils.degToRad(this.camera.fov / 2);
     const hHalf = Math.atan(Math.tan(vHalf) * this.camera.aspect);
@@ -141,15 +155,19 @@ export class FieldScene {
   private resize() {
     const el = this.canvas.parentElement ?? this.canvas;
     const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight);
+    // keep the pixel-ratio cap current (an iPad is 2x; a window dragged to another display may not be)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (this.renderer.getPixelRatio() !== dpr) this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.fov = w / h < 0.8 ? 44 : w / h < 1.1 ? 36 : 28;   // portrait phones: wider lens, so the boxes aren't specks
     // centre the boxes in the band between the bar and the dock, not in the full canvas
-    const { top, bottom } = FieldScene.INSET;
+    const inset = this.inset();
+    const { top, bottom } = inset;
     const shift = Math.round((bottom - top) / 2);
     if (h > top + bottom + 100) this.camera.setViewOffset(w, h, 0, shift, w, h); else this.camera.clearViewOffset();
     this.camera.updateProjectionMatrix();
-    const fit = this.homeDist(w, h);
+    const fit = this.homeDist(w, h, inset);
     this.controls.maxDistance = Math.max(30, fit * 1.6);
     if (this.userZoomed) return;
     // always open on the two boxes: home target, home direction, fitted distance

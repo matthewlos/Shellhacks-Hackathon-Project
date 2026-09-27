@@ -78,6 +78,14 @@ const LAND_WORDS: Record<string, string> = {
 const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
 const mercY = (lat: number) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360));
 
+/** Right-hand padding that keeps a framed farm clear of the legend card (when it floats over the map), never more
+ *  than half the map, so a narrow map (iPad Split View) still zooms to something sensible. */
+function legendPad(mapEl: HTMLElement): number {
+  const card = mapEl.parentElement?.querySelector<HTMLElement>('.map-legend-card');
+  const over = card && getComputedStyle(card).position === 'absolute' ? card.offsetWidth + 24 : 40;
+  return Math.min(over, Math.round(mapEl.clientWidth / 2));
+}
+
 /** Reads the overlay PNG's pixels once, so any tapped spot can be named (the palette is the lookup table). */
 function useLandcover(meta: LandcoverMeta | null) {
   const [px, setPx] = useState<{ data: Uint8ClampedArray; w: number; h: number } | null>(null);
@@ -142,8 +150,7 @@ function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
     // keep FIU centred in the part of the map the legend card does not cover; re-frame on resize until the user moves the map
     let framing = false, touched = false;
     const frame = () => {
-      const card = el.current?.parentElement?.querySelector<HTMLElement>('.map-legend-card');
-      const right = card && getComputedStyle(card).position === 'absolute' ? card.offsetWidth + 24 : 8;
+      const right = el.current ? legendPad(el.current) : 8;
       framing = true;
       m.fitBounds(frameBox, { paddingTopLeft: [8, 8], paddingBottomRight: [right, 8], animate: false });
       framing = false;
@@ -187,7 +194,7 @@ function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
       'Farm fields <small>(Google AlphaEarth)</small>': fieldsLayer,
       'Soil water now <small>(Open-Meteo)</small>': soilNowLayer,
       'Soil type points <small>(USDA)</small>': typeLayer,
-    }, { position: 'bottomleft', collapsed: el.current.clientWidth < 700 }).addTo(m);
+    }, { position: 'bottomleft', collapsed: el.current.clientWidth < 900 }).addTo(m);   // a narrow map (iPad, Split View): tap the icon for the layers
     // the Farm Hand boxes at FIU
     L.circleMarker(home, { radius: 8, color: '#fafbf8', weight: 3, fillColor: '#1b66c9', fillOpacity: 1, interactive: false })
       .bindTooltip('Your boxes (FIU)', { permanent: true, direction: 'right', offset: [10, 0], className: 'home-tip' })
@@ -228,7 +235,7 @@ function FieldMap({ region, selected, onPick, soilNow, spot, onSpot }: {
       if (id === selected) {
         layer.setStyle({ color: '#fafbf8', weight: 3, fillColor: base, fillOpacity: 0.85 }).bringToFront();
         // bring the chosen farm into view, clear of the legend card
-        map.current?.flyToBounds(layer.getBounds(), { maxZoom: 14, duration: 0.45, paddingTopLeft: [40, 40], paddingBottomRight: [400, 40] });
+        map.current?.flyToBounds(layer.getBounds(), { maxZoom: 14, duration: 0.45, paddingTopLeft: [40, 40], paddingBottomRight: [legendPad(map.current.getContainer()), 40] });
       }
       else if (sim.has(id)) layer.setStyle({ color: '#5aa2ff', weight: 2.5, fillColor: base, fillOpacity: 0.6 });
       else layer.setStyle({ color: base, weight: 1.5, fillColor: base, fillOpacity: f ? 0.3 : 0.7 });

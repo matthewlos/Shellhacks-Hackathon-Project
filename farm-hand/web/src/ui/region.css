@@ -61,3 +61,39 @@
   .map-legend-card .legend-land h4 span { font-size: 12px; }
   .map-legend-card .legend-land li { font-size: 13px; }
 }
+
+/* ------------------------------------------------------------- iPad and split view */
+/* (region.css loads before styles.css, so these rules carry one more class to win over the base map styles.) */
+/* The legend never runs past the map: it scrolls inside its own card (and never drags the page with it). */
+.map-frame { container: mapframe / inline-size; }
+.map-frame .map-legend-card { max-height: calc(100% - 48px);   /* clear of the imagery credit, bottom right */
+  overflow-y: auto; overscroll-behavior: contain; }
+.fieldmap .leaflet-control-layers label > span { display: inline-flex; align-items: center; gap: 8px; }
+.map-layout .map-side { overscroll-behavior: contain; }
+
+@media (min-width: 901px) {
+  /* A narrow map (iPad landscape beside the card column, Split View): a compact legend, so most of the map shows. */
+  @container mapframe (max-width: 760px) {
+    .map-frame .map-legend-card { top: 8px; right: 8px; width: min(260px, calc(100% - 72px)); max-height: calc(100% - 40px); padding: 12px 14px; gap: 8px; }
+    .map-frame .map-legend-card h4 { font-size: 15px; }
+    .map-frame .map-legend-card h4 span { font-size: 12px; }
+    .map-frame .map-legend-card ul { gap: 4px; }
+    .map-frame .map-legend-card li { grid-template-columns: 16px 1fr auto; gap: 8px; font-size: 14px; }
+    .map-frame .map-legend-card i { width: 16px; height: 16px; }
+    .map-frame .map-legend-card .legend-soil h4, .map-frame .map-legend-card .legend-land h4 { font-size: 14px; }
+    .map-frame .map-legend-card .legend-soil h4 span, .map-frame .map-legend-card .legend-land h4 span { font-size: 12px; }
+    .map-frame .map-legend-card .legend-land ul { grid-template-columns: 1fr; }
+    .map-frame .map-legend-card .legend-land li { grid-template-columns: 14px 1fr; font-size: 13px; }
+    .map-frame .map-legend-card .legend-src { font-size: 12px; }
+  }
+}
+
+/* iPad portrait (tall, and wide enough for the two-column map): the map on top at full width, the card under it. */
+@media (min-width: 901px) and (max-aspect-ratio: 1/1) {
+  .panel-body .map-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; }
+  .map-layout .map-side { border-top: 1px solid var(--line); padding-top: 16px; }
+}
+/* iPad landscape: a slimmer card column leaves more of the width to the map */
+@media (min-width: 901px) and (max-width: 1279px) and (min-aspect-ratio: 1/1) {
+  .panel-body .map-layout { grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+}
